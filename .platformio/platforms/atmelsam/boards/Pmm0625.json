@@ -23,7 +23,7 @@
     ],
     "mcu": "samd21g18a",
     "usb_product": "Arduino Zero",
-    "variant": "pmm0620"
+    "variant": "pmm0625"
   },
   "debug": {
     "jlink_device": "ATSAMD21G18",
