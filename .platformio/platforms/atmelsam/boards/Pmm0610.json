@@ -1,11 +1,11 @@
 {
   "build": {
     "arduino": {
-        "ldscript": "flash_without_bootloader.ld"
+        "ldscript": "flash_with_bootloader.ld"
     },
     "core": "arduino",
     "cpu": "cortex-m0plus",
-    "extra_flags": "-DARDUINO_SAMD_ZERO -D__SAMD21J15B__",
+    "extra_flags": "-DARDUINO_SAMD_ZERO -D__SAMD21G18A__",
     "f_cpu": "48000000L",
     "hwids": [
       [
@@ -21,27 +21,27 @@
         "0x824D"
       ]
     ],
-    "mcu": "samd21j15b",
+    "mcu": "samd21g18a",
     "usb_product": "Arduino Zero",
-    "variant": "pmm0639XP"
+    "variant": "pmm0610"
   },
   "debug": {
-    "jlink_device": "ATSAMD21J15",
+    "jlink_device": "ATSAMD21G18",
     "onboard_tools": [
       "cmsis-dap"
     ],
-    "openocd_chipname": "at91samd21j15",
+    "openocd_chipname": "at91samd21g18",
     "openocd_target": "at91samdXX",
-    "svd_path": "ATSAMD21J15B.svd"
+    "svd_path": "ATSAMD21G18A.svd"
   },
   "frameworks": [
     "arduino"
   ],
-  "name": "pmm0639XP",
+  "name": "pmm0610",
   "upload": {
     "disable_flushing": true,
-    "maximum_ram_size": 4096,
-    "maximum_size": 32768,
+    "maximum_ram_size": 32768,
+    "maximum_size": 262144,
     "native_usb": true,
     "offset_address": "0x2000",
     "protocol": "sam-ba",
