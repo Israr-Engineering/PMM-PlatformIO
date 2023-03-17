@@ -159,18 +159,18 @@ static const uint8_t DAC0 = PIN_DAC0;
 
 
 
-// static const uint8_t DI0= PMM_DI0  ;
-// static const uint8_t DI1= PMM_DI1  ;
-// static const uint8_t DI2= PMM_DI2  ;
-// static const uint8_t DI3= PMM_DI3  ;
-// static const uint8_t DI4= PMM_DI4  ;
-// static const uint8_t DI5= PMM_DI5  ;
-// static const uint8_t DI6= PMM_DI6  ;
-// static const uint8_t DI7= PMM_DI7  ;
-// static const uint8_t DI8= PMM_DI8  ;
-// static const uint8_t DI9= PMM_DI9  ;
-// static const uint8_t DI10=PMM_DI10  ;
-// static const uint8_t DI11=PMM_DI11  ;
+static const uint8_t DI0= PMM_DI0  ;
+static const uint8_t DI1= PMM_DI1  ;
+static const uint8_t DI2= PMM_DI2  ;
+static const uint8_t DI3= PMM_DI3  ;
+static const uint8_t DI4= PMM_DI4  ;
+static const uint8_t DI5= PMM_DI5  ;
+static const uint8_t DI6= PMM_DI6  ;
+static const uint8_t DI7= PMM_DI7  ;
+static const uint8_t DI8= PMM_DI8  ;
+static const uint8_t DI9= PMM_DI9  ;
+static const uint8_t DI10=PMM_DI10  ;
+static const uint8_t DI11=PMM_DI11  ;
 
 
 // Edit Mohannad

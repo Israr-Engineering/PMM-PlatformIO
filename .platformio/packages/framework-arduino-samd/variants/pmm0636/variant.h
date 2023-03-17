@@ -131,29 +131,37 @@ extern "C" unsigned int PINCOUNT_fn();
 #define PIN_A9               (0ul)
 
 
+
+//Mandatory : this should be added for compiling the board 
+static const uint8_t A0  = PIN_A0;
+static const uint8_t A1  = PIN_A1;
+static const uint8_t A2  = PIN_A2;
+static const uint8_t A3  = PIN_A3;
+static const uint8_t A4  = PIN_A4;
+static const uint8_t A5  = PIN_A5;
+static const uint8_t A6  = PIN_A6;
+static const uint8_t A7  = PIN_A7;
+static const uint8_t A8  = PIN_A8;
+static const uint8_t A9  = PIN_A9;
+
+#define PIN_DAC0             (47ul)
+static const uint8_t DAC0 = PIN_DAC0;
+#define ADC_RESOLUTION		12
+//End Mandatory:
+
 //#define PIN_DAC0             (14ul)
 
 
+static const uint8_t AO0  = PMM_AO0;
+static const uint8_t AO1  = PMM_AO1;
+static const uint8_t AO2  = PMM_AO2;
+static const uint8_t AO3  = PMM_AO3;
 
-// static const uint8_t A1  = PMM_AO_01;
-// static const uint8_t A2  = PMM_AO_02;
-// static const uint8_t A3  = PMM_AO_03;
-// static const uint8_t A4  = PMM_AO_04;
 
 
 // Edit Mohannad
 static const uint8_t PMM_AO_Pins[4] = {PMM_AO0,PMM_AO1,PMM_AO2,PMM_AO3};
 
-
-
-// static const uint8_t DO1= PMM_DI_01  ;
-// static const uint8_t DO2= PMM_DI_02  ;
-// static const uint8_t DO3= PMM_DI_03  ;
-// static const uint8_t DO4= PMM_DI_04  ;
-// static const uint8_t DO5= PMM_DI_05  ;
-// static const uint8_t DO6= PMM_DI_06  ;
-// static const uint8_t DO7= PMM_DI_07  ;
-// static const uint8_t DO8= PMM_DI_08  ;
 
 
 //static const uint8_t DAC0 = PIN_DAC0;

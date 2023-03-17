@@ -151,14 +151,14 @@ static const uint8_t DAC0 = PIN_DAC0;
 
 //#define PIN_DAC0             (14ul)
 
-// static const uint8_t DO0= PMM_DO0  ;
-// static const uint8_t DO1= PMM_DO1  ;
-// static const uint8_t DO2= PMM_DO2  ;
-// static const uint8_t DO3= PMM_DO3  ;
-// static const uint8_t DO4= PMM_DO4  ;
-// static const uint8_t DO5= PMM_DO5  ;
-// static const uint8_t DO6= PMM_DO6  ;
-// static const uint8_t DO7= PMM_DO7  ;
+static const uint8_t DO0= PMM_DO0  ;
+static const uint8_t DO1= PMM_DO1  ;
+static const uint8_t DO2= PMM_DO2  ;
+static const uint8_t DO3= PMM_DO3  ;
+static const uint8_t DO4= PMM_DO4  ;
+static const uint8_t DO5= PMM_DO5  ;
+static const uint8_t DO6= PMM_DO6  ;
+static const uint8_t DO7= PMM_DO7  ;
 
 //static const uint8_t DAC0 = PIN_DAC0;
 //#define ADC_RESOLUTION		12
