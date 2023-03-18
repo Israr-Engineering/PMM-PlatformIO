@@ -59,12 +59,12 @@ class RTClib {
 };
 
 // Eric's original code is everything below this line
-class DS3231 {
+class PmmDS3231 {
 	public:
 			
 		//Constructor
-		DS3231();
-		DS3231(TwoWire & w);
+		PmmDS3231();
+		PmmDS3231(TwoWire & w);
 
 		TwoWire & _Wire;
 

@@ -22,7 +22,7 @@ David Merrifield
 Released into the public domain.
 */
 
-#include "DS3231.h"
+#include "PmmDS3231.h"
 
 // These included for the DateTime class inclusion; will try to find a way to
 // not need them in the future...
@@ -42,11 +42,11 @@ Released into the public domain.
 
 
 // Constructor
-DS3231::DS3231() : _Wire(Wire) {
+PmmDS3231::PmmDS3231() : _Wire(Wire) {
 	// nothing to do for this constructor.
 }
 
-DS3231::DS3231(TwoWire & w) : _Wire(w) {
+PmmDS3231::PmmDS3231(TwoWire & w) : _Wire(w) {
 }
 
 // Utilities from JeeLabs/Ladyada
@@ -182,7 +182,7 @@ DateTime RTClib::now(TwoWire & _Wire) {
 
 ///// ERIC'S ORIGINAL CODE FOLLOWS /////
 
-byte DS3231::getSecond() {
+byte PmmDS3231::getSecond() {
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x00);
 	_Wire.endTransmission();
@@ -191,7 +191,7 @@ byte DS3231::getSecond() {
 	return bcdToDec(_Wire.read());
 }
 
-byte DS3231::getMinute() {
+byte PmmDS3231::getMinute() {
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x01);
 	_Wire.endTransmission();
@@ -200,7 +200,7 @@ byte DS3231::getMinute() {
 	return bcdToDec(_Wire.read());
 }
 
-byte DS3231::getHour(bool& h12, bool& PM_time) {
+byte PmmDS3231::getHour(bool& h12, bool& PM_time) {
 	byte temp_buffer;
 	byte hour;
 	_Wire.beginTransmission(CLOCK_ADDRESS);
@@ -219,7 +219,7 @@ byte DS3231::getHour(bool& h12, bool& PM_time) {
 	return hour;
 }
 
-byte DS3231::getDoW() {
+byte PmmDS3231::getDoW() {
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x03);
 	_Wire.endTransmission();
@@ -228,7 +228,7 @@ byte DS3231::getDoW() {
 	return bcdToDec(_Wire.read());
 }
 
-byte DS3231::getDate() {
+byte PmmDS3231::getDate() {
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x04);
 	_Wire.endTransmission();
@@ -237,7 +237,7 @@ byte DS3231::getDate() {
 	return bcdToDec(_Wire.read());
 }
 
-byte DS3231::getMonth(bool& Century) {
+byte PmmDS3231::getMonth(bool& Century) {
 	byte temp_buffer;
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x05);
@@ -249,7 +249,7 @@ byte DS3231::getMonth(bool& Century) {
 	return (bcdToDec(temp_buffer & 0b01111111)) ;
 }
 
-byte DS3231::getYear() {
+byte PmmDS3231::getYear() {
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x06);
 	_Wire.endTransmission();
@@ -260,7 +260,7 @@ byte DS3231::getYear() {
 
 // setEpoch function gives the epoch as parameter and feeds the RTC
 // epoch = UnixTime and starts at 01.01.1970 00:00:00
-void DS3231::setEpoch(time_t epoch, bool flag_localtime) {
+void PmmDS3231::setEpoch(time_t epoch, bool flag_localtime) {
 	struct tm tmnow;
 	if (flag_localtime) {
 		localtime_r(&epoch, &tmnow);
@@ -277,7 +277,7 @@ void DS3231::setEpoch(time_t epoch, bool flag_localtime) {
 	setYear(tmnow.tm_year - 100);
 }
 
-void DS3231::setSecond(byte Second) {
+void PmmDS3231::setSecond(byte Second) {
 	// Sets the seconds 
 	// This function also resets the Oscillator Stop Flag, which is set
 	// whenever power is interrupted.
@@ -290,7 +290,7 @@ void DS3231::setSecond(byte Second) {
 	writeControlByte((temp_buffer & 0b01111111), 1);
 }
 
-void DS3231::setMinute(byte Minute) {
+void PmmDS3231::setMinute(byte Minute) {
 	// Sets the minutes 
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x01);
@@ -300,7 +300,7 @@ void DS3231::setMinute(byte Minute) {
 
 // Following setHour revision by David Merrifield 4/14/2020 correcting handling of 12-hour clock
 
-void DS3231::setHour(byte Hour) {
+void PmmDS3231::setHour(byte Hour) {
 	// Sets the hour, without changing 12/24h mode.
 	// The hour must be in 24h format.
 
@@ -337,7 +337,7 @@ void DS3231::setHour(byte Hour) {
 	_Wire.endTransmission();
 }
 
-void DS3231::setDoW(byte DoW) {
+void PmmDS3231::setDoW(byte DoW) {
 	// Sets the Day of Week
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x03);
@@ -345,7 +345,7 @@ void DS3231::setDoW(byte DoW) {
 	_Wire.endTransmission();
 }
 
-void DS3231::setDate(byte Date) {
+void PmmDS3231::setDate(byte Date) {
 	// Sets the Date
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x04);
@@ -353,7 +353,7 @@ void DS3231::setDate(byte Date) {
 	_Wire.endTransmission();
 }
 
-void DS3231::setMonth(byte Month) {
+void PmmDS3231::setMonth(byte Month) {
 	// Sets the month
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x05);
@@ -361,7 +361,7 @@ void DS3231::setMonth(byte Month) {
 	_Wire.endTransmission();
 }
 
-void DS3231::setYear(byte Year) {
+void PmmDS3231::setYear(byte Year) {
 	// Sets the year
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x06);
@@ -369,7 +369,7 @@ void DS3231::setYear(byte Year) {
 	_Wire.endTransmission();
 }
 
-void DS3231::setClockMode(bool h12) {
+void PmmDS3231::setClockMode(bool h12) {
 	// sets the mode to 12-hour (true) or 24-hour (false).
 	// One thing that bothers me about how I've written this is that
 	// if the read and right happen at the right hourly millisecnd,
@@ -402,7 +402,7 @@ void DS3231::setClockMode(bool h12) {
 	_Wire.endTransmission();
 }
 
-float DS3231::getTemperature() {
+float PmmDS3231::getTemperature() {
 	// Checks the internal thermometer on the DS3231 and returns the 
 	// temperature as a floating-point value.
 
@@ -433,7 +433,7 @@ float DS3231::getTemperature() {
   return temp3231;
 }
 
-void DS3231::getA1Time(byte& A1Day, byte& A1Hour, byte& A1Minute, byte& A1Second, byte& AlarmBits, bool& A1Dy, bool& A1h12, bool& A1PM) {
+void PmmDS3231::getA1Time(byte& A1Day, byte& A1Hour, byte& A1Minute, byte& A1Second, byte& AlarmBits, bool& A1Dy, bool& A1h12, bool& A1PM) {
 	byte temp_buffer;
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x07);
@@ -477,7 +477,7 @@ void DS3231::getA1Time(byte& A1Day, byte& A1Hour, byte& A1Minute, byte& A1Second
 	}
 }
 
-void DS3231::getA2Time(byte& A2Day, byte& A2Hour, byte& A2Minute, byte& AlarmBits, bool& A2Dy, bool& A2h12, bool& A2PM) {
+void PmmDS3231::getA2Time(byte& A2Day, byte& A2Hour, byte& A2Minute, byte& AlarmBits, bool& A2Dy, bool& A2h12, bool& A2PM) {
 	byte temp_buffer;
 	_Wire.beginTransmission(CLOCK_ADDRESS);
 	_Wire.write(0x0b);
@@ -515,7 +515,7 @@ void DS3231::getA2Time(byte& A2Day, byte& A2Hour, byte& A2Minute, byte& AlarmBit
 	}
 }
 
-void DS3231::setA1Time(byte A1Day, byte A1Hour, byte A1Minute, byte A1Second, byte AlarmBits, bool A1Dy, bool A1h12, bool A1PM) {
+void PmmDS3231::setA1Time(byte A1Day, byte A1Hour, byte A1Minute, byte A1Second, byte AlarmBits, bool A1Dy, bool A1h12, bool A1PM) {
 	//	Sets the alarm-1 date and time on the DS3231, using A1* information
 	byte temp_buffer;
 	_Wire.beginTransmission(CLOCK_ADDRESS);
@@ -559,7 +559,7 @@ void DS3231::setA1Time(byte A1Day, byte A1Hour, byte A1Minute, byte A1Second, by
 	_Wire.endTransmission();
 }
 
-void DS3231::setA2Time(byte A2Day, byte A2Hour, byte A2Minute, byte AlarmBits, bool A2Dy, bool A2h12, bool A2PM) {
+void PmmDS3231::setA2Time(byte A2Day, byte A2Hour, byte A2Minute, byte AlarmBits, bool A2Dy, bool A2h12, bool A2PM) {
 	//	Sets the alarm-2 date and time on the DS3231, using A2* information
 	byte temp_buffer;
 	_Wire.beginTransmission(CLOCK_ADDRESS);
@@ -602,7 +602,7 @@ void DS3231::setA2Time(byte A2Day, byte A2Hour, byte A2Minute, byte AlarmBits, b
 	_Wire.endTransmission();
 }
 
-void DS3231::turnOnAlarm(byte Alarm) {
+void PmmDS3231::turnOnAlarm(byte Alarm) {
 	// turns on alarm number "Alarm". Defaults to 2 if Alarm is not 1.
 	byte temp_buffer = readControlByte(0);
 	// modify control byte
@@ -614,7 +614,7 @@ void DS3231::turnOnAlarm(byte Alarm) {
 	writeControlByte(temp_buffer, 0);
 }
 
-void DS3231::turnOffAlarm(byte Alarm) {
+void PmmDS3231::turnOffAlarm(byte Alarm) {
 	// turns off alarm number "Alarm". Defaults to 2 if Alarm is not 1.
 	// Leaves interrupt pin alone.
 	byte temp_buffer = readControlByte(0);
@@ -627,7 +627,7 @@ void DS3231::turnOffAlarm(byte Alarm) {
 	writeControlByte(temp_buffer, 0);
 }
 
-bool DS3231::checkAlarmEnabled(byte Alarm) {
+bool PmmDS3231::checkAlarmEnabled(byte Alarm) {
 	// Checks whether the given alarm is enabled.
 	byte result = 0x0;
 	byte temp_buffer = readControlByte(0);
@@ -639,7 +639,7 @@ bool DS3231::checkAlarmEnabled(byte Alarm) {
 	return result;
 }
 
-bool DS3231::checkIfAlarm(byte Alarm) {
+bool PmmDS3231::checkIfAlarm(byte Alarm) {
 	// Checks whether alarm 1 or alarm 2 flag is on, returns T/F accordingly.
 	// Turns flag off, also.
 	// defaults to checking alarm 2, unless Alarm == 1.
@@ -660,7 +660,7 @@ bool DS3231::checkIfAlarm(byte Alarm) {
 	return result;
 }
 
-void DS3231::enableOscillator(bool TF, bool battery, byte frequency) {
+void PmmDS3231::enableOscillator(bool TF, bool battery, byte frequency) {
 	// turns oscillator on or off. True is on, false is off.
 	// if battery is true, turns on even for battery-only operation,
 	// otherwise turns off if Vcc is off.
@@ -693,7 +693,7 @@ void DS3231::enableOscillator(bool TF, bool battery, byte frequency) {
 	writeControlByte(temp_buffer, 0);
 }
 
-void DS3231::enable32kHz(bool TF) {
+void PmmDS3231::enable32kHz(bool TF) {
 	// turn 32kHz pin on or off
 	byte temp_buffer = readControlByte(1);
 	if (TF) {
@@ -706,7 +706,7 @@ void DS3231::enable32kHz(bool TF) {
 	writeControlByte(temp_buffer, 1);
 }
 
-bool DS3231::oscillatorCheck() {
+bool PmmDS3231::oscillatorCheck() {
 	// Returns false if the oscillator has been off for some reason.
 	// If this is the case, the time is probably not correct.
 	byte temp_buffer = readControlByte(1);
@@ -722,17 +722,17 @@ bool DS3231::oscillatorCheck() {
 	Private Functions
  *****************************************/
 
-byte DS3231::decToBcd(byte val) {
+byte PmmDS3231::decToBcd(byte val) {
 // Convert normal decimal numbers to binary coded decimal
 	return ( (val/10*16) + (val%10) );
 }
 
-byte DS3231::bcdToDec(byte val) {
+byte PmmDS3231::bcdToDec(byte val) {
 // Convert binary coded decimal to normal decimal numbers
 	return ( (val/16*10) + (val%16) );
 }
 
-byte DS3231::readControlByte(bool which) {
+byte PmmDS3231::readControlByte(bool which) {
 	// Read selected control byte
 	// first byte (0) is 0x0e, second (1) is 0x0f
 	_Wire.beginTransmission(CLOCK_ADDRESS);
@@ -748,7 +748,7 @@ byte DS3231::readControlByte(bool which) {
 	return _Wire.read();	
 }
 
-void DS3231::writeControlByte(byte control, bool which) {
+void PmmDS3231::writeControlByte(byte control, bool which) {
 	// Write the selected control byte.
 	// which=false -> 0x0e, true->0x0f.
 	_Wire.beginTransmission(CLOCK_ADDRESS);
