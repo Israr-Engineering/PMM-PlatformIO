@@ -34,7 +34,7 @@
 #define PMMBNO
 
 //I2C 
-#define PMMI2C
+//#define PMMI2C
 
 
 #pragma endregion
@@ -58,8 +58,6 @@
 #include <Wire.h>
 #include <SPI.h>
 
-
-
 #include <PmmScheduler.h>
 #include <PmmExternalEEPROM.h>
 #include <PmmSPISerialFlash.h>
@@ -68,17 +66,18 @@
 #include <PmmPID_v1.h>
 #include <PmmDS3231.h>
 //#include <PmmSunCalculations.h>
-
+//#ifdef PMMI2C
 #include <PmmRS485Lib.h>
 #include <PmmArduinoModbus.h>
 #include <PmmFlashAsEEPROM.h>
-#include <PmmFlashAsEEPROM.h>
+#include <PmmFlashStorage.h>
 
 //#include <Modbus.h>
 //#include <ModbusSerial.h>
 
 #include <PmmEthernet.h>
 #include <PmmEthernetUDP.h>
+//#endif
 
 //#include <HTTPRequest.hPP>
 //#include <MPU6050_6Axis_MotionApps612.h>
@@ -95,5 +94,7 @@ using std::char_traits;
 //#pragma region VARIABLES
 
 typedef bool bit;
+
+
 
 //#pragma endregion
