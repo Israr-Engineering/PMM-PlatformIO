@@ -69,8 +69,10 @@
 #include <PmmDS3231.h>
 //#include <PmmSunCalculations.h>
 
-//#include <ArduinoRS485.h>
-//#include <ArduinoModbus.h>
+#include <PmmRS485Lib.h>
+#include <PmmArduinoModbus.h>
+#include <PmmFlashAsEEPROM.h>
+#include <PmmFlashAsEEPROM.h>
 
 //#include <Modbus.h>
 //#include <ModbusSerial.h>
