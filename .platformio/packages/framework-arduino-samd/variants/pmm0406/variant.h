@@ -143,6 +143,13 @@ static const uint8_t A8  = PIN_A8;
 static const uint8_t A9  = PIN_A9;
 
 
+//Mandatory : this should be added for compiling the board 
+
+#define PIN_DAC0             (47ul)
+static const uint8_t DAC0 = PIN_DAC0;
+#define ADC_RESOLUTION		12
+//End Mandatory:
+
 
 
 static const uint8_t D1= PMM_D_01  ;
