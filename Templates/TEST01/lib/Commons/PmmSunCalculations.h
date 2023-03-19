@@ -1,6 +1,8 @@
-#include "ProjectDef.h"
+//#include "ProjectDef.h"
 
 #ifdef PMMSunCalculations
+
+#define M_PI       3.14159265358979323846   // pi
 
 class DateTime
 {
@@ -135,9 +137,56 @@ public:
 
 int16_t PMMReturnDayOfYear(DateTime date)
 {
-    boost::gregorian::date d(date.getYear(), date.getMonth(), date.getDay());
-    int16_t dayNumber = d.day_of_year();
-    return dayNumber;
+    // Yazan way
+    // boost::gregorian::date d(date.getYear(), date.getMonth(), date.getDay());
+    // int16_t dayNumber = d.day_of_year();
+
+    // My Way
+    // Given a day, month, and year (4 digit), returns 
+    // the day of year. Errors return 999.
+  
+        int daysInMonth[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+        int year = date.getYear() ;
+        int month = date.getMonth();
+        int day = date.getDay();
+        
+        // Verify we got a 4-digit year
+        if (year < 1000) {
+            return 999;
+        }
+        
+        // Check if it is a leap year, this is confusing business
+        // See: https://support.microsoft.com/en-us/kb/214019
+
+        if (year%4  == 0) {
+            if (year%100 != 0) {
+            daysInMonth[1] = 29;
+            }
+            else {
+            if (year%400 == 0) {
+                daysInMonth[1] = 29;
+            }
+            }
+        }
+
+        // Make sure we are on a valid day of the month
+        if (day < 1) 
+        {
+            return 999;
+        } else if (day > daysInMonth[month-1]) {
+            return 999;
+        }
+        
+        int doy = 0;
+        for (int i = 0; i < month - 1; i++) {
+            doy += daysInMonth[i];
+        }
+        
+        doy += day;
+        return doy;
+
+    //return dayNumber;
 }
 
 array<string, 18> SunCalculations(DateTime date, double lat, double lang, int TimeZone = 3, double TrackerWidth = 4, double Post2Post = 11)
