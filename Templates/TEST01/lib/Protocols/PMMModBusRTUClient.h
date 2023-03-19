@@ -1,82 +1,49 @@
-#include "../Commons/ProjectDef.h"
-#ifdef PMMModbusRTUClient
+/*
+  This file is part of the ArduinoModbus library.
+  Copyright (c) 2018 Arduino SA. All rights reserved.
 
-extern void PMMModBUSRTUClientSetup(uint16_t Config, int16_t BaudRate, int16_t TXPin, int16_t RXPin, int16_t SerialSelectionPin, int8_t SerialPortNumber = 1);
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
-extern int PMMModBUSRTUClientcoilRead(int SlaveID, int address);
-extern int PMMModBUSRTUClientdiscreteInputRead(int SlaveID, int address);
-extern long PMMModBUSRTUClientholdingRegisterRead(int SlaveID, int address);
-extern long PMMModBUSRTUClientinputRegisterRead(int SlaveID, int address);
-extern void PMMModBUSRTUClientcoilWrite(int SlaveID, int address, uint8_t value);
-extern void PMMModBUSRTUClientdiscreteInputWrite(int SlaveID, int address, uint8_t value);
-extern void PMMModBUSRTUClientholdingRegisterWrite(int SlaveID, int address, uint16_t value);
-extern void PMMModBUSRTUClientinputRegisterWrite(int SlaveID, int address, uint16_t value);
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
 
-void PMMModBUSRTUClientSetup(uint16_t Config, int16_t BaudRate, int16_t TXPin,
-                             int16_t RXPin, int16_t SerialSelectionPin, int8_t SerialPort)
-{
-    if (SerialPort == 1)
-        RS485.setSerial(&Serial);
-    else if (SerialPort == 2)
-        RS485.setSerial(&Serial1);
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
-    RS485.setPins(TXPin, SerialSelectionPin, RXPin);
-    ModbusRTUClient.begin(BaudRate, Config)
-}
+#ifndef _MODBUS_RTU_CLIENT_H_INCLUDED
+#define _MODBUS_RTU_CLIENT_H_INCLUDED
 
-int PMMModBUSRTUClientcoilRead(int SlaveID, int address)
-{
-    int value;
+#include "PmmModbusClient.h"
+#include "PmmRS485Lib.h"
 
-    value = ModbusRTUClient.coilRead(SlaveID, address);
-    return value;
-}
+class PmmModbusRTUClientClass : public PmmModbusClient {
+public:
+  PmmModbusRTUClientClass();
+  PmmModbusRTUClientClass(PmmRS485Class& rs485);
+  virtual ~PmmModbusRTUClientClass();
 
-int PMMModBUSRTUClientdiscreteInputRead(int SlaveID, int address)
-{
-    int value;
+  /**
+   * Start the Modbus RTU client with the specified parameters
+   *
+   * @param baudrate Baud rate to use
+   * @param config serial config. to use defaults to SERIAL_8N1
+   *
+   * Return 1 on success, 0 on failure
+   */
+  int begin(unsigned long baudrate, uint16_t config = SERIAL_8N1);
+  int begin(PmmRS485Class& rs485, unsigned long baudrate, uint16_t config = SERIAL_8N1);
 
-    value = ModbusRTUClient.discreteInputRead(SlaveID, address);
-    return value;
-}
+private:
+  PmmRS485Class* _rs485 = &RS485;
+};
 
-long PMMModBUSRTUClientholdingRegisterRead(int SlaveID, int address)
-{
-    long value;
+extern PmmModbusRTUClientClass PmmModbusRTUClient;
 
-    value = ModbusRTUClient.holdingRegisterRead(SlaveID, address);
-    return value;
-}
-
-long PMMModBUSRTUClientinputRegisterRead(int SlaveID, int address)
-{
-    long value;
-
-    value = ModbusRTUClient.inputRegisterRead(SlaveID, address);
-    return value;
-}
-
-void PMMModBUSRTUClientcoilWrite(int SlaveID, int address, uint8_t value)
-{
-
-    ModbusRTUClient.coilWrite(SlaveID, address, value);
-}
-
-// void PMMModBUSRTUClientdiscreteInputWrite(int SlaveID, int address, uint8_t value)
-// {
-
-//     ModbusRTUClient.discreteInputWrite(SlaveID, address, value);
-// }
-
-void PMMModBUSRTUClientholdingRegisterWrite(int SlaveID, int address, uint16_t value)
-{
-
-    ModbusRTUClient.holdingRegisterWrite(SlaveID, address, value);
-}
-
-// void PMMModBUSRTUClientinputRegisterWrite(int SlaveID, int address, uint16_t value)
-// {
-
-//     ModbusRTUClient.inputRegisterWrite(SlaveID, address, value);
-// }
 #endif

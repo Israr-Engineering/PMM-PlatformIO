@@ -1,113 +1,55 @@
-#include "../Commons/ProjectDef.h"
-#ifdef PMMModbusRTUServer
+/*
+  This file is part of the ArduinoModbus library.
+  Copyright (c) 2018 Arduino SA. All rights reserved.
 
-extern void PMMModBUSRTUServerSetup(int16_t SlaveID, uint16_t Config, int16_t BaudRate, int16_t TXPin, int16_t RXPin, int16_t SerialSelectionPin, int8_t SerialPortNumber = 1);
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
-extern void PMMModBUSRTUServerconfigure(
-    bool Coils, int16_t CoilsStartAddress, int16_t CoilsQauntity,
-    bool InputRegisters, int16_t InputRegistersStartAddress, int16_t InputRegistersQauntity,
-    bool HoldingRegisters, int16_t HoldingRegistersStartAddress, int16_t HoldingRegistersQauntity,
-    bool DiscreteInputs, int16_t DiscreteInputsStartAddress, int16_t DiscreteInputsQauntity
-);
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
 
-extern int PMMModBUSRTUServercoilRead(int address);
-extern int PMMModBUSRTUServerdiscreteInputRead(int address);
-extern long PMMModBUSRTUServerholdingRegisterRead(int address);
-extern long PMMModBUSRTUServerinputRegisterRead(int address);
-extern void PMMModBUSRTUServercoilWrite(int address, uint8_t value);
-extern void PMMModBUSRTUServerdiscreteInputWrite(int address, uint8_t value);
-extern void PMMModBUSRTUServerholdingRegisterWrite(int address, uint16_t value);
-extern void PMMModBUSRTUServerinputRegisterWrite(int address, uint16_t value);
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
-void PMMModBUSRTUServerSetup(int16_t SlaveID, uint16_t Config, int16_t BaudRate, int16_t TXPin, int16_t RXPin, int16_t SerialSelectionPin, int8_t SerialPort)
-{
-    if (SerialPort == 1)
-        RS485.setSerial(&Serial);
-    else if (SerialPort == 2)
-        RS485.setSerial(&Serial1);
+#ifndef _MODBUS_RTU_SERVER_H_INCLUDED
+#define _MODBUS_RTU_SERVER_H_INCLUDED
 
-    RS485.setPins(TXPin, SerialSelectionPin, RXPin);
-    ModbusRTUServer.begin(SlaveID, BaudRate, Config);
-}
+#include "PmmModbusServer.h"
+#include "PmmRS485Lib.h"
 
-void PMMModBUSRTUServerconfigure(
-    bool Coils, int16_t CoilsStartAddress, int16_t CoilsQauntity,
-    bool InputRegisters, int16_t InputRegistersStartAddress, int16_t InputRegistersQauntity,
-    bool HoldingRegisters, int16_t HoldingRegistersStartAddress, int16_t HoldingRegistersQauntity,
-    bool DiscreteInputs, int16_t DiscreteInputsStartAddress, int16_t DiscreteInputsQauntity)
-{
+class PmmModbusRTUServerClass : public PmmModbusServer {
+public:
+  PmmModbusRTUServerClass();
+  PmmModbusRTUServerClass(PmmRS485Class& rs485);
+  virtual ~PmmModbusRTUServerClass();
 
-    if (Coils)
-    {
-        ModbusRTUServer.configureCoils(CoilsStartAddress, CoilsQauntity);
-    }
-    if (InputRegisters)
-    {
-        ModbusRTUServer.configureInputRegisters(InputRegistersStartAddress, InputRegistersQauntity);
-    }
-    if (HoldingRegisters)
-    {
-        ModbusRTUServer.configureHoldingRegisters(HoldingRegistersStartAddress, HoldingRegistersQauntity);
-    }
-    if (DiscreteInputs)
-    {
-        ModbusRTUServer.configureDiscreteInputs(DiscreteInputsStartAddress, DiscreteInputsQauntity);
-    }
-}
+  /**
+   * Start the Modbus RTU server with the specified parameters
+   *
+   * @param id (slave) id of the server
+   * @param baudrate Baud rate to use
+   * @param config serial config. to use defaults to SERIAL_8N1
+   *
+   * Return 1 on success, 0 on failure
+   */
+  int begin(int id, unsigned long baudrate, uint16_t config = SERIAL_8N1);
+  int begin(PmmRS485Class& rs485, int id, unsigned long baudrate, uint16_t config = SERIAL_8N1);
 
-int PMMModBUSRTUServercoilRead(int address)
-{
-    int value;
-    ModbusRTUServer.poll();
-    value = ModbusRTUServer.coilRead(address);
-    return value;
-}
+  /**
+   * Poll interface for requests
+   */
+  virtual int poll();
 
-int PMMModBUSRTUServerdiscreteInputRead(int address)
-{
-    int value;
-    ModbusRTUServer.poll();
-    value = ModbusRTUServer.discreteInputRead(address);
-    return value;
-}
+private:
+  PmmRS485Class* _rs485 = &RS485;
+};
 
-long PMMModBUSRTUServerholdingRegisterRead(int address)
-{
-    long value;
-    ModbusRTUServer.poll();
-    value = ModbusRTUServer.holdingRegisterRead(address);
-    return value;
-}
+extern PmmModbusRTUServerClass PmmModbusRTUServer;
 
-long PMMModBUSRTUServerinputRegisterRead(int address)
-{
-    long value;
-    ModbusRTUServer.poll();
-    value = ModbusRTUServer.inputRegisterRead(address);
-    return value;
-}
-
-void PMMModBUSRTUServercoilWrite(int address, uint8_t value)
-{
-    ModbusRTUServer.poll();
-    ModbusRTUServer.coilWrite(address, value);
-}
-
-void PMMModBUSRTUServerdiscreteInputWrite(int address, uint8_t value)
-{
-    ModbusRTUServer.poll();
-    ModbusRTUServer.discreteInputWrite(address, value);
-}
-
-void PMMModBUSRTUServerholdingRegisterWrite(int address, uint16_t value)
-{
-    ModbusRTUServer.poll();
-    ModbusRTUServer.holdingRegisterWrite(address, value);
-}
-
-void PMMModBUSRTUServerinputRegisterWrite(int address, uint16_t value)
-{
-    ModbusRTUServer.poll();
-    ModbusRTUServer.inputRegisterWrite(address, value);
-}
 #endif

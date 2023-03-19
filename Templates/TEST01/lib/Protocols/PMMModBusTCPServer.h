@@ -1,134 +1,57 @@
-#include "../Commons/ProjectDef.h"
-#ifdef PMMModbusTCPServer
-EthernetServer ethServer(502);
-ModbusTCPServer modbusTCPServer;
+/*
+  This file is part of the ArduinoModbus library.
+  Copyright (c) 2018 Arduino SA. All rights reserved.
 
-extern void PMMmodbusTCPServerSetup(uint8_t *MACAddress, IPAddress IpAddress, int16_t ETHPORT, int16_t SlaveID);
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
-extern void PMMmodbusTCPServerconfigure(bool Coils, int16_t CoilsStartAddress, int16_t CoilsQauntity,
-                                        bool InputRegisters, int16_t InputRegistersStartAddress, int16_t InputRegistersQauntity,
-                                        bool HoldingRegisters, int16_t HoldingRegistersStartAddress, int16_t HoldingRegistersQauntity,
-                                        bool DiscreteInputs, int16_t DiscreteInputsStartAddress, int16_t DiscreteInputsQauntity);
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
 
-extern int PMMmodbusTCPServercoilRead(int address);
-extern int PMMmodbusTCPServerdiscreteInputRead(int address);
-extern long PMMmodbusTCPServerholdingRegisterRead(int address);
-extern long PMMmodbusTCPServerinputRegisterRead(int address);
-extern void PMMmodbusTCPServercoilWrite(int address, uint8_t value);
-extern void PMMmodbusTCPServerdiscreteInputWrite(int address, uint8_t value);
-extern void PMMmodbusTCPServerholdingRegisterWrite(int address, uint16_t value);
-extern void PMMmodbusTCPServerinputRegisterWrite(int address, uint16_t value);
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
-void PMMmodbusTCPServerSetup(uint8_t *MACAddress, IPAddress IpAddress, int16_t ETHPORT, int16_t SlaveID)
-{
-    Ethernet.begin(MACAddress, IpAddress);
-    ethServer.begin();
-    modbusTCPServer.begin(SlaveID); 
-}
+#ifndef _MODBUS_TCP_SERVER_H_INCLUDED
+#define _MODBUS_TCP_SERVER_H_INCLUDED
 
-void PMMmodbusTCPServerconfigure(bool Coils, int16_t CoilsStartAddress, int16_t CoilsQauntity,
-                                 bool InputRegisters, int16_t InputRegistersStartAddress, int16_t InputRegistersQauntity,
-                                 bool HoldingRegisters, int16_t HoldingRegistersStartAddress, int16_t HoldingRegistersQauntity,
-                                 bool DiscreteInputs, int16_t DiscreteInputsStartAddress, int16_t DiscreteInputsQauntity)
-{
+#include <Client.h>
 
-    if (Coils)
-    {
-        modbusTCPServer.configureCoils(CoilsStartAddress, CoilsQauntity);
-    }
-    if (InputRegisters)
-    {
-        modbusTCPServer.configureInputRegisters(InputRegistersStartAddress, InputRegistersQauntity);
-    }
-    if (HoldingRegisters)
-    {
-        modbusTCPServer.configureHoldingRegisters(HoldingRegistersStartAddress, HoldingRegistersQauntity);
-    }
-    if (DiscreteInputs)
-    {
-        modbusTCPServer.configureDiscreteInputs(DiscreteInputsStartAddress, DiscreteInputsQauntity);
-    }
-    
-}
+#include "PmmModbusServer.h"
 
-int PMMmodbusTCPServercoilRead(int address)
-{
-    int value;
-    EthernetClient client = ethServer.available();
-    modbusTCPServer.accept(client);
-    modbusTCPServer.poll();
-    value = modbusTCPServer.coilRead(address);
-       
-    return value;
-}
+class PmmModbusTCPServer : public PmmModbusServer {
+public:
+  PmmModbusTCPServer();
+  virtual ~PmmModbusTCPServer();
 
-int PMMmodbusTCPServerdiscreteInputRead(int address)
-{
-    int value;
-    EthernetClient client = ethServer.available();
-    modbusTCPServer.accept(client);
-    modbusTCPServer.poll();
-    value = modbusTCPServer.discreteInputRead(address);
-        
-    return value;
-}
+  /**
+   * Start the Modbus TCP server with the specified parameters
+   *
+   * @param id (slave) id of the server, defaults to 0xff (TCP)
+   *
+   * Return 1 on success, 0 on failure
+   */
+  int begin(int id = 0xff);
 
-long PMMmodbusTCPServerholdingRegisterRead(int address)
-{
-    long value;
-    EthernetClient client = ethServer.available();
-    modbusTCPServer.accept(client);
-    modbusTCPServer.poll();
-    value =modbusTCPServer.holdingRegisterRead(address);
-       
-    return value;
-}
+  /**
+   * Accept client connection
+   *
+   * @param client client to accept
+   */
+  void accept(Client& client);
 
-long PMMmodbusTCPServerinputRegisterRead(int address)
-{
-    long value;
-    EthernetClient client = ethServer.available();
-    modbusTCPServer.accept(client);
-    modbusTCPServer.poll();
-    value = modbusTCPServer.inputRegisterRead(address);
-        
-    return value;
-}
+  /**
+   * Poll accepted client for requests
+   */
+  virtual int poll();
 
-void PMMmodbusTCPServercoilWrite(int address, uint8_t value)
-{
-    EthernetClient client = ethServer.available();
-    modbusTCPServer.accept(client);
-    modbusTCPServer.poll();
-    modbusTCPServer.coilWrite(address, value);
-        
-}
+private:
+  Client* _client;
+};
 
-void PMMmodbusTCPServerdiscreteInputWrite(int address, uint8_t value)
-{
-    EthernetClient client = ethServer.available();
-    modbusTCPServer.accept(client);
-    modbusTCPServer.poll();
-    modbusTCPServer.discreteInputWrite(address, value);
-        
-}
-
-void PMMmodbusTCPServerholdingRegisterWrite(int address, uint16_t value)
-{
-    
-    EthernetClient client = ethServer.available();
-    modbusTCPServer.accept(client);
-    modbusTCPServer.poll();
-    modbusTCPServer.holdingRegisterWrite(address, value);
-        
-}
-
-void PMMmodbusTCPServerinputRegisterWrite(int address, uint16_t value)
-{
-    EthernetClient client = ethServer.available();
-    modbusTCPServer.accept(client);
-    modbusTCPServer.poll();
-    modbusTCPServer.inputRegisterWrite(address, value);
-        
-}
 #endif
