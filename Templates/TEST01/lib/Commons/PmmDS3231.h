@@ -52,7 +52,7 @@ protected:
 //checks if a year is a leap year
 bool isleapYear(const uint8_t);
 
-class RTClib {
+class PmmRTClib {
   public:
 		// Get date and time snapshot
     static DateTime now(TwoWire & _Wire = Wire);

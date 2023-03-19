@@ -162,7 +162,7 @@ bool isleapYear(const uint8_t y) {
   return (y % 100 || y % 400 == 0);
 }
 
-DateTime RTClib::now(TwoWire & _Wire) {
+DateTime PmmRTClib::now(TwoWire & _Wire) {
   _Wire.beginTransmission(CLOCK_ADDRESS);
   _Wire.write(0);	// This is the first register address (Seconds)
   			// We'll read from here on for 7 bytes: secs reg, minutes reg, hours, days, months and years.

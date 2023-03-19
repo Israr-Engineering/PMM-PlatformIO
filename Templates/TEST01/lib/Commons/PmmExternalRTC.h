@@ -14,7 +14,7 @@ extern int16_t PMMReturnCurrentMinute();
 extern bool PMMRTCCheck();
 extern string PMMRTCStringTime();
 
-RTClib PMMDS3231;
+PmmRTClib PMMDS3231;
 DS3231 RTCSetTime;
 
 bool PMMInitializeExternalRTC()

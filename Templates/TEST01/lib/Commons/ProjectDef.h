@@ -77,8 +77,8 @@
 //#include <Modbus.h>
 //#include <ModbusSerial.h>
 
-//#include <Ethernet.h>
-//#include <EthernetUdp.h>
+#include <PmmEthernet.h>
+#include <PmmEthernetUDP.h>
 
 //#include <HTTPRequest.hPP>
 //#include <MPU6050_6Axis_MotionApps612.h>
