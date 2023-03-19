@@ -19,7 +19,7 @@
 
 #include <errno.h>
 
-#include "PmmPmmModbusClient.h"
+#include "PmmModbusClient.h"
 
 PmmModbusClient::PmmModbusClient(unsigned long defaultTimeout) :
   _mb(NULL),
