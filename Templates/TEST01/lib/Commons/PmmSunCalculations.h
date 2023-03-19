@@ -147,6 +147,7 @@ int16_t PMMReturnDayOfYear(DateTime date)
   
         int daysInMonth[] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
+
         int year = date.getYear() ;
         int month = date.getMonth();
         int day = date.getDay();
@@ -159,12 +160,12 @@ int16_t PMMReturnDayOfYear(DateTime date)
         // Check if it is a leap year, this is confusing business
         // See: https://support.microsoft.com/en-us/kb/214019
 
-        if (year%4  == 0) {
-            if (year%100 != 0) {
+        if (year % 4  == 0) {
+            if (year % 100 != 0) {
             daysInMonth[1] = 29;
             }
             else {
-            if (year%400 == 0) {
+            if (year % 400 == 0) {
                 daysInMonth[1] = 29;
             }
             }
