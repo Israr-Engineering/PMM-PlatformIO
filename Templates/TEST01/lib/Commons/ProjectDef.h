@@ -76,7 +76,7 @@
 #include <PmmEthernetUDP.h>
 #endif
 
-#include <PmmHTTPRequest.h>
+//#include <PmmHTTPRequest.h>
 #include <PmmMPU6050_6Axis_MotionApps612.h>
 
 

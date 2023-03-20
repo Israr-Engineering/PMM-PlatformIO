@@ -43,7 +43,7 @@
 #include "WProgram.h"
 #endif
 
-#include <SPI.h>
+#include <PmmSPI.h>
 
 // Flash Commands
 typedef enum
