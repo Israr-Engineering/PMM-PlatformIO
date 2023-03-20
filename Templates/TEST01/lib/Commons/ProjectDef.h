@@ -34,7 +34,7 @@
 #define PMMBNO
 
 //I2C 
-//#define PMMI2C
+#define PMMI2C
 
 
 #pragma endregion
@@ -43,7 +43,7 @@
 #pragma region INCLUDES
 
 // 01. Includes
-#include <iostream>
+//#include <iostream>
 #include <string>
 #include <String>
 #include <array>
@@ -66,22 +66,19 @@
 #include <PmmPID_v1.h>
 #include <PmmDS3231.h>
 //#include <PmmSunCalculations.h>
-//#ifdef PMMI2C
+#ifdef PMMI2C
 #include <PmmRS485Lib.h>
 #include <PmmArduinoModbus.h>
 #include <PmmFlashAsEEPROM.h>
 #include <PmmFlashStorage.h>
 
-//#include <Modbus.h>
-//#include <ModbusSerial.h>
-
 #include <PmmEthernet.h>
 #include <PmmEthernetUDP.h>
-//#endif
+#endif
 
 //#include <HTTPRequest.hPP>
 //#include <MPU6050_6Axis_MotionApps612.h>
-//#include <FlashStorage_SAMD.h>
+
 
 
 // 02. Using
