@@ -56,7 +56,7 @@
 #include <random>
 
 #include <Wire.h>
-#include <SPI.h>
+#include <PmmSPI.h>
 
 #include <PmmScheduler.h>
 #include <PmmExternalEEPROM.h>
@@ -77,7 +77,7 @@
 #endif
 
 //#include <HTTPRequest.hPP>
-//#include <MPU6050_6Axis_MotionApps612.h>
+#include <PmmMPU6050_6Axis_MotionApps612.h>
 
 
 
