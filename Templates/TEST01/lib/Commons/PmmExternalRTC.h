@@ -15,7 +15,7 @@ extern bool PMMRTCCheck();
 extern string PMMRTCStringTime();
 
 PmmRTClib PMMDS3231;
-DS3231 RTCSetTime;
+PmmDS3231 RTCSetTime;
 
 bool PMMInitializeExternalRTC()
 {

@@ -1,6 +1,4 @@
 
-#pragma region DEFINE
-
 // PMMTypes
 #define PMMTypes
 // PMMCommands
@@ -27,20 +25,15 @@
 // Flash Memory
 #define PMMFlashMemory
 // UDP
-//#define PMMUDP
+#define PMMUDP
 /// MPU
 #define PMMMPU
 // BNO
 #define PMMBNO
-
 //I2C 
 #define PMMI2C
 
 
-#pragma endregion
-
-
-#pragma region INCLUDES
 
 // 01. Includes
 //#include <iostream>
@@ -65,7 +58,7 @@
 #include <PmmInternalRTC.h>
 #include <PmmPID_v1.h>
 #include <PmmDS3231.h>
-//#include <PmmSunCalculations.h>
+
 #ifdef PMMI2C
 #include <PmmRS485Lib.h>
 #include <PmmArduinoModbus.h>
@@ -76,9 +69,9 @@
 #include <PmmEthernetUDP.h>
 #endif
 
-//#include <PmmHTTPRequest.h>
 #include <PmmMPU6050_6Axis_MotionApps612.h>
 
+#include <PmmTimeLib.h>
 
 
 // 02. Using
@@ -86,12 +79,9 @@ using namespace std;
 using std::basic_string;
 using std::char_traits;
 
-#pragma endregion
 
-//#pragma region VARIABLES
 
 typedef bool bit;
 
 
 
-//#pragma endregion

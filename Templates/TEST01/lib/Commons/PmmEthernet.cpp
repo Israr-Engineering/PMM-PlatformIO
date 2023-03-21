@@ -24,11 +24,11 @@
 #include "PmmDhcp.h"
 
 IPAddress EthernetClass::_dnsServerAddress;
-DhcpClass* EthernetClass::_dhcp = NULL;
+PmmDhcpClass* EthernetClass::_dhcp = NULL;
 
 int EthernetClass::begin(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
 {
-	static DhcpClass s_dhcp;
+	static PmmDhcpClass s_dhcp;
 	_dhcp = &s_dhcp;
 
 	// Initialise the basic info

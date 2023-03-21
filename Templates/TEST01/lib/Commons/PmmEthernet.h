@@ -69,12 +69,12 @@ enum EthernetHardwareStatus {
 class PmmEthernetUDP;
 class PmmEthernetClient;
 class PmmEthernetServer;
-class DhcpClass;
+class PmmDhcpClass;
 
 class EthernetClass {
 private:
 	static IPAddress _dnsServerAddress;
-	static DhcpClass* _dhcp;
+	static PmmDhcpClass* _dhcp;
 public:
 	// Initialise the Ethernet shield to use the provided MAC address and
 	// gain the rest of the configuration through DHCP.
@@ -270,7 +270,7 @@ public:
 };
 
 
-class DhcpClass {
+class PmmDhcpClass {
 private:
 	uint32_t _dhcpInitialTransactionId;
 	uint32_t _dhcpTransactionId;

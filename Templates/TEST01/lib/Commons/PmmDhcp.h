@@ -113,7 +113,7 @@ enum
 	dhcpMaxMsgSize		=	57,*/
 	dhcpT1value		=	58,
 	dhcpT2value		=	59,
-	/*DhcpClassIdentifier	=	60,*/
+	/*PmmDhcpClassIdentifier	=	60,*/
 	dhcpClientIdentifier	=	61,
 	endOption		=	255
 };

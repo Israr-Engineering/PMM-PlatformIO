@@ -6,7 +6,7 @@
 #include "PmmDhcp.h"
 #include "Pmmw5100.h"
 
-int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
+int PmmDhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
 {
 	_dhcpLeaseTime=0;
 	_dhcpT1=0;
@@ -23,14 +23,14 @@ int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long 
 	return request_DHCP_lease();
 }
 
-void DhcpClass::reset_DHCP_lease()
+void PmmDhcpClass::reset_DHCP_lease()
 {
 	// zero out _dhcpSubnetMask, _dhcpGatewayIp, _dhcpLocalIp, _dhcpDhcpServerIp, _dhcpDnsServerIp
 	memset(_dhcpLocalIp, 0, 20);
 }
 
 	//return:0 on error, 1 if request is sent and response is received
-int DhcpClass::request_DHCP_lease()
+int PmmDhcpClass::request_DHCP_lease()
 {
 	uint8_t messageType = 0;
 
@@ -112,11 +112,11 @@ int DhcpClass::request_DHCP_lease()
 	return result;
 }
 
-void DhcpClass::presend_DHCP()
+void PmmDhcpClass::presend_DHCP()
 {
 }
 
-void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
+void PmmDhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
 {
 	uint8_t buffer[32];
 	memset(buffer, 0, 32);
@@ -233,7 +233,7 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
 	_dhcpUdpSocket.endPacket();
 }
 
-uint8_t DhcpClass::parseDHCPResponse(unsigned long responseTimeout, uint32_t& transactionId)
+uint8_t PmmDhcpClass::parseDHCPResponse(unsigned long responseTimeout, uint32_t& transactionId)
 {
 	uint8_t type = 0;
 	uint8_t opt_len = 0;
@@ -349,7 +349,7 @@ uint8_t DhcpClass::parseDHCPResponse(unsigned long responseTimeout, uint32_t& tr
     3/DHCP_CHECK_REBIND_FAIL: rebind fail
     4/DHCP_CHECK_REBIND_OK: rebind success
 */
-int DhcpClass::checkLease()
+int PmmDhcpClass::checkLease()
 {
 	int rc = DHCP_CHECK_NONE;
 
@@ -395,32 +395,32 @@ int DhcpClass::checkLease()
 	return rc;
 }
 
-IPAddress DhcpClass::getLocalIp()
+IPAddress PmmDhcpClass::getLocalIp()
 {
 	return IPAddress(_dhcpLocalIp);
 }
 
-IPAddress DhcpClass::getSubnetMask()
+IPAddress PmmDhcpClass::getSubnetMask()
 {
 	return IPAddress(_dhcpSubnetMask);
 }
 
-IPAddress DhcpClass::getGatewayIp()
+IPAddress PmmDhcpClass::getGatewayIp()
 {
 	return IPAddress(_dhcpGatewayIp);
 }
 
-IPAddress DhcpClass::getDhcpServerIp()
+IPAddress PmmDhcpClass::getDhcpServerIp()
 {
 	return IPAddress(_dhcpDhcpServerIp);
 }
 
-IPAddress DhcpClass::getDnsServerIp()
+IPAddress PmmDhcpClass::getDnsServerIp()
 {
 	return IPAddress(_dhcpDnsServerIp);
 }
 
-void DhcpClass::printByte(char * buf, uint8_t n )
+void PmmDhcpClass::printByte(char * buf, uint8_t n )
 {
 	char *str = &buf[1];
 	buf[0]='0';

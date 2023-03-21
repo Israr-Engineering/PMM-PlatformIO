@@ -4,7 +4,7 @@
 
 #include "PmmTypes.h"
 
-ExternalEEPROM PMMEprom;
+PmmExternalEEPROM PMMEprom;
 
 struct PmmPLC PMMPLC;
 struct PmmModBus PMMMODBUS;
@@ -39,7 +39,7 @@ extern unsigned int EEPROMLength();
 extern void InitializeWire();
 
 
-#pragma region CONGIGRATION FUNCTIONS
+//#pragma region CONGIGRATION FUNCTIONS
 
 void InitializeWire(){
      Wire.begin();
@@ -237,9 +237,9 @@ string CheckAvailabeHardware()
 
 
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Check Hardware
+//#pragma region Check Hardware
 
 bool PMMCheckExternalRTC()
 {
@@ -257,9 +257,9 @@ bool PMMCheckEEPROM()
     return EEPROMFound;
 }
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region STRINGS FUNCTIONS
+//#pragma region STRINGS FUNCTIONS
 
 std::array<string, 100> PMMSplitString(string parameter, std::array<string, 100> OutputArray)
 {
@@ -350,9 +350,10 @@ string DateTimeToString(uint16_t year, uint8_t month, uint8_t day, uint8_t hour,
     return str;
 }
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region CHECK DEVICE USING DEBUG PRINT
+//#pragma region CHECK DEVICE USING DEBUG PRINT
+
 void Debugprintln(string toPrint)
 {
     String PrintData = String(toPrint.c_str());
@@ -367,9 +368,9 @@ void Debugprint(string toPrint)
         SerialUSB.print(PrintData);
 }
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region HTTP FUNCTIONS
+//#pragma region HTTP FUNCTIONS
 
 // void InitializeEthernet(byte mac[],IPAddress ip)
 // {
@@ -383,6 +384,6 @@ IPAddress PMMGetLocalIP()
     return Ethernet.localIP();
 }
 
-#pragma endregion
+//#pragma endregion
 
 #endif

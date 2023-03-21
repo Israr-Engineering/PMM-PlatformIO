@@ -8,8 +8,8 @@ extern string PMMCommnads(string readData);
 extern string PMMReturnDataFromSerialUSB();
 extern string PMMReturnDataFromAPIHTTPHeader();
 
-EthernetServer server(80);
-EthernetClient client = server.available();
+PmmEthernetServer server(80);
+PmmEthernetClient client = server.available();
 
 void PMMInitializeEthernet(IPAddress ip, byte mac[])
 {
@@ -120,7 +120,7 @@ string PMMReturnDataFromAPIHTTPHeader()
 
 void PMMSendDataHTTPClient(String Data)
 {
-    EthernetClient client = server.available();
+    PmmEthernetClient client = server.available();
     client.println("HTTP/1.1 200 OK");
     client.println("Content-Type: text/html");
     client.println("Connection: close");
