@@ -1,7 +1,7 @@
 #include "PmmInternalRTCLib.h"
-#include "PmmRTCZero.h"
+#include "PmmInternalRTC.h"
 
-PmmRTCZero PMMRTC;
+PmmInternalRTC PMMRTC;
 
 void PMMInternalRTCSetup()
 {

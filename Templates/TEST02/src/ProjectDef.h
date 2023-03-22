@@ -59,7 +59,6 @@
 
 #ifdef PMMInternalRTC
 #include <PmmInternalRTC.h>
-#include <PmmRTCZero.h>
 #endif
 
 #if defined(PMMModbusRTUServer) || defined(PMMModbusRTUClient) || defined(PMMModbusTCPServer)
