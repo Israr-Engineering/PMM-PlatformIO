@@ -91,9 +91,9 @@
 #include "PmmHX711.h"
 #endif
 
-// #ifdef PMMI2C2000
-// #include <PmmEthernet2000.h>
-// #endif
+#ifdef PMMI2C2000
+#include <PmmEthernet2000.h>
+#endif
 
 // 02. Using
 using namespace std;
