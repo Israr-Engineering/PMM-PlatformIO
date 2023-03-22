@@ -1,7 +1,7 @@
-#include "../Commons/ProjectDef.h"
+//#include "../Commons/ProjectDef.h"
 #ifdef PMMModbusTCPServer
-EthernetServer ethServer(502);
-ModbusTCPServer modbusTCPServer;
+PmmEthernetServer ethServer(502);
+PmmModbusTCPServer modbusTCPServer;
 
 extern void PMMmodbusTCPServerSetup(uint8_t *MACAddress, IPAddress IpAddress, int16_t ETHPORT, int16_t SlaveID);
 
@@ -54,7 +54,7 @@ void PMMmodbusTCPServerconfigure(bool Coils, int16_t CoilsStartAddress, int16_t 
 int PMMmodbusTCPServercoilRead(int address)
 {
     int value;
-    EthernetClient client = ethServer.available();
+    PmmEthernetClient client = ethServer.available();
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     value = modbusTCPServer.coilRead(address);
@@ -65,7 +65,7 @@ int PMMmodbusTCPServercoilRead(int address)
 int PMMmodbusTCPServerdiscreteInputRead(int address)
 {
     int value;
-    EthernetClient client = ethServer.available();
+    PmmEthernetClient client = ethServer.available();
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     value = modbusTCPServer.discreteInputRead(address);
@@ -76,7 +76,7 @@ int PMMmodbusTCPServerdiscreteInputRead(int address)
 long PMMmodbusTCPServerholdingRegisterRead(int address)
 {
     long value;
-    EthernetClient client = ethServer.available();
+    PmmEthernetClient client = ethServer.available();
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     value =modbusTCPServer.holdingRegisterRead(address);
@@ -87,7 +87,7 @@ long PMMmodbusTCPServerholdingRegisterRead(int address)
 long PMMmodbusTCPServerinputRegisterRead(int address)
 {
     long value;
-    EthernetClient client = ethServer.available();
+    PmmEthernetClient client = ethServer.available();
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     value = modbusTCPServer.inputRegisterRead(address);
@@ -97,7 +97,7 @@ long PMMmodbusTCPServerinputRegisterRead(int address)
 
 void PMMmodbusTCPServercoilWrite(int address, uint8_t value)
 {
-    EthernetClient client = ethServer.available();
+    PmmEthernetClient client = ethServer.available();
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     modbusTCPServer.coilWrite(address, value);
@@ -106,7 +106,7 @@ void PMMmodbusTCPServercoilWrite(int address, uint8_t value)
 
 void PMMmodbusTCPServerdiscreteInputWrite(int address, uint8_t value)
 {
-    EthernetClient client = ethServer.available();
+    PmmEthernetClient client = ethServer.available();
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     modbusTCPServer.discreteInputWrite(address, value);
@@ -116,7 +116,7 @@ void PMMmodbusTCPServerdiscreteInputWrite(int address, uint8_t value)
 void PMMmodbusTCPServerholdingRegisterWrite(int address, uint16_t value)
 {
     
-    EthernetClient client = ethServer.available();
+    PmmEthernetClient client = ethServer.available();
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     modbusTCPServer.holdingRegisterWrite(address, value);
@@ -125,7 +125,7 @@ void PMMmodbusTCPServerholdingRegisterWrite(int address, uint16_t value)
 
 void PMMmodbusTCPServerinputRegisterWrite(int address, uint16_t value)
 {
-    EthernetClient client = ethServer.available();
+    PmmEthernetClient client = ethServer.available();
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     modbusTCPServer.inputRegisterWrite(address, value);

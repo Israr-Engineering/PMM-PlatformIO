@@ -1,4 +1,4 @@
-#include "../Commons/ProjectDef.h"
+//#include "../Commons/ProjectDef.h"
 #ifdef PMMModbusRTUClient
 
 extern void PMMModBUSRTUClientSetup(uint16_t Config, int16_t BaudRate, int16_t TXPin, int16_t RXPin, int16_t SerialSelectionPin, int8_t SerialPortNumber = 1);
@@ -21,14 +21,14 @@ void PMMModBUSRTUClientSetup(uint16_t Config, int16_t BaudRate, int16_t TXPin,
         RS485.setSerial(&Serial1);
 
     RS485.setPins(TXPin, SerialSelectionPin, RXPin);
-    ModbusRTUClient.begin(BaudRate, Config)
+    PmmModbusRTUClient.begin(BaudRate, Config);
 }
 
 int PMMModBUSRTUClientcoilRead(int SlaveID, int address)
 {
     int value;
 
-    value = ModbusRTUClient.coilRead(SlaveID, address);
+    value = PmmModbusRTUClient.coilRead(SlaveID, address);
     return value;
 }
 
@@ -36,7 +36,7 @@ int PMMModBUSRTUClientdiscreteInputRead(int SlaveID, int address)
 {
     int value;
 
-    value = ModbusRTUClient.discreteInputRead(SlaveID, address);
+    value = PmmModbusRTUClient.discreteInputRead(SlaveID, address);
     return value;
 }
 
@@ -44,7 +44,7 @@ long PMMModBUSRTUClientholdingRegisterRead(int SlaveID, int address)
 {
     long value;
 
-    value = ModbusRTUClient.holdingRegisterRead(SlaveID, address);
+    value = PmmModbusRTUClient.holdingRegisterRead(SlaveID, address);
     return value;
 }
 
@@ -52,14 +52,14 @@ long PMMModBUSRTUClientinputRegisterRead(int SlaveID, int address)
 {
     long value;
 
-    value = ModbusRTUClient.inputRegisterRead(SlaveID, address);
+    value = PmmModbusRTUClient.inputRegisterRead(SlaveID, address);
     return value;
 }
 
 void PMMModBUSRTUClientcoilWrite(int SlaveID, int address, uint8_t value)
 {
 
-    ModbusRTUClient.coilWrite(SlaveID, address, value);
+    PmmModbusRTUClient.coilWrite(SlaveID, address, value);
 }
 
 // void PMMModBUSRTUClientdiscreteInputWrite(int SlaveID, int address, uint8_t value)
@@ -71,7 +71,7 @@ void PMMModBUSRTUClientcoilWrite(int SlaveID, int address, uint8_t value)
 void PMMModBUSRTUClientholdingRegisterWrite(int SlaveID, int address, uint16_t value)
 {
 
-    ModbusRTUClient.holdingRegisterWrite(SlaveID, address, value);
+    PmmModbusRTUClient.holdingRegisterWrite(SlaveID, address, value);
 }
 
 // void PMMModBUSRTUClientinputRegisterWrite(int SlaveID, int address, uint16_t value)

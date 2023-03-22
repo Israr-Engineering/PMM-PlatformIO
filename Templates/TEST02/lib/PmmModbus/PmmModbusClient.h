@@ -21,7 +21,7 @@
 #define _MODBUS_CLIENT_H_INCLUDED
 
 extern "C" {
-  #include "libmodbus/modbus.h"
+  #include "modbus.h"
 }
 
 #include <Arduino.h>

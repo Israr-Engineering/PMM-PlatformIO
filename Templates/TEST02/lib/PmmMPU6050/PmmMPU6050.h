@@ -38,7 +38,7 @@ THE SOFTWARE.
 #ifndef _MPU6050_H_
 #define _MPU6050_H_
 
-#include "I2Cdev.h"
+#include "PmmI2Cdev.h"
 #include "Pmmhelper_3dmath.h"
 
 // supporting link:  http://forum.arduino.cc/index.php?&topic=143444.msg1079517#msg1079517

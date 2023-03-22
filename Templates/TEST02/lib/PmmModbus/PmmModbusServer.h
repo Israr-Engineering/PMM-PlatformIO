@@ -23,7 +23,7 @@
 #include <Arduino.h>
 
 extern "C" {
-  #include "libmodbus/modbus.h"
+  #include "modbus.h"
 }
 
 class PmmModbusServer {

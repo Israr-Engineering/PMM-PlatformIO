@@ -5,7 +5,13 @@
         "string_view": "cpp",
         "chrono": "cpp",
         "string": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "istream": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

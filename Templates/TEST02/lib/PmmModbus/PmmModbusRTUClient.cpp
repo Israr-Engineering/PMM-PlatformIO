@@ -20,54 +20,41 @@
 #include <errno.h>
 
 extern "C" {
-#include "libmodbus/modbus.h"
-#include "libmodbus/modbus-rtu.h"
+#include "modbus.h"
+#include "modbus-rtu.h"
 }
 
-#include "PmmModbusRTUServer.h"
+#include "PmmModbusRTUClient.h"
 
-PmmModbusRTUServerClass::PmmModbusRTUServerClass()
+PmmModbusRTUClientClass::PmmModbusRTUClientClass() :
+  PmmModbusClient(1000)
 {
 }
 
-PmmModbusRTUServerClass::PmmModbusRTUServerClass(PmmRS485Class& rs485) : _rs485(&rs485)
+PmmModbusRTUClientClass::PmmModbusRTUClientClass(PmmRS485Class& rs485) :
+  PmmModbusClient(1000),  _rs485(&rs485)
 {
 }
 
-PmmModbusRTUServerClass::~PmmModbusRTUServerClass()
+PmmModbusRTUClientClass::~PmmModbusRTUClientClass()
 {
 }
 
-int PmmModbusRTUServerClass::begin(int id, unsigned long baudrate, uint16_t config)
+int PmmModbusRTUClientClass::begin(unsigned long baudrate, uint16_t config)
 {
   modbus_t* mb = modbus_new_rtu(_rs485, baudrate, config);
 
-  if (!PmmModbusServer::begin(mb, id)) {
+  if (!PmmModbusClient::begin(mb, 0x00)) {
     return 0;
   }
-
-  modbus_connect(mb);
 
   return 1;
 }
 
-int PmmModbusRTUServerClass::begin(PmmRS485Class& rs485, int id, unsigned long baudrate, uint16_t config)
+int PmmModbusRTUClientClass::begin(PmmRS485Class& rs485, unsigned long baudrate, uint16_t config)
 {
   _rs485 = &rs485;
-  return begin(id, baudrate, config);
+  return begin(baudrate, config);
 }
 
-int PmmModbusRTUServerClass::poll()
-{
-  uint8_t request[MODBUS_RTU_MAX_ADU_LENGTH];
-
-  int requestLength = modbus_receive(_mb, request);
-
-  if (requestLength > 0) {
-    modbus_reply(_mb, request, requestLength, &_mbMapping);
-    return 1;
-  }
-  return 0;
-}
-
-PmmModbusRTUServerClass ModbusRTUServer;
+PmmModbusRTUClientClass PmmModbusClient;

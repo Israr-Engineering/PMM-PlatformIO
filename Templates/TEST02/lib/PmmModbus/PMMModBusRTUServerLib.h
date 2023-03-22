@@ -1,4 +1,4 @@
-#include "../Commons/ProjectDef.h"
+//#include "../Commons/ProjectDef.h"
 #ifdef PMMModbusRTUServer
 
 extern void PMMModBUSRTUServerSetup(int16_t SlaveID, uint16_t Config, int16_t BaudRate, int16_t TXPin, int16_t RXPin, int16_t SerialSelectionPin, int8_t SerialPortNumber = 1);
@@ -27,7 +27,7 @@ void PMMModBUSRTUServerSetup(int16_t SlaveID, uint16_t Config, int16_t BaudRate,
         RS485.setSerial(&Serial1);
 
     RS485.setPins(TXPin, SerialSelectionPin, RXPin);
-    ModbusRTUServer.begin(SlaveID, BaudRate, Config);
+    PmmModbusRTUServer.begin(SlaveID, BaudRate, Config);
 }
 
 void PMMModBUSRTUServerconfigure(
@@ -39,75 +39,75 @@ void PMMModBUSRTUServerconfigure(
 
     if (Coils)
     {
-        ModbusRTUServer.configureCoils(CoilsStartAddress, CoilsQauntity);
+        PmmModbusRTUServer.configureCoils(CoilsStartAddress, CoilsQauntity);
     }
     if (InputRegisters)
     {
-        ModbusRTUServer.configureInputRegisters(InputRegistersStartAddress, InputRegistersQauntity);
+        PmmModbusRTUServer.configureInputRegisters(InputRegistersStartAddress, InputRegistersQauntity);
     }
     if (HoldingRegisters)
     {
-        ModbusRTUServer.configureHoldingRegisters(HoldingRegistersStartAddress, HoldingRegistersQauntity);
+        PmmModbusRTUServer.configureHoldingRegisters(HoldingRegistersStartAddress, HoldingRegistersQauntity);
     }
     if (DiscreteInputs)
     {
-        ModbusRTUServer.configureDiscreteInputs(DiscreteInputsStartAddress, DiscreteInputsQauntity);
+        PmmModbusRTUServer.configureDiscreteInputs(DiscreteInputsStartAddress, DiscreteInputsQauntity);
     }
 }
 
 int PMMModBUSRTUServercoilRead(int address)
 {
     int value;
-    ModbusRTUServer.poll();
-    value = ModbusRTUServer.coilRead(address);
+    PmmModbusRTUServer.poll();
+    value = PmmModbusRTUServer.coilRead(address);
     return value;
 }
 
 int PMMModBUSRTUServerdiscreteInputRead(int address)
 {
     int value;
-    ModbusRTUServer.poll();
-    value = ModbusRTUServer.discreteInputRead(address);
+    PmmModbusRTUServer.poll();
+    value = PmmModbusRTUServer.discreteInputRead(address);
     return value;
 }
 
 long PMMModBUSRTUServerholdingRegisterRead(int address)
 {
     long value;
-    ModbusRTUServer.poll();
-    value = ModbusRTUServer.holdingRegisterRead(address);
+    PmmModbusRTUServer.poll();
+    value = PmmModbusRTUServer.holdingRegisterRead(address);
     return value;
 }
 
 long PMMModBUSRTUServerinputRegisterRead(int address)
 {
     long value;
-    ModbusRTUServer.poll();
-    value = ModbusRTUServer.inputRegisterRead(address);
+    PmmModbusRTUServer.poll();
+    value = PmmModbusRTUServer.inputRegisterRead(address);
     return value;
 }
 
 void PMMModBUSRTUServercoilWrite(int address, uint8_t value)
 {
-    ModbusRTUServer.poll();
-    ModbusRTUServer.coilWrite(address, value);
+    PmmModbusRTUServer.poll();
+    PmmModbusRTUServer.coilWrite(address, value);
 }
 
 void PMMModBUSRTUServerdiscreteInputWrite(int address, uint8_t value)
 {
-    ModbusRTUServer.poll();
-    ModbusRTUServer.discreteInputWrite(address, value);
+    PmmModbusRTUServer.poll();
+    PmmModbusRTUServer.discreteInputWrite(address, value);
 }
 
 void PMMModBUSRTUServerholdingRegisterWrite(int address, uint16_t value)
 {
-    ModbusRTUServer.poll();
-    ModbusRTUServer.holdingRegisterWrite(address, value);
+    PmmModbusRTUServer.poll();
+    PmmModbusRTUServer.holdingRegisterWrite(address, value);
 }
 
 void PMMModBUSRTUServerinputRegisterWrite(int address, uint16_t value)
 {
-    ModbusRTUServer.poll();
-    ModbusRTUServer.inputRegisterWrite(address, value);
+    PmmModbusRTUServer.poll();
+    PmmModbusRTUServer.inputRegisterWrite(address, value);
 }
 #endif

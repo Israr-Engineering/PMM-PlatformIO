@@ -17,44 +17,33 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <errno.h>
+#ifndef _MODBUS_RTU_CLIENT_H_INCLUDED
+#define _MODBUS_RTU_CLIENT_H_INCLUDED
 
-extern "C" {
-#include "libmodbus/modbus.h"
-#include "libmodbus/modbus-rtu.h"
-}
+#include "PmmModbusClient.h"
+#include <PmmRS485Lib.h>
 
-#include "PmmModbusRTUClient.h"
+class PmmModbusRTUClientClass : public PmmModbusClient {
+public:
+  PmmModbusRTUClientClass();
+  PmmModbusRTUClientClass(PmmRS485Class& rs485);
+  virtual ~PmmModbusRTUClientClass();
 
-PmmModbusRTUClientClass::PmmModbusRTUClientClass() :
-  PmmModbusClient(1000)
-{
-}
+  /**
+   * Start the Modbus RTU client with the specified parameters
+   *
+   * @param baudrate Baud rate to use
+   * @param config serial config. to use defaults to SERIAL_8N1
+   *
+   * Return 1 on success, 0 on failure
+   */
+  int begin(unsigned long baudrate, uint16_t config = SERIAL_8N1);
+  int begin(PmmRS485Class& rs485, unsigned long baudrate, uint16_t config = SERIAL_8N1);
 
-PmmModbusRTUClientClass::PmmModbusRTUClientClass(PmmRS485Class& rs485) :
-  PmmModbusClient(1000),  _rs485(&rs485)
-{
-}
+private:
+  PmmRS485Class* _rs485 = &RS485;
+};
 
-PmmModbusRTUClientClass::~PmmModbusRTUClientClass()
-{
-}
+extern PmmModbusRTUClientClass PmmModbusRTUClient;
 
-int PmmModbusRTUClientClass::begin(unsigned long baudrate, uint16_t config)
-{
-  modbus_t* mb = modbus_new_rtu(_rs485, baudrate, config);
-
-  if (!PmmModbusClient::begin(mb, 0x00)) {
-    return 0;
-  }
-
-  return 1;
-}
-
-int PmmModbusRTUClientClass::begin(PmmRS485Class& rs485, unsigned long baudrate, uint16_t config)
-{
-  _rs485 = &rs485;
-  return begin(baudrate, config);
-}
-
-PmmModbusRTUClientClass PmmModbusClient;
+#endif

@@ -20,8 +20,8 @@
 #include <errno.h>
 
 extern "C" {
-#include "libmodbus/modbus.h"
-#include "libmodbus/modbus-tcp.h"
+#include "modbus.h"
+#include "modbus-tcp.h"
 }
 
 #include "PmmModbusTCPServer.h"

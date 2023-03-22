@@ -1,4 +1,4 @@
-//#include "ProjectDef.h"
+// #include "ProjectDef.h"
 
 #ifdef PMMGlobalFunctions
 
@@ -38,16 +38,19 @@ extern void PMMInitializeEEPROM();
 extern unsigned int EEPROMLength();
 extern void InitializeWire();
 
+// #pragma region CONGIGRATION FUNCTIONS
 
-//#pragma region CONGIGRATION FUNCTIONS
-
-void InitializeWire(){
-     Wire.begin();
+void InitializeWire()
+{
+    Wire.begin();
 }
 
 void PMMInitializeEEPROM()
 {
+#ifdef PMMEEPROM
     PMMEprom.begin();
+#endif
+
 }
 
 // 0620,0,1,192.168.1.200,255.255.255.0,8.8.8.0,192.168.1.1,192.168.1.201,1000,5,00-B0-D0-63-C2-26,91,92,93,94,COM1,9600,8,1,None,true,1000,5,18101995,1,1,false\n
@@ -56,50 +59,50 @@ void PMMSetUSBConfigurationSettings(string Settings)
     // if (SerialUSB.available() > 0)
     // {
     //     String SerialData = SerialUSB.readStringUntil('\n');
-        //String SerialData = "0620,0,1,192.168.1.200,255.255.255.0,8.8.8.0,192.168.1.1,192.168.1.201,1000,5,00-B0-D0-63-C2-26,91,92,93,94,COM1,9600,8,1,None,true,1000,5,18101995,1,1,false\n";
-        //string Settings = settings;
-        std::array<string, 100> OUTPUT;
-        OUTPUT = PMMSplitString(Settings, OUTPUT);
+    // String SerialData = "0620,0,1,192.168.1.200,255.255.255.0,8.8.8.0,192.168.1.1,192.168.1.201,1000,5,00-B0-D0-63-C2-26,91,92,93,94,COM1,9600,8,1,None,true,1000,5,18101995,1,1,false\n";
+    // string Settings = settings;
+    std::array<string, 100> OUTPUT;
+    OUTPUT = PMMSplitString(Settings, OUTPUT);
 
-        PMMPLC.Name = OUTPUT[0];
-        PMMPLC.TCPorRTU = stoi(OUTPUT[1]);
-        PMMMODBUS.SlaveID = stoi(OUTPUT[2]);
-        PMMTCPUDP.IPAddressEthOne = OUTPUT[3];
-        PMMTCPUDP.SubnetMaskEthOne = OUTPUT[4];
-        PMMTCPUDP.DNSOneEthOne = OUTPUT[5];
-        PMMTCPUDP.GatewayEthOne = OUTPUT[6];
-        PMMTCPUDP.RemoteIPAddressEthOne = OUTPUT[7];
-        PMMTCPUDP.TimeOutConnEthOne = stoi(OUTPUT[8]);
-        PMMTCPUDP.MaxRetriesEthOne = stoi(OUTPUT[9]);
-        PMMTCPUDP.MacAddressEthOne = OUTPUT[10];
-        PMMTCPUDP.UDPPortOne = stoi(OUTPUT[11]);
-        PMMTCPUDP.UDPPortTow = stoi(OUTPUT[12]);
-        PMMTCPUDP.UDPPortThree = stoi(OUTPUT[13]);
-        PMMTCPUDP.UDPPortFour = stoi(OUTPUT[14]);
-        PMMSERIAL.PortOneName = OUTPUT[15];
-        PMMSERIAL.PortOneBaudRate = stoi(OUTPUT[16]);
-        PMMSERIAL.PortOneDataBits = stoi(OUTPUT[17]);
-        PMMSERIAL.PortOneStopBits = stoi(OUTPUT[18]);
-        PMMSERIAL.PortOneParity = OUTPUT[19];
-        bool PortOneInterface = false;
-        if (OUTPUT[20] == "true")
-            PortOneInterface = true;
-        else
-            PortOneInterface = false;
-        PMMSERIAL.PortOneInterface = PortOneInterface;
-        PMMSERIAL.PortOneConnTimeOut = stoi(OUTPUT[21]);
-        PMMSERIAL.PortOneMaxRetries = stoi(OUTPUT[22]);
-        PMMPLC.SerialNumber = stoi(OUTPUT[23]);
-        PMMPLC.FirmwareVersion = OUTPUT[24];
-        PMMPLC.HardwareVersion = OUTPUT[25];
-        bool WebServer = false;
-        if (OUTPUT[26] == "true")
-            WebServer = true;
-        else
-            WebServer = false;
-        PMMPLC.WebServer = WebServer;
+    PMMPLC.Name = OUTPUT[0];
+    PMMPLC.TCPorRTU = stoi(OUTPUT[1]);
+    PMMMODBUS.SlaveID = stoi(OUTPUT[2]);
+    PMMTCPUDP.IPAddressEthOne = OUTPUT[3];
+    PMMTCPUDP.SubnetMaskEthOne = OUTPUT[4];
+    PMMTCPUDP.DNSOneEthOne = OUTPUT[5];
+    PMMTCPUDP.GatewayEthOne = OUTPUT[6];
+    PMMTCPUDP.RemoteIPAddressEthOne = OUTPUT[7];
+    PMMTCPUDP.TimeOutConnEthOne = stoi(OUTPUT[8]);
+    PMMTCPUDP.MaxRetriesEthOne = stoi(OUTPUT[9]);
+    PMMTCPUDP.MacAddressEthOne = OUTPUT[10];
+    PMMTCPUDP.UDPPortOne = stoi(OUTPUT[11]);
+    PMMTCPUDP.UDPPortTow = stoi(OUTPUT[12]);
+    PMMTCPUDP.UDPPortThree = stoi(OUTPUT[13]);
+    PMMTCPUDP.UDPPortFour = stoi(OUTPUT[14]);
+    PMMSERIAL.PortOneName = OUTPUT[15];
+    PMMSERIAL.PortOneBaudRate = stoi(OUTPUT[16]);
+    PMMSERIAL.PortOneDataBits = stoi(OUTPUT[17]);
+    PMMSERIAL.PortOneStopBits = stoi(OUTPUT[18]);
+    PMMSERIAL.PortOneParity = OUTPUT[19];
+    bool PortOneInterface = false;
+    if (OUTPUT[20] == "true")
+        PortOneInterface = true;
+    else
+        PortOneInterface = false;
+    PMMSERIAL.PortOneInterface = PortOneInterface;
+    PMMSERIAL.PortOneConnTimeOut = stoi(OUTPUT[21]);
+    PMMSERIAL.PortOneMaxRetries = stoi(OUTPUT[22]);
+    PMMPLC.SerialNumber = stoi(OUTPUT[23]);
+    PMMPLC.FirmwareVersion = OUTPUT[24];
+    PMMPLC.HardwareVersion = OUTPUT[25];
+    bool WebServer = false;
+    if (OUTPUT[26] == "true")
+        WebServer = true;
+    else
+        WebServer = false;
+    PMMPLC.WebServer = WebServer;
 
-        PMMSetDeviceSettingsEProm();
+    PMMSetDeviceSettingsEProm();
     //}
 }
 
@@ -219,27 +222,23 @@ string CheckAvailabeHardware()
 {
     string result = "";
 
-  
-        // Read Data From USB
-        if (SerialUSB.available() > 0)
+    // Read Data From USB
+    if (SerialUSB.available() > 0)
+    {
+        string Hardware = std::string((SerialUSB.readString()).c_str());
+        if (Hardware == "InternalRTC")
         {
-            string Hardware = std::string((SerialUSB.readString()).c_str());
-            if (Hardware == "InternalRTC")
-            {
-                // bool InternalRTCBool = PMMCheckInternalRTC();
-                // result = InternalRTCBool ? "found" : "not found";
-            }
+            // bool InternalRTCBool = PMMCheckInternalRTC();
+            // result = InternalRTCBool ? "found" : "not found";
         }
-    
+    }
 
     return result;
 }
 
+// #pragma endregion
 
-
-//#pragma endregion
-
-//#pragma region Check Hardware
+// #pragma region Check Hardware
 
 bool PMMCheckExternalRTC()
 {
@@ -257,9 +256,9 @@ bool PMMCheckEEPROM()
     return EEPROMFound;
 }
 
-//#pragma endregion
+// #pragma endregion
 
-//#pragma region STRINGS FUNCTIONS
+// #pragma region STRINGS FUNCTIONS
 
 std::array<string, 100> PMMSplitString(string parameter, std::array<string, 100> OutputArray)
 {
@@ -350,9 +349,9 @@ string DateTimeToString(uint16_t year, uint8_t month, uint8_t day, uint8_t hour,
     return str;
 }
 
-//#pragma endregion
+// #pragma endregion
 
-//#pragma region CHECK DEVICE USING DEBUG PRINT
+// #pragma region CHECK DEVICE USING DEBUG PRINT
 
 void Debugprintln(string toPrint)
 {
@@ -368,9 +367,9 @@ void Debugprint(string toPrint)
         SerialUSB.print(PrintData);
 }
 
-//#pragma endregion
+// #pragma endregion
 
-//#pragma region HTTP FUNCTIONS
+// #pragma region HTTP FUNCTIONS
 
 // void InitializeEthernet(byte mac[],IPAddress ip)
 // {
@@ -384,6 +383,6 @@ IPAddress PMMGetLocalIP()
     return Ethernet.localIP();
 }
 
-//#pragma endregion
+// #pragma endregion
 
 #endif

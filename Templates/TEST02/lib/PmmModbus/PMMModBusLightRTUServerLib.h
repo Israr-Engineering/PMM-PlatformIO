@@ -1,4 +1,4 @@
-#include "../Commons/ProjectDef.h"
+//#include "../Commons/ProjectDef.h"
 #ifdef PMMModbusLightRTUServer
 ModbusSerial mb;
 

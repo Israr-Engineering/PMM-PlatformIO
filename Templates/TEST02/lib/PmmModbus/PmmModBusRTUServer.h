@@ -17,33 +17,39 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _MODBUS_RTU_CLIENT_H_INCLUDED
-#define _MODBUS_RTU_CLIENT_H_INCLUDED
+#ifndef _MODBUS_RTU_SERVER_H_INCLUDED
+#define _MODBUS_RTU_SERVER_H_INCLUDED
 
-#include "PmmModbusClient.h"
-#include "PmmRS485Lib.h"
+#include "PmmModbusServer.h"
+#include <PmmRS485Lib.h>
 
-class PmmModbusRTUClientClass : public PmmModbusClient {
+class PmmModbusRTUServerClass : public PmmModbusServer {
 public:
-  PmmModbusRTUClientClass();
-  PmmModbusRTUClientClass(PmmRS485Class& rs485);
-  virtual ~PmmModbusRTUClientClass();
+  PmmModbusRTUServerClass();
+  PmmModbusRTUServerClass(PmmRS485Class& rs485);
+  virtual ~PmmModbusRTUServerClass();
 
   /**
-   * Start the Modbus RTU client with the specified parameters
+   * Start the Modbus RTU server with the specified parameters
    *
+   * @param id (slave) id of the server
    * @param baudrate Baud rate to use
    * @param config serial config. to use defaults to SERIAL_8N1
    *
    * Return 1 on success, 0 on failure
    */
-  int begin(unsigned long baudrate, uint16_t config = SERIAL_8N1);
-  int begin(PmmRS485Class& rs485, unsigned long baudrate, uint16_t config = SERIAL_8N1);
+  int begin(int id, unsigned long baudrate, uint16_t config = SERIAL_8N1);
+  int begin(PmmRS485Class& rs485, int id, unsigned long baudrate, uint16_t config = SERIAL_8N1);
+
+  /**
+   * Poll interface for requests
+   */
+  virtual int poll();
 
 private:
   PmmRS485Class* _rs485 = &RS485;
 };
 
-extern PmmModbusRTUClientClass PmmModbusRTUClient;
+extern PmmModbusRTUServerClass PmmModbusRTUServer;
 
 #endif
