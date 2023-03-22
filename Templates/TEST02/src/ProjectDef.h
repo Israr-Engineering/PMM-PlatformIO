@@ -67,9 +67,9 @@
 #include <PmmEthernet.h>
 #include <PmmEthernetUDP.h>
 
-// #ifdef PMMI2C2000
-// #include <PmmEthernet2000.h>
-// #endif
+#ifdef PMMI2C2000
+#include <PmmEthernet2000.h>
+#endif
 
 #include <PmmMPU6050_6Axis_MotionApps612.h>
 #include <PmmTimeLib.h>
