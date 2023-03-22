@@ -24,9 +24,9 @@
 
 #include "Arduino.h"
 
-#include "utility/imumaths.h"
-#include "Adafruit_BusIO/Adafruit_I2CDevice.h"
-#include "Adafruit_Unified_Sensor/Adafruit_Sensor.h"
+#include "imumaths.h"
+#include "Adafruit_I2CDevice.h"
+#include "Adafruit_Sensor.h"
 
 /** BNO055 Address A **/
 #define BNO055_ADDRESS_A (0x28)
