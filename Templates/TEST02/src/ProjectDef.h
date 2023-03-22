@@ -37,7 +37,6 @@
 
 // 01. Includes
 //#include <iostream>
-#include <string>
 #include <String>
 #include <array>
 #include <cstdlib>
@@ -53,13 +52,13 @@
 
 #include <PmmScheduler.h>
 #include <PmmExternalEEPROM.h>
-#include <PmmSPISerialFlash.h>
-#include <PmmBNO055.h>
+//#include <PmmSPISerialFlash.h>
+//#include <PmmBNO055.h>
 #include <PmmInternalRTC.h>
 #include <PmmPID_v1.h>
 #include <PmmDS3231.h>
 
-#ifdef PMMI2C
+
 #include <PmmRS485Lib.h>
 #include <PmmArduinoModbus.h>
 #include <PmmFlashAsEEPROM.h>
@@ -67,10 +66,14 @@
 
 #include <PmmEthernet.h>
 #include <PmmEthernetUDP.h>
-#endif
+
+// #ifdef PMMI2C2000
+// #include <PmmEthernet2000.h>
+// #endif
 
 #include <PmmMPU6050_6Axis_MotionApps612.h>
-//#include <PmmTimeLib.h>
+#include <PmmTimeLib.h>
+
 
 
 // 02. Using

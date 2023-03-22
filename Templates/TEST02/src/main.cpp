@@ -4,7 +4,7 @@
 
 #include <PmmGlobalFunctions.h>
 #include <PmmCommands.h>
-//#include <PmmSunCalculations.h>
+#include <PmmSunCalculations.h>
 
 
 
@@ -24,7 +24,19 @@ void setup()
 
 void loop()
 {
-  time_t now = time(0);
+  //time_t now = time(0);
+  // SerialUSB.print(year(now));
+  // SerialUSB.print("-");
+  // printDigits(month(now));
+  // SerialUSB.print("-");
+  // printDigits(day(now));
+  // SerialUSB.print(" ");
+  // printDigits(hour(now));
+  // SerialUSB.print(":");
+  // printDigits(minute(now));
+  // SerialUSB.print(":");
+  // printDigits(second(now));
+  // SerialUSB.println();
 
   // if ((millis() - TT) > 3000)
   // {
