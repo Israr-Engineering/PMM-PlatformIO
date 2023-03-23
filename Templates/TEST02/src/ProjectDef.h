@@ -33,6 +33,8 @@
 #define PMMI2C
 //Load Cell
 #define PmmLoadCell
+//PmmPCA9535
+#define PmmPCA9535
 
 // 01. Includes
 #include <String>
@@ -92,6 +94,10 @@
 
 #ifdef PMMI2C2000
 #include <PmmEthernet2000.h>
+#endif
+
+#ifdef PmmPCA9535
+#include "PmmPCA9535.h"
 #endif
 
 // 02. Using

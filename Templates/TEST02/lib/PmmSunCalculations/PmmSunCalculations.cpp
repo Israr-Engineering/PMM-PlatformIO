@@ -11,7 +11,7 @@ string printDigits(int digits);
 int16_t PMMReturnDayOfYear(int year, int month, int day);
 string PMMDatetimeNowStr(time_t date);
 time_t PMMSetDatetime(int year, int month, int day);
-time_t PMMSetAnDatetime(int year, int month, int day,int hour,int minute,int second);
+time_t PMMSetAnDatetime(int year, int month, int day, int hour, int minute, int second);
 array<string, 18> SunCalculations(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post);
 string SunCalculationsStr(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post);
 string PmmDateTimeToString(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec);
@@ -115,7 +115,7 @@ time_t PMMSetDatetime(int year, int month, int day)
     return tSet;
 }
 
-time_t PMMSetAnDatetime(int year, int month, int day,int hour,int minute,int second)
+time_t PMMSetAnDatetime(int year, int month, int day, int hour, int minute, int second)
 {
     tmElements_t tm;
     tm.Year = year;
@@ -129,9 +129,9 @@ time_t PMMSetAnDatetime(int year, int month, int day,int hour,int minute,int sec
     return tSet;
 }
 
-array<string, 18> SunCalculations(time_t date, double lat, double lang, int TimeZone, double TrackerWidth , double Post2Post)
+array<string, 18> SunCalculations(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post)
 {
-TimeZone = 3,TrackerWidth = 4,Post2Post = 11;
+    TimeZone = 3, TrackerWidth = 4, Post2Post = 11;
     array<string, 18> arr;
     string Resulte = "Time : " + PMMDatetimeNowStr(date) + " (Lang,Lat) = " + to_string(lang) + " , " + to_string(lat) + "; \n";
 
@@ -180,7 +180,7 @@ TimeZone = 3,TrackerWidth = 4,Post2Post = 11;
 
     time_t tmpLSTh = LST - 43200;
 
-double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)) / 60)) * (double)15 / 60;
+    double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)) / 60)) * (double)15 / 60;
 
 #pragma endregion
 
@@ -241,7 +241,7 @@ double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)
     double tmp = (1.0 / 15) * acos(tan(DeclinationRAD) * tan(latRAD));
     tmp = tmp * 180 / M_PI;
 
-    time_t dateSetRise = PMMSetDatetime((year(date)-1970), month(date), day(date));
+    time_t dateSetRise = PMMSetDatetime((year(date) - 1970), month(date), day(date));
     // DateTime dateSetRise(date.getYear(), date.getMonth(), date.getDay(), 12, 0, 0);
 
     time_t Sunset = dateSetRise + (43200);
@@ -254,10 +254,10 @@ double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)
     Sunrise = Sunrise - (60 * TC);
 
     Resulte = Resulte + "Sunrise = " + PmmDateTimeToString((year(Sunrise)), month(Sunrise), day(Sunrise), hour(Sunrise), minute(Sunrise), second(Sunrise)) + "\n";
-    arr[11] = PmmDateTimeToString((year(Sunrise)-1970), month(Sunrise), day(Sunrise), hour(Sunrise), minute(Sunrise), second(Sunrise));
+    arr[11] = PmmDateTimeToString((year(Sunrise) - 1970), month(Sunrise), day(Sunrise), hour(Sunrise), minute(Sunrise), second(Sunrise));
 
     Resulte = Resulte + "Sunrise = " + PmmDateTimeToString((year(Sunset)), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset)) + "\n";
-    arr[12] = PmmDateTimeToString((year(Sunset)-1970), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset));
+    arr[12] = PmmDateTimeToString((year(Sunset) - 1970), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset));
 
 #pragma endregion
 
@@ -348,7 +348,7 @@ double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)
 
 string SunCalculationsStr(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post)
 {
-TimeZone = 3,TrackerWidth = 4,Post2Post = 11;
+    TimeZone = 3, TrackerWidth = 4, Post2Post = 11;
     array<string, 18> arr;
     string Resulte = "Time : " + PMMDatetimeNowStr(date) + " (Lang,Lat) = " + to_string(lang) + " , " + to_string(lat) + "; \n";
 
@@ -397,7 +397,7 @@ TimeZone = 3,TrackerWidth = 4,Post2Post = 11;
 
     time_t tmpLSTh = LST - 43200;
 
-double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)) / 60)) * (double)15 / 60;
+    double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)) / 60)) * (double)15 / 60;
 
 #pragma endregion
 
@@ -458,9 +458,8 @@ double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)
     double tmp = (1.0 / 15) * acos(tan(DeclinationRAD) * tan(latRAD));
     tmp = tmp * 180 / M_PI;
 
-    time_t dateSetRise = PMMSetDatetime((year(date)-1970), month(date), day(date));
+    time_t dateSetRise = PMMSetDatetime((year(date) - 1970), month(date), day(date));
     // DateTime dateSetRise(date.getYear(), date.getMonth(), date.getDay(), 12, 0, 0);
-
 
     // DateTime Sunset = dateSetRise.AddMinutes(-TC);
 
@@ -480,15 +479,14 @@ double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)
     // Sunrise = Sunrise.AddHours(-tmp);
     // Sunrise = Sunrise.AddHours(-12);
 
-    
     // Sunrise = Sunrise - (60 * tmp);
     // Sunrise = Sunrise - (60 * 12);
 
     Resulte = Resulte + "Sunrise = " + PmmDateTimeToString((year(Sunrise)), month(Sunrise), day(Sunrise), hour(Sunrise), minute(Sunrise), second(Sunrise)) + "\n";
-    arr[11] = PmmDateTimeToString((year(Sunrise)-1970), month(Sunrise), day(Sunrise), hour(Sunrise), minute(Sunrise), second(Sunrise));
+    arr[11] = PmmDateTimeToString((year(Sunrise) - 1970), month(Sunrise), day(Sunrise), hour(Sunrise), minute(Sunrise), second(Sunrise));
 
     Resulte = Resulte + "Sunrise = " + PmmDateTimeToString((year(Sunset)), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset)) + "\n";
-    arr[12] = PmmDateTimeToString((year(Sunset)-1970), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset));
+    arr[12] = PmmDateTimeToString((year(Sunset) - 1970), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset));
 
 #pragma endregion
 
@@ -573,7 +571,6 @@ double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)
     }
     arr[17] = to_string(BackTrackerAngle);
 #pragma endregion
-
 
     return Resulte;
 }
