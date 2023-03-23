@@ -1,6 +1,5 @@
 #include <Arduino.h>
 
-#include <PmmPCA9535.h>
 
 #include <ProjectDef.h>
 
@@ -12,14 +11,15 @@ bool x = false;
 long TT = 0;
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 IPAddress ip(192, 168, 1, 55);
+PmmWDTZero PmmWatchDoggy;
 
 void PMMConfiguration();
 void PMMCommunication();
 
 void setup()
 {
-  PMMPCA9535Setup(0 , 0x20, PCA9535NONINVERTED , PCA9535INPUT);
-  PMMPCA9535Setup(1 , 0x27, PCA9535NONINVERTED , PCA9535INPUT);
+
+  PmmWatchDoggy.setup(WDT_SOFTCYCLE2M);
   PMMInitializeEthernet(ip, mac);
   SerialUSB.begin(9600);
   Scheduler.startLoop(PMMConfiguration);
@@ -28,6 +28,7 @@ void setup()
 
 void loop()
 {
+  PmmWatchDoggy.clear();
   if ((millis() - TT) > 3000)
   {
     time_t now = PMMSetAnDatetime(53, 3, 22, 16, 0, 0);
@@ -37,8 +38,7 @@ void loop()
 }
 
 void PMMConfiguration()
-{
-  
+{ 
   PMMReadCommands();
   yield();
 }

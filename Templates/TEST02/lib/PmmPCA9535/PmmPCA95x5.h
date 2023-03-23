@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-namespace PmmPCA95x5 {
+namespace PCA95x5 {
 
 namespace Reg {
     enum : uint8_t {
@@ -53,7 +53,7 @@ namespace Direction {
 }  // namespace Direction
 
 template <typename WireType = TwoWire>
-class PmmPCA95x5 {
+class PCA95x5 {
     union Ports {
         uint16_t w;
         uint8_t b[2];
@@ -160,7 +160,7 @@ private:
     }
 };
 
-}  // namespace PmmPCA95x5
+}  // namespace PCA95x5
 
-using PmmPCA9535 = PmmPCA95x5::PmmPCA95x5<>;
-using PmmPCA9555 = PmmPCA95x5::PmmPCA95x5<>;
+using PCA9535 = PCA95x5::PCA95x5<>;
+using PCA9555 = PCA95x5::PCA95x5<>;

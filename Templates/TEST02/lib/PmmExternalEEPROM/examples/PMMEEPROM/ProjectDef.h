@@ -6,37 +6,37 @@
 // PMMGlobalFunctions
 #define PMMGlobalFunctions
 // External  RTC
-#define PMMExternalRTC
+//#define PMMExternalRTC
 // Internal RTC
-#define PMMInternalRTC
+//#define PMMInternalRTC
 // ModbusRTUServer
-#define PMMModbusRTUServer
+//#define PMMModbusRTUServer
 // ModbusLightRTUServer
-#define PMMModbusLightRTUServer
+//#define PMMModbusLightRTUServer
 // ModbusRTUClient
-#define PMMModbusRTUClient
+//#define PMMModbusRTUClient
 // ModbusTCPServer
-#define PMMModbusTCPServer
+//#define PMMModbusTCPServer
 // Sun Calculations
-#define PMMSunCalculations
+//#define PMMSunCalculations
 // EEPROM
 #define PMMEEPROM
 // Flash Memory
-#define PMMFlashMemory
+//#define PMMFlashMemory
 // UDP
-#define PMMUDP
+//#define PMMUDP
 /// MPU
-#define PMMMPU
+//#define PMMMPU
 // BNO
-#define PMMBNO
+//#define PMMBNO
 //I2C 
-#define PMMI2C
+//#define PMMI2C
 //Load Cell
-#define PmmLoadCell
+//#define PmmLoadCell
 //PmmPCA9535
-#define PmmPCA9535
+//#define PmmPCA9535
 //Watch Dog
-#define PmmWatchDog
+//#define PmmWatchDog
 
 // 01. Includes
 #include <String>
