@@ -15,6 +15,8 @@ void PMMCommunication();
 
 void setup()
 {
+  PMMPCA9535Setup(0 , 0x20, PCA9535NONINVERTED , PCA9535INPUT);
+  PMMPCA9535Setup(1 , 0x27, PCA9535NONINVERTED , PCA9535INPUT);
   PMMInitializeEthernet(ip, mac);
   SerialUSB.begin(9600);
   Scheduler.startLoop(PMMConfiguration);

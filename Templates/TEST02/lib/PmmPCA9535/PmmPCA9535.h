@@ -1,6 +1,6 @@
 #ifndef PCA9535
 #define PCA5935
-#include "PmmPCA95x5.h"
+#include "PmmPCA95X5.h"
 #define PCA9535INVERTED 1
 #define PCA9535NONINVERTED 0
 #define PCA9535OUTPUT 1
