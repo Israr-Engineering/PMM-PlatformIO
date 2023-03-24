@@ -37,6 +37,8 @@
 #define PmmPCA9535
 //Watch Dog
 #define PmmWatchDog
+//PWM
+#define PmmPWM
 
 // 01. Includes
 #include <String>
@@ -104,6 +106,10 @@
 
 #ifdef PmmWatchDog
 #include <PmmWDTZero.h>
+#endif
+
+#ifdef PmmPWM
+#include <PmmPWM.h>
 #endif
 
 // 02. Using
