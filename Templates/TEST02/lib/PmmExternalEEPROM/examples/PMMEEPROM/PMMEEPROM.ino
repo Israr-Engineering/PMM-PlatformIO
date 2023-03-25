@@ -1,5 +1,5 @@
 #include <Arduino.h>
-//#include "ProjectDef.h"
+#include "ProjectDef.h"
 #include <PmmExternalEEPROMLib.h>
 
 long PMMTime;
@@ -26,7 +26,7 @@ void loop() {
 
   if ((millis() - PMMTime) > 15000) {
 
-    EpromValue1 = PMMFlashReadInt(1);     // Function to read int16_t value from address 1 in eeprom EEPROM
+    EpromValue1 = GetIntDataFromEEprom(1);     // Function to read int16_t value from address 1 in eeprom EEPROM
     EpromValue2 = GetLongDataFromEEprom(2);    // Function to read int32_t value from address 2 in eeprom EEPROM
     EpromValue3 = GetStringDataFromEEprom(4);  // Function to read String value from address 4 in eeprom EEPROM
     EpromValue4 = GetFloatDataFromEEprom(6);   // Function to read float value from address 6 in eeprom EEPROM
