@@ -57,4 +57,4 @@ int PmmModbusRTUClientClass::begin(PmmRS485Class& rs485, unsigned long baudrate,
   return begin(baudrate, config);
 }
 
-PmmModbusRTUClientClass PmmModbusClient;
+PmmModbusRTUClientClass PmmModbusRTUClient;

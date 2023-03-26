@@ -70,4 +70,4 @@ int PmmModbusRTUServerClass::poll()
   return 0;
 }
 
-PmmModbusRTUServerClass ModbusRTUServer;
+PmmModbusRTUServerClass PmmModbusRTUServer;
