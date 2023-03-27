@@ -8,7 +8,9 @@
 #include <PMMModBusRTUServerLib.h>
 
 bool x = false;
-long TT = 0;
+long Timer1 = 0;
+long Timer2 = 0;
+long Timer3 = 0;
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 IPAddress ip(192, 168, 1, 55);
 PmmWDTZero PmmWatchDoggy;
@@ -37,11 +39,11 @@ void setup()
 void loop()
 {
   PmmWatchDoggy.clear();
-  if ((millis() - TT) > 3000)
+  if ((millis() - Timer1) > 3000)
   {
     time_t now = PMMSetAnDatetime(53, 3, 22, 16, 0, 0);
     SerialUSB.println(SunCalculationsStr(now, 31.5320459, 36.0276305, 3, 4, 11).c_str());
-    TT = millis();
+    Timer1 = millis();
   }
 }
 
@@ -54,6 +56,20 @@ void PMMConfiguration()
 void PMMCommunication()
 {
 
+  if ((millis() - Timer2) > 3000)
+  {
+
+    for (int address = 0; address < 10; address++)
+    {
+      long val = PMMModBUSRTUServerholdingRegisterRead(address);
+      SerialUSB.print("Value Of Address ");
+      SerialUSB.print(address);
+      SerialUSB.print(" : ");
+      SerialUSB.println(val);
+    }
+
+    Timer2 = millis();
+  }
   // We must call 'yield' at a regular basis to pass
 
   // control to other tasks.

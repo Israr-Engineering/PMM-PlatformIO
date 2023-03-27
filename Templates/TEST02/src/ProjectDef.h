@@ -67,9 +67,9 @@
 #include <PmmInternalRTC.h>
 #endif
 
-//#if defined(PMMModbusRTUServer) || defined(PMMModbusRTUClient) || defined(PMMModbusTCPServer)
+#if defined(PMMModbusRTUServer) || defined(PMMModbusRTUClient) || defined(PMMModbusTCPServer)
 #include <PmmArduinoModbus.h>
-//#endif
+#endif
 
 #ifdef PMMEEPROM
 #include <PmmExternalEEPROM.h>
