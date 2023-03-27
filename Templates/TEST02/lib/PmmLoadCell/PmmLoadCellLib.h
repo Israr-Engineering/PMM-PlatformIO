@@ -27,7 +27,7 @@ void PmmLoadCellSetOffset(float Offset)
 
 float PmmLoadCellGetOffset()
 {
-    PmmLoadCell.get_offset();
+   return  PmmLoadCell.get_offset();
 }
 
 void PmmLoadCellSetScale(float Scale)
@@ -37,15 +37,15 @@ void PmmLoadCellSetScale(float Scale)
 
 float PmmLoadCellGetScale()
 {
-    PmmLoadCell.get_scale();
+    return PmmLoadCell.get_scale();
 }
 
 float PmmLoadCellGetRealRead(uint8_t NumberOfReads)
 {
-    PmmLoadCell.read_average(NumberOfReads);
+    return PmmLoadCell.read_average(NumberOfReads);
 }
 
 float PmmLoadCellGetScaleReading(uint8_t NumberOfReads)
 {
-    PmmLoadCell.get_units(NumberOfReads);
+    return PmmLoadCell.get_units(NumberOfReads);
 }

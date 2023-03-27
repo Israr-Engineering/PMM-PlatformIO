@@ -1,10 +1,10 @@
-//#include "ProjectDef.h"
+// #include "ProjectDef.h"
 
 #ifdef PMMTypes
 
-typedef bool bit; 
+typedef bool bit;
 
-typedef struct PmmPLC
+typedef struct PmmGeneralSettings
 {
 
     /* data */
@@ -30,8 +30,8 @@ typedef struct PmmPLC
     bool GSM = false;                  // INDEX => 39 , If true => GSM          Else If false => no GSM
     bool GPS = false;                  // INDEX => 40 , If true => GPS          Else If false => no GPS
     bool Antenna = false;              // INDEX => 41 , If true => Antenna      Else If false => no Antenna
-    bool ExternalRTCAva = false;          // INDEX => 42 , If true => External RTC Else If false => no External RTC
-    bool InternalRTCAva = false;          // INDEX => 43 , If true => Internal RTC Else If false => no Internal RTC
+    bool ExternalRTCAva = false;       // INDEX => 42 , If true => External RTC Else If false => no External RTC
+    bool InternalRTCAva = false;       // INDEX => 43 , If true => Internal RTC Else If false => no Internal RTC
     bool UDPOption = false;            // INDEX => 44 , If true => UDP          Else If false => no UDP
     bool GateWay = false;              // INDEX => 45 , If true => GateWay      Else If false => no GateWay
     string ControllerType = "";        // INDEX => 46 , Controller Type
@@ -47,9 +47,9 @@ typedef struct PmmPLC
     float GeneralReadingsOffset = 0;   // INDEX => 76
     float GeneralReadingsFactor = 0;   // INDEX => 80
     int16_t TCPorRTU = 0;              // INDEX => 84
-} PmmPLC;
+} PmmGeneralSettings;
 
-typedef struct PmmSerial
+typedef struct PmmSerialSettings
 {
     /* data */
     // system memorey
@@ -87,9 +87,9 @@ typedef struct PmmSerial
     int32_t PortFourConnTimeOut = 0;  // INDEX => 158
     int8_t PortFourMaxRetries = 8;    // INDEX => 162
     bool PortFourInterface = false;   // INDEX => 163 , If true => RS485 Else If false RS232
-} PmmSerial;
+} PmmSerialSettings;
 
-typedef struct PmmTCPUDP
+typedef struct PmmTCPUDPSettings
 {
     /* data */
     // system memorey
@@ -117,9 +117,9 @@ typedef struct PmmTCPUDP
     int16_t UDPPortTow = 0;            // INDEX => 266
     int16_t UDPPortThree = 0;          // INDEX => 268
     int16_t UDPPortFour = 0;           // INDEX => 270
-} PmmTCPUDP;
+} PmmTCPUDPSettings;
 
-typedef struct PmmModBus
+typedef struct PmmModBusSettings
 {
     /* data */
 
@@ -160,9 +160,18 @@ typedef struct PmmModBus
     int16_t SlaveID = 1;                               // INDEX => 319
     int32_t StartingAddress = 0;                       // INDEX => 321
     int16_t Quantity = 0;                              // INDEX => 325
+} PmmModBusSettings;
+
+typedef struct PmmModBus
+{
+    int Coils[1024];
+    int DiscretetInputs[1024];
+    long Registers[1024];
+    long InputRegisters[1024];
+
 } PmmModBus;
 
-typedef struct PmmTimers
+typedef struct PmmTimersSettings
 {
     /* data */
 
@@ -177,7 +186,7 @@ typedef struct PmmTimers
     bit OneHouTimer = false;  // INDEX => 500.625 ,Flip Flop Timer Every One Hour
     bit OneMonTimer = false;  // INDEX => 500.750 ,Flip Flop Timer Every One Month
     bit OneYearTimer = false; // INDEX => 500.875 ,Flip Flop Timer Every One Year
-} PmmTimers;
+} PmmTimersSettings;
 
 enum PmmModBusFunction
 {
