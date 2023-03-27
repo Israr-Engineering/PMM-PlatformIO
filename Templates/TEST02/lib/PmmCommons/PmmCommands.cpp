@@ -6,7 +6,6 @@ using namespace std;
 PmmEthernetServer server(80);
 PmmEthernetClient client = server.available();
 
-
 void PMMInitializeEthernet(IPAddress ip, byte mac[]);
 void PMMReadCommands();
 string PMMCommnads(string readData);
@@ -39,18 +38,20 @@ void PMMReadCommands()
 string PMMCommnads(string readData)
 {
     string result = "";
-    if (readData == "PMMSetUSBConfigurationSettings")
+
+    if (readData == "PMMSetSettings,0")
     {
         if (SerialUSB.available() > 0)
         {
             string settings = PMMReturnDataFromSerialUSB();
             PMMSetUSBConfigurationSettings(settings);
-            result = "PMMSetUSBConfigurationSettings";
+            //PMMSetDeviceSettingsEProm();
+            result = "Done";
         }
 
         if (client)
         {
-            string settings = PMMReturnDataFromAPIHTTPHeader();     
+            string settings = PMMReturnDataFromAPIHTTPHeader();
             PMMSetUSBConfigurationSettings(settings);
             result = "PMMSetUSBConfigurationSettings";
         }
@@ -63,8 +64,6 @@ string PMMCommnads(string readData)
     {
         result = PMMIsAlive();
     }
-
-    
 
     return result;
 }
@@ -113,7 +112,7 @@ void PMMSendDataHTTPClient(String Data)
     client.println("HTTP/1.1 200 OK");
     client.println("Content-Type: text/html");
     client.println("Connection: close");
-    
+
     client.println();
     client.println("<!DOCTYPE HTML>");
     client.println("<html>");

@@ -49,7 +49,7 @@ void PutLongDataToEEprom(int16_t Address, int32_t Value)
 String GetStringDataFromEEprom(int16_t Address)
 {
     String  Value;
-     PMMEprom.get(Address, Value);
+    PMMEprom.get(Address, Value);
     return Value;
 }
 

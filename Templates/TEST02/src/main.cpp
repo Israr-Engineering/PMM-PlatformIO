@@ -11,6 +11,8 @@ bool x = false;
 long Timer1 = 0;
 long Timer2 = 0;
 long Timer3 = 0;
+int StartingAddress = 11;
+int Quantity = 10;
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 IPAddress ip(192, 168, 1, 55);
 PmmWDTZero PmmWatchDoggy;
@@ -58,10 +60,12 @@ void PMMCommunication()
 
   if ((millis() - Timer2) > 3000)
   {
-
-    for (int address = 0; address < 10; address++)
+    long* RegisrersValues = PMMModBUSRTUServerholdingRegisterRead(StartingAddress,Quantity);
+    for (int address = StartingAddress; address < (StartingAddress+Quantity); address++)
     {
-      long val = PMMModBUSRTUServerholdingRegisterRead(address);
+      int index = address - StartingAddress;
+      //long val = PMMModBUSRTUServerholdingRegisterRead(address);
+      long val = RegisrersValues[index];
       SerialUSB.print("Value Of Address ");
       SerialUSB.print(address);
       SerialUSB.print(" : ");

@@ -102,7 +102,7 @@ void PMMSetUSBConfigurationSettings(string Settings)
         WebServer = false;
     PMMPLC.WebServer = WebServer;
 
-    PMMSetDeviceSettingsEProm();
+    
     //}
 }
 
@@ -217,6 +217,42 @@ void PMMGetDeviceSettingsEProm()
     PMMEprom.get(100, PMMPLC.HardwareVersion);
     PMMEprom.get(104, PMMPLC.WebServer);
 }
+
+
+// void PMMSetDeviceSettingsIntoFlash()
+// {
+//     if (PMMEprom.begin() == true)
+//     {
+//         PMMEprom.put(0, PMMPLC.Name);
+//         PMMEprom.put(4, PMMPLC.TCPorRTU);
+//         PMMEprom.put(8, PMMMODBUS.SlaveID);
+//         PMMEprom.put(12, PMMTCPUDP.IPAddressEthOne);
+//         PMMEprom.put(16, PMMTCPUDP.SubnetMaskEthOne);
+//         PMMEprom.put(20, PMMTCPUDP.DNSOneEthOne);
+//         PMMEprom.put(24, PMMTCPUDP.GatewayEthOne);
+//         PMMEprom.put(28, PMMTCPUDP.RemoteIPAddressEthOne);
+//         PMMEprom.put(32, PMMTCPUDP.TimeOutConnEthOne);
+//         PMMEprom.put(36, PMMTCPUDP.MaxRetriesEthOne);
+//         PMMEprom.put(40, PMMTCPUDP.MacAddressEthOne);
+//         PMMEprom.put(44, PMMTCPUDP.UDPPortOne);
+//         PMMEprom.put(48, PMMTCPUDP.UDPPortTow);
+//         PMMEprom.put(52, PMMTCPUDP.UDPPortThree);
+//         PMMEprom.put(56, PMMTCPUDP.UDPPortFour);
+//         PMMEprom.put(60, PMMSERIAL.PortOneName);
+//         PMMEprom.put(64, PMMSERIAL.PortOneBaudRate);
+//         PMMEprom.put(68, PMMSERIAL.PortOneDataBits);
+//         PMMEprom.put(72, PMMSERIAL.PortOneStopBits);
+//         PMMEprom.put(76, PMMSERIAL.PortOneParity);
+//         PMMEprom.put(80, PMMSERIAL.PortOneInterface);
+//         PMMEprom.put(84, PMMSERIAL.PortOneConnTimeOut);
+//         PMMEprom.put(88, PMMSERIAL.PortOneMaxRetries);
+//         PMMEprom.put(92, PMMPLC.SerialNumber);
+//         PMMEprom.put(96, PMMPLC.FirmwareVersion);
+//         PMMEprom.put(100, PMMPLC.HardwareVersion);
+//         PMMEprom.put(104, PMMPLC.WebServer);
+//     }
+// }
+
 
 string CheckAvailabeHardware()
 {
