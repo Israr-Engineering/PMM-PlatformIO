@@ -1,39 +1,22 @@
 #include "PmmSunCalculations.h"
 #include <PmmTimeLib.h>
-
 #include <Wire.h>
+#include <string>
 #include <String>
 #include <array>
-#include <cstdlib>
-#include <chrono>
-#include <ctime>
-#include <cmath>
-#include <iomanip>
-#include <sstream>
-#include <random>
 
 using namespace std;
 
-// string printDigits(int digits);
-// int16_t PMMReturnDayOfYear(int year, int month, int day);
-// string PMMDatetimeNowStr(time_t date);
-// time_t PMMSetDatetime(int year, int month, int day);
-// time_t PMMSetAnDatetime(int year, int month, int day, int hour, int minute, int second);
-// array<string, 18> SunCalculations(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post);
-// string SunCalculationsStr(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post);
-// string PmmDateTimeToString(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec);
+string printDigits(int digits);
+int16_t PMMReturnDayOfYear(int year, int month, int day);
+string PMMDatetimeNowStr(time_t date);
+time_t PMMSetDatetime(int year, int month, int day);
+time_t PMMSetAnDatetime(int year, int month, int day, int hour, int minute, int second);
+array<string, 18> SunCalculations(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post);
+string SunCalculationsStr(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post);
+string PmmDateTimeToString(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec);
 
-
-PmmSunCalculations::PmmSunCalculations(/* args */)
-{
-}
-
-PmmSunCalculations::~PmmSunCalculations()
-{
-}
-
-
-string PmmSunCalculations::printDigits(int digits)
+string printDigits(int digits)
 {
     string x = "";
     if (digits < 10)
@@ -47,7 +30,7 @@ string PmmSunCalculations::printDigits(int digits)
     return x;
 }
 
-int16_t PmmSunCalculations::PMMReturnDayOfYear(int year, int month, int day)
+int16_t PMMReturnDayOfYear(int year, int month, int day)
 {
     // Yazan way
     // boost::gregorian::date d(date.getYear(), date.getMonth(), date.getDay());
@@ -113,12 +96,12 @@ int16_t PmmSunCalculations::PMMReturnDayOfYear(int year, int month, int day)
     // return dayNumber;
 }
 
-string PmmSunCalculations::PMMDatetimeNowStr(time_t date)
+string PMMDatetimeNowStr(time_t date)
 {
     return to_string(year(date)) + "-" + to_string(month(date)) + "-" + to_string(day(date)) + " " + to_string(hour(date)) + ":" + to_string(minute(date)) + ":" + to_string(second(date));
 }
 
-time_t PmmSunCalculations::PMMSetDatetime(int year, int month, int day)
+time_t PMMSetDatetime(int year, int month, int day)
 {
     tmElements_t tm;
     tm.Year = year;
@@ -132,7 +115,7 @@ time_t PmmSunCalculations::PMMSetDatetime(int year, int month, int day)
     return tSet;
 }
 
-time_t PmmSunCalculations::PMMSetAnDatetime(int year, int month, int day, int hour, int minute, int second)
+time_t PMMSetAnDatetime(int year, int month, int day, int hour, int minute, int second)
 {
     tmElements_t tm;
     tm.Year = year;
@@ -146,7 +129,7 @@ time_t PmmSunCalculations::PMMSetAnDatetime(int year, int month, int day, int ho
     return tSet;
 }
 
-array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post)
+array<string, 18> SunCalculations(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post)
 {
     TimeZone = 3, TrackerWidth = 4, Post2Post = 11;
     array<string, 18> arr;
@@ -363,7 +346,7 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
     return arr;
 }
 
-string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post)
+string SunCalculationsStr(time_t date, double lat, double lang, int TimeZone, double TrackerWidth, double Post2Post)
 {
     TimeZone = 3, TrackerWidth = 4, Post2Post = 11;
     array<string, 18> arr;
@@ -592,7 +575,7 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
     return Resulte;
 }
 
-string PmmSunCalculations::PmmDateTimeToString(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec)
+string PmmDateTimeToString(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min, uint8_t sec)
 {
     string str = "";
 
