@@ -32,7 +32,6 @@ PmmSunCalculations::~PmmSunCalculations()
 {
 }
 
-
 string PmmSunCalculations::printDigits(int digits)
 {
     string x = "";
