@@ -1,31 +1,28 @@
 
-#ifdef PmmPWM
+#ifndef PmmPWM_h
+#define PmmPWM_h
 
-extern void PmmPWMSetup(int PWMOutputArray[], int Resolution);
-extern void PmmPWMWrite(uint16_t Value , int pinNumber);
-extern void PmmPWMWritePercentage(int Resolution, int Percentage, int pinNumber);
+#if ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 
-void PmmPWMSetup(int PWMOutputArray[], int Resolution)
+
+class PmmPWMClass
 {
-    int Length= sizeof(PWMOutputArray) / sizeof(PWMOutputArray[0]);
-    for(int i=0;i<Length;i++)
-    {
-        pinMode(PWMOutputArray[i],OUTPUT);
-    }
 
-    analogWriteResolution(Resolution);
-}
+public:
 
-void PmmPWMWrite(uint16_t Value , int pinNumber)
-{
-    analogWrite(pinNumber, Value);
-}
+        PmmPWMClass();
 
-void PmmPWMWritePercentage(int Resolution, int Percentage, int pinNumber)
-{
-    uint16_t FullValue= pow(2,Resolution);
-    uint16_t Value = FullValue * (Percentage/100);
-    analogWrite(pinNumber, Value);
-}
+		virtual ~PmmPWMClass();
+
+        void PmmPWMSetup(int PWMOutputArray[], int Resolution);
+        void PmmPWMWrite(uint16_t Value , int pinNumber);
+        void PmmPWMWritePercentage(int Resolution, int Percentage, int pinNumber);
+
+};
+
 
 #endif

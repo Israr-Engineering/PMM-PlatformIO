@@ -112,6 +112,10 @@
 #include <PmmPWM.h>
 #endif
 
+#ifdef PMMSunCalculations
+#include <PmmSunCalculations.h>
+#endif
+
 // 02. Using
 using namespace std;
 using std::basic_string;
