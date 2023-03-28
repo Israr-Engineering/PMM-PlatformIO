@@ -61,6 +61,7 @@ void PMMConfiguration()
 void PMMCommunication()
 {
 
+
   if ((millis() - Timer2) > 3000)
   {
     long* RegisrersValues = PMMModBUSRTUServerholdingRegisterRead(StartingAddress,Quantity);
