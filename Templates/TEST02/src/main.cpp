@@ -28,8 +28,9 @@ void setup()
 
   PmmWatchDoggy.setup(WDT_SOFTCYCLE2M);
   PMMInitializeEthernet(ip, mac);
-  PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 30, 9, 31, 1);
 
+
+  PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 30, 9, 31, 1);
   PMMModBUSRTUServerconfigure(
       false, 0, 10,
       false, 0, 10,

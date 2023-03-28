@@ -36,7 +36,7 @@
 #include "WProgram.h"
 #endif
 
- 
+
 
 class PmmModBus
 {
@@ -44,13 +44,17 @@ class PmmModBus
 
    
 
-      bool Coils[1024];
-      bool DiscretetInputs[1024];
-      int16_t HoldingRegisters[128];
-      int16_t InputRegisters[128];
+      bool Coils[128]; // 64 word,int16 strating from 0x000 to 0x9999
+      bool DiscretetInputs[128]; // 64 word,int16 strating from 0x10000 to 0x1999
+      int16_t HoldingRegisters[96]; // strating from 0x40000 to 0x4999
+      int16_t InputRegisters[96];  // strating from  0x30000 to 0x3999
 
        PmmModBus();
 		virtual ~PmmModBus();
+
+    // RtuServerStart();
+
+
 
 };
  extern  PmmModBus PmmModbus;
