@@ -47,8 +47,8 @@ void loop()
   PmmWatchDoggy.clear();
   if ((millis() - Timer1) > 3000)
   {
-    time_t now = PMMSetAnDatetime(53, 3, 22, 16, 0, 0);
-    SerialUSB.println(SunCalculationsStr(now, 31.5320459, 36.0276305, 3, 4, 11).c_str());
+    // time_t now = PMMSetAnDatetime(53, 3, 22, 16, 0, 0);
+    // SerialUSB.println(SunCalculationsStr(now, 31.5320459, 36.0276305, 3, 4, 11).c_str());
     Timer1 = millis();
   }
 }
