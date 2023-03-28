@@ -68,7 +68,7 @@
 #endif
 
 #if defined(PMMModbusRTUServer) || defined(PMMModbusRTUClient) || defined(PMMModbusTCPServer)
-#include <PmmArduinoModbus.h>
+#include <PmmModbus.h>
 #endif
 
 #ifdef PMMEEPROM

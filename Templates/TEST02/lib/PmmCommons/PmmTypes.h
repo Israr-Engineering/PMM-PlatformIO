@@ -162,14 +162,7 @@ typedef struct PmmModBusSettings
     int16_t Quantity = 0;                              // INDEX => 325
 } PmmModBusSettings;
 
-typedef struct PmmModBus
-{
-    int Coils[1024];
-    int DiscretetInputs[1024];
-    long Registers[1024];
-    long InputRegisters[1024];
 
-} PmmModBus;
 
 typedef struct PmmTimersSettings
 {

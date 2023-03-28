@@ -5,7 +5,8 @@
 #include <PmmGlobalFunctions.h>
 #include <PmmCommands.h>
 #include <PmmSunCalculations.h>
-#include <PMMModBusRTUServerLib.h>
+
+
 
 bool x = false;
 long Timer1 = 0;
@@ -22,6 +23,8 @@ void PMMCommunication();
 
 void setup()
 {
+
+
 
   PmmWatchDoggy.setup(WDT_SOFTCYCLE2M);
   PMMInitializeEthernet(ip, mac);

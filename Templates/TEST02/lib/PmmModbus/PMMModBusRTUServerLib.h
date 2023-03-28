@@ -1,6 +1,8 @@
 // #include "../Commons/ProjectDef.h"
 #ifdef PMMModbusRTUServer
 
+
+
 extern void PMMModBUSRTUServerSetup(int16_t SlaveID, uint16_t Config, int16_t BaudRate, int16_t TXPin, int16_t RXPin, int16_t SerialSelectionPin, int8_t SerialPortNumber = 1);
 
 extern void PMMModBUSRTUServerconfigure(
@@ -35,6 +37,10 @@ void PMMModBUSRTUServerSetup(int16_t SlaveID, uint16_t Config, int16_t BaudRate,
 
     RS485.setPins(TXPin, SerialSelectionPin, RXPin);
     PmmModbusRTUServer.begin(SlaveID, BaudRate, Config);
+    
+   // PmmModbus.Coils[1] = 0;
+
+    
 }
 
 void PMMModBUSRTUServerconfigure(

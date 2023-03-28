@@ -21,9 +21,40 @@
 #define _ARDUINO_MODBUS_H_INCLUDED
 
 #include "PmmModbusRTUClient.h"
+#include "PMMModBusRTUClientLib.h"
 #include "PmmModbusRTUServer.h"
+#include "PMMModBusRTUServerLib.h"
 
 #include "PmmModbusTCPClient.h"
+
 #include "PmmModbusTCPServer.h"
+#include "PMMModBusTCPServerLib.h"
+
+#if ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
+
+ 
+
+class PmmModBus
+{
+  public:
+
+   
+
+      bool Coils[1024];
+      bool DiscretetInputs[1024];
+      int16_t HoldingRegisters[128];
+      int16_t InputRegisters[128];
+
+       PmmModBus();
+		virtual ~PmmModBus();
+
+};
+ extern  PmmModBus PmmModbus;
+
+
 
 #endif
