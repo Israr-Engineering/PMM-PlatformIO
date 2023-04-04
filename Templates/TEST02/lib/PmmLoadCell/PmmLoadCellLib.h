@@ -1,52 +1,23 @@
 #include "PmmHX711.h"
-PmmHX711 PmmLoadCell;
 
-extern void PmmLoadCellSetup(uint8_t DoutPin = 15, uint8_t SCKPin = 16);
-extern bool PmmLoadCellReady();
-extern void PmmLoadCellSetOffset(float Offset = 0);
-extern float PmmLoadCellGetOffset();
-extern void PmmLoadCellSetScale(float Scale = 1);
-extern float PmmLoadCellGetScale();
-extern float PmmLoadCellGetRealRead(uint8_t NumberOfReads = 10);
-extern float PmmLoadCellGetScaleReading(uint8_t NumberOfReads = 10);
+PmmHX711 PMMLoadCell;
 
-void PmmLoadCellSetup(uint8_t DoutPin, uint8_t SCKPin)
+class PmmLoadCell
 {
-    PmmLoadCell.begin(DoutPin, SCKPin);
+public:   
+#ifndef PmmHX711 
+  void PmmLoadCellSetup(uint8_t DoutPin = 15, uint8_t SCKPin = 16);
+  bool PmmLoadCellReady();
+  void PmmLoadCellSetOffset(float Offset = 0);
+ float PmmLoadCellGetOffset();
+  void PmmLoadCellSetScale(float Scale = 1);
+ float PmmLoadCellGetScale();
+ float PmmLoadCellGetRealRead(uint8_t NumberOfReads = 10);
+ float PmmLoadCellGetScaleReading(uint8_t NumberOfReads = 10);
+ #endif 
+ void PmmADS1231Setup();
+ uint32_t PmmADS1231ReadRowData();
+ float PmmADS1231Caliberation(float RealScale);
+ float PmmADS1231ReadScaleValue();
 }
 
-bool PmmLoadCellReady()
-{
-    
-    return PmmLoadCell.is_ready();
-}
-
-void PmmLoadCellSetOffset(float Offset)
-{
-    PmmLoadCell.set_offset(Offset);
-}
-
-float PmmLoadCellGetOffset()
-{
-   return  PmmLoadCell.get_offset();
-}
-
-void PmmLoadCellSetScale(float Scale)
-{
-    PmmLoadCell.set_scale(Scale);
-}
-
-float PmmLoadCellGetScale()
-{
-    return PmmLoadCell.get_scale();
-}
-
-float PmmLoadCellGetRealRead(uint8_t NumberOfReads)
-{
-    return PmmLoadCell.read_average(NumberOfReads);
-}
-
-float PmmLoadCellGetScaleReading(uint8_t NumberOfReads)
-{
-    return PmmLoadCell.get_units(NumberOfReads);
-}

@@ -116,8 +116,6 @@
 #include <PmmSunCalculations.h>
 #endif
 
-#include <PmmGlobalFunctions.h>
-#include <PmmCommands.h>
 
 // 02. Using
 using namespace std;
