@@ -17,6 +17,7 @@ void PmmLoadCellSetup(uint8_t DoutPin, uint8_t SCKPin)
 
 bool PmmLoadCellReady()
 {
+    
     return PmmLoadCell.is_ready();
 }
 
