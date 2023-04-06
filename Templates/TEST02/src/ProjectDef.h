@@ -116,6 +116,9 @@
 #include <PmmSunCalculations.h>
 #endif
 
+//Always Include this libraries 
+#include <PmmGlobalFunctions.h>
+#include <PmmCommands.h>
 
 // 02. Using
 using namespace std;
@@ -123,6 +126,18 @@ using std::basic_string;
 using std::char_traits;
 
 typedef bool bit;
+
+// Global Functions 
+void PMMConfiguration();
+void PMMCommunication();
+
+//Global Classes
+
+
+//Global Variables
+
+
+
 
 
 
