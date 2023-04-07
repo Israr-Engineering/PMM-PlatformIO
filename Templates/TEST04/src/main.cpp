@@ -8,8 +8,9 @@ void setup()
 // STEP01: Read Flash ROM and update Settings
 
 
-// STEP02: Initialize needed Modules
-  PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
+// STEP02: Initialize needed Modules MyWatchDoggy.attachShutdown(myshutdown);
+  //PmmWatchDoggy.attachShutdown(Pmmshutdown);
+  PmmWatchDoggy.setup(WDT_SOFTCYCLE16S);
   PMMInitializeEthernet(ip, mac);
 
 // STEP03: Setup and configure services
@@ -93,7 +94,7 @@ void PMMCommunication()
 void PMMTimers()
 {
 
-   if ((micros() - CommunicationTimer) > 1000)
+   if ((micros() - CommunicationTimer) > 10000)
    {
   
      CommunicationTimer = micros();
@@ -103,3 +104,9 @@ void PMMTimers()
   // We must call 'yield' at a regular basis to pass control to other tasks.
   yield();
 }
+
+
+///////////////////////////////////////////////////
+//WATCHDOG: Reset Controller                     //
+///////////////////////////////////////////////////
+
