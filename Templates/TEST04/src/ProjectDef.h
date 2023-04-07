@@ -132,12 +132,13 @@ typedef bool bit;
 // Global Functions 
 void PMMConfiguration();
 void PMMCommunication();
+void PMMTimers();
 
 //Global Classes
 bool x = false;
-long Timer1 = 0;
-long Timer2 = 0;
-long Timer3 = 0;
+long MainLoopTimer = 0;
+long ConfigurationTimer = 0;
+long CommunicationTimer = 0;
 int StartingAddress = 11;
 int Quantity = 10;
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};

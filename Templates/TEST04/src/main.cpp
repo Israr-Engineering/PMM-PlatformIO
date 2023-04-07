@@ -2,8 +2,6 @@
 #include <ProjectDef.h>
 
 
-
-
 void setup()
 {
 
@@ -11,7 +9,7 @@ void setup()
 
 
 // STEP02: Initialize needed Modules
-  PmmWatchDoggy.setup(WDT_SOFTCYCLE2M);
+  PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
   PMMInitializeEthernet(ip, mac);
 
 // STEP03: Setup and configure services
@@ -22,6 +20,7 @@ void setup()
   SerialUSB.begin(9600);
   Scheduler.startLoop(PMMConfiguration);
   Scheduler.startLoop(PMMCommunication);
+  Scheduler.startLoop(PMMTimers);
 }
 
 ///////////////////////////////////////////////////
@@ -34,11 +33,11 @@ void loop()
 //MyLoadCell.
   PmmWatchDoggy.clear();
 
-  if ((millis() - Timer1) > 500)
+  if ((millis() - MainLoopTimer) > 500)
   {
     // time_t now = PMMSetAnDatetime(53, 3, 22, 16, 0, 0);
     // SerialUSB.println(SunCalculationsStr(now, 31.5320459, 36.0276305, 3, 4, 11).c_str());
-    Timer1 = millis();
+    MainLoopTimer = millis();
   }
 }
 
@@ -47,6 +46,9 @@ void loop()
 ///////////////////////////////////////////////////
 void PMMConfiguration()
 {
+
+
+//ConfigurationTimer
 
   PMMReadCommands();
 
@@ -62,7 +64,7 @@ void PMMCommunication()
 {
 
 
-   if ((millis() - Timer2) > 500)
+   if ((millis() - CommunicationTimer) > 500)
    {
   //   long* RegisrersValues = PMMModBUSRTUServerholdingRegisterRead(StartingAddress,Quantity);
   //   for (int address = StartingAddress; address < (StartingAddress+Quantity); address++)
@@ -76,7 +78,25 @@ void PMMCommunication()
   //     SerialUSB.println(val);
   //   }
 
-     Timer2 = millis();
+     CommunicationTimer = millis();
+   }
+
+
+  // We must call 'yield' at a regular basis to pass control to other tasks.
+  yield();
+}
+
+
+///////////////////////////////////////////////////
+//Loop 04 : Timers updating loop          //
+///////////////////////////////////////////////////
+void PMMTimers()
+{
+
+   if ((micros() - CommunicationTimer) > 1000)
+   {
+  
+     CommunicationTimer = micros();
    }
 
 
