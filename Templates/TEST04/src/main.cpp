@@ -10,11 +10,11 @@ void setup()
 
 // STEP02: Initialize needed Modules MyWatchDoggy.attachShutdown(myshutdown);
   //PmmWatchDoggy.attachShutdown(Pmmshutdown);
-  PmmWatchDoggy.setup(WDT_SOFTCYCLE16S);
+  PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
   PMMInitializeEthernet(ip, mac);
 
 // STEP03: Setup and configure services
-  PmmModbus.PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 30, 9, 31, 1);
+  PmmModbus.PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 35, 36, 31, 1);
   PmmModbus.PMMModBUSRTUServerconfigure(false, 0, 10,false, 0, 10,true, 0, 10,false, 0, 10);
 
 // STEP04: Start General services
@@ -22,23 +22,39 @@ void setup()
   Scheduler.startLoop(PMMConfiguration);
   Scheduler.startLoop(PMMCommunication);
   Scheduler.startLoop(PMMTimers);
+
+// STEP05: Warmup 2 seconds
+  delay(2000);
+  SerialUSB.println("New Start");
 }
 
 ///////////////////////////////////////////////////
 //Loop 01 :  Main loop start here                //
 ///////////////////////////////////////////////////
 
+int x1 =0;
+
 void loop()
 {
 
-//MyLoadCell.
+
   PmmWatchDoggy.clear();
 
-  if ((millis() - MainLoopTimer) > 500)
+  if ((millis() - MainLoopTimer) > 1000)
   {
-    // time_t now = PMMSetAnDatetime(53, 3, 22, 16, 0, 0);
-    // SerialUSB.println(SunCalculationsStr(now, 31.5320459, 36.0276305, 3, 4, 11).c_str());
+    
+    PmmModbusRTUServer.poll();
+    if (PmmModbusRTUServer.holdingRegisterWrite(0, x1) == 1 )
+    {
+      SerialUSB.println(" Write done");
+      SerialUSB.println(PmmModbusRTUServer.holdingRegisterRead(0));
+    }else {
+      SerialUSB.println(" Write fail");
+    }
+    SerialUSB.print(x1);
+    SerialUSB.println(" ..Running...");
     MainLoopTimer = millis();
+    x1++;
   }
 }
 
@@ -67,6 +83,12 @@ void PMMCommunication()
 
    if ((millis() - CommunicationTimer) > 500)
    {
+
+
+
+
+
+    
   //   long* RegisrersValues = PMMModBUSRTUServerholdingRegisterRead(StartingAddress,Quantity);
   //   for (int address = StartingAddress; address < (StartingAddress+Quantity); address++)
   //   {
