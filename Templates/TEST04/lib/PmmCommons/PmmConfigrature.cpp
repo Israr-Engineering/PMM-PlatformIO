@@ -125,7 +125,7 @@ Product product;
 
 FlashStorage(my_flash_store, Product);
 
-std::vector<string> PMMStringToArray(const string &csvStr, char delimiter)
+std::vector<string> PMMStringToArray(string csvStr, char delimiter)
 {
     vector<string> arr;
     istringstream iss(csvStr);
@@ -141,7 +141,6 @@ void PMMWriteIntoFlashAllSettings(string Message)
 {
     std::vector<string> values = PMMStringToArray(Message,',');
 
-#pragma region Set Values
 
     // General Info
     PMMGENERALSETTINGS.FirmwareVersion = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
@@ -242,9 +241,7 @@ void PMMWriteIntoFlashAllSettings(string Message)
     PMMIOPINS.Pin23 = values[110];
     PMMIOPINS.Pin24 = values[111];
 
-#pragma endregion
 
-#pragma region Set Into Struct
     // General Info
     product.firmware_version = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
     product.software_version = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
@@ -345,7 +342,6 @@ void PMMWriteIntoFlashAllSettings(string Message)
     product.right_io_pins.pin23 = values[110];
     product.right_io_pins.pin24 = values[111];
 
-#pragma endregion
 
     // ...and finally save everything into "my_flash_store"
     my_flash_store.write(product);
@@ -355,7 +351,7 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
 {
     std::vector<string> values = PMMStringToArray(Message,',');
 
-#pragma region Set Values
+
 
     // General Info
     PMMGENERALSETTINGS.FirmwareVersion = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
@@ -369,9 +365,6 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
     PMMGENERALSETTINGS.PlatformIOSupport = (values[17] == "1" ? "true" : "false");
     PMMGENERALSETTINGS.OtherSupportName = values[18];
 
-#pragma endregion
-
-#pragma region Set Into Struct
     // General Info
     product.firmware_version = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
     product.software_version = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
@@ -384,8 +377,6 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
     product.platform_io_support = (values[17] == "1" ? "true" : "false");
     product.other_support_name = values[18];
 
-#pragma endregion
-
     // ...and finally save everything into "my_flash_store"
     my_flash_store.write(product);
 }
@@ -393,8 +384,6 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
 void PMMWriteIntoFlashSerialSettings(string Message)
 {
     std::vector<string> values = PMMStringToArray(Message,',');
-
-#pragma region Set Values
 
     // RTU Setting
     PMMSERIALSETTINGS.PortOneName = values[19];
@@ -415,9 +404,6 @@ void PMMWriteIntoFlashSerialSettings(string Message)
     PMMSERIALSETTINGS.SerialFourEnabled = (values[70] == "1" ? "true" : "false");
     PMMSERIALSETTINGS.SerialFourType = values[73];
 
-#pragma endregion
-
-#pragma region Set Into Struct
 
     // RTU Setting
     product.rtu_settings.ComName = values[19];
@@ -439,8 +425,6 @@ void PMMWriteIntoFlashSerialSettings(string Message)
     product.serial4.enabled = (values[70] == "1" ? "true" : "false");
     product.serial4.type = values[73];
 
-#pragma endregion
-
     // ...and finally save everything into "my_flash_store"
     my_flash_store.write(product);
 }
@@ -448,8 +432,6 @@ void PMMWriteIntoFlashSerialSettings(string Message)
 void PMMWriteIntoFlashTCPSettings(string Message)
 {
     std::vector<string> values = PMMStringToArray(Message,',');
-
-#pragma region Set Values
 
     // TCP Settings
     PMMTCPUDPSETTINGS.IPAddressEthOne = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
@@ -465,10 +447,6 @@ void PMMWriteIntoFlashTCPSettings(string Message)
     PMMTCPUDPSETTINGS.UDPPortThree = stoi(values[56]);
     PMMTCPUDPSETTINGS.UDPPortFour = stoi(values[57]);
 
-#pragma endregion
-
-#pragma region Set Into Struct
-
     // TCP Settings
     product.tcp_udp_settings.ip_address = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
     product.tcp_udp_settings.net_mask = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
@@ -483,8 +461,6 @@ void PMMWriteIntoFlashTCPSettings(string Message)
     product.tcp_udp_settings.udp_port_three = stoi(values[56]);
     product.tcp_udp_settings.udp_port_four = stoi(values[57]);
 
-#pragma endregion
-
     // ...and finally save everything into "my_flash_store"
     my_flash_store.write(product);
 }
@@ -492,7 +468,6 @@ void PMMWriteIntoFlashTCPSettings(string Message)
 void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
 {
     std::vector<string> values = PMMStringToArray(Message,',');
-#pragma region Set Values
 
     // Options
     PMMGENERALSETTINGS.HasEthernet = (values[58] == "1" ? "true" : "false");
@@ -548,9 +523,6 @@ void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
     PMMIOPINS.Pin23 = values[110];
     PMMIOPINS.Pin24 = values[111];
 
-#pragma endregion
-
-#pragma region Set Into Struct
 
     // Options
     product.ethernet = (values[58] == "1" ? "true" : "false");
@@ -606,7 +578,6 @@ void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
     product.right_io_pins.pin23 = values[110];
     product.right_io_pins.pin24 = values[111];
 
-#pragma endregion
 
     // ...and finally save everything into "my_flash_store"
     my_flash_store.write(product);

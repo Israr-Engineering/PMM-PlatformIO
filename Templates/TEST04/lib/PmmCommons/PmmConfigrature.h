@@ -1,6 +1,6 @@
 #include <PmmFlashStorage.h>
 #include "PmmTypes.h"
-#include <iostream>
+
 #include <sstream>
 #include <string>
 #include <vector>
@@ -14,7 +14,7 @@ struct PmmIOPins PMMIOPINS;
 struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
 
 
-std::vector<string> PMMStringToArray(const string &csvStr, char delimiter);
+std::vector<string> PMMStringToArray(string csvStr, char delimiter);
 void PMMWriteIntoFlashAllSettings(string Message);
 void PMMWriteIntoFlashGeneralSettings(string Message);
 void PMMWriteIntoFlashSerialSettings(string Message);
