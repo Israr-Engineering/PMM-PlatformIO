@@ -122,16 +122,10 @@ typedef struct Product
 
 Product product;
 
-struct PmmGeneralSettings PMMGENERALSETTINGS;
-struct PmmModBusSettings PMMMODBUSSETTINGS;
-struct PmmTCPUDPSettings PMMTCPUDPSETTINGS;
-struct PmmSerialSettings PMMSERIALSETTINGS;
-struct PmmIOPins PMMIOPINS;
-struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
 
 FlashStorage(my_flash_store, Product);
 
-vector<string> PMMStringToArray(const string &csvStr, char delimiter = ',')
+std::vector<string> PMMStringToArray(const string &csvStr, char delimiter)
 {
     vector<string> arr;
     istringstream iss(csvStr);
@@ -145,7 +139,7 @@ vector<string> PMMStringToArray(const string &csvStr, char delimiter = ',')
 
 void PMMWriteIntoFlashAllSettings(string Message)
 {
-    vector<string> values = PMMStringToArray(Message);
+    std::vector<string> values = PMMStringToArray(Message,',');
 
 #pragma region Set Values
 
@@ -359,7 +353,7 @@ void PMMWriteIntoFlashAllSettings(string Message)
 
 void PMMWriteIntoFlashGeneralSettings(string Message)
 {
-    vector<string> values = PMMStringToArray(Message);
+    std::vector<string> values = PMMStringToArray(Message,',');
 
 #pragma region Set Values
 
@@ -398,7 +392,7 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
 
 void PMMWriteIntoFlashSerialSettings(string Message)
 {
-    vector<string> values = PMMStringToArray(Message);
+    std::vector<string> values = PMMStringToArray(Message,',');
 
 #pragma region Set Values
 
@@ -453,7 +447,7 @@ void PMMWriteIntoFlashSerialSettings(string Message)
 
 void PMMWriteIntoFlashTCPSettings(string Message)
 {
-    vector<string> values = PMMStringToArray(Message);
+    std::vector<string> values = PMMStringToArray(Message,',');
 
 #pragma region Set Values
 
@@ -497,8 +491,7 @@ void PMMWriteIntoFlashTCPSettings(string Message)
 
 void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
 {
-    vector<string> values = PMMStringToArray(Message);
-
+    std::vector<string> values = PMMStringToArray(Message,',');
 #pragma region Set Values
 
     // Options

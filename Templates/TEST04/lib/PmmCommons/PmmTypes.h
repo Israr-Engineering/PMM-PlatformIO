@@ -1,6 +1,12 @@
 // #include "ProjectDef.h"
 
-#ifdef PMMTypes
+//#ifdef PMMTypes
+
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+using namespace std;
 
 typedef bool bit;
 
@@ -276,4 +282,4 @@ enum PmmModBusFunction
     WriteMultipleRegisters = 16
 };
 
-#endif
+//#endif

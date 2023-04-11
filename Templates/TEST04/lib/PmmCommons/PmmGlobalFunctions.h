@@ -76,7 +76,7 @@ void PMMSetUSBConfigurationSettings(string Settings)
     PMMTCPUDPSETTINGS.MaxRetriesEthOne = stoi(OUTPUT[9]);
     PMMTCPUDPSETTINGS.MacAddressEthOne = OUTPUT[10];
     PMMTCPUDPSETTINGS.UDPPortOne = stoi(OUTPUT[11]);
-    PMMTCPUDPSETTINGS.UDPPortTow = stoi(OUTPUT[12]);
+    PMMTCPUDPSETTINGS.UDPPortTwo = stoi(OUTPUT[12]);
     PMMTCPUDPSETTINGS.UDPPortThree = stoi(OUTPUT[13]);
     PMMTCPUDPSETTINGS.UDPPortFour = stoi(OUTPUT[14]);
     PMMSERIALSETTINGS.PortOneName = OUTPUT[15];
@@ -123,7 +123,7 @@ string PMMGetUSBConfigurationSettings()
     DeviceSettings = DeviceSettings + std::to_string(PMMTCPUDPSETTINGS.MaxRetriesEthOne) + ",";
     DeviceSettings = DeviceSettings + PMMTCPUDPSETTINGS.MacAddressEthOne + ",";
     DeviceSettings = DeviceSettings + std::to_string(PMMTCPUDPSETTINGS.UDPPortOne) + ",";
-    DeviceSettings = DeviceSettings + std::to_string(PMMTCPUDPSETTINGS.UDPPortTow) + ",";
+    DeviceSettings = DeviceSettings + std::to_string(PMMTCPUDPSETTINGS.UDPPortTwo) + ",";
     DeviceSettings = DeviceSettings + std::to_string(PMMTCPUDPSETTINGS.UDPPortThree) + ",";
     DeviceSettings = DeviceSettings + std::to_string(PMMTCPUDPSETTINGS.UDPPortFour) + ",";
     DeviceSettings = DeviceSettings + PMMSERIALSETTINGS.PortOneName + ",";
@@ -168,7 +168,7 @@ void PMMSetDeviceSettingsEProm()
         PMMEprom.put(36, PMMTCPUDPSETTINGS.MaxRetriesEthOne);
         PMMEprom.put(40, PMMTCPUDPSETTINGS.MacAddressEthOne);
         PMMEprom.put(44, PMMTCPUDPSETTINGS.UDPPortOne);
-        PMMEprom.put(48, PMMTCPUDPSETTINGS.UDPPortTow);
+        PMMEprom.put(48, PMMTCPUDPSETTINGS.UDPPortTwo);
         PMMEprom.put(52, PMMTCPUDPSETTINGS.UDPPortThree);
         PMMEprom.put(56, PMMTCPUDPSETTINGS.UDPPortFour);
         PMMEprom.put(60, PMMSERIALSETTINGS.PortOneName);
@@ -201,7 +201,7 @@ void PMMGetDeviceSettingsEProm()
     PMMEprom.get(36, PMMTCPUDPSETTINGS.MaxRetriesEthOne);
     PMMEprom.get(40, PMMTCPUDPSETTINGS.MacAddressEthOne);
     PMMEprom.get(44, PMMTCPUDPSETTINGS.UDPPortOne);
-    PMMEprom.get(48, PMMTCPUDPSETTINGS.UDPPortTow);
+    PMMEprom.get(48, PMMTCPUDPSETTINGS.UDPPortTwo);
     PMMEprom.get(52, PMMTCPUDPSETTINGS.UDPPortThree);
     PMMEprom.get(56, PMMTCPUDPSETTINGS.UDPPortFour);
     PMMEprom.get(60, PMMSERIALSETTINGS.PortOneName);
@@ -235,7 +235,7 @@ void PMMGetDeviceSettingsEProm()
 //         PMMEprom.put(36, PMMTCPUDPSETTINGS.MaxRetriesEthOne);
 //         PMMEprom.put(40, PMMTCPUDPSETTINGS.MacAddressEthOne);
 //         PMMEprom.put(44, PMMTCPUDPSETTINGS.UDPPortOne);
-//         PMMEprom.put(48, PMMTCPUDPSETTINGS.UDPPortTow);
+//         PMMEprom.put(48, PMMTCPUDPSETTINGS.UDPPortTwo);
 //         PMMEprom.put(52, PMMTCPUDPSETTINGS.UDPPortThree);
 //         PMMEprom.put(56, PMMTCPUDPSETTINGS.UDPPortFour);
 //         PMMEprom.put(60, PMMSERIALSETTINGS.PortOneName);
