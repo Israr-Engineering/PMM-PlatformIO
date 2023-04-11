@@ -47,6 +47,25 @@ typedef struct PmmGeneralSettings
     float GeneralReadingsOffset = 0;   // INDEX => 76
     float GeneralReadingsFactor = 0;   // INDEX => 80
     int16_t TCPorRTU = 0;              // INDEX => 84
+
+    // new variables
+    string CPUType = "";
+    string ProductFamily = "";
+    string EnclosureType = "";
+
+    bool ArduinoSupport = false;
+    bool PlatformIOSupport = false;
+    string OtherSupportName = "";
+
+    bool HasEthernet = false;
+    bool HasFiber = false;
+    bool HasSwitch = false;
+    bool HasExternalRTC = false;
+    bool HasInternalRTC = false;
+    bool HasEEprom = false;
+    bool HasInternalFlash = false;
+    bool HasExternalFlash = false;
+
 } PmmGeneralSettings;
 
 typedef struct PmmSerialSettings
@@ -87,6 +106,17 @@ typedef struct PmmSerialSettings
     int32_t PortFourConnTimeOut = 0;  // INDEX => 158
     int8_t PortFourMaxRetries = 8;    // INDEX => 162
     bool PortFourInterface = false;   // INDEX => 163 , If true => RS485 Else If false RS232
+
+    // Serail Connectors
+    bool SerialOneEnabled = false;
+    bool SerialTowEnabled = false;
+    bool SerialThreeEnabled = false;
+    bool SerialFourEnabled = false;
+    string SerialOneType = "";
+    string SerialTowType = "";
+    string SerialThreeType = "";
+    string SerialFourType = "";
+
 } PmmSerialSettings;
 
 typedef struct PmmTCPUDPSettings
@@ -96,7 +126,7 @@ typedef struct PmmTCPUDPSettings
 
     // TCP & UDP Settings
     string MacAddressEthOne = "";      // INDEX => 200
-    string MacAddressEthTow = "";      // INDEX => 204
+    string MacAddressEthTwo= "";      // INDEX => 204
     string IPAddressEthOne = "";       // INDEX => 208
     string RemoteIPAddressEthOne = ""; // INDEX => 212
     string SubnetMaskEthOne = "";      // INDEX => 216
@@ -105,18 +135,22 @@ typedef struct PmmTCPUDPSettings
     string GatewayEthOne = "";         // INDEX => 228
     int32_t TimeOutConnEthOne = 0;     // INDEX => 232
     int16_t MaxRetriesEthOne = 0;      // INDEX => 236
-    string IPAddressEthTow = "";       // INDEX => 234
-    string RemoteIPAddressEthTow = ""; // INDEX => 238
-    string SubnetMaskEthTow = "";      // INDEX => 242
-    string DNSOneEthTow = "";          // INDEX => 246
-    string DNSTowEthTow = "";          // INDEX => 250
-    string GatewayEthTow = "";         // INDEX => 254
-    int32_t TimeOutConnEthTow = 0;     // INDEX => 258
-    int16_t MaxRetriesEthTow = 0;      // INDEX => 262
+    string IPAddressEthTwo= "";       // INDEX => 234
+    string RemoteIPAddressEthTwo= ""; // INDEX => 238
+    string SubnetMaskEthTwo= "";      // INDEX => 242
+    string DNSOneEthTwo= "";          // INDEX => 246
+    string DNSTowEthTwo= "";          // INDEX => 250
+    string GatewayEthTwo= "";         // INDEX => 254
+    int32_t TimeOutConnEthTwo= 0;     // INDEX => 258
+    int16_t MaxRetriesEthTwo= 0;      // INDEX => 262
     int16_t UDPPortOne = 0;            // INDEX => 264
-    int16_t UDPPortTow = 0;            // INDEX => 266
+    int16_t UDPPortTwo= 0;            // INDEX => 266
     int16_t UDPPortThree = 0;          // INDEX => 268
     int16_t UDPPortFour = 0;           // INDEX => 270
+
+    // new variables
+    string PreferredDNSServer;
+    string AlternateDNSServer;
 } PmmTCPUDPSettings;
 
 typedef struct PmmModBusSettings
@@ -162,8 +196,6 @@ typedef struct PmmModBusSettings
     int16_t Quantity = 0;                              // INDEX => 325
 } PmmModBusSettings;
 
-
-
 typedef struct PmmTimersSettings
 {
     /* data */
@@ -180,6 +212,57 @@ typedef struct PmmTimersSettings
     bit OneMonTimer = false;  // INDEX => 500.750 ,Flip Flop Timer Every One Month
     bit OneYearTimer = false; // INDEX => 500.875 ,Flip Flop Timer Every One Year
 } PmmTimersSettings;
+
+typedef struct PmmIOPins
+{
+    /* data */
+
+    // system memorey
+    string Pin01 = "";
+    string Pin02 = "";
+    string Pin03 = "";
+    string Pin04 = "";
+    string Pin05 = "";
+    string Pin06 = "";
+    string Pin07 = "";
+    string Pin08 = "";
+    string Pin09 = "";
+    string Pin10 = "";
+    string Pin11 = "";
+    string Pin12 = "";
+    string Pin13 = "";
+    string Pin14 = "";
+    string Pin15 = "";
+    string Pin16 = "";
+    string Pin17 = "";
+    string Pin18 = "";
+    string Pin19 = "";
+    string Pin20 = "";
+    string Pin21 = "";
+    string Pin22 = "";
+    string Pin23 = "";
+    string Pin24 = "";
+} PmmIOPins;
+
+typedef struct PmmExtensionsSettings
+{
+    // Extension Boards
+    bool I2C = false;
+    string SlaveI2CAddress = "";
+    string BoardOne = "";
+    string BoardOneAddress1 = "";
+    string BoardOneAddress2 = "";
+    string BoardTwo= "";
+    string BoardTowAddress1 = "";
+    string BoardTowAddress2 = "";
+    string BoardThree = "";
+    string BoardThreeAddress1 = "";
+    string BoardThreeAddress2 = "";
+    string BoardFour = "";
+    string BoardFourAddress1 = "";
+    string BoardFourAddress2 = "";
+
+} PmmExtensionsSettings;
 
 enum PmmModBusFunction
 {
