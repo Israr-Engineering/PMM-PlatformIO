@@ -1,7 +1,6 @@
 #include "PmmCommands.h"
+#include "PmmConfigrature.h"
 #include <PmmEthernet.h>
-#include <string>
-using namespace std;
 
 PmmEthernetServer server(80);
 PmmEthernetClient client = server.available();
@@ -22,45 +21,117 @@ void PMMInitializeEthernet(IPAddress ip, byte mac[])
     server.begin();
 }
 
-void PMMReadCommands()
+string PMMReadCommands()
 {
+    string result = "";
     if (SerialUSB.available() > 0)
     {
-        PMMCommnads(PMMReturnDataFromSerialUSB());
+        result = PMMCommnads(PMMReturnDataFromSerialUSB());
     }
 
     if (client)
     {
-        PMMCommnads(PMMReturnDataFromAPIHTTPHeader());
+       result = PMMCommnads(PMMReturnDataFromAPIHTTPHeader());
     }
+
+    return result;
 }
 
 string PMMCommnads(string readData)
 {
     string result = "";
 
-    if (readData == "PMMSetSettings,0")
+    if (readData == "PMMSetSettings,0,0")
     {
         if (SerialUSB.available() > 0)
         {
             string settings = PMMReturnDataFromSerialUSB();
-            PMMSetUSBConfigurationSettings(settings);
-            //PMMSetDeviceSettingsEProm();
+            PMMWriteIntoFlashGeneralSettings(settings);
             result = "Done";
         }
 
         if (client)
         {
             string settings = PMMReturnDataFromAPIHTTPHeader();
-            PMMSetUSBConfigurationSettings(settings);
-            result = "PMMSetUSBConfigurationSettings";
+            PMMWriteIntoFlashGeneralSettings(settings);
+            result = "Done";
         }
     }
-    else if (readData == "PMMGetUSBConfigurationSettings")
+
+    else if (readData == "PMMSetSettings,0,1")
     {
-        result = PMMGetUSBConfigurationSettings();
+        if (SerialUSB.available() > 0)
+        {
+            string settings = PMMReturnDataFromSerialUSB();
+            PMMWriteIntoFlashGeneralSettings(settings);
+            result = "Done";
+        }
+
+        if (client)
+        {
+            string settings = PMMReturnDataFromAPIHTTPHeader();
+            PMMWriteIntoFlashGeneralSettings(settings);
+            result = "Done";
+        }
     }
-    else if (readData == "PMMUSBConfiguration")
+
+    else if (readData == "PMMSetSettings,0,2")
+    {
+        if (SerialUSB.available() > 0)
+        {
+            string settings = PMMReturnDataFromSerialUSB();
+            PMMWriteIntoFlashSerialSettings(settings);
+            result = "Done";
+        }
+
+        if (client)
+        {
+            string settings = PMMReturnDataFromAPIHTTPHeader();
+            PMMWriteIntoFlashSerialSettings(settings);
+            result = "Done";
+        }
+    }
+
+    else if (readData == "PMMSetSettings,0,3")
+    {
+        if (SerialUSB.available() > 0)
+        {
+            string settings = PMMReturnDataFromSerialUSB();
+            PMMWriteIntoFlashTCPSettings(settings);
+            result = "Done";
+        }
+
+        if (client)
+        {
+            string settings = PMMReturnDataFromAPIHTTPHeader();
+            PMMWriteIntoFlashTCPSettings(settings);
+            result = "Done";
+        }
+    }
+
+    else if (readData == "PMMSetSettings,0,4")
+    {
+        if (SerialUSB.available() > 0)
+        {
+            string settings = PMMReturnDataFromSerialUSB();
+            PMMWriteIntoFlashOptionsAndPinsSettings(settings);
+            result = "Done";
+        }
+
+        if (client)
+        {
+            string settings = PMMReturnDataFromAPIHTTPHeader();
+            PMMWriteIntoFlashOptionsAndPinsSettings(settings);
+            result = "Done";
+        }
+    }
+
+    else if (readData == "PMMGetSettings,0")
+    {
+        result = PMMReadFromFlashAllSettings();
+    }
+
+    else if (readData == "PMMTestConfiguration")
     {
         result = PMMIsAlive();
     }

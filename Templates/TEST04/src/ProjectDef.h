@@ -119,8 +119,10 @@ PmmHX711 MyLoadCell;
 #endif
 
 //Always Include this libraries 
-#include <PmmGlobalFunctions.h>
+// #include <PmmGlobalFunctions.h>
 #include <PmmCommands.h>
+//#include <PmmConfigrature.h>
+//#include <PmmTypes.h>
 
 // 02. Using
 using namespace std;

@@ -1,5 +1,12 @@
 #include "PmmConfigrature.h"
 
+struct PmmGeneralSettings PMMGENERALSETTINGS;
+struct PmmModBusSettings PMMMODBUSSETTINGS;
+struct PmmTCPUDPSettings PMMTCPUDPSETTINGS;
+struct PmmSerialSettings PMMSERIALSETTINGS;
+struct PmmIOPins PMMIOPINS;
+struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
+
 typedef struct tcp_udp_settings
 {
     string ip_address;
@@ -121,7 +128,6 @@ typedef struct Product
 } Product;
 
 Product product;
-
 
 FlashStorage(my_flash_store, Product);
 
@@ -687,4 +693,9 @@ string PMMReadFromFlashAllSettings()
     settings = settings + "," + product.right_io_pins.pin24;
 
     return settings;
+}
+
+string PMMIsAlive()
+{
+    return "PMMAlive";
 }

@@ -6,12 +6,7 @@
 #include <vector>
 using namespace std;
 
-struct PmmGeneralSettings PMMGENERALSETTINGS;
-struct PmmModBusSettings PMMMODBUSSETTINGS;
-struct PmmTCPUDPSettings PMMTCPUDPSETTINGS;
-struct PmmSerialSettings PMMSERIALSETTINGS;
-struct PmmIOPins PMMIOPINS;
-struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
+
 
 
 std::vector<string> PMMStringToArray(string csvStr, char delimiter);

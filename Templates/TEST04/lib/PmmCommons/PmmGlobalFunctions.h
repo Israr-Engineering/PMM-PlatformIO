@@ -10,6 +10,9 @@ struct PmmGeneralSettings PMMGENERALSETTINGS;
 struct PmmModBusSettings PMMMODBUSSETTINGS;
 struct PmmTCPUDPSettings PMMTCPUDPSETTINGS;
 struct PmmSerialSettings PMMSERIALSETTINGS;
+struct PmmIOPins PMMIOPINS;
+struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
+
 
 extern void PMMSetUSBConfigurationSettings(string Settings);
 extern string PMMGetUSBConfigurationSettings();
@@ -17,7 +20,7 @@ extern string PMMGetUSBConfigurationSettings();
 extern void PMMSetDeviceSettingsEProm();
 extern void PMMGetDeviceSettingsEProm();
 
-extern string PMMIsAlive();
+//extern string PMMIsAlive();
 extern std::array<string, 100> PMMSplitString(string parameter, std::array<string, 100> OutputArray);
 extern void PMMSplitString2(string parameter, string &returnVal, string &returnstring);
 extern string ConvertUint8_tTostring(uint8_t number);
@@ -147,10 +150,7 @@ unsigned int EEPROMLength()
     return PMMEprom.length();
 }
 
-string PMMIsAlive()
-{
-    return "PMMAlive";
-}
+
 
 void PMMSetDeviceSettingsEProm()
 {
@@ -219,39 +219,7 @@ void PMMGetDeviceSettingsEProm()
 }
 
 
-// void PMMSetDeviceSettingsIntoFlash()
-// {
-//     if (PMMEprom.begin() == true)
-//     {
-//         PMMEprom.put(0, PMMGENERALSETTINGS.Name);
-//         PMMEprom.put(4, PMMGENERALSETTINGS.TCPorRTU);
-//         PMMEprom.put(8, PMMMODBUSSETTINGS.SlaveID);
-//         PMMEprom.put(12, PMMTCPUDPSETTINGS.IPAddressEthOne);
-//         PMMEprom.put(16, PMMTCPUDPSETTINGS.SubnetMaskEthOne);
-//         PMMEprom.put(20, PMMTCPUDPSETTINGS.DNSOneEthOne);
-//         PMMEprom.put(24, PMMTCPUDPSETTINGS.GatewayEthOne);
-//         PMMEprom.put(28, PMMTCPUDPSETTINGS.RemoteIPAddressEthOne);
-//         PMMEprom.put(32, PMMTCPUDPSETTINGS.TimeOutConnEthOne);
-//         PMMEprom.put(36, PMMTCPUDPSETTINGS.MaxRetriesEthOne);
-//         PMMEprom.put(40, PMMTCPUDPSETTINGS.MacAddressEthOne);
-//         PMMEprom.put(44, PMMTCPUDPSETTINGS.UDPPortOne);
-//         PMMEprom.put(48, PMMTCPUDPSETTINGS.UDPPortTwo);
-//         PMMEprom.put(52, PMMTCPUDPSETTINGS.UDPPortThree);
-//         PMMEprom.put(56, PMMTCPUDPSETTINGS.UDPPortFour);
-//         PMMEprom.put(60, PMMSERIALSETTINGS.PortOneName);
-//         PMMEprom.put(64, PMMSERIALSETTINGS.PortOneBaudRate);
-//         PMMEprom.put(68, PMMSERIALSETTINGS.PortOneDataBits);
-//         PMMEprom.put(72, PMMSERIALSETTINGS.PortOneStopBits);
-//         PMMEprom.put(76, PMMSERIALSETTINGS.PortOneParity);
-//         PMMEprom.put(80, PMMSERIALSETTINGS.PortOneInterface);
-//         PMMEprom.put(84, PMMSERIALSETTINGS.PortOneConnTimeOut);
-//         PMMEprom.put(88, PMMSERIALSETTINGS.PortOneMaxRetries);
-//         PMMEprom.put(92, PMMGENERALSETTINGS.SerialNumber);
-//         PMMEprom.put(96, PMMGENERALSETTINGS.FirmwareVersion);
-//         PMMEprom.put(100, PMMGENERALSETTINGS.HardwareVersion);
-//         PMMEprom.put(104, PMMGENERALSETTINGS.WebServer);
-//     }
-// }
+
 
 
 string CheckAvailabeHardware()
