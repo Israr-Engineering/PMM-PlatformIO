@@ -6,7 +6,7 @@ PmmEthernetServer server(80);
 PmmEthernetClient client = server.available();
 
 void PMMInitializeEthernet(IPAddress ip, byte mac[]);
-void PMMReadCommands();
+string PMMReadCommands();
 string PMMCommnads(string readData);
 string PMMReturnDataFromSerialUSB();
 string PMMReturnDataFromAPIHTTPHeader();
