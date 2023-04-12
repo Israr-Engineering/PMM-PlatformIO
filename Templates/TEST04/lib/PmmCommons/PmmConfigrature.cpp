@@ -131,7 +131,8 @@ typedef struct Product
     string settingPanel;
 } Product;
 
-FlashStorage(my_flash_store, Product);
+//FlashStorage(my_flash_store, Product);
+FlashStorage(my_flash_store, tcp_udp_settings);
 
 // std::vector<string> PMMStringToArray(string csvStr, char delimiter)
 // {
@@ -144,6 +145,54 @@ FlashStorage(my_flash_store, Product);
 //     }
 //     return arr;
 // }
+
+void SetTCPSettings(string Message)
+{
+    PmmStringToArray(Message);
+    
+    SerialUSB.println(Message.c_str());
+    tcp_udp_settings tcpudp;
+    // TCP Settings
+    tcpudp.ip_address = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
+    tcpudp.net_mask = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
+    tcpudp.preferred_dns_server = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
+    tcpudp.alternate_dns_server = values[12] + "." + values[13] + "." + values[14] + "." + values[15];
+    tcpudp.default_gateway = values[16] + "." + values[17] + "." + values[18] + "." + values[19];
+    tcpudp.mac_address = values[20] + ":" + values[21] + ":" + values[22] + ":" + values[23] + ":" + values[24];
+    tcpudp.connection_timeout_tcp = stoi(values[25]);
+    tcpudp.max_retry_tcp = stoi(values[26]);
+    tcpudp.udp_port_one = stoi(values[27]);
+    tcpudp.udp_port_two = stoi(values[28]);
+    tcpudp.udp_port_three = stoi(values[29]);
+    tcpudp.udp_port_four = stoi(values[30]);
+
+    // ...and finally save everything into "my_flash_store"
+    my_flash_store.write(tcpudp);
+}
+
+string GetTCPSettings()
+{
+    tcp_udp_settings tcpudp;
+
+    SerialUSB.println("GET 1");
+    tcpudp = my_flash_store.read();
+    SerialUSB.println("GET 2");
+    string settings = tcpudp.ip_address;
+    settings = settings + "," + tcpudp.net_mask;
+    settings = settings + "," + tcpudp.preferred_dns_server;
+    settings = settings + "," + tcpudp.alternate_dns_server;
+    settings = settings + "," + tcpudp.default_gateway;
+    settings = settings + "," + tcpudp.mac_address;
+    settings = settings + "," + std::to_string(tcpudp.connection_timeout_tcp);
+    settings = settings + "," + std::to_string(tcpudp.max_retry_tcp);
+    settings = settings + "," + std::to_string(tcpudp.udp_port_one);
+    settings = settings + "," + std::to_string(tcpudp.udp_port_two);
+    settings = settings + "," + std::to_string(tcpudp.udp_port_three);
+    settings = settings + "," + std::to_string(tcpudp.udp_port_four);
+
+    SerialUSB.println("GET 3");
+    return settings;
+}
 
 void PmmStringToArray(string input)
 {
@@ -166,10 +215,15 @@ void PmmStringToArray(string input)
         ptr = strtok(NULL, ",");
     }
 
-    for (int n = 0; n < 120; n++)
+    for (int n = 0; n < (length + 1); n++)
     {
         string s(strings[n]);
+        
         values[n] = s;
+
+        SerialUSB.print(n);
+        SerialUSB.print(" : ");
+        SerialUSB.println(s.c_str());
     }
 }
 
@@ -188,9 +242,9 @@ void PMMWriteIntoFlashAllSettings(string Message)
 
     Product product;
 
-    //product = my_flash_store.read();
-    //SerialUSB.println((PMMGENERALSETTINGS.FirmwareVersion).c_str());
-    // General Info
+    // product = my_flash_store.read();
+    // SerialUSB.println((PMMGENERALSETTINGS.FirmwareVersion).c_str());
+    //  General Info
     PMMGENERALSETTINGS.FirmwareVersion = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
     PMMGENERALSETTINGS.HardwareVersion = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
     PMMGENERALSETTINGS.HardwareVersion = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
@@ -390,7 +444,7 @@ void PMMWriteIntoFlashAllSettings(string Message)
     product.right_io_pins.pin24 = values[111];
 
     // ...and finally save everything into "my_flash_store"
-    my_flash_store.write(product);
+    //my_flash_store.write(product);
 }
 
 void PMMWriteIntoFlashGeneralSettings(string Message)
@@ -424,12 +478,12 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
     product.other_support_name = values[18];
 
     // ...and finally save everything into "my_flash_store"
-    my_flash_store.write(product);
+    //my_flash_store.write(product);
 }
 
 void PMMWriteIntoFlashSerialSettings(string Message)
 {
-   Product product;
+    Product product;
 
     PmmStringToArray(Message);
 
@@ -473,12 +527,12 @@ void PMMWriteIntoFlashSerialSettings(string Message)
     product.serial4.type = values[73];
 
     // ...and finally save everything into "my_flash_store"
-    my_flash_store.write(product);
+    //my_flash_store.write(product);
 }
 
 void PMMWriteIntoFlashTCPSettings(string Message)
 {
-   Product product;
+    Product product;
 
     PmmStringToArray(Message);
     // TCP Settings
@@ -510,7 +564,7 @@ void PMMWriteIntoFlashTCPSettings(string Message)
     product.tcp_udp_settings.udp_port_four = stoi(values[57]);
 
     // ...and finally save everything into "my_flash_store"
-    my_flash_store.write(product);
+    //my_flash_store.write(product);
 }
 
 void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
@@ -627,16 +681,16 @@ void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
     product.right_io_pins.pin24 = values[111];
 
     // ...and finally save everything into "my_flash_store"
-    my_flash_store.write(product);
+    //my_flash_store.write(product);
 }
 
 string PMMReadFromFlashAllSettings()
 {
     Product product;
-    
-    //SerialUSB.println("GET 1");
-    product = my_flash_store.read();
-    //SerialUSB.println("GET 2");
+
+    // SerialUSB.println("GET 1");
+    //product = my_flash_store.read();
+    // SerialUSB.println("GET 2");
     string settings = product.firmware_version;
     settings = settings + "," + product.software_version;
     settings = settings + "," + product.hardware_version;
@@ -736,7 +790,7 @@ string PMMReadFromFlashAllSettings()
     settings = settings + "," + product.right_io_pins.pin23;
     settings = settings + "," + product.right_io_pins.pin24;
 
-    //SerialUSB.println("GET 3");
+    // SerialUSB.println("GET 3");
     return settings;
 }
 

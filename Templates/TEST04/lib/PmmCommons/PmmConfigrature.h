@@ -17,3 +17,7 @@ void PMMWriteIntoFlashTCPSettings(string Message);
 void PMMWriteIntoFlashOptionsAndPinsSettings(string Message);
 string PMMReadFromFlashAllSettings();
 void PmmStringToArray(string input);
+
+
+void SetTCPSettings(string Message);
+string GetTCPSettings();
