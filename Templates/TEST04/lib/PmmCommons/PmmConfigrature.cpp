@@ -7,9 +7,9 @@ struct PmmSerialSettings PMMSERIALSETTINGS;
 struct PmmIOPins PMMIOPINS;
 struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
 
-char *strings[120]; // an array of pointers to the pieces of the above array after strtok()
+char *strings[32]; // an array of pointers to the pieces of the above array after strtok()
 char *ptr = NULL;
-string values[120];
+string values[32];
 
 typedef struct tcp_udp_settings
 {
@@ -200,7 +200,7 @@ void PmmStringToArray(string input)
     int length = input.length();
 
     // declaring character array (+1 for null terminator)
-    char *char_array = new char[length + 1];
+    char *char_array = new char[32];
 
     // copying the contents of the
     // string to char array
@@ -215,7 +215,7 @@ void PmmStringToArray(string input)
         ptr = strtok(NULL, ",");
     }
 
-    for (int n = 0; n < (length + 1); n++)
+    for (int n = 0; n < (index ); n++)
     {
         string s(strings[n]);
         
