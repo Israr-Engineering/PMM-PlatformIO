@@ -174,23 +174,39 @@ string GetTCPSettings()
 {
     tcp_udp_settings tcpudp;
 
-    SerialUSB.println("GET 1");
+    // //SerialUSB.println("GET 1");
     tcpudp = my_flash_store.read();
-    SerialUSB.println("GET 2");
+    // //SerialUSB.println("GET 2");
     string settings = tcpudp.ip_address;
-    settings = settings + "," + tcpudp.net_mask;
-    settings = settings + "," + tcpudp.preferred_dns_server;
-    settings = settings + "," + tcpudp.alternate_dns_server;
-    settings = settings + "," + tcpudp.default_gateway;
-    settings = settings + "," + tcpudp.mac_address;
-    settings = settings + "," + std::to_string(tcpudp.connection_timeout_tcp);
-    settings = settings + "," + std::to_string(tcpudp.max_retry_tcp);
-    settings = settings + "," + std::to_string(tcpudp.udp_port_one);
-    settings = settings + "," + std::to_string(tcpudp.udp_port_two);
-    settings = settings + "," + std::to_string(tcpudp.udp_port_three);
-    settings = settings + "," + std::to_string(tcpudp.udp_port_four);
+    SerialUSB.println((settings).c_str());
+    delay(200);
+    settings =  tcpudp.net_mask;
+    SerialUSB.println(settings.c_str());
+    // settings =  tcpudp.preferred_dns_server;
+    // SerialUSB.println(settings.c_str());
+    // settings =  tcpudp.alternate_dns_server;
+    // SerialUSB.println(settings.c_str());
+    // settings =  tcpudp.default_gateway;
+    // SerialUSB.println(settings.c_str());
+    // settings =  tcpudp.mac_address;
+    // SerialUSB.println(settings.c_str());
+    // settings =  std::to_string(tcpudp.connection_timeout_tcp);
+    // SerialUSB.println(settings.c_str());
+    // settings =  std::to_string(tcpudp.max_retry_tcp);
+    // SerialUSB.println(settings.c_str());
+    // settings =  std::to_string(tcpudp.udp_port_one);
+    // SerialUSB.println(settings.c_str());
+    // settings =  std::to_string(tcpudp.udp_port_two);
+    // SerialUSB.println(settings.c_str());
+    // settings =  std::to_string(tcpudp.udp_port_three);
+    // SerialUSB.println(settings.c_str());
+    // settings =  std::to_string(tcpudp.udp_port_four);
+    // SerialUSB.println(settings.c_str());
+    // SerialUSB.println("END");
 
-    SerialUSB.println("GET 3");
+    //string settings = "PMMSet,0,3,127,0,0,1,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,171,205,173,205,171,205,3000,10,502,503,504,505,";
+
+    
     return settings;
 }
 
