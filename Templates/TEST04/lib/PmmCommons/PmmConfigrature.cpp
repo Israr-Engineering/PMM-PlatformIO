@@ -7,6 +7,10 @@ struct PmmSerialSettings PMMSERIALSETTINGS;
 struct PmmIOPins PMMIOPINS;
 struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
 
+char *strings[120]; // an array of pointers to the pieces of the above array after strtok()
+char *ptr = NULL;
+string values[120];
+
 typedef struct tcp_udp_settings
 {
     string ip_address;
@@ -127,27 +131,65 @@ typedef struct Product
     string settingPanel;
 } Product;
 
-Product product;
-
 FlashStorage(my_flash_store, Product);
 
-std::vector<string> PMMStringToArray(string csvStr, char delimiter)
+// std::vector<string> PMMStringToArray(string csvStr, char delimiter)
+// {
+//     vector<string> arr;
+//     istringstream iss(csvStr);
+//     string token;
+//     while (getline(iss, token, delimiter))
+//     {
+//         arr.push_back(token);
+//     }
+//     return arr;
+// }
+
+void PmmStringToArray(string input)
 {
-    vector<string> arr;
-    istringstream iss(csvStr);
-    string token;
-    while (getline(iss, token, delimiter))
+
+    int length = input.length();
+
+    // declaring character array (+1 for null terminator)
+    char *char_array = new char[length + 1];
+
+    // copying the contents of the
+    // string to char array
+    strcpy(char_array, input.c_str());
+
+    byte index = 0;
+    ptr = strtok(char_array, ","); // delimiter
+    while (ptr != NULL)
     {
-        arr.push_back(token);
+        strings[index] = ptr;
+        index++;
+        ptr = strtok(NULL, ",");
     }
-    return arr;
+
+    for (int n = 0; n < 120; n++)
+    {
+        string s(strings[n]);
+        values[n] = s;
+    }
 }
 
 void PMMWriteIntoFlashAllSettings(string Message)
 {
-    std::vector<string> values = PMMStringToArray(Message,',');
+    // std::vector<string> values = PMMStringToArray(Message,',');
 
+    PmmStringToArray(Message);
 
+    // for (int n = 0; n < 120; n++)
+    // {
+    //     SerialUSB.print(n);
+    //     SerialUSB.print(" : ");
+    //     SerialUSB.println((values[n]).c_str());
+    // }
+
+    Product product;
+
+    //product = my_flash_store.read();
+    //SerialUSB.println((PMMGENERALSETTINGS.FirmwareVersion).c_str());
     // General Info
     PMMGENERALSETTINGS.FirmwareVersion = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
     PMMGENERALSETTINGS.HardwareVersion = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
@@ -246,7 +288,6 @@ void PMMWriteIntoFlashAllSettings(string Message)
     PMMIOPINS.Pin22 = values[109];
     PMMIOPINS.Pin23 = values[110];
     PMMIOPINS.Pin24 = values[111];
-
 
     // General Info
     product.firmware_version = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
@@ -348,16 +389,15 @@ void PMMWriteIntoFlashAllSettings(string Message)
     product.right_io_pins.pin23 = values[110];
     product.right_io_pins.pin24 = values[111];
 
-
     // ...and finally save everything into "my_flash_store"
     my_flash_store.write(product);
 }
 
 void PMMWriteIntoFlashGeneralSettings(string Message)
 {
-    std::vector<string> values = PMMStringToArray(Message,',');
+    Product product;
 
-
+    PmmStringToArray(Message);
 
     // General Info
     PMMGENERALSETTINGS.FirmwareVersion = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
@@ -389,7 +429,9 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
 
 void PMMWriteIntoFlashSerialSettings(string Message)
 {
-    std::vector<string> values = PMMStringToArray(Message,',');
+   Product product;
+
+    PmmStringToArray(Message);
 
     // RTU Setting
     PMMSERIALSETTINGS.PortOneName = values[19];
@@ -409,7 +451,6 @@ void PMMWriteIntoFlashSerialSettings(string Message)
     PMMSERIALSETTINGS.SerialThreeType = values[71];
     PMMSERIALSETTINGS.SerialFourEnabled = (values[70] == "1" ? "true" : "false");
     PMMSERIALSETTINGS.SerialFourType = values[73];
-
 
     // RTU Setting
     product.rtu_settings.ComName = values[19];
@@ -437,8 +478,9 @@ void PMMWriteIntoFlashSerialSettings(string Message)
 
 void PMMWriteIntoFlashTCPSettings(string Message)
 {
-    std::vector<string> values = PMMStringToArray(Message,',');
+   Product product;
 
+    PmmStringToArray(Message);
     // TCP Settings
     PMMTCPUDPSETTINGS.IPAddressEthOne = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
     PMMTCPUDPSETTINGS.SubnetMaskEthOne = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
@@ -473,8 +515,9 @@ void PMMWriteIntoFlashTCPSettings(string Message)
 
 void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
 {
-    std::vector<string> values = PMMStringToArray(Message,',');
+    Product product;
 
+    PmmStringToArray(Message);
     // Options
     PMMGENERALSETTINGS.HasEthernet = (values[58] == "1" ? "true" : "false");
     PMMGENERALSETTINGS.HasFiber = (values[59] == "1" ? "true" : "false");
@@ -528,7 +571,6 @@ void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
     PMMIOPINS.Pin22 = values[109];
     PMMIOPINS.Pin23 = values[110];
     PMMIOPINS.Pin24 = values[111];
-
 
     // Options
     product.ethernet = (values[58] == "1" ? "true" : "false");
@@ -584,15 +626,17 @@ void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
     product.right_io_pins.pin23 = values[110];
     product.right_io_pins.pin24 = values[111];
 
-
     // ...and finally save everything into "my_flash_store"
     my_flash_store.write(product);
 }
 
 string PMMReadFromFlashAllSettings()
 {
+    Product product;
+    
+    //SerialUSB.println("GET 1");
     product = my_flash_store.read();
-
+    //SerialUSB.println("GET 2");
     string settings = product.firmware_version;
     settings = settings + "," + product.software_version;
     settings = settings + "," + product.hardware_version;
@@ -692,6 +736,7 @@ string PMMReadFromFlashAllSettings()
     settings = settings + "," + product.right_io_pins.pin23;
     settings = settings + "," + product.right_io_pins.pin24;
 
+    //SerialUSB.println("GET 3");
     return settings;
 }
 
