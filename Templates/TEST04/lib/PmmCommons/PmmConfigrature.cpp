@@ -50,7 +50,7 @@ typedef struct tcp_udp_settings
 
 typedef struct serial_connector
 {
-    bool enabled;
+    int enabled;
     int type;
 } serial_connector;
 
@@ -115,15 +115,15 @@ typedef struct Product
     int software_version04;
     int cpu_type;
     int connection_type;
-    bool ethernet;
-    bool fiber;
-    bool switchh;
-    bool rtc_external;
-    bool rtc_internal;
-    bool eprom;
-    bool internal_flash;
-    bool external_flash;
-    bool i2c;
+    int ethernet;
+    int fiber;
+    int switchh;
+    int rtc_external;
+    int rtc_internal;
+    int eprom;
+    int internal_flash;
+    int external_flash;
+    int i2c;
     struct left_io_pins left_io_pins;
     struct right_io_pins right_io_pins;
     struct serial_connector serial1;
@@ -135,9 +135,9 @@ typedef struct Product
     int product_family;
     int enclosure_type;
     int other_support_name;
-    bool arduino_support;
-    bool platform_io_support;
-    bool other_support;
+    int arduino_support;
+    int platform_io_support;
+    int other_support;
     int slave_i2c_address;
     int board1;
     int board1_address1;
@@ -151,12 +151,12 @@ typedef struct Product
     int board4;
     int board4_address1;
     int board4_address2;
-    bool usb_com;
-    bool ice_only;
+    int usb_com;
+    int ice_only;
     int settingPanel;
 
-    bool EthernetAndUSB;
-    bool IsUSB;
+    int EthernetAndUSB;
+    int IsUSB;
     int SettingsROM;
 } Product;
 
@@ -326,6 +326,8 @@ void PmmStringToArray(string input)
         ptr = strtok(NULL, ",");
     }
 
+    SerialUSB.println(index);
+
     for (int n = 0; n < (index); n++)
     {
         string s(strings[n]);
@@ -444,8 +446,6 @@ void PMMWriteIntoFlashAllSettings(string Message)
     PMMIOPINS.Pin24 = values[111];
 #pragma endregion
 
-#pragma region
-
     // General Info
     product.firmware_version01 = stoi(values[0]);
     product.firmware_version02 = stoi(values[1]);
@@ -463,8 +463,8 @@ void PMMWriteIntoFlashAllSettings(string Message)
     product.cpu_type = stoi(values[13]);
     product.product_family = stoi(values[14]);
     product.enclosure_type = stoi(values[15]);
-    product.arduino_support = (values[16] == "1" ? "true" : "false");
-    product.platform_io_support = (values[17] == "1" ? "true" : "false");
+    product.arduino_support = stoi(values[16]);
+    product.platform_io_support = stoi(values[17]);
     product.other_support_name = stoi(values[18]);
 
     // RTU Setting
@@ -517,27 +517,27 @@ void PMMWriteIntoFlashAllSettings(string Message)
     product.tcp_udp_settings.udp_port_four = stoi(values[57]);
 
     // Options
-    product.ethernet = (values[58] == "1" ? "true" : "false");
-    product.fiber = (values[59] == "1" ? "true" : "false");
-    product.switchh = (values[60] == "1" ? "true" : "false");
-    product.rtc_external = (values[61] == "1" ? "true" : "false");
-    product.rtc_internal = (values[62] == "1" ? "true" : "false");
-    product.eprom = (values[63] == "1" ? "true" : "false");
-    product.internal_flash = (values[64] == "1" ? "true" : "false");
-    product.external_flash = (values[65] == "1" ? "true" : "false");
+    product.ethernet =stoi(values[58]);
+    product.fiber = stoi(values[59]);
+    product.switchh = stoi(values[60]);
+    product.rtc_external = stoi(values[61]);
+    product.rtc_internal = stoi(values[62]);
+    product.eprom = stoi(values[63]);
+    product.internal_flash = stoi(values[64]);
+    product.external_flash = stoi(values[65]);
 
     // Serail Connectors
-    product.serial1.enabled = (values[66] == "1" ? "true" : "false");
+    product.serial1.enabled = stoi(values[66]) ;
     product.serial1.type = stoi(values[67]);
-    product.serial2.enabled = (values[68] == "1" ? "true" : "false");
+    product.serial2.enabled = stoi(values[68]);
     product.serial2.type = stoi(values[69]);
-    product.serial3.enabled = (values[69] == "1" ? "true" : "false");
+    product.serial3.enabled = stoi(values[69]);
     product.serial3.type = stoi(values[71]);
-    product.serial4.enabled = (values[70] == "1" ? "true" : "false");
+    product.serial4.enabled = stoi(values[70]);
     product.serial4.type = stoi(values[73]);
 
     // Extension Boards
-    product.i2c = (values[74] == "1" ? "true" : "false");
+    product.i2c = stoi(values[74]);
     product.slave_i2c_address = stoi(values[75]);
     product.board1 = stoi(values[76]);
     product.board1_address1 = stoi(values[77]);
@@ -580,14 +580,12 @@ void PMMWriteIntoFlashAllSettings(string Message)
     product.right_io_pins.pin23 = stoi(values[110]);
     product.right_io_pins.pin24 = stoi(values[111]);
 
-    product.usb_com = (values[112] == "1" ? "true" : "false");
-    product.ice_only = (values[113] == "1" ? "true" : "false");
+    product.usb_com = stoi(values[112]);
+    product.ice_only = stoi(values[113]);
     product.settingPanel = stoi(values[114]);
-    product.EthernetAndUSB = (values[115] == "1" ? "true" : "false");
-    product.IsUSB = (values[116] == "1" ? "true" : "false");
+    product.EthernetAndUSB = stoi(values[115]);
+    product.IsUSB = stoi(values[116]);
     product.SettingsROM = stoi(values[117]);
-
-#pragma endregion
 
     // ...and finally save everything into "my_flash_store"
     my_flash_store.write(product);
