@@ -20,4 +20,4 @@ void PmmStringToArray(string input);
 
 
 void SetTCPSettings(string Message);
-string GetTCPSettings();
+String GetTCPSettings();

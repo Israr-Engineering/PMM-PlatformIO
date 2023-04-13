@@ -13,13 +13,14 @@ string values[32];
 
 typedef struct tcp_udp_settings
 {
-    string ip_address;
+    String tmpSpace;
+    String ip_address;
     int port;
-    string net_mask;
-    string default_gateway;
-    string mac_address;
-    string preferred_dns_server;
-    string alternate_dns_server;
+    String net_mask;
+    String default_gateway;
+    String mac_address;
+    String preferred_dns_server;
+    String alternate_dns_server;
     int connection_timeout_tcp;
     int max_retry_tcp;
     int udp_port_one;
@@ -150,63 +151,79 @@ void SetTCPSettings(string Message)
 {
     PmmStringToArray(Message);
     
-    SerialUSB.println(Message.c_str());
+    //SerialUSB.println(Message.c_str());
     tcp_udp_settings tcpudp;
     // TCP Settings
-    tcpudp.ip_address = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
-    tcpudp.net_mask = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
-    tcpudp.preferred_dns_server = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
-    tcpudp.alternate_dns_server = values[12] + "." + values[13] + "." + values[14] + "." + values[15];
-    tcpudp.default_gateway = values[16] + "." + values[17] + "." + values[18] + "." + values[19];
-    tcpudp.mac_address = values[20] + ":" + values[21] + ":" + values[22] + ":" + values[23] + ":" + values[24];
+
+    tcpudp.tmpSpace = "x";
+
+    string tmpString = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
+
+     tcpudp.ip_address = tmpString.c_str() ;
+
+     SerialUSB.println(tcpudp.ip_address);
+
+     tmpString = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
+    tcpudp.net_mask = tmpString.c_str() ;
+    tmpString = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
+    tcpudp.preferred_dns_server = tmpString.c_str() ;
+     tmpString = values[12] + "." + values[13] + "." + values[14] + "." + values[15];
+    tcpudp.alternate_dns_server = tmpString.c_str() ;
+     tmpString = values[16] + "." + values[17] + "." + values[18] + "." + values[19];
+    tcpudp.default_gateway = tmpString.c_str() ;
+     tmpString = values[20] + ":" + values[21] + ":" + values[22] + ":" + values[23] + ":" + values[24];
+    tcpudp.mac_address = tmpString.c_str() ;
+
     tcpudp.connection_timeout_tcp = stoi(values[25]);
     tcpudp.max_retry_tcp = stoi(values[26]);
     tcpudp.udp_port_one = stoi(values[27]);
     tcpudp.udp_port_two = stoi(values[28]);
-    tcpudp.udp_port_three = stoi(values[29]);
+    tcpudp.udp_port_three =  stoi(values[29]);
     tcpudp.udp_port_four = stoi(values[30]);
 
-    // ...and finally save everything into "my_flash_store"
-    my_flash_store.write(tcpudp);
+    // // ...and finally save everything into "my_flash_store"
+     my_flash_store.write(tcpudp);
 }
 
-string GetTCPSettings()
+String GetTCPSettings()
 {
     tcp_udp_settings tcpudp;
 
-    // //SerialUSB.println("GET 1");
+    //SerialUSB.println("GET 1");
     tcpudp = my_flash_store.read();
-    // //SerialUSB.println("GET 2");
-    string settings = tcpudp.ip_address;
-    SerialUSB.println((settings).c_str());
-    delay(200);
-    settings =  tcpudp.net_mask;
-    SerialUSB.println(settings.c_str());
-    // settings =  tcpudp.preferred_dns_server;
-    // SerialUSB.println(settings.c_str());
-    // settings =  tcpudp.alternate_dns_server;
-    // SerialUSB.println(settings.c_str());
-    // settings =  tcpudp.default_gateway;
-    // SerialUSB.println(settings.c_str());
-    // settings =  tcpudp.mac_address;
-    // SerialUSB.println(settings.c_str());
-    // settings =  std::to_string(tcpudp.connection_timeout_tcp);
-    // SerialUSB.println(settings.c_str());
-    // settings =  std::to_string(tcpudp.max_retry_tcp);
-    // SerialUSB.println(settings.c_str());
-    // settings =  std::to_string(tcpudp.udp_port_one);
-    // SerialUSB.println(settings.c_str());
-    // settings =  std::to_string(tcpudp.udp_port_two);
-    // SerialUSB.println(settings.c_str());
-    // settings =  std::to_string(tcpudp.udp_port_three);
-    // SerialUSB.println(settings.c_str());
-    // settings =  std::to_string(tcpudp.udp_port_four);
-    // SerialUSB.println(settings.c_str());
-    // SerialUSB.println("END");
+    //SerialUSB.println("GET 2");
 
-    //string settings = "PMMSet,0,3,127,0,0,1,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,171,205,173,205,171,205,3000,10,502,503,504,505,";
+    SerialUSB.println(tcpudp.ip_address);
 
-    
+    String settings ="";
+    settings = "1919";
+    settings = String(settings + ",");
+    settings = String(settings + tcpudp.ip_address);
+   
+    settings = String(settings + ",");
+    settings = String(settings + tcpudp.net_mask);
+    settings = String(settings + ",");
+    settings = String(settings + tcpudp.preferred_dns_server);
+    settings = String(settings + ",");
+    settings = String(settings + tcpudp.alternate_dns_server);
+    settings = String(settings + ",");
+    settings = String(settings + tcpudp.default_gateway);
+    settings = String(settings + ",");
+    settings = String(settings + tcpudp.mac_address);
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.connection_timeout_tcp));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.max_retry_tcp));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.udp_port_one));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.udp_port_two));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.udp_port_three));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.udp_port_four));
+
+    SerialUSB.println(settings);
     return settings;
 }
 
@@ -382,18 +399,18 @@ void PMMWriteIntoFlashAllSettings(string Message)
     product.rtu_settings.max_retry_rtu = stoi(values[26]);
 
     // TCP Settings
-    product.tcp_udp_settings.ip_address = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
-    product.tcp_udp_settings.net_mask = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
-    product.tcp_udp_settings.preferred_dns_server = values[35] + "." + values[36] + "." + values[37] + "." + values[38];
-    product.tcp_udp_settings.alternate_dns_server = values[39] + "." + values[40] + "." + values[41] + "." + values[42];
-    product.tcp_udp_settings.default_gateway = values[43] + "." + values[44] + "." + values[45] + "." + values[46];
-    product.tcp_udp_settings.mac_address = values[47] + ":" + values[48] + ":" + values[49] + ":" + values[50] + ":" + values[51];
-    product.tcp_udp_settings.connection_timeout_tcp = stoi(values[52]);
-    product.tcp_udp_settings.max_retry_tcp = stoi(values[53]);
-    product.tcp_udp_settings.udp_port_one = stoi(values[54]);
-    product.tcp_udp_settings.udp_port_two = stoi(values[55]);
-    product.tcp_udp_settings.udp_port_three = stoi(values[56]);
-    product.tcp_udp_settings.udp_port_four = stoi(values[57]);
+    // product.tcp_udp_settings.ip_address = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
+    // product.tcp_udp_settings.net_mask = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
+    // product.tcp_udp_settings.preferred_dns_server = values[35] + "." + values[36] + "." + values[37] + "." + values[38];
+    // product.tcp_udp_settings.alternate_dns_server = values[39] + "." + values[40] + "." + values[41] + "." + values[42];
+    // product.tcp_udp_settings.default_gateway = values[43] + "." + values[44] + "." + values[45] + "." + values[46];
+    // product.tcp_udp_settings.mac_address = values[47] + ":" + values[48] + ":" + values[49] + ":" + values[50] + ":" + values[51];
+    // product.tcp_udp_settings.connection_timeout_tcp = stoi(values[52]);
+    // product.tcp_udp_settings.max_retry_tcp = stoi(values[53]);
+    // product.tcp_udp_settings.udp_port_one = stoi(values[54]);
+    // product.tcp_udp_settings.udp_port_two = stoi(values[55]);
+    // product.tcp_udp_settings.udp_port_three = stoi(values[56]);
+    // product.tcp_udp_settings.udp_port_four = stoi(values[57]);
 
     // Options
     product.ethernet = (values[58] == "1" ? "true" : "false");
@@ -566,18 +583,18 @@ void PMMWriteIntoFlashTCPSettings(string Message)
     PMMTCPUDPSETTINGS.UDPPortFour = stoi(values[57]);
 
     // TCP Settings
-    product.tcp_udp_settings.ip_address = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
-    product.tcp_udp_settings.net_mask = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
-    product.tcp_udp_settings.preferred_dns_server = values[35] + "." + values[36] + "." + values[37] + "." + values[38];
-    product.tcp_udp_settings.alternate_dns_server = values[39] + "." + values[40] + "." + values[41] + "." + values[42];
-    product.tcp_udp_settings.default_gateway = values[43] + "." + values[44] + "." + values[45] + "." + values[46];
-    product.tcp_udp_settings.mac_address = values[47] + ":" + values[48] + ":" + values[49] + ":" + values[50] + ":" + values[51];
-    product.tcp_udp_settings.connection_timeout_tcp = stoi(values[52]);
-    product.tcp_udp_settings.max_retry_tcp = stoi(values[53]);
-    product.tcp_udp_settings.udp_port_one = stoi(values[54]);
-    product.tcp_udp_settings.udp_port_two = stoi(values[55]);
-    product.tcp_udp_settings.udp_port_three = stoi(values[56]);
-    product.tcp_udp_settings.udp_port_four = stoi(values[57]);
+    // product.tcp_udp_settings.ip_address = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
+    // product.tcp_udp_settings.net_mask = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
+    // product.tcp_udp_settings.preferred_dns_server = values[35] + "." + values[36] + "." + values[37] + "." + values[38];
+    // product.tcp_udp_settings.alternate_dns_server = values[39] + "." + values[40] + "." + values[41] + "." + values[42];
+    // product.tcp_udp_settings.default_gateway = values[43] + "." + values[44] + "." + values[45] + "." + values[46];
+    // product.tcp_udp_settings.mac_address = values[47] + ":" + values[48] + ":" + values[49] + ":" + values[50] + ":" + values[51];
+    // product.tcp_udp_settings.connection_timeout_tcp = stoi(values[52]);
+    // product.tcp_udp_settings.max_retry_tcp = stoi(values[53]);
+    // product.tcp_udp_settings.udp_port_one = stoi(values[54]);
+    // product.tcp_udp_settings.udp_port_two = stoi(values[55]);
+    // product.tcp_udp_settings.udp_port_three = stoi(values[56]);
+    // product.tcp_udp_settings.udp_port_four = stoi(values[57]);
 
     // ...and finally save everything into "my_flash_store"
     //my_flash_store.write(product);
@@ -729,18 +746,18 @@ string PMMReadFromFlashAllSettings()
     settings = settings + "," + std::to_string(product.rtu_settings.max_retry_rtu);
 
     // TCP Settings
-    settings = settings + "," + product.tcp_udp_settings.ip_address;
-    settings = settings + "," + product.tcp_udp_settings.net_mask;
-    settings = settings + "," + product.tcp_udp_settings.preferred_dns_server;
-    settings = settings + "," + product.tcp_udp_settings.alternate_dns_server;
-    settings = settings + "," + product.tcp_udp_settings.default_gateway;
-    settings = settings + "," + product.tcp_udp_settings.mac_address;
-    settings = settings + "," + std::to_string(product.tcp_udp_settings.connection_timeout_tcp);
-    settings = settings + "," + std::to_string(product.tcp_udp_settings.max_retry_tcp);
-    settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_one);
-    settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_two);
-    settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_three);
-    settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_four);
+    // settings = settings + "," + product.tcp_udp_settings.ip_address;
+    // settings = settings + "," + product.tcp_udp_settings.net_mask;
+    // settings = settings + "," + product.tcp_udp_settings.preferred_dns_server;
+    // settings = settings + "," + product.tcp_udp_settings.alternate_dns_server;
+    // settings = settings + "," + product.tcp_udp_settings.default_gateway;
+    // settings = settings + "," + product.tcp_udp_settings.mac_address;
+    // settings = settings + "," + std::to_string(product.tcp_udp_settings.connection_timeout_tcp);
+    // settings = settings + "," + std::to_string(product.tcp_udp_settings.max_retry_tcp);
+    // settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_one);
+    // settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_two);
+    // settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_three);
+    // settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_four);
 
     // Options
     settings = settings + "," + std::to_string(product.ethernet);

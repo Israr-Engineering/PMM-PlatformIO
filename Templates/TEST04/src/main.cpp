@@ -69,7 +69,9 @@ void PMMConfiguration()
 
   if ((millis() - ConfigurationTimer) > 1000)
   {
-    PMMReadCommands();
+
+    string CMDResult = PMMReadCommands();
+    SerialUSB.println(CMDResult.c_str());
     ConfigurationTimer = millis();
   }
   // ConfigurationTimer
