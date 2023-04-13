@@ -15,7 +15,7 @@ void PMMWriteIntoFlashGeneralSettings(string Message);
 void PMMWriteIntoFlashSerialSettings(string Message);
 void PMMWriteIntoFlashTCPSettings(string Message);
 void PMMWriteIntoFlashOptionsAndPinsSettings(string Message);
-string PMMReadFromFlashAllSettings();
+String PMMReadFromFlashAllSettings();
 void PmmStringToArray(string input);
 
 

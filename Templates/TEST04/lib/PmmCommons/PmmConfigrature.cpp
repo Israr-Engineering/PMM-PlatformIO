@@ -7,20 +7,39 @@ struct PmmSerialSettings PMMSERIALSETTINGS;
 struct PmmIOPins PMMIOPINS;
 struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
 
-char *strings[32]; // an array of pointers to the pieces of the above array after strtok()
+char *strings[128]; // an array of pointers to the pieces of the above array after strtok()
 char *ptr = NULL;
-string values[32];
+string values[128];
 
 typedef struct tcp_udp_settings
 {
     String tmpSpace;
-    String ip_address;
+    int ip_address01;
+    int ip_address02;
+    int ip_address03;
+    int ip_address04;
     int port;
-    String net_mask;
-    String default_gateway;
-    String mac_address;
-    String preferred_dns_server;
-    String alternate_dns_server;
+    int net_mask01;
+    int net_mask02;
+    int net_mask03;
+    int net_mask04;
+    int default_gateway01;
+    int default_gateway02;
+    int default_gateway03;
+    int default_gateway04;
+    int mac_address01;
+    int mac_address02;
+    int mac_address03;
+    int mac_address04;
+    int mac_address05;
+    int preferred_dns_server01;
+    int preferred_dns_server02;
+    int preferred_dns_server03;
+    int preferred_dns_server04;
+    int alternate_dns_server01;
+    int alternate_dns_server02;
+    int alternate_dns_server03;
+    int alternate_dns_server04;
     int connection_timeout_tcp;
     int max_retry_tcp;
     int udp_port_one;
@@ -32,65 +51,70 @@ typedef struct tcp_udp_settings
 typedef struct serial_connector
 {
     bool enabled;
-    string type;
+    int type;
 } serial_connector;
 
 typedef struct rtu_settings
 {
-    string ComName;
+    int ComName;
     int32_t baudRate;
     int32_t dataBits;
     int32_t stopBits;
     int32_t parity;
-    string interface;
+    int interface;
     int32_t connection_timeout_rtu;
     int32_t max_retry_rtu;
 } rtu_settings;
 
 typedef struct left_io_pins
 {
-    string pin1;
-    string pin2;
-    string pin3;
-    string pin4;
-    string pin5;
-    string pin6;
-    string pin7;
-    string pin8;
-    string pin9;
-    string pin10;
-    string pin11;
-    string pin12;
+    int pin1;
+    int pin2;
+    int pin3;
+    int pin4;
+    int pin5;
+    int pin6;
+    int pin7;
+    int pin8;
+    int pin9;
+    int pin10;
+    int pin11;
+    int pin12;
 } left_io_pins;
 
 typedef struct right_io_pins
 {
-    string pin13;
-    string pin14;
-    string pin15;
-    string pin16;
-    string pin17;
-    string pin18;
-    string pin19;
-    string pin20;
-    string pin21;
-    string pin22;
-    string pin23;
-    string pin24;
+    int pin13;
+    int pin14;
+    int pin15;
+    int pin16;
+    int pin17;
+    int pin18;
+    int pin19;
+    int pin20;
+    int pin21;
+    int pin22;
+    int pin23;
+    int pin24;
 } right_io_pins;
 
 typedef struct Product
 {
-    // string name[128];
-    string firmware_version;
-    string serial_number;
-    string hardware_version;
-    string software_version;
-    string cpu_type;
-    // string description[128];
-    // string created_by;
-    string settings_rom;
-    string connection_type;
+    int firmware_version01;
+    int firmware_version02;
+    int firmware_version03;
+    int firmware_version04;
+    int32_t serial_number;
+    int hardware_version01;
+    int hardware_version02;
+    int hardware_version03;
+    int hardware_version04;
+    int software_version01;
+    int software_version02;
+    int software_version03;
+    int software_version04;
+    int cpu_type;
+    int connection_type;
     bool ethernet;
     bool fiber;
     bool switchh;
@@ -108,108 +132,134 @@ typedef struct Product
     struct serial_connector serial4;
     struct tcp_udp_settings tcp_udp_settings;
     struct rtu_settings rtu_settings;
-    string product_family;
-    string enclosure_type;
-    string other_support_name;
+    int product_family;
+    int enclosure_type;
+    int other_support_name;
     bool arduino_support;
     bool platform_io_support;
     bool other_support;
-    string slave_i2c_address;
-    string board1;
-    string board1_address1;
-    string board1_address2;
-    string board2;
-    string board2_address1;
-    string board2_address2;
-    string board3;
-    string board3_address1;
-    string board3_address2;
-    string board4;
-    string board4_address1;
-    string board4_address2;
+    int slave_i2c_address;
+    int board1;
+    int board1_address1;
+    int board1_address2;
+    int board2;
+    int board2_address1;
+    int board2_address2;
+    int board3;
+    int board3_address1;
+    int board3_address2;
+    int board4;
+    int board4_address1;
+    int board4_address2;
     bool usb_com;
     bool ice_only;
-    string settingPanel;
+    int settingPanel;
+
+    bool EthernetAndUSB;
+    bool IsUSB;
+    int SettingsROM;
 } Product;
 
-//FlashStorage(my_flash_store, Product);
-FlashStorage(my_flash_store, tcp_udp_settings);
-
-// std::vector<string> PMMStringToArray(string csvStr, char delimiter)
-// {
-//     vector<string> arr;
-//     istringstream iss(csvStr);
-//     string token;
-//     while (getline(iss, token, delimiter))
-//     {
-//         arr.push_back(token);
-//     }
-//     return arr;
-// }
+FlashStorage(my_flash_store, Product);
 
 void SetTCPSettings(string Message)
 {
     PmmStringToArray(Message);
-    
-    //SerialUSB.println(Message.c_str());
+
     tcp_udp_settings tcpudp;
     // TCP Settings
 
-    tcpudp.tmpSpace = "x";
+    tcpudp.ip_address01 = stoi(values[0]);
+    tcpudp.ip_address02 = stoi(values[1]);
+    tcpudp.ip_address03 = stoi(values[2]);
+    tcpudp.ip_address04 = stoi(values[3]);
 
-    string tmpString = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
+    tcpudp.net_mask01 = stoi(values[4]);
+    tcpudp.net_mask02 = stoi(values[5]);
+    tcpudp.net_mask03 = stoi(values[6]);
+    tcpudp.net_mask04 = stoi(values[7]);
 
-     tcpudp.ip_address = tmpString.c_str() ;
+    tcpudp.preferred_dns_server01 = stoi(values[8]);
+    tcpudp.preferred_dns_server02 = stoi(values[9]);
+    tcpudp.preferred_dns_server03 = stoi(values[10]);
+    tcpudp.preferred_dns_server04 = stoi(values[11]);
 
-     SerialUSB.println(tcpudp.ip_address);
+    tcpudp.alternate_dns_server01 = stoi(values[12]);
+    tcpudp.alternate_dns_server02 = stoi(values[13]);
+    tcpudp.alternate_dns_server03 = stoi(values[14]);
+    tcpudp.alternate_dns_server04 = stoi(values[15]);
 
-     tmpString = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
-    tcpudp.net_mask = tmpString.c_str() ;
-    tmpString = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
-    tcpudp.preferred_dns_server = tmpString.c_str() ;
-     tmpString = values[12] + "." + values[13] + "." + values[14] + "." + values[15];
-    tcpudp.alternate_dns_server = tmpString.c_str() ;
-     tmpString = values[16] + "." + values[17] + "." + values[18] + "." + values[19];
-    tcpudp.default_gateway = tmpString.c_str() ;
-     tmpString = values[20] + ":" + values[21] + ":" + values[22] + ":" + values[23] + ":" + values[24];
-    tcpudp.mac_address = tmpString.c_str() ;
+    tcpudp.default_gateway01 = stoi(values[16]);
+    tcpudp.default_gateway02 = stoi(values[17]);
+    tcpudp.default_gateway03 = stoi(values[18]);
+    tcpudp.default_gateway04 = stoi(values[20]);
 
-    tcpudp.connection_timeout_tcp = stoi(values[25]);
-    tcpudp.max_retry_tcp = stoi(values[26]);
-    tcpudp.udp_port_one = stoi(values[27]);
-    tcpudp.udp_port_two = stoi(values[28]);
-    tcpudp.udp_port_three =  stoi(values[29]);
-    tcpudp.udp_port_four = stoi(values[30]);
+    tcpudp.mac_address01 = stoi(values[21]);
+    tcpudp.mac_address02 = stoi(values[22]);
+    tcpudp.mac_address03 = stoi(values[23]);
+    tcpudp.mac_address04 = stoi(values[24]);
+    tcpudp.mac_address05 = stoi(values[25]);
 
+    tcpudp.connection_timeout_tcp = stoi(values[26]);
+    tcpudp.max_retry_tcp = stoi(values[27]);
+    tcpudp.udp_port_one = stoi(values[28]);
+    tcpudp.udp_port_two = stoi(values[29]);
+    tcpudp.udp_port_three = stoi(values[30]);
+    tcpudp.udp_port_four = stoi(values[31]);
+
+  
     // // ...and finally save everything into "my_flash_store"
-     my_flash_store.write(tcpudp);
+    //my_flash_store.write(tcpudp);
 }
 
 String GetTCPSettings()
 {
     tcp_udp_settings tcpudp;
+    //tcpudp = my_flash_store.read();
 
-    //SerialUSB.println("GET 1");
-    tcpudp = my_flash_store.read();
-    //SerialUSB.println("GET 2");
+    String settings = "";
 
-    SerialUSB.println(tcpudp.ip_address);
-
-    String settings ="";
-    settings = "1919";
+    settings = String(settings + String(tcpudp.ip_address01));
     settings = String(settings + ",");
-    settings = String(settings + tcpudp.ip_address);
-   
+    settings = String(settings + String(tcpudp.ip_address02));
     settings = String(settings + ",");
-    settings = String(settings + tcpudp.net_mask);
+    settings = String(settings + String(tcpudp.ip_address03));
     settings = String(settings + ",");
-    settings = String(settings + tcpudp.preferred_dns_server);
+    settings = String(settings + String(tcpudp.ip_address04));
     settings = String(settings + ",");
-    settings = String(settings + tcpudp.alternate_dns_server);
+    settings = String(settings + String(tcpudp.net_mask01));
     settings = String(settings + ",");
-    settings = String(settings + tcpudp.default_gateway);
+    settings = String(settings + String(tcpudp.net_mask02));
     settings = String(settings + ",");
-    settings = String(settings + tcpudp.mac_address);
+    settings = String(settings + String(tcpudp.net_mask03));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.net_mask04));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.preferred_dns_server01));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.preferred_dns_server02));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.preferred_dns_server03));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.preferred_dns_server04));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.default_gateway01));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.default_gateway02));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.default_gateway03));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.default_gateway04));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.mac_address01));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.mac_address02));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.mac_address03));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.mac_address04));
+    settings = String(settings + ",");
+    settings = String(settings + String(tcpudp.mac_address05));
     settings = String(settings + ",");
     settings = String(settings + String(tcpudp.connection_timeout_tcp));
     settings = String(settings + ",");
@@ -223,6 +273,34 @@ String GetTCPSettings()
     settings = String(settings + ",");
     settings = String(settings + String(tcpudp.udp_port_four));
 
+    // String settings = "";
+    // settings = "1919";
+    // settings = String(settings + ",");
+    // settings = String(settings + tcpudp.ip_address);
+
+    // settings = String(settings + ",");
+    // settings = String(settings + tcpudp.net_mask);
+    // settings = String(settings + ",");
+    // settings = String(settings + tcpudp.preferred_dns_server);
+    // settings = String(settings + ",");
+    // settings = String(settings + tcpudp.alternate_dns_server);
+    // settings = String(settings + ",");
+    // settings = String(settings + tcpudp.default_gateway);
+    // settings = String(settings + ",");
+    // settings = String(settings + tcpudp.mac_address);
+    // settings = String(settings + ",");
+    // settings = String(settings + String(tcpudp.connection_timeout_tcp));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(tcpudp.max_retry_tcp));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(tcpudp.udp_port_one));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(tcpudp.udp_port_two));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(tcpudp.udp_port_three));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(tcpudp.udp_port_four));
+
     SerialUSB.println(settings);
     return settings;
 }
@@ -230,10 +308,10 @@ String GetTCPSettings()
 void PmmStringToArray(string input)
 {
 
-    int length = input.length();
+    //int length = input.length();
 
     // declaring character array (+1 for null terminator)
-    char *char_array = new char[32];
+    char *char_array = new char[128];
 
     // copying the contents of the
     // string to char array
@@ -248,10 +326,9 @@ void PmmStringToArray(string input)
         ptr = strtok(NULL, ",");
     }
 
-    for (int n = 0; n < (index ); n++)
+    for (int n = 0; n < (index); n++)
     {
         string s(strings[n]);
-        
         values[n] = s;
 
         SerialUSB.print(n);
@@ -262,21 +339,11 @@ void PmmStringToArray(string input)
 
 void PMMWriteIntoFlashAllSettings(string Message)
 {
-    // std::vector<string> values = PMMStringToArray(Message,',');
-
     PmmStringToArray(Message);
-
-    // for (int n = 0; n < 120; n++)
-    // {
-    //     SerialUSB.print(n);
-    //     SerialUSB.print(" : ");
-    //     SerialUSB.println((values[n]).c_str());
-    // }
-
+    SerialUSB.println(Message.c_str());
     Product product;
 
-    // product = my_flash_store.read();
-    // SerialUSB.println((PMMGENERALSETTINGS.FirmwareVersion).c_str());
+#pragma region
     //  General Info
     PMMGENERALSETTINGS.FirmwareVersion = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
     PMMGENERALSETTINGS.HardwareVersion = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
@@ -375,42 +442,79 @@ void PMMWriteIntoFlashAllSettings(string Message)
     PMMIOPINS.Pin22 = values[109];
     PMMIOPINS.Pin23 = values[110];
     PMMIOPINS.Pin24 = values[111];
+#pragma endregion
+
+#pragma region
 
     // General Info
-    product.firmware_version = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
-    product.software_version = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
-    product.hardware_version = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
-    product.serial_number = values[12];
-    product.cpu_type = values[13];
-    product.product_family = values[14];
-    product.enclosure_type = values[15];
+    product.firmware_version01 = stoi(values[0]);
+    product.firmware_version02 = stoi(values[1]);
+    product.firmware_version03 = stoi(values[2]);
+    product.firmware_version04 = stoi(values[3]);
+    product.software_version01 = stoi(values[4]);
+    product.software_version02 = stoi(values[5]);
+    product.software_version03 = stoi(values[6]);
+    product.software_version04 = stoi(values[7]);
+    product.hardware_version01 = stoi(values[8]);
+    product.hardware_version02 = stoi(values[9]);
+    product.hardware_version03 = stoi(values[10]);
+    product.hardware_version04 = stoi(values[11]);
+    product.serial_number = stoi(values[12]);
+    product.cpu_type = stoi(values[13]);
+    product.product_family = stoi(values[14]);
+    product.enclosure_type = stoi(values[15]);
     product.arduino_support = (values[16] == "1" ? "true" : "false");
     product.platform_io_support = (values[17] == "1" ? "true" : "false");
-    product.other_support_name = values[18];
+    product.other_support_name = stoi(values[18]);
 
     // RTU Setting
-    product.rtu_settings.ComName = values[19];
+    product.rtu_settings.ComName = stoi(values[19]);
     product.rtu_settings.baudRate = stoi(values[20]);
     product.rtu_settings.dataBits = stoi(values[21]);
     product.rtu_settings.stopBits = stoi(values[22]);
     product.rtu_settings.parity = stoi(values[23]);
-    product.rtu_settings.interface = values[24];
+    product.rtu_settings.interface = stoi(values[24]);
     product.rtu_settings.connection_timeout_rtu = stoi(values[25]);
     product.rtu_settings.max_retry_rtu = stoi(values[26]);
 
     // TCP Settings
-    // product.tcp_udp_settings.ip_address = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
-    // product.tcp_udp_settings.net_mask = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
-    // product.tcp_udp_settings.preferred_dns_server = values[35] + "." + values[36] + "." + values[37] + "." + values[38];
-    // product.tcp_udp_settings.alternate_dns_server = values[39] + "." + values[40] + "." + values[41] + "." + values[42];
-    // product.tcp_udp_settings.default_gateway = values[43] + "." + values[44] + "." + values[45] + "." + values[46];
-    // product.tcp_udp_settings.mac_address = values[47] + ":" + values[48] + ":" + values[49] + ":" + values[50] + ":" + values[51];
-    // product.tcp_udp_settings.connection_timeout_tcp = stoi(values[52]);
-    // product.tcp_udp_settings.max_retry_tcp = stoi(values[53]);
-    // product.tcp_udp_settings.udp_port_one = stoi(values[54]);
-    // product.tcp_udp_settings.udp_port_two = stoi(values[55]);
-    // product.tcp_udp_settings.udp_port_three = stoi(values[56]);
-    // product.tcp_udp_settings.udp_port_four = stoi(values[57]);
+    product.tcp_udp_settings.ip_address01 = stoi(values[27]);
+    product.tcp_udp_settings.ip_address02 = stoi(values[28]);
+    product.tcp_udp_settings.ip_address03 = stoi(values[29]);
+    product.tcp_udp_settings.ip_address04 = stoi(values[30]);
+
+    product.tcp_udp_settings.net_mask01 = stoi(values[31]);
+    product.tcp_udp_settings.net_mask02 = stoi(values[32]);
+    product.tcp_udp_settings.net_mask03 = stoi(values[33]);
+    product.tcp_udp_settings.net_mask04 = stoi(values[34]);
+
+    product.tcp_udp_settings.preferred_dns_server01 = stoi(values[35]);
+    product.tcp_udp_settings.preferred_dns_server02 = stoi(values[36]);
+    product.tcp_udp_settings.preferred_dns_server03 = stoi(values[37]);
+    product.tcp_udp_settings.preferred_dns_server04 = stoi(values[38]);
+
+    product.tcp_udp_settings.alternate_dns_server01 = stoi(values[39]);
+    product.tcp_udp_settings.alternate_dns_server02 = stoi(values[40]);
+    product.tcp_udp_settings.alternate_dns_server03 = stoi(values[41]);
+    product.tcp_udp_settings.alternate_dns_server04 = stoi(values[42]);
+
+    product.tcp_udp_settings.default_gateway01 = stoi(values[43]);
+    product.tcp_udp_settings.default_gateway02 = stoi(values[44]);
+    product.tcp_udp_settings.default_gateway03 = stoi(values[45]);
+    product.tcp_udp_settings.default_gateway04 = stoi(values[46]);
+
+    product.tcp_udp_settings.mac_address01 = stoi(values[47]);
+    product.tcp_udp_settings.mac_address02 = stoi(values[48]);
+    product.tcp_udp_settings.mac_address03 = stoi(values[49]);
+    product.tcp_udp_settings.mac_address04 = stoi(values[50]);
+    product.tcp_udp_settings.mac_address05 = stoi(values[51]);
+
+    product.tcp_udp_settings.connection_timeout_tcp = stoi(values[52]);
+    product.tcp_udp_settings.max_retry_tcp = stoi(values[53]);
+    product.tcp_udp_settings.udp_port_one = stoi(values[54]);
+    product.tcp_udp_settings.udp_port_two = stoi(values[55]);
+    product.tcp_udp_settings.udp_port_three = stoi(values[56]);
+    product.tcp_udp_settings.udp_port_four = stoi(values[57]);
 
     // Options
     product.ethernet = (values[58] == "1" ? "true" : "false");
@@ -424,60 +528,71 @@ void PMMWriteIntoFlashAllSettings(string Message)
 
     // Serail Connectors
     product.serial1.enabled = (values[66] == "1" ? "true" : "false");
-    product.serial1.type = values[67];
+    product.serial1.type = stoi(values[67]);
     product.serial2.enabled = (values[68] == "1" ? "true" : "false");
-    product.serial2.type = values[69];
+    product.serial2.type = stoi(values[69]);
     product.serial3.enabled = (values[69] == "1" ? "true" : "false");
-    product.serial3.type = values[71];
+    product.serial3.type = stoi(values[71]);
     product.serial4.enabled = (values[70] == "1" ? "true" : "false");
-    product.serial4.type = values[73];
+    product.serial4.type = stoi(values[73]);
 
     // Extension Boards
     product.i2c = (values[74] == "1" ? "true" : "false");
-    product.slave_i2c_address = values[75];
-    product.board1 = values[76];
-    product.board1_address1 = values[77];
-    product.board1_address2 = values[78];
-    product.board2 = values[79];
-    product.board2_address1 = values[80];
-    product.board2_address2 = values[81];
-    product.board3 = values[82];
-    product.board3_address1 = values[83];
-    product.board3_address2 = values[84];
-    product.board4 = values[85];
-    product.board4_address1 = values[86];
-    product.board4_address2 = values[87];
+    product.slave_i2c_address = stoi(values[75]);
+    product.board1 = stoi(values[76]);
+    product.board1_address1 = stoi(values[77]);
+    product.board1_address2 = stoi(values[78]);
+    product.board2 = stoi(values[79]);
+    product.board2_address1 = stoi(values[80]);
+    product.board2_address2 = stoi(values[81]);
+    product.board3 = stoi(values[82]);
+    product.board3_address1 = stoi(values[83]);
+    product.board3_address2 = stoi(values[84]);
+    product.board4 = stoi(values[85]);
+    product.board4_address1 = stoi(values[86]);
+    product.board4_address2 = stoi(values[87]);
 
     // Left Pins
-    product.left_io_pins.pin1 = values[88];
-    product.left_io_pins.pin2 = values[89];
-    product.left_io_pins.pin3 = values[90];
-    product.left_io_pins.pin4 = values[91];
-    product.left_io_pins.pin5 = values[92];
-    product.left_io_pins.pin6 = values[93];
-    product.left_io_pins.pin7 = values[94];
-    product.left_io_pins.pin8 = values[95];
-    product.left_io_pins.pin9 = values[96];
-    product.left_io_pins.pin10 = values[97];
-    product.left_io_pins.pin11 = values[98];
-    product.left_io_pins.pin12 = values[99];
+    product.left_io_pins.pin1 = stoi(values[88]);
+    product.left_io_pins.pin2 = stoi(values[89]);
+    product.left_io_pins.pin3 = stoi(values[90]);
+    product.left_io_pins.pin4 = stoi(values[91]);
+    product.left_io_pins.pin5 = stoi(values[92]);
+    product.left_io_pins.pin6 = stoi(values[93]);
+    product.left_io_pins.pin7 = stoi(values[94]);
+    product.left_io_pins.pin8 = stoi(values[95]);
+    product.left_io_pins.pin9 = stoi(values[96]);
+    product.left_io_pins.pin10 = stoi(values[97]);
+    product.left_io_pins.pin11 = stoi(values[98]);
+    product.left_io_pins.pin12 = stoi(values[99]);
 
     // Right Pins
-    product.right_io_pins.pin13 = values[100];
-    product.right_io_pins.pin14 = values[101];
-    product.right_io_pins.pin15 = values[102];
-    product.right_io_pins.pin16 = values[103];
-    product.right_io_pins.pin17 = values[104];
-    product.right_io_pins.pin18 = values[105];
-    product.right_io_pins.pin19 = values[106];
-    product.right_io_pins.pin20 = values[107];
-    product.right_io_pins.pin21 = values[108];
-    product.right_io_pins.pin22 = values[109];
-    product.right_io_pins.pin23 = values[110];
-    product.right_io_pins.pin24 = values[111];
+    product.right_io_pins.pin13 = stoi(values[100]);
+    product.right_io_pins.pin14 = stoi(values[101]);
+    product.right_io_pins.pin15 = stoi(values[102]);
+    product.right_io_pins.pin16 = stoi(values[103]);
+    product.right_io_pins.pin17 = stoi(values[104]);
+    product.right_io_pins.pin18 = stoi(values[105]);
+    product.right_io_pins.pin19 = stoi(values[106]);
+    product.right_io_pins.pin20 = stoi(values[107]);
+    product.right_io_pins.pin21 = stoi(values[108]);
+    product.right_io_pins.pin22 = stoi(values[109]);
+    product.right_io_pins.pin23 = stoi(values[110]);
+    product.right_io_pins.pin24 = stoi(values[111]);
+
+    product.usb_com = (values[112] == "1" ? "true" : "false");
+    product.ice_only = (values[113] == "1" ? "true" : "false");
+    product.settingPanel = stoi(values[114]);
+    product.EthernetAndUSB = (values[115] == "1" ? "true" : "false");
+    product.IsUSB = (values[116] == "1" ? "true" : "false");
+    product.SettingsROM = stoi(values[117]);
+
+#pragma endregion
 
     // ...and finally save everything into "my_flash_store"
-    //my_flash_store.write(product);
+    my_flash_store.write(product);
+
+    SerialUSB.println("Done");
 }
 
 void PMMWriteIntoFlashGeneralSettings(string Message)
@@ -498,20 +613,20 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
     PMMGENERALSETTINGS.PlatformIOSupport = (values[17] == "1" ? "true" : "false");
     PMMGENERALSETTINGS.OtherSupportName = values[18];
 
-    // General Info
-    product.firmware_version = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
-    product.software_version = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
-    product.hardware_version = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
-    product.serial_number = values[12];
-    product.cpu_type = values[13];
-    product.product_family = values[14];
-    product.enclosure_type = values[15];
-    product.arduino_support = (values[16] == "1" ? "true" : "false");
-    product.platform_io_support = (values[17] == "1" ? "true" : "false");
-    product.other_support_name = values[18];
+    // // General Info
+    // product.firmware_version = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
+    // product.software_version = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
+    // product.hardware_version = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
+    // product.serial_number = values[12];
+    // product.cpu_type = values[13];
+    // product.product_family = values[14];
+    // product.enclosure_type = values[15];
+    // product.arduino_support = (values[16] == "1" ? "true" : "false");
+    // product.platform_io_support = (values[17] == "1" ? "true" : "false");
+    // product.other_support_name = values[18];
 
     // ...and finally save everything into "my_flash_store"
-    //my_flash_store.write(product);
+    // my_flash_store.write(product);
 }
 
 void PMMWriteIntoFlashSerialSettings(string Message)
@@ -539,28 +654,28 @@ void PMMWriteIntoFlashSerialSettings(string Message)
     PMMSERIALSETTINGS.SerialFourEnabled = (values[70] == "1" ? "true" : "false");
     PMMSERIALSETTINGS.SerialFourType = values[73];
 
-    // RTU Setting
-    product.rtu_settings.ComName = values[19];
-    product.rtu_settings.baudRate = stoi(values[20]);
-    product.rtu_settings.dataBits = stoi(values[21]);
-    product.rtu_settings.stopBits = stoi(values[22]);
-    product.rtu_settings.parity = stoi(values[23]);
-    product.rtu_settings.interface = values[24];
-    product.rtu_settings.connection_timeout_rtu = stoi(values[25]);
-    product.rtu_settings.max_retry_rtu = stoi(values[26]);
+    // // RTU Setting
+    // product.rtu_settings.ComName = values[19];
+    // product.rtu_settings.baudRate = stoi(values[20]);
+    // product.rtu_settings.dataBits = stoi(values[21]);
+    // product.rtu_settings.stopBits = stoi(values[22]);
+    // product.rtu_settings.parity = stoi(values[23]);
+    // product.rtu_settings.interface = values[24];
+    // product.rtu_settings.connection_timeout_rtu = stoi(values[25]);
+    // product.rtu_settings.max_retry_rtu = stoi(values[26]);
 
-    // Serail Connectors
-    product.serial1.enabled = (values[66] == "1" ? "true" : "false");
-    product.serial1.type = values[67];
-    product.serial2.enabled = (values[68] == "1" ? "true" : "false");
-    product.serial2.type = values[69];
-    product.serial3.enabled = (values[69] == "1" ? "true" : "false");
-    product.serial3.type = values[71];
-    product.serial4.enabled = (values[70] == "1" ? "true" : "false");
-    product.serial4.type = values[73];
+    // // Serail Connectors
+    // product.serial1.enabled = (values[66] == "1" ? "true" : "false");
+    // product.serial1.type = values[67];
+    // product.serial2.enabled = (values[68] == "1" ? "true" : "false");
+    // product.serial2.type = values[69];
+    // product.serial3.enabled = (values[69] == "1" ? "true" : "false");
+    // product.serial3.type = values[71];
+    // product.serial4.enabled = (values[70] == "1" ? "true" : "false");
+    // product.serial4.type = values[73];
 
     // ...and finally save everything into "my_flash_store"
-    //my_flash_store.write(product);
+    // my_flash_store.write(product);
 }
 
 void PMMWriteIntoFlashTCPSettings(string Message)
@@ -597,233 +712,384 @@ void PMMWriteIntoFlashTCPSettings(string Message)
     // product.tcp_udp_settings.udp_port_four = stoi(values[57]);
 
     // ...and finally save everything into "my_flash_store"
-    //my_flash_store.write(product);
+    // my_flash_store.write(product);
 }
 
 void PMMWriteIntoFlashOptionsAndPinsSettings(string Message)
 {
-    Product product;
+    // Product product;
 
-    PmmStringToArray(Message);
-    // Options
-    PMMGENERALSETTINGS.HasEthernet = (values[58] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.HasFiber = (values[59] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.HasSwitch = (values[60] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.HasExternalRTC = (values[61] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.HasInternalRTC = (values[62] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.HasEEprom = (values[63] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.HasInternalFlash = (values[64] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.HasExternalFlash = (values[65] == "1" ? "true" : "false");
+    // PmmStringToArray(Message);
+    // // Options
+    // PMMGENERALSETTINGS.HasEthernet = (values[58] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.HasFiber = (values[59] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.HasSwitch = (values[60] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.HasExternalRTC = (values[61] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.HasInternalRTC = (values[62] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.HasEEprom = (values[63] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.HasInternalFlash = (values[64] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.HasExternalFlash = (values[65] == "1" ? "true" : "false");
 
-    // Extension Boards
-    PMMEXTENSIONSSETTINGS.I2C = (values[74] == "1" ? "true" : "false");
-    PMMEXTENSIONSSETTINGS.SlaveI2CAddress = values[75];
-    PMMEXTENSIONSSETTINGS.BoardOne = values[76];
-    PMMEXTENSIONSSETTINGS.BoardOneAddress1 = values[77];
-    PMMEXTENSIONSSETTINGS.BoardOneAddress2 = values[78];
-    PMMEXTENSIONSSETTINGS.BoardTwo = values[79];
-    PMMEXTENSIONSSETTINGS.BoardTowAddress1 = values[80];
-    PMMEXTENSIONSSETTINGS.BoardTowAddress2 = values[81];
-    PMMEXTENSIONSSETTINGS.BoardThree = values[82];
-    PMMEXTENSIONSSETTINGS.BoardThreeAddress1 = values[83];
-    PMMEXTENSIONSSETTINGS.BoardThreeAddress2 = values[84];
-    PMMEXTENSIONSSETTINGS.BoardFour = values[85];
-    PMMEXTENSIONSSETTINGS.BoardFourAddress1 = values[86];
-    PMMEXTENSIONSSETTINGS.BoardFourAddress2 = values[87];
+    // // Extension Boards
+    // PMMEXTENSIONSSETTINGS.I2C = (values[74] == "1" ? "true" : "false");
+    // PMMEXTENSIONSSETTINGS.SlaveI2CAddress = values[75];
+    // PMMEXTENSIONSSETTINGS.BoardOne = values[76];
+    // PMMEXTENSIONSSETTINGS.BoardOneAddress1 = values[77];
+    // PMMEXTENSIONSSETTINGS.BoardOneAddress2 = values[78];
+    // PMMEXTENSIONSSETTINGS.BoardTwo = values[79];
+    // PMMEXTENSIONSSETTINGS.BoardTowAddress1 = values[80];
+    // PMMEXTENSIONSSETTINGS.BoardTowAddress2 = values[81];
+    // PMMEXTENSIONSSETTINGS.BoardThree = values[82];
+    // PMMEXTENSIONSSETTINGS.BoardThreeAddress1 = values[83];
+    // PMMEXTENSIONSSETTINGS.BoardThreeAddress2 = values[84];
+    // PMMEXTENSIONSSETTINGS.BoardFour = values[85];
+    // PMMEXTENSIONSSETTINGS.BoardFourAddress1 = values[86];
+    // PMMEXTENSIONSSETTINGS.BoardFourAddress2 = values[87];
 
-    // Left Pins
-    PMMIOPINS.Pin01 = values[88];
-    PMMIOPINS.Pin02 = values[89];
-    PMMIOPINS.Pin03 = values[90];
-    PMMIOPINS.Pin04 = values[91];
-    PMMIOPINS.Pin05 = values[92];
-    PMMIOPINS.Pin06 = values[93];
-    PMMIOPINS.Pin07 = values[94];
-    PMMIOPINS.Pin08 = values[95];
-    PMMIOPINS.Pin09 = values[96];
-    PMMIOPINS.Pin10 = values[97];
-    PMMIOPINS.Pin11 = values[98];
-    PMMIOPINS.Pin12 = values[99];
+    // // Left Pins
+    // PMMIOPINS.Pin01 = values[88];
+    // PMMIOPINS.Pin02 = values[89];
+    // PMMIOPINS.Pin03 = values[90];
+    // PMMIOPINS.Pin04 = values[91];
+    // PMMIOPINS.Pin05 = values[92];
+    // PMMIOPINS.Pin06 = values[93];
+    // PMMIOPINS.Pin07 = values[94];
+    // PMMIOPINS.Pin08 = values[95];
+    // PMMIOPINS.Pin09 = values[96];
+    // PMMIOPINS.Pin10 = values[97];
+    // PMMIOPINS.Pin11 = values[98];
+    // PMMIOPINS.Pin12 = values[99];
 
-    // Right Pins
-    PMMIOPINS.Pin13 = values[100];
-    PMMIOPINS.Pin14 = values[101];
-    PMMIOPINS.Pin15 = values[102];
-    PMMIOPINS.Pin16 = values[103];
-    PMMIOPINS.Pin17 = values[104];
-    PMMIOPINS.Pin18 = values[105];
-    PMMIOPINS.Pin19 = values[106];
-    PMMIOPINS.Pin20 = values[107];
-    PMMIOPINS.Pin21 = values[108];
-    PMMIOPINS.Pin22 = values[109];
-    PMMIOPINS.Pin23 = values[110];
-    PMMIOPINS.Pin24 = values[111];
+    // // Right Pins
+    // PMMIOPINS.Pin13 = values[100];
+    // PMMIOPINS.Pin14 = values[101];
+    // PMMIOPINS.Pin15 = values[102];
+    // PMMIOPINS.Pin16 = values[103];
+    // PMMIOPINS.Pin17 = values[104];
+    // PMMIOPINS.Pin18 = values[105];
+    // PMMIOPINS.Pin19 = values[106];
+    // PMMIOPINS.Pin20 = values[107];
+    // PMMIOPINS.Pin21 = values[108];
+    // PMMIOPINS.Pin22 = values[109];
+    // PMMIOPINS.Pin23 = values[110];
+    // PMMIOPINS.Pin24 = values[111];
 
-    // Options
-    product.ethernet = (values[58] == "1" ? "true" : "false");
-    product.fiber = (values[59] == "1" ? "true" : "false");
-    product.switchh = (values[60] == "1" ? "true" : "false");
-    product.rtc_external = (values[61] == "1" ? "true" : "false");
-    product.rtc_internal = (values[62] == "1" ? "true" : "false");
-    product.eprom = (values[63] == "1" ? "true" : "false");
-    product.internal_flash = (values[64] == "1" ? "true" : "false");
-    product.external_flash = (values[65] == "1" ? "true" : "false");
+    // // Options
+    // product.ethernet = (values[58] == "1" ? "true" : "false");
+    // product.fiber = (values[59] == "1" ? "true" : "false");
+    // product.switchh = (values[60] == "1" ? "true" : "false");
+    // product.rtc_external = (values[61] == "1" ? "true" : "false");
+    // product.rtc_internal = (values[62] == "1" ? "true" : "false");
+    // product.eprom = (values[63] == "1" ? "true" : "false");
+    // product.internal_flash = (values[64] == "1" ? "true" : "false");
+    // product.external_flash = (values[65] == "1" ? "true" : "false");
 
-    // Extension Boards
-    product.i2c = (values[74] == "1" ? "true" : "false");
-    product.slave_i2c_address = values[75];
-    product.board1 = values[76];
-    product.board1_address1 = values[77];
-    product.board1_address2 = values[78];
-    product.board2 = values[79];
-    product.board2_address1 = values[80];
-    product.board2_address2 = values[81];
-    product.board3 = values[82];
-    product.board3_address1 = values[83];
-    product.board3_address2 = values[84];
-    product.board4 = values[85];
-    product.board4_address1 = values[86];
-    product.board4_address2 = values[87];
+    // // Extension Boards
+    // product.i2c = (values[74] == "1" ? "true" : "false");
+    // product.slave_i2c_address = values[75];
+    // product.board1 = values[76];
+    // product.board1_address1 = values[77];
+    // product.board1_address2 = values[78];
+    // product.board2 = values[79];
+    // product.board2_address1 = values[80];
+    // product.board2_address2 = values[81];
+    // product.board3 = values[82];
+    // product.board3_address1 = values[83];
+    // product.board3_address2 = values[84];
+    // product.board4 = values[85];
+    // product.board4_address1 = values[86];
+    // product.board4_address2 = values[87];
 
-    // Left Pins
-    product.left_io_pins.pin1 = values[88];
-    product.left_io_pins.pin2 = values[89];
-    product.left_io_pins.pin3 = values[90];
-    product.left_io_pins.pin4 = values[91];
-    product.left_io_pins.pin5 = values[92];
-    product.left_io_pins.pin6 = values[93];
-    product.left_io_pins.pin7 = values[94];
-    product.left_io_pins.pin8 = values[95];
-    product.left_io_pins.pin9 = values[96];
-    product.left_io_pins.pin10 = values[97];
-    product.left_io_pins.pin11 = values[98];
-    product.left_io_pins.pin12 = values[99];
+    // // Left Pins
+    // product.left_io_pins.pin1 = values[88];
+    // product.left_io_pins.pin2 = values[89];
+    // product.left_io_pins.pin3 = values[90];
+    // product.left_io_pins.pin4 = values[91];
+    // product.left_io_pins.pin5 = values[92];
+    // product.left_io_pins.pin6 = values[93];
+    // product.left_io_pins.pin7 = values[94];
+    // product.left_io_pins.pin8 = values[95];
+    // product.left_io_pins.pin9 = values[96];
+    // product.left_io_pins.pin10 = values[97];
+    // product.left_io_pins.pin11 = values[98];
+    // product.left_io_pins.pin12 = values[99];
 
-    // Right Pins
-    product.right_io_pins.pin13 = values[100];
-    product.right_io_pins.pin14 = values[101];
-    product.right_io_pins.pin15 = values[102];
-    product.right_io_pins.pin16 = values[103];
-    product.right_io_pins.pin17 = values[104];
-    product.right_io_pins.pin18 = values[105];
-    product.right_io_pins.pin19 = values[106];
-    product.right_io_pins.pin20 = values[107];
-    product.right_io_pins.pin21 = values[108];
-    product.right_io_pins.pin22 = values[109];
-    product.right_io_pins.pin23 = values[110];
-    product.right_io_pins.pin24 = values[111];
+    // // Right Pins
+    // product.right_io_pins.pin13 = values[100];
+    // product.right_io_pins.pin14 = values[101];
+    // product.right_io_pins.pin15 = values[102];
+    // product.right_io_pins.pin16 = values[103];
+    // product.right_io_pins.pin17 = values[104];
+    // product.right_io_pins.pin18 = values[105];
+    // product.right_io_pins.pin19 = values[106];
+    // product.right_io_pins.pin20 = values[107];
+    // product.right_io_pins.pin21 = values[108];
+    // product.right_io_pins.pin22 = values[109];
+    // product.right_io_pins.pin23 = values[110];
+    // product.right_io_pins.pin24 = values[111];
 
     // ...and finally save everything into "my_flash_store"
-    //my_flash_store.write(product);
+    // my_flash_store.write(product);
 }
 
-string PMMReadFromFlashAllSettings()
+String PMMReadFromFlashAllSettings()
 {
     Product product;
+    product = my_flash_store.read();
 
-    // SerialUSB.println("GET 1");
-    //product = my_flash_store.read();
-    // SerialUSB.println("GET 2");
-    string settings = product.firmware_version;
-    settings = settings + "," + product.software_version;
-    settings = settings + "," + product.hardware_version;
-    settings = settings + "," + product.serial_number;
-    settings = settings + "," + product.cpu_type;
-    settings = settings + "," + product.product_family;
-    settings = settings + "," + product.enclosure_type;
-    settings = settings + "," + std::to_string(product.arduino_support);
-    settings = settings + "," + std::to_string(product.platform_io_support);
-    settings = settings + "," + product.other_support_name;
+    String settings = "";
 
+    settings = String(settings + String(product.firmware_version01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.firmware_version01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.firmware_version02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.firmware_version03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.firmware_version04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.software_version01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.software_version02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.software_version03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.software_version04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.hardware_version01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.hardware_version02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.hardware_version03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.hardware_version04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.serial_number));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.cpu_type));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.product_family));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.enclosure_type));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.arduino_support));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.platform_io_support));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.other_support_name));
+    settings = String(settings + ",");
     // RTU Setting
-    settings = settings + "," + product.rtu_settings.ComName;
-    settings = settings + "," + std::to_string(product.rtu_settings.baudRate);
-    settings = settings + "," + std::to_string(product.rtu_settings.dataBits);
-    settings = settings + "," + std::to_string(product.rtu_settings.stopBits);
-    settings = settings + "," + std::to_string(product.rtu_settings.parity);
-    settings = settings + "," + product.rtu_settings.interface;
-    settings = settings + "," + std::to_string(product.rtu_settings.connection_timeout_rtu);
-    settings = settings + "," + std::to_string(product.rtu_settings.max_retry_rtu);
-
+    settings = String(settings + String(product.rtu_settings.ComName));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtu_settings.baudRate));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtu_settings.dataBits));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtu_settings.stopBits));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtu_settings.parity));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtu_settings.interface));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtu_settings.connection_timeout_rtu));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtu_settings.max_retry_rtu));
+    settings = String(settings + ",");
     // TCP Settings
-    // settings = settings + "," + product.tcp_udp_settings.ip_address;
-    // settings = settings + "," + product.tcp_udp_settings.net_mask;
-    // settings = settings + "," + product.tcp_udp_settings.preferred_dns_server;
-    // settings = settings + "," + product.tcp_udp_settings.alternate_dns_server;
-    // settings = settings + "," + product.tcp_udp_settings.default_gateway;
-    // settings = settings + "," + product.tcp_udp_settings.mac_address;
-    // settings = settings + "," + std::to_string(product.tcp_udp_settings.connection_timeout_tcp);
-    // settings = settings + "," + std::to_string(product.tcp_udp_settings.max_retry_tcp);
-    // settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_one);
-    // settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_two);
-    // settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_three);
-    // settings = settings + "," + std::to_string(product.tcp_udp_settings.udp_port_four);
-
+    settings = String(settings + String(product.tcp_udp_settings.ip_address01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.ip_address02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.ip_address03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.ip_address04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.net_mask01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.net_mask02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.net_mask03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.net_mask04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.preferred_dns_server01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.preferred_dns_server02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.preferred_dns_server03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.preferred_dns_server04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.alternate_dns_server01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.alternate_dns_server02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.alternate_dns_server03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.alternate_dns_server04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.default_gateway01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.default_gateway02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.default_gateway03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.default_gateway04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.mac_address01));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.mac_address02));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.mac_address03));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.mac_address04));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.mac_address05));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.connection_timeout_tcp));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.max_retry_tcp));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.udp_port_one));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.udp_port_two));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.udp_port_three));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.tcp_udp_settings.udp_port_four));
+    settings = String(settings + ",");
     // Options
-    settings = settings + "," + std::to_string(product.ethernet);
-    settings = settings + "," + std::to_string(product.fiber);
-    settings = settings + "," + std::to_string(product.switchh);
-    settings = settings + "," + std::to_string(product.rtc_external);
-    settings = settings + "," + std::to_string(product.rtc_internal);
-    settings = settings + "," + std::to_string(product.eprom);
-    settings = settings + "," + std::to_string(product.internal_flash);
-    settings = settings + "," + std::to_string(product.external_flash);
-
+    settings = String(settings + String(product.ethernet));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.fiber));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.switchh));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtc_external));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.rtc_internal));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.eprom));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.internal_flash));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.external_flash));
+    settings = String(settings + ",");
     // Serail Connectors
-    settings = settings + "," + std::to_string(product.serial1.enabled);
-    settings = settings + "," + product.serial1.type;
-    settings = settings + "," + std::to_string(product.serial2.enabled);
-    settings = settings + "," + product.serial2.type;
-    settings = settings + "," + std::to_string(product.serial3.enabled);
-    settings = settings + "," + product.serial3.type;
-    settings = settings + "," + std::to_string(product.serial4.enabled);
-    settings = settings + "," + product.serial4.type;
-
+    settings = String(settings + String(product.serial1.enabled));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.serial1.type));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.serial2.enabled));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.serial2.type));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.serial3.enabled));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.serial3.type));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.serial4.enabled));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.serial4.type));
+    settings = String(settings + ",");
     // Extension Boards
-    settings = settings + "," + std::to_string(product.i2c);
-    settings = settings + "," + product.slave_i2c_address;
-    settings = settings + "," + product.board1;
-    settings = settings + "," + product.board1_address1;
-    settings = settings + "," + product.board1_address2;
-    settings = settings + "," + product.board2;
-    settings = settings + "," + product.board2_address1;
-    settings = settings + "," + product.board2_address2;
-    settings = settings + "," + product.board3;
-    settings = settings + "," + product.board3_address1;
-    settings = settings + "," + product.board3_address2;
-    settings = settings + "," + product.board4;
-    settings = settings + "," + product.board4_address1;
-    settings = settings + "," + product.board4_address2;
+    settings = String(settings + String(product.i2c));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.slave_i2c_address));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board1));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board1_address1));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board1_address2));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board2));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board2_address1));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board2_address2));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board3));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board3_address1));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board3_address2));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board4));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board4_address1));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.board4_address2));
+    settings = String(settings + ",");
 
     // Left Pins
-    settings = settings + "," + product.left_io_pins.pin1;
-    settings = settings + "," + product.left_io_pins.pin2;
-    settings = settings + "," + product.left_io_pins.pin3;
-    settings = settings + "," + product.left_io_pins.pin4;
-    settings = settings + "," + product.left_io_pins.pin5;
-    settings = settings + "," + product.left_io_pins.pin6;
-    settings = settings + "," + product.left_io_pins.pin7;
-    settings = settings + "," + product.left_io_pins.pin8;
-    settings = settings + "," + product.left_io_pins.pin9;
-    settings = settings + "," + product.left_io_pins.pin10;
-    settings = settings + "," + product.left_io_pins.pin11;
-    settings = settings + "," + product.left_io_pins.pin12;
+    settings = String(settings + String(product.left_io_pins.pin1));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin2));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin3));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin4));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin5));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin6));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin7));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin8));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin9));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin10));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin11));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.left_io_pins.pin12));
+    settings = String(settings + ",");
 
     // Right Pins
-    settings = settings + "," + product.right_io_pins.pin13;
-    settings = settings + "," + product.right_io_pins.pin14;
-    settings = settings + "," + product.right_io_pins.pin15;
-    settings = settings + "," + product.right_io_pins.pin16;
-    settings = settings + "," + product.right_io_pins.pin17;
-    settings = settings + "," + product.right_io_pins.pin18;
-    settings = settings + "," + product.right_io_pins.pin19;
-    settings = settings + "," + product.right_io_pins.pin20;
-    settings = settings + "," + product.right_io_pins.pin21;
-    settings = settings + "," + product.right_io_pins.pin22;
-    settings = settings + "," + product.right_io_pins.pin23;
-    settings = settings + "," + product.right_io_pins.pin24;
+    settings = String(settings + String(product.right_io_pins.pin13));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin14));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin15));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin16));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin17));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin18));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin19));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin20));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin21));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin22));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin23));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.right_io_pins.pin24));
+    settings = String(settings + ",");
 
-    // SerialUSB.println("GET 3");
+    settings = String(settings + String(product.usb_com));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.ice_only));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.settingPanel));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.EthernetAndUSB));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.IsUSB));
+    settings = String(settings + ",");
+    settings = String(settings + String(product.SettingsROM));
+    settings = String(settings + ",END");
+
+    SerialUSB.println(settings);
+
     return settings;
 }
 
@@ -831,3 +1097,4 @@ string PMMIsAlive()
 {
     return "PMMAlive";
 }
+
