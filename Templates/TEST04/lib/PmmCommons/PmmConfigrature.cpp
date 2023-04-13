@@ -7,9 +7,9 @@ struct PmmSerialSettings PMMSERIALSETTINGS;
 struct PmmIOPins PMMIOPINS;
 struct PmmExtensionsSettings PMMEXTENSIONSSETTINGS;
 
-char *strings[128]; // an array of pointers to the pieces of the above array after strtok()
+char *strings[32]; // an array of pointers to the pieces of the above array after strtok()
 char *ptr = NULL;
-string values[128];
+string values[32];
 
 typedef struct tcp_udp_settings
 {
@@ -55,7 +55,7 @@ typedef struct serial_connector
 
 typedef struct rtu_settings
 {
-    int ComName;
+    int ComName = 1;
     int baudRate = 9600;
     int dataBits = 8;
     int stopBits = 1;
@@ -99,64 +99,78 @@ typedef struct right_io_pins
 
 typedef struct Product
 {
-    int firmware_version01 = 1;
-    int firmware_version02 = 0;
-    int firmware_version03 = 0;
-    int firmware_version04 = 1;
-    int serial_number = 5000;
-    int hardware_version01 = 1;
-    int hardware_version02 = 0;
-    int hardware_version03 = 0;
-    int hardware_version04 = 1;
-    int software_version01 = 1;
-    int software_version02 = 0;
-    int software_version03 = 0;
-    int software_version04 = 1;
+    long serial_number = 5000;
+    int ProductName = 0620;
+    int firmware_version01 = 1;// 12 => 1.2
+    int hardware_version01 = 1;// 23 => 2.3
+    int software_version01 = 1;// 12 => 1.2
     int cpu_type = 3;
     int connection_type = 1;
-    int ethernet = 1;
-    int fiber = 1;
-    int switchh = 1;
-    int rtc_external = 0;
-    int rtc_internal = 1;
-    int eprom = 1;
-    int internal_flash = 1;
-    int external_flash = 0;
-    int i2c = 1;
-    struct left_io_pins left_io_pins;
-    struct right_io_pins right_io_pins;
-    struct serial_connector serial1;
-    struct serial_connector serial2;
-    struct serial_connector serial3;
-    struct serial_connector serial4;
-    struct tcp_udp_settings tcp_udp_settings;
-    struct rtu_settings rtu_settings;
-    int product_family = 20;
-    int enclosure_type = 100;
-    int other_support_name = 10;
-    int arduino_support = 20;
-    int platform_io_support = 1;
-    int other_support = 10;
     int slave_i2c_address = 4001;
-    int board1 = 1;
-    int board1_address1 = 1;
-    int board1_address2 = 101;
-    int board2 = 2;
-    int board2_address1 = 201;
-    int board2_address2 = 301;
-    int board3 = 3;
-    int board3_address1 = 401;
-    int board3_address2 = 501;
-    int board4 = 4;
-    int board4_address1 = 601;
-    int board4_address2 = 701;
-    int usb_com = 1;
-    int ice_only = 1;
+
+    int board1_address = 1; // 0103 => address02 = 01 , address01 =03
+    int board2_address = 201;
+    int board3_address = 401;
+    int board4_address = 601;
+    int ModbusRtuID = 1 ;
+    int ModbusTCPID = 1 ;
+    int ExtRTCAddress = 0 ;
     int settingPanel = 1;
 
-    int EthernetAndUSB = 0;
-    int IsUSB = 1;
-    int SettingsROM = 100;
+    int Comm01Settings = 0 ; // 00: interface , 00:parity , 00:stopBits , 00:dataBits , 0000:baudRate (x100 exsample 96 equal to 9600 )
+    int Comm02Settings = 0 ;
+    int Comm03Settings = 0 ;
+    int Comm04Settings = 0 ;
+    int connection_timeout_rtu = 3000;
+    int max_retry_rtu = 5;
+    int spare01 = 0 ;
+    int spare02 = 0 ;
+
+    int PcYear = 1990 ;
+    int PcMonth = 8 ;
+    int PcDay = 20;
+    int PcHour = 6 ;
+    int PcMinutes = 30 ;
+    int PcSeconed = 00 ;
+    // options 
+    int Options01 = 110;
+    // bit ethernet = 1;
+    // bit fiber = 1;
+    // bit switchh = 1;
+    // bit rtc_external = 0;
+    // bit rtc_internal = 1;
+    // bit eprom = 1;
+    // bit internal_flash = 1;
+    // bit external_flash = 0;
+
+    // bit i2c = 1;
+    // bit arduino_support = 20;
+    // bit platform_io_support = 1;
+    // bit other_support = 10;
+    // bit usb_com = 1;
+    // bit ice_only = 1;
+    // bit EthernetAndUSB = 0;
+    // bit IsUSB = 1;
+
+    int Options02 = 120;
+    // bit SettingsROM = 100;
+    // bit product_family = 20;
+    // bit enclosure_type = 100;
+    // bit other_support_name = 10;
+    // bit board1 = 1;
+    // bit board2 = 2;
+    // bit board3 = 3;
+    // bit board4 = 4;
+
+    // bit EnableCom01 =0;
+    // bit EnableCom02 =0;
+    // bit EnableCom03 =0;
+    // bit EnableCom04 =0;
+    // bit RTUServer = 0;
+    // bit RTUClient = 0;
+    // bit TCPServer = 0;
+    // Bit TCPClient = 0;
+      
 } Product;
 
 FlashStorage(my_flash_store, Product);
