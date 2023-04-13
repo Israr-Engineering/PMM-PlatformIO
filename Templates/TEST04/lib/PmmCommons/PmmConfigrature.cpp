@@ -161,6 +161,8 @@ typedef struct Product
 
 FlashStorage(my_flash_store, Product);
 
+FlashStorage(my_flash_store2, tcp_udp_settings);
+
 void SetTCPSettings(string Message)
 {
     PmmStringToArray(Message);
@@ -208,6 +210,7 @@ void SetTCPSettings(string Message)
 
     // // ...and finally save everything into "my_flash_store"
     // my_flash_store.write(tcpudp);
+    my_flash_store2.write (tcpudp);
 }
 
 String GetTCPSettings()
