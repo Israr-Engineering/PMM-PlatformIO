@@ -173,9 +173,44 @@ typedef struct Product
       
 } Product;
 
-FlashStorage(my_flash_store, Product);
+FlashStorage(Product_flash_store, Product);
 
-FlashStorage(my_flash_store2, tcp_udp_settings);
+FlashStorage(TCP_flash_store, tcp_udp_settings);
+
+
+void PmmStringToArray(string input)
+{
+
+    // int length = input.length();
+
+    // declaring character array (+1 for null terminator)
+    char *char_array = new char[128];
+
+    // copying the contents of the
+    // string to char array
+    strcpy(char_array, input.c_str());
+
+    byte index = 0;
+    ptr = strtok(char_array, ","); // delimiter
+    while (ptr != NULL)
+    {
+        strings[index] = ptr;
+        index++;
+        ptr = strtok(NULL, ",");
+    }
+
+    SerialUSB.println(index);
+
+    for (int n = 0; n < (index); n++)
+    {
+        string s(strings[n]);
+        values[n] = s;
+
+        SerialUSB.print(n);
+        SerialUSB.print(" : ");
+        SerialUSB.println(s.c_str());
+    }
+}
 
 void SetTCPSettings(string Message)
 {
@@ -224,13 +259,13 @@ void SetTCPSettings(string Message)
 
     // // ...and finally save everything into "my_flash_store"
     // my_flash_store.write(tcpudp);
-    my_flash_store2.write (tcpudp);
+    TCP_flash_store.write (tcpudp);
 }
 
 String GetTCPSettings()
 {
     tcp_udp_settings tcpudp;
-    // tcpudp = my_flash_store.read();
+     tcpudp = TCP_flash_store.read();
 
     String settings = "";
 
@@ -288,71 +323,44 @@ String GetTCPSettings()
     settings = String(settings + ",");
     settings = String(settings + String(tcpudp.udp_port_four));
 
-    // String settings = "";
-    // settings = "1919";
-    // settings = String(settings + ",");
-    // settings = String(settings + tcpudp.ip_address);
-
-    // settings = String(settings + ",");
-    // settings = String(settings + tcpudp.net_mask);
-    // settings = String(settings + ",");
-    // settings = String(settings + tcpudp.preferred_dns_server);
-    // settings = String(settings + ",");
-    // settings = String(settings + tcpudp.alternate_dns_server);
-    // settings = String(settings + ",");
-    // settings = String(settings + tcpudp.default_gateway);
-    // settings = String(settings + ",");
-    // settings = String(settings + tcpudp.mac_address);
-    // settings = String(settings + ",");
-    // settings = String(settings + String(tcpudp.connection_timeout_tcp));
-    // settings = String(settings + ",");
-    // settings = String(settings + String(tcpudp.max_retry_tcp));
-    // settings = String(settings + ",");
-    // settings = String(settings + String(tcpudp.udp_port_one));
-    // settings = String(settings + ",");
-    // settings = String(settings + String(tcpudp.udp_port_two));
-    // settings = String(settings + ",");
-    // settings = String(settings + String(tcpudp.udp_port_three));
-    // settings = String(settings + ",");
-    // settings = String(settings + String(tcpudp.udp_port_four));
-
+    
     SerialUSB.println(settings);
     return settings;
 }
 
-void PmmStringToArray(string input)
+void SetProductSettings(string Message)
 {
 
-    // int length = input.length();
+ PmmStringToArray(Message);
 
-    // declaring character array (+1 for null terminator)
-    char *char_array = new char[128];
+    Product ThisProduct;
 
-    // copying the contents of the
-    // string to char array
-    strcpy(char_array, input.c_str());
 
-    byte index = 0;
-    ptr = strtok(char_array, ","); // delimiter
-    while (ptr != NULL)
-    {
-        strings[index] = ptr;
-        index++;
-        ptr = strtok(NULL, ",");
-    }
+Product_flash_store.write (ThisProduct);
 
-    SerialUSB.println(index);
-
-    for (int n = 0; n < (index); n++)
-    {
-        string s(strings[n]);
-        values[n] = s;
-
-        SerialUSB.print(n);
-        SerialUSB.print(" : ");
-        SerialUSB.println(s.c_str());
-    }
 }
+
+String GetProductSettings()
+{
+
+    Product ThisProduct;
+     ThisProduct = Product_flash_store.read();
+
+    String settings = "";
+
+
+
+
+SerialUSB.println(settings);
+    return settings;
+}
+
+string PMMIsAlive()
+{
+    return "PMMAlive";
+}
+
+// Old functins 
 
 void PMMWriteIntoFlashAllSettings(string Message)
 {
@@ -603,7 +611,7 @@ void PMMWriteIntoFlashAllSettings(string Message)
     // product.SettingsROM = stoi(values[117]);
 
     // ...and finally save everything into "my_flash_store"
-    my_flash_store.write(product);
+    Product_flash_store.write(product);
 
     SerialUSB.println("Done");
 }
@@ -615,16 +623,16 @@ void PMMWriteIntoFlashGeneralSettings(string Message)
     PmmStringToArray(Message);
 
     // General Info
-    PMMGENERALSETTINGS.FirmwareVersion = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
-    PMMGENERALSETTINGS.HardwareVersion = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
-    PMMGENERALSETTINGS.HardwareVersion = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
-    PMMGENERALSETTINGS.SerialNumber = stoi(values[12]);
-    PMMGENERALSETTINGS.CPUType = values[13];
-    PMMGENERALSETTINGS.ProductFamily = values[14];
-    PMMGENERALSETTINGS.EnclosureType = values[15];
-    PMMGENERALSETTINGS.ArduinoSupport = (values[16] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.PlatformIOSupport = (values[17] == "1" ? "true" : "false");
-    PMMGENERALSETTINGS.OtherSupportName = values[18];
+    // PMMGENERALSETTINGS.FirmwareVersion = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
+    // PMMGENERALSETTINGS.HardwareVersion = values[4] + "." + values[5] + "." + values[6] + "." + values[7];
+    // PMMGENERALSETTINGS.HardwareVersion = values[8] + "." + values[9] + "." + values[10] + "." + values[11];
+    // PMMGENERALSETTINGS.SerialNumber = stoi(values[12]);
+    // PMMGENERALSETTINGS.CPUType = values[13];
+    // PMMGENERALSETTINGS.ProductFamily = values[14];
+    // PMMGENERALSETTINGS.EnclosureType = values[15];
+    // PMMGENERALSETTINGS.ArduinoSupport = (values[16] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.PlatformIOSupport = (values[17] == "1" ? "true" : "false");
+    // PMMGENERALSETTINGS.OtherSupportName = values[18];
 
     // // General Info
     // product.firmware_version = values[0] + "." + values[1] + "." + values[2] + "." + values[3];
@@ -649,23 +657,23 @@ void PMMWriteIntoFlashSerialSettings(string Message)
     PmmStringToArray(Message);
 
     // RTU Setting
-    PMMSERIALSETTINGS.PortOneName = values[19];
-    PMMSERIALSETTINGS.PortOneBaudRate = stoi(values[20]);
-    PMMSERIALSETTINGS.PortOneDataBits = stoi(values[21]);
-    PMMSERIALSETTINGS.PortOneStopBits = stoi(values[22]);
-    PMMSERIALSETTINGS.PortOneParity = values[23];
-    PMMSERIALSETTINGS.PortOneInterface = (values[24] == "1" ? "true" : "false");
-    PMMSERIALSETTINGS.PortOneConnTimeOut = stoi(values[25]);
-    PMMSERIALSETTINGS.PortOneMaxRetries = stoi(values[26]);
+    // PMMSERIALSETTINGS.PortOneName = values[19];
+    // PMMSERIALSETTINGS.PortOneBaudRate = stoi(values[20]);
+    // PMMSERIALSETTINGS.PortOneDataBits = stoi(values[21]);
+    // PMMSERIALSETTINGS.PortOneStopBits = stoi(values[22]);
+    // PMMSERIALSETTINGS.PortOneParity = values[23];
+    // PMMSERIALSETTINGS.PortOneInterface = (values[24] == "1" ? "true" : "false");
+    // PMMSERIALSETTINGS.PortOneConnTimeOut = stoi(values[25]);
+    // PMMSERIALSETTINGS.PortOneMaxRetries = stoi(values[26]);
 
-    PMMSERIALSETTINGS.SerialOneEnabled = (values[66] == "1" ? "true" : "false");
-    PMMSERIALSETTINGS.SerialOneType = values[67];
-    PMMSERIALSETTINGS.SerialTowEnabled = (values[68] == "1" ? "true" : "false");
-    PMMSERIALSETTINGS.SerialTowType = values[69];
-    PMMSERIALSETTINGS.SerialThreeEnabled = (values[69] == "1" ? "true" : "false");
-    PMMSERIALSETTINGS.SerialThreeType = values[71];
-    PMMSERIALSETTINGS.SerialFourEnabled = (values[70] == "1" ? "true" : "false");
-    PMMSERIALSETTINGS.SerialFourType = values[73];
+    // PMMSERIALSETTINGS.SerialOneEnabled = (values[66] == "1" ? "true" : "false");
+    // PMMSERIALSETTINGS.SerialOneType = values[67];
+    // PMMSERIALSETTINGS.SerialTowEnabled = (values[68] == "1" ? "true" : "false");
+    // PMMSERIALSETTINGS.SerialTowType = values[69];
+    // PMMSERIALSETTINGS.SerialThreeEnabled = (values[69] == "1" ? "true" : "false");
+    // PMMSERIALSETTINGS.SerialThreeType = values[71];
+    // PMMSERIALSETTINGS.SerialFourEnabled = (values[70] == "1" ? "true" : "false");
+    // PMMSERIALSETTINGS.SerialFourType = values[73];
 
     // // RTU Setting
     // product.rtu_settings.ComName = values[19];
@@ -697,18 +705,18 @@ void PMMWriteIntoFlashTCPSettings(string Message)
 
     PmmStringToArray(Message);
     // TCP Settings
-    PMMTCPUDPSETTINGS.IPAddressEthOne = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
-    PMMTCPUDPSETTINGS.SubnetMaskEthOne = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
-    PMMTCPUDPSETTINGS.PreferredDNSServer = values[35] + "." + values[36] + "." + values[37] + "." + values[38];
-    PMMTCPUDPSETTINGS.AlternateDNSServer = values[39] + "." + values[40] + "." + values[41] + "." + values[42];
-    PMMTCPUDPSETTINGS.GatewayEthOne = values[43] + "." + values[44] + "." + values[45] + "." + values[46];
-    PMMTCPUDPSETTINGS.MacAddressEthOne = values[47] + ":" + values[48] + ":" + values[49] + ":" + values[50] + ":" + values[51];
-    PMMTCPUDPSETTINGS.TimeOutConnEthOne = stoi(values[52]);
-    PMMTCPUDPSETTINGS.MaxRetriesEthOne = stoi(values[53]);
-    PMMTCPUDPSETTINGS.UDPPortOne = stoi(values[54]);
-    PMMTCPUDPSETTINGS.UDPPortTwo = stoi(values[55]);
-    PMMTCPUDPSETTINGS.UDPPortThree = stoi(values[56]);
-    PMMTCPUDPSETTINGS.UDPPortFour = stoi(values[57]);
+    // PMMTCPUDPSETTINGS.IPAddressEthOne = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
+    // PMMTCPUDPSETTINGS.SubnetMaskEthOne = values[31] + "." + values[32] + "." + values[33] + "." + values[34];
+    // PMMTCPUDPSETTINGS.PreferredDNSServer = values[35] + "." + values[36] + "." + values[37] + "." + values[38];
+    // PMMTCPUDPSETTINGS.AlternateDNSServer = values[39] + "." + values[40] + "." + values[41] + "." + values[42];
+    // PMMTCPUDPSETTINGS.GatewayEthOne = values[43] + "." + values[44] + "." + values[45] + "." + values[46];
+    // PMMTCPUDPSETTINGS.MacAddressEthOne = values[47] + ":" + values[48] + ":" + values[49] + ":" + values[50] + ":" + values[51];
+    // PMMTCPUDPSETTINGS.TimeOutConnEthOne = stoi(values[52]);
+    // PMMTCPUDPSETTINGS.MaxRetriesEthOne = stoi(values[53]);
+    // PMMTCPUDPSETTINGS.UDPPortOne = stoi(values[54]);
+    // PMMTCPUDPSETTINGS.UDPPortTwo = stoi(values[55]);
+    // PMMTCPUDPSETTINGS.UDPPortThree = stoi(values[56]);
+    // PMMTCPUDPSETTINGS.UDPPortFour = stoi(values[57]);
 
     // TCP Settings
     // product.tcp_udp_settings.ip_address = values[27] + "." + values[28] + "." + values[29] + "." + values[30];
@@ -849,7 +857,7 @@ String PMMReadFromFlashAllSettings()
 {
     SerialUSB.println("PMM");
     Product product;
-    product = my_flash_store.read();
+    product = Product_flash_store.read();
 
     String settings = "";
 
@@ -1105,9 +1113,4 @@ String PMMReadFromFlashAllSettings()
     SerialUSB.println(settings);
     SerialUSB.println("ISRAR");
     return settings;
-}
-
-string PMMIsAlive()
-{
-    return "PMMAlive";
 }
