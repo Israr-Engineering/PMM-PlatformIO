@@ -6,21 +6,17 @@
 //#include <vector>
 using namespace std;
 
-
-
-
-//Old functions 
-void PMMWriteIntoFlashAllSettings(string Message);
-void PMMWriteIntoFlashGeneralSettings(string Message);
-void PMMWriteIntoFlashSerialSettings(string Message);
-void PMMWriteIntoFlashTCPSettings(string Message);
-void PMMWriteIntoFlashOptionsAndPinsSettings(string Message);
-String PMMReadFromFlashAllSettings();
-
-
-// new functions in use 
+// Old functions
 void PmmStringToArray(string input);
-void SetProductSettings(string Message);
-String GetProductSettings();
-void SetTCPSettings(string Message);
-String GetTCPSettings();
+string PMMIsAlive();
+void PmmConvertDecimalToBinary(int Dic);
+// New functions
+void PmmWriteGeneralSettings(string Message);
+void PmmWriteRTUSettings(string Message);
+void PmmReadGeneralSettings();
+void PmmReadRTUSettings();
+
+// void SetProductSettings(string Message);
+// String GetProductSettings();
+// void SetTCPSettings(string Message);
+// String GetTCPSettings();

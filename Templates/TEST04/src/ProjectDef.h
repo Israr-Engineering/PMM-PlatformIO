@@ -58,6 +58,7 @@
 #include <PmmRS485Lib.h>
 #include <PmmEthernet.h>
 #include <PmmTimeLib.h>
+#include <PmmTypes.h>
 
 #ifdef PMMExternalRTC
 #include <PmmDS3231.h>
@@ -136,7 +137,10 @@ void PMMConfiguration();
 void PMMCommunication();
 void PMMTimers();
 
+
 //Global Classes
+
+
 bool x = false;
 long MainLoopTimer = 0;
 long ConfigurationTimer = 0;

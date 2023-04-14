@@ -1,8 +1,11 @@
 #include <Arduino.h>
 #include <ProjectDef.h>
 
+
 void setup()
 {
+
+   
 
   // STEP01: Read Flash ROM and update Settings
 
@@ -39,6 +42,8 @@ void loop()
 {
 
   PmmWatchDoggy.clear();
+
+  
 
   if ((millis() - MainLoopTimer) > 1000)
   {

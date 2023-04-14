@@ -52,136 +52,71 @@ string PMMCommnads(string readData)
     String result2 = "";
 
     std::string commandtype = readData.substr(0, 10);
-    //SerialUSB.println(commandtype.c_str());
-    // PMMSet,0,0,1,0,0,0,1,0,0,0,1,0,0,0,20,5,1,1,1,1,0,1,9600,8,1,2,422,3000,10,127,0,0,1,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,171,205,173,205,171,205,3000,10,502,503,504,505,1,0,0,0,1,0,1,1,1,0,0,0,0,0,0,1,2,0,2,3,1,2,3,0,2,3,1,2,3,10,0,0,0,0,6,0,1,0,0,3,0,0,0,7,0,5,3,0,6,10,0,0,0,0,0,0,0,0,0,
+    SerialUSB.println(commandtype.c_str());
+    //  PMMSet,0,0,1,0,0,0,1,0,0,0,1,0,0,0,20,5,1,1,1,1,0,1,9600,8,1,2,422,3000,10,127,0,0,1,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,171,205,173,205,171,205,3000,10,502,503,504,505,1,0,0,0,1,0,1,1,1,0,0,0,0,0,0,1,2,0,2,3,1,2,3,0,2,3,1,2,3,10,0,0,0,0,6,0,1,0,0,3,0,0,0,7,0,5,3,0,6,10,0,0,0,0,0,0,0,0,0,
 
-    //PMMSet,0,0,05711503,503,0,1,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,171,205,173,205,171,205,3000,10,502,503,504,711,
-    //PMMGet,0,0
+    // PMMSet,0,0,05711503,503,0,1,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,171,205,173,205,171,205,3000,10,502,503,504,711,
+    // PMMGet,0,0
 
-    //PMMSet,0,3,127,0,0,1,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,171,205,173,205,171,205,3000,10,502,503,504,505,
-    // PMMGet,0,3
+    // PMMSet,0,3,127,0,0,1,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,171,205,173,205,171,205,3000,10,502,503,504,505,
+    //  PMMGet,0,3
+
+    // PMMSet,0,0,0620,5000,0,1000,55,200,0,0,1,0,3891,1,2,3,4,5,6,100,200,300,400,500,600,
+    //PMMSet,0,1,1,9600,1,8,0,5000,3,485,2,9600,2,7,1,6000,4,322,3,9600,1,8,2,7000,5,485,4,9600,2,7,1,7000,5,322
+
 
     if (commandtype == "PMMSet,0,0")
     {
         // if (SerialUSB.available() > 0)
         // {
-        // string settings = PMMReturnDataFromSerialUSB();
-        // PMMWriteIntoFlashGeneralSettings(settings);
-        // result = "Done";
 
         string substring = "PMMSet,0,0,";
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
-        //SerialUSB.println(readData.c_str());
+        // SerialUSB.println(readData.c_str());
 
-        //PMMWriteIntoFlashAllSettings(readData);
-        SetProductSettings(readData);
-        
-        //result = "Done";
+        PmmWriteGeneralSettings(readData);
+
         //}
 
         if (client)
         {
             string settings = PMMReturnDataFromAPIHTTPHeader();
-            PMMWriteIntoFlashGeneralSettings(settings);
+            // PMMWriteIntoFlashGeneralSettings(settings);
             result = "Done";
         }
     }
 
-    if (commandtype == "PMMSet,0,3")
+    if (commandtype == "PMMSet,0,1")
     {
-        string substring = "PMMSet,0,3,";
+        string substring = "PMMSet,0,1,";
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
-        //SerialUSB.println(readData.c_str());
-        SetTCPSettings(readData);
-        result = "Done";
+        // SerialUSB.println(readData.c_str());
+        // SetTCPSettings(readData);
 
+        PmmWriteRTUSettings(readData);
         if (client)
         {
             string settings = PMMReturnDataFromAPIHTTPHeader();
-            PMMWriteIntoFlashGeneralSettings(settings);
+            // PMMWriteIntoFlashGeneralSettings(settings);
             result = "Done";
         }
     }
 
-    if (commandtype == "PMMGet,0,3") // GET tcp TO STRING 
+    if (commandtype == "PMMGet,0,3") // GET tcp TO STRING
     {
-        result2 = GetTCPSettings();
+        // result2 = GetTCPSettings();
     }
 
-    else if (commandtype == "PMMGet,0,0") // GET PRODUCT TO STRING 
+    else if (commandtype == "PMMGet,0,0") // GET General TO STRING
     {
-        result2 = GetProductSettings();
+        PmmReadGeneralSettings();
     }
 
-
-    else if (readData == "PMMSetSettings,0,1")
+    else if (commandtype == "PMMGet,0,1") // GET RTU TO STRING
     {
-        if (SerialUSB.available() > 0)
-        {
-            string settings = PMMReturnDataFromSerialUSB();
-            PMMWriteIntoFlashGeneralSettings(settings);
-            result = "Done";
-        }
-
-        if (client)
-        {
-            string settings = PMMReturnDataFromAPIHTTPHeader();
-            PMMWriteIntoFlashGeneralSettings(settings);
-            result = "Done";
-        }
-    }
-
-    else if (readData == "PMMSetSettings,0,2")
-    {
-        if (SerialUSB.available() > 0)
-        {
-            string settings = PMMReturnDataFromSerialUSB();
-            PMMWriteIntoFlashSerialSettings(settings);
-            result = "Done";
-        }
-
-        if (client)
-        {
-            string settings = PMMReturnDataFromAPIHTTPHeader();
-            PMMWriteIntoFlashSerialSettings(settings);
-            result = "Done";
-        }
-    }
-
-    else if (readData == "PMMSetSettings,0,3")
-    {
-        if (SerialUSB.available() > 0)
-        {
-            string settings = PMMReturnDataFromSerialUSB();
-            PMMWriteIntoFlashTCPSettings(settings);
-            result = "Done";
-        }
-
-        if (client)
-        {
-            string settings = PMMReturnDataFromAPIHTTPHeader();
-            PMMWriteIntoFlashTCPSettings(settings);
-            result = "Done";
-        }
-    }
-
-    else if (readData == "PMMSetSettings,0,4")
-    {
-        if (SerialUSB.available() > 0)
-        {
-            string settings = PMMReturnDataFromSerialUSB();
-            PMMWriteIntoFlashOptionsAndPinsSettings(settings);
-            result = "Done";
-        }
-
-        if (client)
-        {
-            string settings = PMMReturnDataFromAPIHTTPHeader();
-            PMMWriteIntoFlashOptionsAndPinsSettings(settings);
-            result = "Done";
-        }
+        PmmReadRTUSettings();
     }
 
     // else if (commandtype == "PMMGet,0,0")
