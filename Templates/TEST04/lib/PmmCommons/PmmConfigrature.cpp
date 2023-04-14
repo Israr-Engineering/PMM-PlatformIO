@@ -171,14 +171,20 @@ typedef struct Product
     // bit TCPServer = 0;
     // Bit TCPClient = 0;
       
+
+// non storing area
+
+ tcp_udp_settings tcpudp;
+
 } Product;
 
-FlashStorage(Product_flash_store, Product);
-
-FlashStorage(TCP_flash_store, tcp_udp_settings);
-
+/*****************************************************************
+* Common functions for all types of ROM
+******************************************************************/
+Product ThisProduct;
 
 void PmmStringToArray(string input)
+
 {
 
     // int length = input.length();
@@ -212,116 +218,132 @@ void PmmStringToArray(string input)
     }
 }
 
+string PMMIsAlive()
+{
+    return "PMMAlive";
+}
+
+/*****************************************************************
+* Internal flash section
+******************************************************************/
+
+// storage area definitions each should be max 256 bytes
+FlashStorage(Product_flash_store, Product);
+FlashStorage(TCP_flash_store, tcp_udp_settings);
+
+
+
 void SetTCPSettings(string Message) // Save TCP Settings to internal flash
 {
     PmmStringToArray(Message);
 
-    tcp_udp_settings tcpudp;
+   
     // TCP Settings
+    //ThisProduct.tcpudp
+    ThisProduct.tcpudp.ip_address01 = stoi(values[0]);
+    ThisProduct.tcpudp.ip_address02 = stoi(values[1]);
+    ThisProduct.tcpudp.ip_address03 = stoi(values[2]);
+    ThisProduct.tcpudp.ip_address04 = stoi(values[3]);
 
-    tcpudp.ip_address01 = stoi(values[0]);
-    tcpudp.ip_address02 = stoi(values[1]);
-    tcpudp.ip_address03 = stoi(values[2]);
-    tcpudp.ip_address04 = stoi(values[3]);
+    ThisProduct.tcpudp.net_mask01 = stoi(values[4]);
+    ThisProduct.tcpudp.net_mask02 = stoi(values[5]);
+    ThisProduct.tcpudp.net_mask03 = stoi(values[6]);
+    ThisProduct.tcpudp.net_mask04 = stoi(values[7]);
 
-    tcpudp.net_mask01 = stoi(values[4]);
-    tcpudp.net_mask02 = stoi(values[5]);
-    tcpudp.net_mask03 = stoi(values[6]);
-    tcpudp.net_mask04 = stoi(values[7]);
+    ThisProduct.tcpudp.preferred_dns_server01 = stoi(values[8]);
+    ThisProduct.tcpudp.preferred_dns_server02 = stoi(values[9]);
+    ThisProduct.tcpudp.preferred_dns_server03 = stoi(values[10]);
+    ThisProduct.tcpudp.preferred_dns_server04 = stoi(values[11]);
 
-    tcpudp.preferred_dns_server01 = stoi(values[8]);
-    tcpudp.preferred_dns_server02 = stoi(values[9]);
-    tcpudp.preferred_dns_server03 = stoi(values[10]);
-    tcpudp.preferred_dns_server04 = stoi(values[11]);
+    ThisProduct.tcpudp.alternate_dns_server01 = stoi(values[12]);
+    ThisProduct.tcpudp.alternate_dns_server02 = stoi(values[13]);
+    ThisProduct.tcpudp.alternate_dns_server03 = stoi(values[14]);
+    ThisProduct.tcpudp.alternate_dns_server04 = stoi(values[15]);
 
-    tcpudp.alternate_dns_server01 = stoi(values[12]);
-    tcpudp.alternate_dns_server02 = stoi(values[13]);
-    tcpudp.alternate_dns_server03 = stoi(values[14]);
-    tcpudp.alternate_dns_server04 = stoi(values[15]);
+    ThisProduct.tcpudp.default_gateway01 = stoi(values[16]);
+    ThisProduct.tcpudp.default_gateway02 = stoi(values[17]);
+    ThisProduct.tcpudp.default_gateway03 = stoi(values[18]);
+    ThisProduct.tcpudp.default_gateway04 = stoi(values[20]);
 
-    tcpudp.default_gateway01 = stoi(values[16]);
-    tcpudp.default_gateway02 = stoi(values[17]);
-    tcpudp.default_gateway03 = stoi(values[18]);
-    tcpudp.default_gateway04 = stoi(values[20]);
+    ThisProduct.tcpudp.mac_address01 = stoi(values[21]);
+    ThisProduct.tcpudp.mac_address02 = stoi(values[22]);
+    ThisProduct.tcpudp.mac_address03 = stoi(values[23]);
+    ThisProduct.tcpudp.mac_address04 = stoi(values[24]);
+    ThisProduct.tcpudp.mac_address05 = stoi(values[25]);
 
-    tcpudp.mac_address01 = stoi(values[21]);
-    tcpudp.mac_address02 = stoi(values[22]);
-    tcpudp.mac_address03 = stoi(values[23]);
-    tcpudp.mac_address04 = stoi(values[24]);
-    tcpudp.mac_address05 = stoi(values[25]);
-
-    tcpudp.connection_timeout_tcp = stoi(values[26]);
-    tcpudp.max_retry_tcp = stoi(values[27]);
-    tcpudp.udp_port_one = stoi(values[28]);
-    tcpudp.udp_port_two = stoi(values[29]);
-    tcpudp.udp_port_three = stoi(values[30]);
-    tcpudp.udp_port_four = stoi(values[31]);
+    ThisProduct.tcpudp.connection_timeout_tcp = stoi(values[26]);
+    ThisProduct.tcpudp.max_retry_tcp = stoi(values[27]);
+    ThisProduct.tcpudp.udp_port_one = stoi(values[28]);
+    ThisProduct.tcpudp.udp_port_two = stoi(values[29]);
+    ThisProduct.tcpudp.udp_port_three = stoi(values[30]);
+    ThisProduct.tcpudp.udp_port_four = stoi(values[31]);
 
     // // ...and finally save everything into "my_flash_store"
-    // my_flash_store.write(tcpudp);
-    TCP_flash_store.write (tcpudp);
+    // my_flash_store.write(ThisProduct.tcpudp);
+    TCP_flash_store.write (ThisProduct.tcpudp);
 }
 
 String GetTCPSettings() // Get TCP Settings From internal flash
 {
-    tcp_udp_settings tcpudp;
-     tcpudp = TCP_flash_store.read();
+    //tcp_udp_settings ThisProduct.tcpudp;
+    
+     ThisProduct.tcpudp = TCP_flash_store.read();
 
     String settings = "";
 
-    settings = String(settings + String(tcpudp.ip_address01));
+    settings = String(settings + String(ThisProduct.tcpudp.ip_address01));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.ip_address02));
+    settings = String(settings + String(ThisProduct.tcpudp.ip_address02));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.ip_address03));
+    settings = String(settings + String(ThisProduct.tcpudp.ip_address03));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.ip_address04));
+    settings = String(settings + String(ThisProduct.tcpudp.ip_address04));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.net_mask01));
+    settings = String(settings + String(ThisProduct.tcpudp.net_mask01));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.net_mask02));
+    settings = String(settings + String(ThisProduct.tcpudp.net_mask02));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.net_mask03));
+    settings = String(settings + String(ThisProduct.tcpudp.net_mask03));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.net_mask04));
+    settings = String(settings + String(ThisProduct.tcpudp.net_mask04));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.preferred_dns_server01));
+    settings = String(settings + String(ThisProduct.tcpudp.preferred_dns_server01));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.preferred_dns_server02));
+    settings = String(settings + String(ThisProduct.tcpudp.preferred_dns_server02));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.preferred_dns_server03));
+    settings = String(settings + String(ThisProduct.tcpudp.preferred_dns_server03));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.preferred_dns_server04));
+    settings = String(settings + String(ThisProduct.tcpudp.preferred_dns_server04));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.default_gateway01));
+    settings = String(settings + String(ThisProduct.tcpudp.default_gateway01));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.default_gateway02));
+    settings = String(settings + String(ThisProduct.tcpudp.default_gateway02));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.default_gateway03));
+    settings = String(settings + String(ThisProduct.tcpudp.default_gateway03));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.default_gateway04));
+    settings = String(settings + String(ThisProduct.tcpudp.default_gateway04));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.mac_address01));
+    settings = String(settings + String(ThisProduct.tcpudp.mac_address01));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.mac_address02));
+    settings = String(settings + String(ThisProduct.tcpudp.mac_address02));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.mac_address03));
+    settings = String(settings + String(ThisProduct.tcpudp.mac_address03));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.mac_address04));
+    settings = String(settings + String(ThisProduct.tcpudp.mac_address04));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.mac_address05));
+    settings = String(settings + String(ThisProduct.tcpudp.mac_address05));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.connection_timeout_tcp));
+    settings = String(settings + String(ThisProduct.tcpudp.connection_timeout_tcp));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.max_retry_tcp));
+    settings = String(settings + String(ThisProduct.tcpudp.max_retry_tcp));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.udp_port_one));
+    settings = String(settings + String(ThisProduct.tcpudp.udp_port_one));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.udp_port_two));
+    settings = String(settings + String(ThisProduct.tcpudp.udp_port_two));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.udp_port_three));
+    settings = String(settings + String(ThisProduct.tcpudp.udp_port_three));
     settings = String(settings + ",");
-    settings = String(settings + String(tcpudp.udp_port_four));
+    settings = String(settings + String(ThisProduct.tcpudp.udp_port_four));
 
     
     SerialUSB.println(settings);
@@ -333,7 +355,7 @@ void SetProductSettings(string Message) // Save product Settings to internal fla
 
  PmmStringToArray(Message);
 
-    Product ThisProduct;
+    //Product ThisProduct;
 
      // Start writing the procedure
     ThisProduct.serial_number = stol(values[0]);
@@ -354,7 +376,7 @@ Product_flash_store.write (ThisProduct);
 
 String GetProductSettings() // Get product Settings From internal flash
 {
-    Product ThisProduct;
+    
      ThisProduct = Product_flash_store.read();
 
     String settings = "";
@@ -387,12 +409,21 @@ SerialUSB.println(settings);
     return settings;
 }
 
-string PMMIsAlive()
-{
-    return "PMMAlive";
-}
 
-// Old functins 
+/*****************************************************************
+* External flash section
+******************************************************************/
+
+
+/*****************************************************************
+* External EEPROM flash section
+******************************************************************/
+
+
+
+
+
+// Old functins this should be deleted once all above tested 
 
 void PMMWriteIntoFlashAllSettings(string Message)
 {
