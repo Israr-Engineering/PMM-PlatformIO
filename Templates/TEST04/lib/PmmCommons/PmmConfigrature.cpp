@@ -212,7 +212,7 @@ void PmmStringToArray(string input)
     }
 }
 
-void SetTCPSettings(string Message)
+void SetTCPSettings(string Message) // Save TCP Settings to internal flash
 {
     PmmStringToArray(Message);
 
@@ -262,7 +262,7 @@ void SetTCPSettings(string Message)
     TCP_flash_store.write (tcpudp);
 }
 
-String GetTCPSettings()
+String GetTCPSettings() // Get TCP Settings From internal flash
 {
     tcp_udp_settings tcpudp;
      tcpudp = TCP_flash_store.read();
@@ -328,25 +328,57 @@ String GetTCPSettings()
     return settings;
 }
 
-void SetProductSettings(string Message)
+void SetProductSettings(string Message) // Save product Settings to internal flash
 {
 
  PmmStringToArray(Message);
 
     Product ThisProduct;
 
+     // Start writing the procedure
+    ThisProduct.serial_number = stol(values[0]);
+    ThisProduct.ProductName = stoi(values[1]);
+    ThisProduct.firmware_version01 = stoi(values[2]);
+    ThisProduct.hardware_version01 = stoi(values[3]);
+    ThisProduct.software_version01 = stoi(values[4]);
+    ThisProduct.cpu_type = stoi(values[5]);
+    ThisProduct.connection_type = stoi(values[6]);
+    ThisProduct.slave_i2c_address = stoi(values[7]);
+
+     // End procedure
+
 
 Product_flash_store.write (ThisProduct);
 
 }
 
-String GetProductSettings()
+String GetProductSettings() // Get product Settings From internal flash
 {
-
     Product ThisProduct;
      ThisProduct = Product_flash_store.read();
 
     String settings = "";
+
+     // Start writing the procedure
+    settings = String(settings + String(ThisProduct.serial_number));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.ProductName));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.firmware_version01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.hardware_version01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.software_version01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.cpu_type));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.connection_type));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.slave_i2c_address));
+    settings = String(settings + ",");
+
+     // End procedure
+ 
 
 
 
