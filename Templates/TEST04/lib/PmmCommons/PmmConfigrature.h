@@ -8,15 +8,16 @@ using namespace std;
 
 // Old functions
 void PmmStringToArray(string input);
-string PMMIsAlive();
+void PMMIsAlive();
 void PmmConvertDecimalToBinary(int Dic);
 // New functions
-void PmmWriteGeneralSettings(string Message);
-void PmmWriteRTUSettings(string Message);
-void PmmReadGeneralSettings();
-void PmmReadRTUSettings();
-
-// void SetProductSettings(string Message);
-// String GetProductSettings();
-// void SetTCPSettings(string Message);
-// String GetTCPSettings();
+void PmmWriteGeneralSettingsInternalFlash(string Message);
+void PmmWriteRTUSettingsInternalFlash(string Message);
+void PmmWriteTCPUDPSettingsInternalFlash(string Message);
+void PmmWriteModbusSettingsInternalFlash(string Message);
+void PmmWriteTimerSettingsInternalFlash(string Message);
+void PmmReadGeneralSettingsInternalFlash();
+void PmmReadRTUSettingsInternalFlash();
+void PmmReadTCPUDPSettingsInternalFlash();
+void PmmReadModbusSettingsInternalFlash();
+void PmmReadTimersSettingsInternalFlash();

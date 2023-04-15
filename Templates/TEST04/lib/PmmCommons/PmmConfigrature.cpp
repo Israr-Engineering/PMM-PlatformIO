@@ -13,7 +13,6 @@ string binary[16];
 
 void PmmStringToArray(string input)
 {
-
     // declaring character array (+1 for null terminator)
     char *char_array = new char[128];
 
@@ -46,9 +45,9 @@ void PmmConvertDecimalToBinary(int Dic)
     }
 }
 
-string PMMIsAlive()
+void PMMIsAlive()
 {
-    return "PMMAlive";
+    SerialUSB.println("PMMAlive");
 }
 
 /*****************************************************************
@@ -59,11 +58,11 @@ Product ThisProduct;
 FlashStorage(Product_flash_store, Product);
 FlashStorage(General_flash_store, PMMGeneral);
 FlashStorage(RTU_flash_store, PMMRTU);
-FlashStorage(TCP_flash_store, PMMTCPUDP);
+FlashStorage(TCPUDP_flash_store, PMMTCPUDP);
 FlashStorage(Modbus_flash_store, PMMModBus);
-FlashStorage(Timers_flash_store, PMMSettingsTimer);
+FlashStorage(Timers_flash_store, PMMTimer);
 
-void PmmWriteGeneralSettings(string Message)
+void PmmWriteGeneralSettingsInternalFlash(string Message)
 {
     PmmStringToArray(Message);
 
@@ -109,11 +108,9 @@ void PmmWriteGeneralSettings(string Message)
     General_flash_store.write(ThisProduct.PmmGeneral);
 }
 
-void PmmWriteRTUSettings(string Message)
+void PmmWriteRTUSettingsInternalFlash(string Message)
 {
     PmmStringToArray(Message);
-
-    SerialUSB.println(Message.c_str());
 
     ThisProduct.PmmRTU.PortOneName = stoi(values[0]);
     ThisProduct.PmmRTU.PortOneBaudRate = stoi(values[1]);
@@ -138,7 +135,7 @@ void PmmWriteRTUSettings(string Message)
     ThisProduct.PmmRTU.PortThreeParity = stoi(values[20]);
     ThisProduct.PmmRTU.PortThreeConnectionTimeout = stoi(values[21]);
     ThisProduct.PmmRTU.PortThreeMaxRetryRTU = stoi(values[22]);
-    ThisProduct.PmmRTU.PortThreeInterface = stoi(values[33]);
+    ThisProduct.PmmRTU.PortThreeInterface = stoi(values[23]);
     ThisProduct.PmmRTU.PortFourName = stoi(values[24]);
     ThisProduct.PmmRTU.PortFourBaudRate = stoi(values[25]);
     ThisProduct.PmmRTU.PortFourStopBit = stoi(values[26]);
@@ -149,11 +146,117 @@ void PmmWriteRTUSettings(string Message)
     ThisProduct.PmmRTU.PortFourInterface = stoi(values[31]);
 
     RTU_flash_store.write(ThisProduct.PmmRTU);
-
-    SerialUSB.println("Done");
 }
 
-void PmmReadGeneralSettings()
+void PmmWriteTCPUDPSettingsInternalFlash(string Message)
+{
+    PmmStringToArray(Message);
+
+    // TCP Settings
+    ThisProduct.PmmTCPUDP.MacAddress01 = stoi(values[0]);
+    ThisProduct.PmmTCPUDP.MacAddress02 = stoi(values[1]);
+    ThisProduct.PmmTCPUDP.MacAddress03 = stoi(values[2]);
+    ThisProduct.PmmTCPUDP.MacAddress04 = stoi(values[3]);
+    ThisProduct.PmmTCPUDP.MacAddress05 = stoi(values[4]);
+
+    ThisProduct.PmmTCPUDP.IPAddress01 = stoi(values[5]);
+    ThisProduct.PmmTCPUDP.IPAddress02 = stoi(values[6]);
+    ThisProduct.PmmTCPUDP.IPAddress03 = stoi(values[7]);
+    ThisProduct.PmmTCPUDP.IPAddress04 = stoi(values[8]);
+
+    ThisProduct.PmmTCPUDP.RemoteIPAddress01 = stoi(values[9]);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress02 = stoi(values[10]);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress03 = stoi(values[11]);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress04 = stoi(values[12]);
+
+    ThisProduct.PmmTCPUDP.NetMask01 = stoi(values[13]);
+    ThisProduct.PmmTCPUDP.NetMask02 = stoi(values[14]);
+    ThisProduct.PmmTCPUDP.NetMask03 = stoi(values[15]);
+    ThisProduct.PmmTCPUDP.NetMask04 = stoi(values[16]);
+
+    ThisProduct.PmmTCPUDP.DNSSOneServer01 = stoi(values[17]);
+    ThisProduct.PmmTCPUDP.DNSSOneServer02 = stoi(values[18]);
+    ThisProduct.PmmTCPUDP.DNSSOneServer03 = stoi(values[19]);
+    ThisProduct.PmmTCPUDP.DNSSOneServer04 = stoi(values[20]);
+
+    ThisProduct.PmmTCPUDP.DNSTwoServer01 = stoi(values[21]);
+    ThisProduct.PmmTCPUDP.DNSTwoServer02 = stoi(values[22]);
+    ThisProduct.PmmTCPUDP.DNSTwoServer03 = stoi(values[23]);
+    ThisProduct.PmmTCPUDP.DNSTwoServer04 = stoi(values[24]);
+
+    ThisProduct.PmmTCPUDP.ConnectionTimeoutTCP = stoi(values[25]);
+    ThisProduct.PmmTCPUDP.MaxRetryTCP = stoi(values[26]);
+    ThisProduct.PmmTCPUDP.UDPPortOne = stoi(values[27]);
+    ThisProduct.PmmTCPUDP.UDPPortTwo = stoi(values[28]);
+    ThisProduct.PmmTCPUDP.UDPPortThree = stoi(values[29]);
+    ThisProduct.PmmTCPUDP.UDPPortFour = stoi(values[30]);
+
+    TCPUDP_flash_store.write(ThisProduct.PmmTCPUDP);
+}
+
+void PmmWriteModbusSettingsInternalFlash(string Message)
+{
+    PmmStringToArray(Message);
+
+    PmmConvertDecimalToBinary(stoi(values[0]));
+
+    ThisProduct.PmmModbus.ModBusRTU = binaryInt[12];
+    ThisProduct.PmmModbus.ModBusTCP = binaryInt[11];
+    ThisProduct.PmmModbus.ModBusUDP = binaryInt[10];
+    ThisProduct.PmmModbus.ModBusSlave = binaryInt[9];
+    ThisProduct.PmmModbus.ModBusMaster = binaryInt[8];
+    ThisProduct.PmmModbus.ReadCoilsStatus = binaryInt[7];
+    ThisProduct.PmmModbus.ReadInputStatus = binaryInt[6];
+    ThisProduct.PmmModbus.ReadHoldingRegisters = binaryInt[5];
+    ThisProduct.PmmModbus.ReadInputRegisters = binaryInt[4];
+    ThisProduct.PmmModbus.WriteSingleCoil = binaryInt[3];
+    ThisProduct.PmmModbus.WriteSingleRegister = binaryInt[2];
+    ThisProduct.PmmModbus.WriteMultipleCoils = binaryInt[1];
+    ThisProduct.PmmModbus.WriteMultipleRegisters = binaryInt[0];
+    ThisProduct.PmmModbus.StartingAddressCoilsStatus = stoi(values[1]);
+    ThisProduct.PmmModbus.StartingAddressInputStatus = stoi(values[2]);
+    ThisProduct.PmmModbus.StartingAddressHoldingRegisters = stoi(values[3]);
+    ThisProduct.PmmModbus.StartingAddressInputRegisters = stoi(values[4]);
+    ThisProduct.PmmModbus.StartingAddressWriteSingleCoil = stoi(values[5]);
+    ThisProduct.PmmModbus.StartingAddressWriteSingleRegister = stoi(values[6]);
+    ThisProduct.PmmModbus.StartingAddressWriteMultipleCoils = stoi(values[7]);
+    ThisProduct.PmmModbus.StartingAddressWriteMultipleRegisters = stoi(values[8]);
+    ThisProduct.PmmModbus.QuantityCoilsStatus = stoi(values[9]);
+    ThisProduct.PmmModbus.QuantityInputStatus = stoi(values[10]);
+    ThisProduct.PmmModbus.QuantityHoldingRegisters = stoi(values[11]);
+    ThisProduct.PmmModbus.QuantityInputRegisters = stoi(values[12]);
+    ThisProduct.PmmModbus.QuantityWriteMultipleCoils = stoi(values[13]);
+    ThisProduct.PmmModbus.QuantityWriteMultipleRegisters = stoi(values[14]);
+    ThisProduct.PmmModbus.FunctionCode = stoi(values[15]);
+    ThisProduct.PmmModbus.IODataOrder = stoi(values[16]);
+    ThisProduct.PmmModbus.IODataType = stoi(values[17]);
+    ThisProduct.PmmModbus.PollInterval = stoi(values[18]);
+    ThisProduct.PmmModbus.SlaveID = stoi(values[19]);
+    ThisProduct.PmmModbus.StartingAddress = stoi(values[20]);
+    ThisProduct.PmmModbus.Quantity = stoi(values[21]);
+
+    Modbus_flash_store.write(ThisProduct.PmmModbus);
+}
+
+void PmmWriteTimerSettingsInternalFlash(string Message)
+{
+    PmmStringToArray(Message);
+
+    PmmConvertDecimalToBinary(stoi(values[0]));
+
+    ThisProduct.PmmTimers.CycleTimer = binaryInt[7];
+    ThisProduct.PmmTimers.OneMSTimer = binaryInt[6];
+    ThisProduct.PmmTimers.TenMSTimer = binaryInt[5];
+    ThisProduct.PmmTimers.OneSecTimer = binaryInt[4];
+    ThisProduct.PmmTimers.OneMinTimer = binaryInt[3];
+    ThisProduct.PmmTimers.OneHouTimer = binaryInt[2];
+    ThisProduct.PmmTimers.OneMonTimer = binaryInt[1];
+    ThisProduct.PmmTimers.OneYearTimer = binaryInt[0];
+
+    Timers_flash_store.write(ThisProduct.PmmTimers);
+}
+
+void PmmReadGeneralSettingsInternalFlash()
 {
 
     ThisProduct.PmmGeneral = General_flash_store.read();
@@ -219,9 +322,8 @@ void PmmReadGeneralSettings()
     SerialUSB.println(settings);
 }
 
-void PmmReadRTUSettings()
+void PmmReadRTUSettingsInternalFlash()
 {
-    SerialUSB.print("Start Read");
     ThisProduct.PmmRTU = RTU_flash_store.read();
     String settings = "";
 
@@ -293,6 +395,160 @@ void PmmReadRTUSettings()
     SerialUSB.println(settings);
 }
 
+void PmmReadTCPUDPSettingsInternalFlash()
+{
+
+    ThisProduct.PmmTCPUDP = TCPUDP_flash_store.read();
+    String settings = "";
+
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.MacAddress01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.MacAddress02));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.MacAddress03));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.MacAddress04));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.MacAddress05));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.IPAddress01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.IPAddress02));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.IPAddress03));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.IPAddress04));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.RemoteIPAddress01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.RemoteIPAddress02));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.RemoteIPAddress03));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.RemoteIPAddress04));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.NetMask01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.NetMask02));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.NetMask03));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.NetMask04));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.DNSSOneServer01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.DNSSOneServer02));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.DNSSOneServer03));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.DNSSOneServer04));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.DNSTwoServer01));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.DNSTwoServer02));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.DNSTwoServer03));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.DNSTwoServer04));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.ConnectionTimeoutTCP));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.MaxRetryTCP));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.UDPPortOne));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.UDPPortTwo));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.UDPPortThree));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTCPUDP.UDPPortFour));
+    settings = String(settings + ",End");
+
+    SerialUSB.println(settings);
+}
+
+void PmmReadModbusSettingsInternalFlash()
+{
+    ThisProduct.PmmModbus = Modbus_flash_store.read();
+    String settings = "";
+
+    settings = String(settings + String(ThisProduct.PmmModbus.ModBusRTU));
+    settings = String(settings + String(ThisProduct.PmmModbus.ModBusTCP));
+    settings = String(settings + String(ThisProduct.PmmModbus.ModBusUDP));
+    settings = String(settings + String(ThisProduct.PmmModbus.ModBusSlave));
+    settings = String(settings + String(ThisProduct.PmmModbus.ModBusMaster));
+    settings = String(settings + String(ThisProduct.PmmModbus.ReadCoilsStatus));
+    settings = String(settings + String(ThisProduct.PmmModbus.ReadInputStatus));
+    settings = String(settings + String(ThisProduct.PmmModbus.ReadHoldingRegisters));
+    settings = String(settings + String(ThisProduct.PmmModbus.ReadInputRegisters));
+    settings = String(settings + String(ThisProduct.PmmModbus.WriteSingleCoil));
+    settings = String(settings + String(ThisProduct.PmmModbus.WriteSingleRegister));
+    settings = String(settings + String(ThisProduct.PmmModbus.WriteMultipleCoils));
+    settings = String(settings + String(ThisProduct.PmmModbus.WriteMultipleRegisters));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddressCoilsStatus));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddressInputStatus));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddressHoldingRegisters));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddressInputRegisters));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddressWriteSingleCoil));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddressWriteSingleRegister));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddressWriteMultipleCoils));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddressWriteMultipleRegisters));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.QuantityCoilsStatus));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.QuantityInputStatus));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.QuantityHoldingRegisters));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.QuantityInputRegisters));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.QuantityWriteMultipleCoils));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.QuantityWriteMultipleRegisters));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.FunctionCode));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.IODataOrder));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.IODataType));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.PollInterval));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.SlaveID));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.StartingAddress));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmModbus.Quantity));
+    settings = String(settings + ",End");
+
+    SerialUSB.println(settings);
+}
+
+void PmmReadTimersSettingsInternalFlash()
+{
+    ThisProduct.PmmTimers = Timers_flash_store.read();
+    String settings = "";
+
+    settings = String(settings + String(ThisProduct.PmmTimers.CycleTimer));
+    settings = String(settings + String(ThisProduct.PmmTimers.OneMSTimer));
+    settings = String(settings + String(ThisProduct.PmmTimers.TenMSTimer));
+    settings = String(settings + String(ThisProduct.PmmTimers.OneSecTimer));
+    settings = String(settings + String(ThisProduct.PmmTimers.OneMinTimer));
+    settings = String(settings + String(ThisProduct.PmmTimers.OneHouTimer));
+    settings = String(settings + String(ThisProduct.PmmTimers.OneMonTimer));
+    settings = String(settings + String(ThisProduct.PmmTimers.OneYearTimer));
+    settings = String(settings + ",End");
+
+    SerialUSB.println(settings);
+}
 /*
 void SetTCPSettings(string Message) // Save TCP Settings to internal flash
 {
