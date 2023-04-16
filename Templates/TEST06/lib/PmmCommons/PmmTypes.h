@@ -1,6 +1,6 @@
 // #include "ProjectDef.h"
 
-#ifndef PMMTYPES_H 
+#ifndef PMMTYPES_H
 #define PMMTYPES_H
 
 #include <string>
@@ -34,9 +34,9 @@ typedef struct PMMGeneral
     long SerialNumber = 5000;
     long FirstTimeRun = 0;
     long LifeTime = 0;
-    long NumberOfCycles =0;
+    long NumberOfCycles = 0;
     long LastRunningTime = 0;
-    long NumberOfRunningTimes =0 ;
+    long NumberOfRunningTimes = 0;
     int SoftwareVersion = 1; // 12 => 1.2
     int FirmwareVersion = 1; // 12 => 1.2
     int HardwareVersion = 1; // 23 => 2.3
@@ -65,6 +65,10 @@ typedef struct PMMGeneral
     int GeneralReadingsOffset = 0;
     int GeneralReadingsFactor = 0;
 
+    int SettingsRef = 1; // 1 =>Internal Flash,2=>External Flash,3=>EEPROM
+
+    int Spare01 = 0;
+    int Spare02 = 0;
 } PMMGeneral;
 
 typedef struct PMMRTU
@@ -111,6 +115,7 @@ typedef struct PMMTCPUDP
     int MacAddress03 = 30;
     int MacAddress04 = 40;
     int MacAddress05 = 50;
+    int MacAddress06 = 60;
     int IPAddress01 = 192;
     int IPAddress02 = 168;
     int IPAddress03 = 1;
@@ -137,6 +142,8 @@ typedef struct PMMTCPUDP
     int UDPPortTwo = 91;
     int UDPPortThree = 92;
     int UDPPortFour = 93;
+
+    int Spare01 = 0;
 
 } PMMTCPUDP;
 
@@ -182,6 +189,17 @@ typedef struct PMMModBus
     int StartingAddress = 0;
     int Quantity = 0;
 
+    int Spare01 = 0;
+    int Spare02 = 0;
+    int Spare03 = 0;
+    int Spare04 = 0;
+    int Spare05 = 0;
+    int Spare06 = 0;
+    int Spare07 = 0;
+    int Spare08 = 0;
+    int Spare09 = 0;
+    int Spare10 = 0;
+
 } PMMModBus;
 
 typedef struct PMMTimer
@@ -199,6 +217,38 @@ typedef struct PMMTimer
     bit OneHouTimer = false;  // INDEX => 500.625 ,Flip Flop Timer Every One Hour
     bit OneMonTimer = false;  // INDEX => 500.750 ,Flip Flop Timer Every One Month
     bit OneYearTimer = false; // INDEX => 500.875 ,Flip Flop Timer Every One Year
+
+    int Spare01 = 0;
+    int Spare02 = 0;
+    int Spare03 = 0;
+    int Spare04 = 0;
+    int Spare05 = 0;
+    int Spare06 = 0;
+    int Spare07 = 0;
+    int Spare08 = 0;
+    int Spare09 = 0;
+    int Spare10 = 0;
+    int Spare11 = 0;
+    int Spare12 = 0;
+    int Spare13 = 0;
+    int Spare14 = 0;
+    int Spare15 = 0;
+    int Spare16 = 0;
+    int Spare17 = 0;
+    int Spare18 = 0;
+    int Spare19 = 0;
+    int Spare20 = 0;
+    int Spare21 = 0;
+    int Spare22 = 0;
+    int Spare23 = 0;
+    int Spare24 = 0;
+    int Spare25 = 0;
+    int Spare26 = 0;
+    int Spare27 = 0;
+    int Spare28 = 0;
+    int Spare29 = 0;
+    int Spare30 = 0;
+    int Spare31 = 0;
 
 } PMMTimer;
 

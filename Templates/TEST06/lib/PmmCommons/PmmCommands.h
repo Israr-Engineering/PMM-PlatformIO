@@ -1,18 +1,20 @@
-#ifndef PMMCOMMANDS_H 
+#ifndef PMMCOMMANDS_H
 #define PMMCOMMANDS_H
 
 #include <PmmTypes.h>
 #define BowlingLed 5
 #define StatekLed 4
-//declare the existence of this global variable.
+// declare the existence of this global variable.
 
 extern Product ThisProduct;
 
- // Common functions
+// Common functions
 extern void PmmStringToArray(string input);
 extern void PMMIsAlive();
 extern void PmmConvertDecimalToBinary(int Dic);
-//Internal flash ROM functions
+extern void PmmSetEthernetSettings();
+
+// Internal flash ROM functions
 extern void PmmWriteGeneralSettingsInternalFlash(string Message);
 extern void PmmWriteRTUSettingsInternalFlash(string Message);
 extern void PmmWriteTCPUDPSettingsInternalFlash(string Message);
@@ -23,18 +25,26 @@ extern void PmmReadRTUSettingsInternalFlash();
 extern void PmmReadTCPUDPSettingsInternalFlash();
 extern void PmmReadModbusSettingsInternalFlash();
 extern void PmmReadTimersSettingsInternalFlash();
-
+extern void PmmReadAllSettingsInternalFlash();
 
 // Command
- extern void PMMInitializeEthernet(IPAddress ip, byte mac[]);
- extern string PMMReadCommands();
- extern string PMMCommnads(string readData);
- extern string PMMReturnDataFromSerialUSB();
- //string PMMReturnDataFromAPIHTTPHeader();
+extern void PMMInitializeEthernet(IPAddress ip, byte mac[]);
+extern string PMMReadCommands();
+extern string PMMCommnads(string readData);
+extern string PMMReturnDataFromSerialUSB();
+// string PMMReturnDataFromAPIHTTPHeader();
 
- extern void PmmReadAllSettingsInternalFlash();
-
- extern void PmmWriteGeneralSettingsEEPROM(string Message);
-
+//EEPROM
+extern void PmmWriteGeneralSettingsEEPROM(string Message);
+extern void PmmWriteRTUSettingsEEPROM(string Message);
+extern void PmmWriteTCPUDPSettingsEEPROM(string Message);
+extern void PmmWriteModbusSettingsEEPROM(string Message);
+extern void PmmWriteTimerSettingsEEPROM(string Message);
+extern void PmmReadGeneralSettingsEEPROM();
+extern void PmmReadRTUSettingsEEPROM();
+extern void PmmReadTCPUDPSettingsEEPROM();
+extern void PmmReadModbusSettingsEEPROM();
+extern void PmmReadTimersSettingsEEPROM();
+extern void PmmReadAllSettingsEEPROM();
 
 #endif

@@ -149,8 +149,7 @@ long ConfigurationTimer = 0;
 long CommunicationTimer = 0;
 int StartingAddress = 11;
 int Quantity = 10;
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-IPAddress ip(192, 168, 1, 55);
+
 
 
 

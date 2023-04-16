@@ -2,26 +2,25 @@
 #include <ProjectDef.h>
 
 #include <PmmCommands.h>
-
+#include <PmmGlobalFunctions.h>
 #include "test.cpp"
 
- //int rastest =10 ;
+// int rastest =10 ;
 
 void setup()
 {
 
-  // STEP00: Start usb serial for debug 
-    SerialUSB.begin(9600);
+  // STEP00: Start usb serial for debug
+  SerialUSB.begin(9600);
 
   // STEP01: Read Flash ROM and update Settings
 
-    PmmReadAllSettingsInternalFlash();
-    
-  // STEP02: Initialize needed Modules 
- 
-    PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
-   
-    PMMInitializeEthernet(ip, mac);  
+  PmmInitializeProjectSettings();
+  // STEP02: Initialize needed Modules
+
+  PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
+
+  PmmSetEthernetSettings();
 
   // STEP03: Setup and configure services
 
@@ -29,13 +28,13 @@ void setup()
   PmmModbus.PMMModBUSRTUServerconfigure(false, 0, 10, false, 0, 10, true, 0, 10, false, 0, 10);
 
   // STEP04: Start General services
-  
+
   Scheduler.startLoop(PMMConfiguration);
   Scheduler.startLoop(PMMCommunication);
   // Scheduler.startLoop(PMMTimers);
 
   // STEP05: Warmup 2 seconds
-  
+
   SerialUSB.println("New Start");
   // SerialUSB.setTimeout(30000);
   // string CMDResult = PMMReadFromFlashAllSettings();
@@ -51,7 +50,7 @@ int x1 = 0;
 void loop()
 {
 
-  PmmWatchDoggy.clear();  
+  PmmWatchDoggy.clear();
 
   if ((millis() - MainLoopTimer) > 1000)
   {
