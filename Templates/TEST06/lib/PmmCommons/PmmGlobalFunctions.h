@@ -34,12 +34,17 @@ extern void PMMInitializeEEPROM();
 extern unsigned int EEPROMLength();
 extern void InitializeWire();
 
-// #pragma region CONGIGRATION FUNCTIONS
+
 
 void InitializeWire()
 {
     Wire.begin();
 }
+
+
+
+
+
 
 void PmmInitializeProjectSettings()
 {
@@ -79,10 +84,6 @@ string CheckAvailabeHardware()
     return result;
 }
 
-// #pragma endregion
-
-// #pragma region Check Hardware
-
 bool PMMCheckExternalRTC()
 {
     Wire.begin();
@@ -98,10 +99,6 @@ bool PMMCheckEEPROM()
     bool EEPROMFound = Wire.endTransmission() == 0;
     return EEPROMFound;
 }
-
-// #pragma endregion
-
-// #pragma region STRINGS FUNCTIONS
 
 std::array<string, 100> PMMSplitString(string parameter, std::array<string, 100> OutputArray)
 {

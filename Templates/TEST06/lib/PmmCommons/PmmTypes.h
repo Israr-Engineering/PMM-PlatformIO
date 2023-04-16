@@ -40,11 +40,18 @@ typedef struct PMMGeneral
     int SoftwareVersion = 1; // 12 => 1.2
     int FirmwareVersion = 1; // 12 => 1.2
     int HardwareVersion = 1; // 23 => 2.3
-    bit WebServer = false;
-    bit CaseType = false;
-    bit FiberOption = false;
-    bit SingleModeFiber = false;
-    bit MultiModeFiber = false;
+    int ControlerType = 0;
+
+    bit ItHasEthernet = false ; // add this
+    bit ItHasSwitch = false ;
+    bit ItHasExtEEPROM = false ;
+    bit ItHasExtFlash = false ;
+    bit ItHasSerial = false ;
+    bit ItHasWebServer = false;
+    bit ItHasFiber = false;
+    bit LoRA = false;
+
+    bit Zidbee = false;
     bit GSM = false;
     bit GPS = false;
     bit Antenna = false;
@@ -52,9 +59,22 @@ typedef struct PMMGeneral
     bit InternalRTC = false;
     bit UDPOption = false;
     bit GateWay = false;
-    int ControlerType = 0;
-    int MinOprationTemperature = 0;
-    int MaxOprationTemperature = 0;
+    
+    /* Support protocol 
+    modbus
+    canbus
+    profibus
+    profinet
+    BACnet
+    DLMS
+    MBus
+    OPC
+     */
+
+
+    
+    int MinOprationTemperature = 0; // not important change to bits
+    int MaxOprationTemperature = 0; // not important change to bits
     int NumberOfInputs = 0;
     int NumberOfOutputs = 0;
     int NumberOfSerials = 0;
@@ -69,6 +89,7 @@ typedef struct PMMGeneral
 
     int Spare01 = 0;
     int Spare02 = 0;
+
 } PMMGeneral;
 
 typedef struct PMMRTU
@@ -252,14 +273,63 @@ typedef struct PMMTimer
 
 } PMMTimer;
 
+
+typedef struct PMMDeviceCalibration
+{
+    /* 
+    this is a spescial settings for the device itself
+    */
+    int Spare00 = 0;
+    int Spare01 = 0;
+    int Spare02 = 0;
+    int Spare03 = 0;
+    int Spare04 = 0;
+    int Spare05 = 0;
+    int Spare06 = 0;
+    int Spare07 = 0;
+    int Spare08 = 0;
+    int Spare09 = 0;
+    int Spare10 = 0;
+    int Spare11 = 0;
+    int Spare12 = 0;
+    int Spare13 = 0;
+    int Spare14 = 0;
+    int Spare15 = 0;
+    int Spare16 = 0;
+    int Spare17 = 0;
+    int Spare18 = 0;
+    int Spare19 = 0;
+    int Spare20 = 0;
+    int Spare21 = 0;
+    int Spare22 = 0;
+    int Spare23 = 0;
+    int Spare24 = 0;
+    int Spare25 = 0;
+    int Spare26 = 0;
+    int Spare27 = 0;
+    int Spare28 = 0;
+    int Spare29 = 0;
+    int Spare30 = 0;
+    int Spare31 = 0;
+
+} PMMDeviceCalibration;
+
 typedef struct Product
 {
 
+// General Flages 
+    bool EthernetRunning = false;
+    bool SerialRunning = false ;
+    bool I2CRunning = false ; 
+    bool SPIRunning = false ;
+
+// Settings Stucts
     PMMGeneral PmmGeneral;
     PMMRTU PmmRTU;
     PMMTCPUDP PmmTCPUDP;
     PMMModBus PmmModbus;
     PMMTimer PmmTimers;
+    PMMDeviceCalibration PmmCalibration;
 
 } Product;
 
