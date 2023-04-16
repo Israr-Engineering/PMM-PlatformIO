@@ -601,6 +601,7 @@ void PmmReadTimersSettingsInternalFlash()
 
     SerialUSB.println(settings);
 }
+
 /*
 void SetTCPSettings(string Message) // Save TCP Settings to internal flash
 {
@@ -771,6 +772,17 @@ String GetProductSettings() // Get product Settings From internal flash
 }
 
 */
+
+void PmmReadAllSettingsInternalFlash()
+{
+
+PmmReadGeneralSettingsInternalFlash();
+PmmReadRTUSettingsInternalFlash();
+PmmReadTCPUDPSettingsInternalFlash();
+PmmReadModbusSettingsInternalFlash();
+PmmReadTimersSettingsInternalFlash();
+}
+
 
 /*****************************************************************
  * External flash section

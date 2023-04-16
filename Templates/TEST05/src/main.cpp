@@ -2,27 +2,23 @@
 #include <ProjectDef.h>
 
 
-
-
-
 void setup()
 {
 
   // STEP00: Start usb serial for debug 
-   SerialUSB.begin(9600);
+    SerialUSB.begin(9600);
 
   // STEP01: Read Flash ROM and update Settings
 
-  ThisProduct.PmmGeneral.DeviceName = 1010;
-
-  // STEP02: Initialize needed Modules MyWatchDoggy.attachShutdown(myshutdown);
-  // PmmWatchDoggy.attachShutdown(Pmmshutdown);
-  PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
-  PMMInitializeEthernet(ip, mac);
-
-  
+    PmmReadAllSettingsInternalFlash();
+    
+  // STEP02: Initialize needed Modules 
+ 
+    PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
+    PMMInitializeEthernet(ip, mac);  
 
   // STEP03: Setup and configure services
+
   PmmModbus.PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 35, 36, 31, 1);
   PmmModbus.PMMModBUSRTUServerconfigure(false, 0, 10, false, 0, 10, true, 0, 10, false, 0, 10);
 
@@ -40,18 +36,16 @@ void setup()
   // SerialUSB.println(CMDResult.c_str());
 }
 
-///////////////////////////////////////////////////
-// Loop 01 :  Main loop start here                //
-///////////////////////////////////////////////////
+/* ///////////////////////////////////////////////////
+// Loop 01 :  Main loop start here                  //
+/////////////////////////////////////////////////// */
 
 int x1 = 0;
 
 void loop()
 {
 
-  PmmWatchDoggy.clear();
-
-  
+  PmmWatchDoggy.clear();  
 
   if ((millis() - MainLoopTimer) > 1000)
   {
@@ -74,13 +68,14 @@ void loop()
   yield();
 }
 
-///////////////////////////////////////////////////
-// Loop 02 : Configuration and commands updating //
-///////////////////////////////////////////////////
+/* ///////////////////////////////////////////////////
+// Loop 02 : Configuration and commands updating    //
+/////////////////////////////////////////////////// */
+
 void PMMConfiguration()
 {
 
-  if ((millis() - ConfigurationTimer) > 1000)
+  if ((millis() - ConfigurationTimer) > 500)
   {
 
     string CMDResult = PMMReadCommands();
@@ -93,9 +88,10 @@ void PMMConfiguration()
   yield();
 }
 
-///////////////////////////////////////////////////
-// Loop 03 : Communication updating loop         //
-///////////////////////////////////////////////////
+/* ///////////////////////////////////////////////////
+// Loop 03 : Communication updating loop            //
+/////////////////////////////////////////////////// */
+
 void PMMCommunication()
 {
 
@@ -121,9 +117,10 @@ void PMMCommunication()
   yield();
 }
 
-///////////////////////////////////////////////////
-// Loop 04 : Timers updating loop                //
-///////////////////////////////////////////////////
+/* ///////////////////////////////////////////////////
+// Loop 04 : Timers updating loop                   //
+/////////////////////////////////////////////////// */
+
 void PMMTimers()
 {
 
@@ -137,6 +134,6 @@ void PMMTimers()
   yield();
 }
 
-///////////////////////////////////////////////////
-// WATCHDOG: Reset Controller                    //
-///////////////////////////////////////////////////
+/* ///////////////////////////////////////////////////
+// WATCHDOG: Reset Controller                       //
+/////////////////////////////////////////////////// */
