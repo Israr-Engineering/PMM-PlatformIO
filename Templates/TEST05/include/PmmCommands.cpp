@@ -37,8 +37,8 @@ void PmmReadTimersSettingsInternalFlash();
 
   */
 
- void PMMSetUSBConfigurationSettings(string Settings);
- string PMMGetUSBConfigurationSettings();
+void PMMSetUSBConfigurationSettings(string Settings);
+string PMMGetUSBConfigurationSettings();
 
 PmmEthernetServer server(80);
 PmmEthernetClient client = server.available();
@@ -602,194 +602,21 @@ void PmmReadTimersSettingsInternalFlash()
     SerialUSB.println(settings);
 }
 
-/*
-void SetTCPSettings(string Message) // Save TCP Settings to internal flash
-{
-    PmmStringToArray(Message);
-
-    // TCP Settings
-    // ThisProduct.tcpudp
-    ThisProduct.tcpudp.ip_address01 = stoi(values[0]);
-    ThisProduct.tcpudp.ip_address02 = stoi(values[1]);
-    ThisProduct.tcpudp.ip_address03 = stoi(values[2]);
-    ThisProduct.tcpudp.ip_address04 = stoi(values[3]);
-
-    ThisProduct.tcpudp.net_mask01 = stoi(values[4]);
-    ThisProduct.tcpudp.net_mask02 = stoi(values[5]);
-    ThisProduct.tcpudp.net_mask03 = stoi(values[6]);
-    ThisProduct.tcpudp.net_mask04 = stoi(values[7]);
-
-    ThisProduct.tcpudp.preferred_dns_server01 = stoi(values[8]);
-    ThisProduct.tcpudp.preferred_dns_server02 = stoi(values[9]);
-    ThisProduct.tcpudp.preferred_dns_server03 = stoi(values[10]);
-    ThisProduct.tcpudp.preferred_dns_server04 = stoi(values[11]);
-
-    ThisProduct.tcpudp.alternate_dns_server01 = stoi(values[12]);
-    ThisProduct.tcpudp.alternate_dns_server02 = stoi(values[13]);
-    ThisProduct.tcpudp.alternate_dns_server03 = stoi(values[14]);
-    ThisProduct.tcpudp.alternate_dns_server04 = stoi(values[15]);
-
-    ThisProduct.tcpudp.default_gateway01 = stoi(values[16]);
-    ThisProduct.tcpudp.default_gateway02 = stoi(values[17]);
-    ThisProduct.tcpudp.default_gateway03 = stoi(values[18]);
-    ThisProduct.tcpudp.default_gateway04 = stoi(values[20]);
-
-    ThisProduct.tcpudp.mac_address01 = stoi(values[21]);
-    ThisProduct.tcpudp.mac_address02 = stoi(values[22]);
-    ThisProduct.tcpudp.mac_address03 = stoi(values[23]);
-    ThisProduct.tcpudp.mac_address04 = stoi(values[24]);
-    ThisProduct.tcpudp.mac_address05 = stoi(values[25]);
-
-    ThisProduct.tcpudp.connection_timeout_tcp = stoi(values[26]);
-    ThisProduct.tcpudp.max_retry_tcp = stoi(values[27]);
-    ThisProduct.tcpudp.udp_port_one = stoi(values[28]);
-    ThisProduct.tcpudp.udp_port_two = stoi(values[29]);
-    ThisProduct.tcpudp.udp_port_three = stoi(values[30]);
-    ThisProduct.tcpudp.udp_port_four = stoi(values[31]);
-
-    // // ...and finally save everything into "my_flash_store"
-    // my_flash_store.write(ThisProduct.tcpudp);
-    TCP_flash_store.write(ThisProduct.tcpudp);
-}
-
-String GetTCPSettings() // Get TCP Settings From internal flash
-{
-    // PmmTCPUDP ThisProduct.tcpudp;
-
-    ThisProduct.tcpudp = TCP_flash_store.read();
-
-    String settings = "";
-
-    settings = String(settings + String(ThisProduct.tcpudp.ip_address01));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.ip_address02));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.ip_address03));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.ip_address04));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.net_mask01));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.net_mask02));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.net_mask03));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.net_mask04));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.preferred_dns_server01));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.preferred_dns_server02));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.preferred_dns_server03));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.preferred_dns_server04));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.default_gateway01));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.default_gateway02));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.default_gateway03));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.default_gateway04));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.mac_address01));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.mac_address02));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.mac_address03));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.mac_address04));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.mac_address05));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.connection_timeout_tcp));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.max_retry_tcp));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.udp_port_one));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.udp_port_two));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.udp_port_three));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.tcpudp.udp_port_four));
-
-    SerialUSB.println(settings);
-    return settings;
-}
-
-void SetProductSettings(string Message) // Save product Settings to internal flash
-{
-
-    PmmStringToArray(Message);
-
-    // Product ThisProduct;
-
-    // Start writing the procedure
-    ThisProduct.serial_number = stol(values[0]);
-    ThisProduct.ProductName = stoi(values[1]);
-    ThisProduct.firmware_version01 = stoi(values[2]);
-    ThisProduct.hardware_version01 = stoi(values[3]);
-    ThisProduct.software_version01 = stoi(values[4]);
-    ThisProduct.cpu_type = stoi(values[5]);
-    ThisProduct.connection_type = stoi(values[6]);
-    ThisProduct.slave_i2c_address = stoi(values[7]);
-
-    // End procedure
-
-    Product_flash_store.write(ThisProduct);
-}
-
-String GetProductSettings() // Get product Settings From internal flash
-{
-
-    ThisProduct = Product_flash_store.read();
-
-    String settings = "";
-
-    // Start writing the procedure
-    settings = String(settings + String(ThisProduct.serial_number));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.ProductName));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.firmware_version01));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.hardware_version01));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.software_version01));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.cpu_type));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.connection_type));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.slave_i2c_address));
-    settings = String(settings + ",");
-
-    // End procedure
-
-    SerialUSB.println(settings);
-    return settings;
-}
-
-*/
-
 void PmmReadAllSettingsInternalFlash()
 {
 
-PmmReadGeneralSettingsInternalFlash();
-PmmReadRTUSettingsInternalFlash();
-PmmReadTCPUDPSettingsInternalFlash();
-PmmReadModbusSettingsInternalFlash();
-PmmReadTimersSettingsInternalFlash();
+    PmmReadGeneralSettingsInternalFlash();
+    PmmReadRTUSettingsInternalFlash();
+    PmmReadTCPUDPSettingsInternalFlash();
+    PmmReadModbusSettingsInternalFlash();
+    PmmReadTimersSettingsInternalFlash();
 }
-
 
 /*****************************************************************
  * External flash section
  ******************************************************************/
 byte PIN_FLASH_CS = 8;
 PMM_SPI_FLASH myFlash;
-
 
 /*****************************************************************
  * External EEPROM flash section
@@ -837,7 +664,8 @@ void PmmWriteGeneralSettingsEEPROM(string Message)
     ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[21]);
     ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[22]);
 
-    for(int index = 0;index<23;index++){
+    for (int index = 0; index < 23; index++)
+    {
         PutIntDataToEEprom(index, stoi(values[index]));
     }
 }
@@ -879,8 +707,9 @@ void PmmWriteRTUSettingsEEPROM(string Message)
     ThisProduct.PmmRTU.PortFourMaxRetryRTU = stoi(values[30]);
     ThisProduct.PmmRTU.PortFourInterface = stoi(values[31]);
 
-    for(int index = 0;index<32;index++){
-        PutIntDataToEEprom((index+100), stoi(values[index]));
+    for (int index = 0; index < 32; index++)
+    {
+        PutIntDataToEEprom((index + 100), stoi(values[index]));
     }
 }
 
@@ -927,8 +756,9 @@ void PmmWriteTCPUDPSettingsEEPROM(string Message)
     ThisProduct.PmmTCPUDP.UDPPortThree = stoi(values[29]);
     ThisProduct.PmmTCPUDP.UDPPortFour = stoi(values[30]);
 
-    for(int index = 0;index<32;index++){
-        PutIntDataToEEprom((index+200), stoi(values[index]));
+    for (int index = 0; index < 32; index++)
+    {
+        PutIntDataToEEprom((index + 200), stoi(values[index]));
     }
 }
 
@@ -973,8 +803,9 @@ void PmmWriteModbusSettingsEEPROM(string Message)
     ThisProduct.PmmModbus.StartingAddress = stoi(values[20]);
     ThisProduct.PmmModbus.Quantity = stoi(values[21]);
 
-    for(int index = 0;index<22;index++){
-        PutIntDataToEEprom((index+268), stoi(values[index]));
+    for (int index = 0; index < 22; index++)
+    {
+        PutIntDataToEEprom((index + 268), stoi(values[index]));
     }
 }
 
@@ -1000,18 +831,22 @@ void PmmReadGeneralSettingsEEPROM()
 {
     String settings = "";
 
-    for(int index = 0;index<23;index++){
-        if(index==10){
+    for (int index = 0; index < 23; index++)
+    {
+        if (index == 10)
+        {
             PmmConvertDecimalToBinary(GetIntDataFromEEprom(10));
-            for(int i=11 ;i>=0 ;i--)    
-            {    
-                settings = String(settings + String(binaryInt[i])); 
-            } 
+            for (int i = 11; i >= 0; i--)
+            {
+                settings = String(settings + String(binaryInt[i]));
+            }
             settings = String(settings + ",");
-        }else{
+        }
+        else
+        {
             settings = String(settings + String(GetIntDataFromEEprom(index)));
             settings = String(settings + ",");
-        } 
+        }
     }
 
     settings = String(settings + String("End"));
@@ -1023,10 +858,10 @@ void PmmReadRTUSettingsEEPROM()
 {
     String settings = "";
 
-     for(int index = 0;index<32;index++){
-            settings = String(settings + String(GetIntDataFromEEprom((index+100))));
-            settings = String(settings + ",");
-        
+    for (int index = 0; index < 32; index++)
+    {
+        settings = String(settings + String(GetIntDataFromEEprom((index + 100))));
+        settings = String(settings + ",");
     }
 
     settings = String(settings + String("End"));
@@ -1039,10 +874,10 @@ void PmmReadTCPUDPSettingsEEPROM()
 
     String settings = "";
 
-    for(int index = 0;index<31;index++){
-            settings = String(settings + String(GetIntDataFromEEprom((index+200))));
-            settings = String(settings + ",");
-        
+    for (int index = 0; index < 31; index++)
+    {
+        settings = String(settings + String(GetIntDataFromEEprom((index + 200))));
+        settings = String(settings + ",");
     }
 
     settings = String(settings + String("End"));
@@ -1054,17 +889,18 @@ void PmmReadModbusSettingsEEPROM()
 {
     String settings = "";
 
-            PmmConvertDecimalToBinary(GetIntDataFromEEprom(268));
-            for(int i=12 ;i>=0 ;i--)    
-            {    
-                settings = String(settings + String(binaryInt[i])); 
-            } 
-            settings = String(settings + ",");
+    PmmConvertDecimalToBinary(GetIntDataFromEEprom(268));
+    for (int i = 12; i >= 0; i--)
+    {
+        settings = String(settings + String(binaryInt[i]));
+    }
+    settings = String(settings + ",");
 
-    for(int index = 1;index<22;index++){
+    for (int index = 1; index < 22; index++)
+    {
 
-            settings = String(settings + String(GetIntDataFromEEprom((index+268))));
-            settings = String(settings + ",");
+        settings = String(settings + String(GetIntDataFromEEprom((index + 268))));
+        settings = String(settings + ",");
     }
 
     settings = String(settings + String("End"));
@@ -1077,20 +913,17 @@ void PmmReadTimersSettingsEEPROM()
     String settings = "";
 
     PmmConvertDecimalToBinary(GetIntDataFromEEprom(500));
-    for(int i=7 ;i>=0 ;i--)    
-            {    
-                settings = String(settings + String(binaryInt[i])); 
-            } 
+    for (int i = 7; i >= 0; i--)
+    {
+        settings = String(settings + String(binaryInt[i]));
+    }
     settings = String(settings + ",END");
-
-    
 
     SerialUSB.println(settings);
 }
 
-
 /*****************************************************************
- * Command Reader Functions 
+ * Command Reader Functions
  ******************************************************************/
 
 string PMMReturnDataFromSerialUSB()
@@ -1203,7 +1036,7 @@ string PMMCommnads(string readData)
         readData.erase(ind, substring.length());
         PmmWriteGeneralSettingsEEPROM(readData);
     }
-    
+
     if (commandtype == "PMMSet,2,1")
     {
         string substring = "PMMSet,2,1,";
@@ -1211,7 +1044,7 @@ string PMMCommnads(string readData)
         readData.erase(ind, substring.length());
         PmmWriteRTUSettingsEEPROM(readData);
     }
-    
+
     if (commandtype == "PMMSet,2,2")
     {
         string substring = "PMMSet,2,2,";
@@ -1219,7 +1052,7 @@ string PMMCommnads(string readData)
         readData.erase(ind, substring.length());
         PmmWriteTCPUDPSettingsEEPROM(readData);
     }
-    
+
     if (commandtype == "PMMSet,2,3")
     {
         string substring = "PMMSet,2,3,";
@@ -1227,7 +1060,7 @@ string PMMCommnads(string readData)
         readData.erase(ind, substring.length());
         PmmWriteTimerSettingsEEPROM(readData);
     }
-    
+
     if (commandtype == "PMMSet,2,4")
     {
         string substring = "PMMSet,2,4,";
@@ -1260,7 +1093,6 @@ string PMMCommnads(string readData)
     {
         PmmReadTimersSettingsEEPROM();
     }
-
 
     if (readData == "PMMTestConfiguration")
     {
