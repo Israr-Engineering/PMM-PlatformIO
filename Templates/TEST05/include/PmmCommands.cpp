@@ -6,6 +6,8 @@
 #include "PmmTypes.h"
 #include <string>
 #include <PmmEthernet.h>
+#include <PmmSPISerialFlash.h>
+#include <PmmExternalEEPROMLib.h>
 
 /*
  // Common functions
@@ -773,11 +775,306 @@ String GetProductSettings() // Get product Settings From internal flash
 /*****************************************************************
  * External flash section
  ******************************************************************/
+byte PIN_FLASH_CS = 8;
+PMM_SPI_FLASH myFlash;
+
 
 /*****************************************************************
  * External EEPROM flash section
  ******************************************************************/
+void PmmWriteGeneralSettingsEEPROM(string Message)
+{
+    PmmStringToArray(Message);
 
+    ThisProduct.PmmGeneral.DeviceName = stoi(values[0]);
+    ThisProduct.PmmGeneral.SerialNumber = stoi(values[1]);
+    ThisProduct.PmmGeneral.FirstTimeRun = stoi(values[2]);
+    ThisProduct.PmmGeneral.LifeTime = stoi(values[3]);
+    ThisProduct.PmmGeneral.NumberOfCycles = stoi(values[4]);
+    ThisProduct.PmmGeneral.LastRunningTime = stoi(values[5]);
+    ThisProduct.PmmGeneral.NumberOfRunningTimes = stoi(values[6]);
+    ThisProduct.PmmGeneral.SoftwareVersion = stoi(values[7]);
+    ThisProduct.PmmGeneral.FirmwareVersion = stoi(values[8]);
+    ThisProduct.PmmGeneral.HardwareVersion = stoi(values[9]);
+
+    PmmConvertDecimalToBinary(stoi(values[10]));
+
+    ThisProduct.PmmGeneral.WebServer = binaryInt[11];
+    ThisProduct.PmmGeneral.CaseType = binaryInt[10];
+    ThisProduct.PmmGeneral.FiberOption = binaryInt[9];
+    ThisProduct.PmmGeneral.SingleModeFiber = binaryInt[8];
+    ThisProduct.PmmGeneral.MultiModeFiber = binaryInt[7];
+    ThisProduct.PmmGeneral.GSM = binaryInt[6];
+    ThisProduct.PmmGeneral.GPS = binaryInt[5];
+    ThisProduct.PmmGeneral.Antenna = binaryInt[4];
+    ThisProduct.PmmGeneral.ExternalRTC = binaryInt[3];
+    ThisProduct.PmmGeneral.InternalRTC = binaryInt[2];
+    ThisProduct.PmmGeneral.UDPOption = binaryInt[1];
+    ThisProduct.PmmGeneral.GateWay = binaryInt[0];
+
+    ThisProduct.PmmGeneral.ControlerType = stoi(values[11]);
+    ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[12]);
+    ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[13]);
+    ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[14]);
+    ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[15]);
+    ThisProduct.PmmGeneral.NumberOfSerials = stoi(values[16]);
+    ThisProduct.PmmGeneral.NumberOfUDPPorts = stoi(values[17]);
+    ThisProduct.PmmGeneral.MinReadValue = stoi(values[18]);
+    ThisProduct.PmmGeneral.MaxReadValue = stoi(values[19]);
+    ThisProduct.PmmGeneral.OprationVoltage = stoi(values[20]);
+    ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[21]);
+    ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[22]);
+
+    for(int index = 0;index<23;index++){
+        PutIntDataToEEprom(index, stoi(values[index]));
+    }
+}
+
+void PmmWriteRTUSettingsEEPROM(string Message)
+{
+    PmmStringToArray(Message);
+
+    ThisProduct.PmmRTU.PortOneName = stoi(values[0]);
+    ThisProduct.PmmRTU.PortOneBaudRate = stoi(values[1]);
+    ThisProduct.PmmRTU.PortOneStopBit = stoi(values[2]);
+    ThisProduct.PmmRTU.PortOneDataBit = stoi(values[3]);
+    ThisProduct.PmmRTU.PortOneParity = stoi(values[4]);
+    ThisProduct.PmmRTU.PortOneConnectionTimeout = stoi(values[5]);
+    ThisProduct.PmmRTU.PortOneMaxRetryRTU = stoi(values[6]);
+    ThisProduct.PmmRTU.PortOneInterface = stoi(values[7]);
+    ThisProduct.PmmRTU.PortTwoName = stoi(values[8]);
+    ThisProduct.PmmRTU.PortTwoBaudRate = stoi(values[9]);
+    ThisProduct.PmmRTU.PortTwoStopBit = stoi(values[10]);
+    ThisProduct.PmmRTU.PortTwoDataBit = stoi(values[11]);
+    ThisProduct.PmmRTU.PortTwoParity = stoi(values[12]);
+    ThisProduct.PmmRTU.PortTwoConnectionTimeout = stoi(values[13]);
+    ThisProduct.PmmRTU.PortTwoMaxRetryRTU = stoi(values[14]);
+    ThisProduct.PmmRTU.PortTwoInterface = stoi(values[15]);
+    ThisProduct.PmmRTU.PortThreeName = stoi(values[16]);
+    ThisProduct.PmmRTU.PortThreeBaudRate = stoi(values[17]);
+    ThisProduct.PmmRTU.PortThreeStopBit = stoi(values[18]);
+    ThisProduct.PmmRTU.PortThreeDataBit = stoi(values[19]);
+    ThisProduct.PmmRTU.PortThreeParity = stoi(values[20]);
+    ThisProduct.PmmRTU.PortThreeConnectionTimeout = stoi(values[21]);
+    ThisProduct.PmmRTU.PortThreeMaxRetryRTU = stoi(values[22]);
+    ThisProduct.PmmRTU.PortThreeInterface = stoi(values[23]);
+    ThisProduct.PmmRTU.PortFourName = stoi(values[24]);
+    ThisProduct.PmmRTU.PortFourBaudRate = stoi(values[25]);
+    ThisProduct.PmmRTU.PortFourStopBit = stoi(values[26]);
+    ThisProduct.PmmRTU.PortFourDataBit = stoi(values[27]);
+    ThisProduct.PmmRTU.PortFourParity = stoi(values[28]);
+    ThisProduct.PmmRTU.PortFourConnectionTimeout = stoi(values[26]);
+    ThisProduct.PmmRTU.PortFourMaxRetryRTU = stoi(values[30]);
+    ThisProduct.PmmRTU.PortFourInterface = stoi(values[31]);
+
+    for(int index = 0;index<32;index++){
+        PutIntDataToEEprom((index+100), stoi(values[index]));
+    }
+}
+
+void PmmWriteTCPUDPSettingsEEPROM(string Message)
+{
+    PmmStringToArray(Message);
+
+    // TCP Settings
+    ThisProduct.PmmTCPUDP.MacAddress01 = stoi(values[0]);
+    ThisProduct.PmmTCPUDP.MacAddress02 = stoi(values[1]);
+    ThisProduct.PmmTCPUDP.MacAddress03 = stoi(values[2]);
+    ThisProduct.PmmTCPUDP.MacAddress04 = stoi(values[3]);
+    ThisProduct.PmmTCPUDP.MacAddress05 = stoi(values[4]);
+
+    ThisProduct.PmmTCPUDP.IPAddress01 = stoi(values[5]);
+    ThisProduct.PmmTCPUDP.IPAddress02 = stoi(values[6]);
+    ThisProduct.PmmTCPUDP.IPAddress03 = stoi(values[7]);
+    ThisProduct.PmmTCPUDP.IPAddress04 = stoi(values[8]);
+
+    ThisProduct.PmmTCPUDP.RemoteIPAddress01 = stoi(values[9]);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress02 = stoi(values[10]);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress03 = stoi(values[11]);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress04 = stoi(values[12]);
+
+    ThisProduct.PmmTCPUDP.NetMask01 = stoi(values[13]);
+    ThisProduct.PmmTCPUDP.NetMask02 = stoi(values[14]);
+    ThisProduct.PmmTCPUDP.NetMask03 = stoi(values[15]);
+    ThisProduct.PmmTCPUDP.NetMask04 = stoi(values[16]);
+
+    ThisProduct.PmmTCPUDP.DNSSOneServer01 = stoi(values[17]);
+    ThisProduct.PmmTCPUDP.DNSSOneServer02 = stoi(values[18]);
+    ThisProduct.PmmTCPUDP.DNSSOneServer03 = stoi(values[19]);
+    ThisProduct.PmmTCPUDP.DNSSOneServer04 = stoi(values[20]);
+
+    ThisProduct.PmmTCPUDP.DNSTwoServer01 = stoi(values[21]);
+    ThisProduct.PmmTCPUDP.DNSTwoServer02 = stoi(values[22]);
+    ThisProduct.PmmTCPUDP.DNSTwoServer03 = stoi(values[23]);
+    ThisProduct.PmmTCPUDP.DNSTwoServer04 = stoi(values[24]);
+
+    ThisProduct.PmmTCPUDP.ConnectionTimeoutTCP = stoi(values[25]);
+    ThisProduct.PmmTCPUDP.MaxRetryTCP = stoi(values[26]);
+    ThisProduct.PmmTCPUDP.UDPPortOne = stoi(values[27]);
+    ThisProduct.PmmTCPUDP.UDPPortTwo = stoi(values[28]);
+    ThisProduct.PmmTCPUDP.UDPPortThree = stoi(values[29]);
+    ThisProduct.PmmTCPUDP.UDPPortFour = stoi(values[30]);
+
+    for(int index = 0;index<32;index++){
+        PutIntDataToEEprom((index+200), stoi(values[index]));
+    }
+}
+
+void PmmWriteModbusSettingsEEPROM(string Message)
+{
+    PmmStringToArray(Message);
+
+    PmmConvertDecimalToBinary(stoi(values[0]));
+
+    ThisProduct.PmmModbus.ModBusRTU = binaryInt[12];
+    ThisProduct.PmmModbus.ModBusTCP = binaryInt[11];
+    ThisProduct.PmmModbus.ModBusUDP = binaryInt[10];
+    ThisProduct.PmmModbus.ModBusSlave = binaryInt[9];
+    ThisProduct.PmmModbus.ModBusMaster = binaryInt[8];
+    ThisProduct.PmmModbus.ReadCoilsStatus = binaryInt[7];
+    ThisProduct.PmmModbus.ReadInputStatus = binaryInt[6];
+    ThisProduct.PmmModbus.ReadHoldingRegisters = binaryInt[5];
+    ThisProduct.PmmModbus.ReadInputRegisters = binaryInt[4];
+    ThisProduct.PmmModbus.WriteSingleCoil = binaryInt[3];
+    ThisProduct.PmmModbus.WriteSingleRegister = binaryInt[2];
+    ThisProduct.PmmModbus.WriteMultipleCoils = binaryInt[1];
+    ThisProduct.PmmModbus.WriteMultipleRegisters = binaryInt[0];
+    ThisProduct.PmmModbus.StartingAddressCoilsStatus = stoi(values[1]);
+    ThisProduct.PmmModbus.StartingAddressInputStatus = stoi(values[2]);
+    ThisProduct.PmmModbus.StartingAddressHoldingRegisters = stoi(values[3]);
+    ThisProduct.PmmModbus.StartingAddressInputRegisters = stoi(values[4]);
+    ThisProduct.PmmModbus.StartingAddressWriteSingleCoil = stoi(values[5]);
+    ThisProduct.PmmModbus.StartingAddressWriteSingleRegister = stoi(values[6]);
+    ThisProduct.PmmModbus.StartingAddressWriteMultipleCoils = stoi(values[7]);
+    ThisProduct.PmmModbus.StartingAddressWriteMultipleRegisters = stoi(values[8]);
+    ThisProduct.PmmModbus.QuantityCoilsStatus = stoi(values[9]);
+    ThisProduct.PmmModbus.QuantityInputStatus = stoi(values[10]);
+    ThisProduct.PmmModbus.QuantityHoldingRegisters = stoi(values[11]);
+    ThisProduct.PmmModbus.QuantityInputRegisters = stoi(values[12]);
+    ThisProduct.PmmModbus.QuantityWriteMultipleCoils = stoi(values[13]);
+    ThisProduct.PmmModbus.QuantityWriteMultipleRegisters = stoi(values[14]);
+    ThisProduct.PmmModbus.FunctionCode = stoi(values[15]);
+    ThisProduct.PmmModbus.IODataOrder = stoi(values[16]);
+    ThisProduct.PmmModbus.IODataType = stoi(values[17]);
+    ThisProduct.PmmModbus.PollInterval = stoi(values[18]);
+    ThisProduct.PmmModbus.SlaveID = stoi(values[19]);
+    ThisProduct.PmmModbus.StartingAddress = stoi(values[20]);
+    ThisProduct.PmmModbus.Quantity = stoi(values[21]);
+
+    for(int index = 0;index<22;index++){
+        PutIntDataToEEprom((index+268), stoi(values[index]));
+    }
+}
+
+void PmmWriteTimerSettingsEEPROM(string Message)
+{
+    PmmStringToArray(Message);
+
+    PmmConvertDecimalToBinary(stoi(values[0]));
+
+    ThisProduct.PmmTimers.CycleTimer = binaryInt[7];
+    ThisProduct.PmmTimers.OneMSTimer = binaryInt[6];
+    ThisProduct.PmmTimers.TenMSTimer = binaryInt[5];
+    ThisProduct.PmmTimers.OneSecTimer = binaryInt[4];
+    ThisProduct.PmmTimers.OneMinTimer = binaryInt[3];
+    ThisProduct.PmmTimers.OneHouTimer = binaryInt[2];
+    ThisProduct.PmmTimers.OneMonTimer = binaryInt[1];
+    ThisProduct.PmmTimers.OneYearTimer = binaryInt[0];
+
+    PutIntDataToEEprom(500, stoi(values[0]));
+}
+
+void PmmReadGeneralSettingsEEPROM()
+{
+    String settings = "";
+
+    for(int index = 0;index<23;index++){
+        if(index==10){
+            PmmConvertDecimalToBinary(GetIntDataFromEEprom(10));
+            for(int i=11 ;i>=0 ;i--)    
+            {    
+                settings = String(settings + String(binaryInt[i])); 
+            } 
+            settings = String(settings + ",");
+        }else{
+            settings = String(settings + String(GetIntDataFromEEprom(index)));
+            settings = String(settings + ",");
+        } 
+    }
+
+    settings = String(settings + String("End"));
+
+    SerialUSB.println(settings);
+}
+
+void PmmReadRTUSettingsEEPROM()
+{
+    String settings = "";
+
+     for(int index = 0;index<32;index++){
+            settings = String(settings + String(GetIntDataFromEEprom((index+100))));
+            settings = String(settings + ",");
+        
+    }
+
+    settings = String(settings + String("End"));
+
+    SerialUSB.println(settings);
+}
+
+void PmmReadTCPUDPSettingsEEPROM()
+{
+
+    String settings = "";
+
+    for(int index = 0;index<31;index++){
+            settings = String(settings + String(GetIntDataFromEEprom((index+200))));
+            settings = String(settings + ",");
+        
+    }
+
+    settings = String(settings + String("End"));
+
+    SerialUSB.println(settings);
+}
+
+void PmmReadModbusSettingsEEPROM()
+{
+    String settings = "";
+
+            PmmConvertDecimalToBinary(GetIntDataFromEEprom(268));
+            for(int i=12 ;i>=0 ;i--)    
+            {    
+                settings = String(settings + String(binaryInt[i])); 
+            } 
+            settings = String(settings + ",");
+
+    for(int index = 1;index<22;index++){
+
+            settings = String(settings + String(GetIntDataFromEEprom((index+268))));
+            settings = String(settings + ",");
+    }
+
+    settings = String(settings + String("End"));
+
+    SerialUSB.println(settings);
+}
+
+void PmmReadTimersSettingsEEPROM()
+{
+    String settings = "";
+
+    PmmConvertDecimalToBinary(GetIntDataFromEEprom(500));
+    for(int i=7 ;i>=0 ;i--)    
+            {    
+                settings = String(settings + String(binaryInt[i])); 
+            } 
+    settings = String(settings + ",END");
+
+    
+
+    SerialUSB.println(settings);
+}
 
 
 /*****************************************************************
@@ -796,6 +1093,7 @@ string PMMCommnads(string readData)
     string result = "";
     std::string commandtype = readData.substr(0, 10);
 
+    //---------------- Internal Flash ----------------------------------------------------------------------------------------
     // PMMSet,0,0,0620,5000,0,1000,55,200,0,0,1,0,3891,1,2,3,4,5,6,100,200,300,400,500,600
     // PMMSet,0,1,1,9600,1,8,0,5000,3,485,2,9600,2,7,1,6000,4,322,3,9600,1,8,2,7000,5,485,4,9600,2,7,1,7000,5,322
     // PMMSet,0,2,171,205,173,205,171,192,186,1,100,192,168,1,200,255,255,255,255,8,8,8,8,8,8,0,0,5000,3,90,91,92,93
@@ -806,6 +1104,20 @@ string PMMCommnads(string readData)
     // PMMGet,0,2
     // PMMGet,0,3
     // PMMGet,0,4
+    //---------------- End Internal Flash -------------------------------------------------------------------------------------
+
+    //---------------- EEPROM -------------------------------------------------------------------------------------------------
+    // PMMSet,2,0,0620,5000,0,1000,55,200,0,0,1,0,3891,1,2,3,4,5,6,100,200,300,400,500,600
+    // PMMSet,2,1,1,9600,1,8,0,5000,3,485,2,9600,2,7,1,6000,4,322,3,9600,1,8,2,7000,5,485,4,9600,2,7,1,7000,5,322
+    // PMMSet,2,2,171,205,173,205,171,192,186,1,100,192,168,1,200,255,255,255,255,8,8,8,8,8,8,0,0,5000,3,90,91,92,93
+    // PMMSet,2,3,4384,1,1001,2001,3001,1,1001,2001,3001,32,64,128,256,100,100,03,1,1,1000,1,1,100
+    // PMMSet,2,4,195,
+    // PMMGet,2,0
+    // PMMGet,2,1
+    // PMMGet,2,2
+    // PMMGet,2,3
+    // PMMGet,2,4
+    //---------------- End EEPROM ----------------------------------------------------------------------------------------------
 
     if (commandtype == "PMMSet,0,0")
     {
@@ -871,6 +1183,72 @@ string PMMCommnads(string readData)
     {
         PmmReadTimersSettingsInternalFlash();
     }
+
+    if (commandtype == "PMMSet,2,0")
+    {
+        string substring = "PMMSet,2,0,";
+        std::size_t ind = readData.find(substring);
+        readData.erase(ind, substring.length());
+        PmmWriteGeneralSettingsEEPROM(readData);
+    }
+    
+    if (commandtype == "PMMSet,2,1")
+    {
+        string substring = "PMMSet,2,1,";
+        std::size_t ind = readData.find(substring);
+        readData.erase(ind, substring.length());
+        PmmWriteRTUSettingsEEPROM(readData);
+    }
+    
+    if (commandtype == "PMMSet,2,2")
+    {
+        string substring = "PMMSet,2,2,";
+        std::size_t ind = readData.find(substring);
+        readData.erase(ind, substring.length());
+        PmmWriteTCPUDPSettingsEEPROM(readData);
+    }
+    
+    if (commandtype == "PMMSet,2,3")
+    {
+        string substring = "PMMSet,2,3,";
+        std::size_t ind = readData.find(substring);
+        readData.erase(ind, substring.length());
+        PmmWriteTimerSettingsEEPROM(readData);
+    }
+    
+    if (commandtype == "PMMSet,2,4")
+    {
+        string substring = "PMMSet,2,4,";
+        std::size_t ind = readData.find(substring);
+        readData.erase(ind, substring.length());
+        PmmWriteTimerSettingsEEPROM(readData);
+    }
+
+    if (commandtype == "PMMGet,2,0") // GET General TO STRING
+    {
+        PmmReadGeneralSettingsEEPROM();
+    }
+
+    if (commandtype == "PMMGet,2,1") // GET RTU TO STRING
+    {
+        PmmReadRTUSettingsEEPROM();
+    }
+
+    if (commandtype == "PMMGet,2,2") // GET TCP TO STRING
+    {
+        PmmReadTCPUDPSettingsEEPROM();
+    }
+
+    if (commandtype == "PMMGet,2,3") // GET Modbus TO STRING
+    {
+        PmmReadModbusSettingsEEPROM();
+    }
+
+    if (commandtype == "PMMGet,2,4") // GET Timers TO STRING
+    {
+        PmmReadTimersSettingsEEPROM();
+    }
+
 
     if (readData == "PMMTestConfiguration")
     {
