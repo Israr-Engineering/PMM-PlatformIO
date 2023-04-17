@@ -2,12 +2,15 @@
 // #include "PmmConfigrature.h"
 
 #include <Arduino.h>
-#include <PmmFlashStorage.h>
-#include "PmmTypes.h"
 #include <string>
+
+#include <PmmTypes.h>
 #include <PmmEthernet.h>
+#include <PmmFlashStorage.h>
 #include <PmmSPISerialFlash.h>
 #include <PmmExternalEEPROMLib.h>
+
+#include "PmmCommands.h"
 
 /*
  // Common functions
@@ -36,12 +39,6 @@ void PmmReadTimersSettingsInternalFlash();
 
 
   */
-void PMMInitializeEthernet(IPAddress ip, byte mac[]);
-void PMMSetUSBConfigurationSettings(string Settings);
-string PMMGetUSBConfigurationSettings();
-
-PmmEthernetServer server(80);
-PmmEthernetClient client = server.available();
 
 // #include "PmmConfigrature.h"
 
@@ -54,37 +51,6 @@ string values[32];
 int binaryInt[16];
 string binary[16];
 Product ThisProduct;
-
-/*****************************************************************
- * Ethernet functions
- * **************************************************************/
-
-void PmmSetEthernetSettings()
-{
-    byte mac1 = (byte)ThisProduct.PmmTCPUDP.MacAddress01;
-    byte mac2 = (byte)ThisProduct.PmmTCPUDP.MacAddress02;
-    byte mac3 = (byte)ThisProduct.PmmTCPUDP.MacAddress03;
-    byte mac4 = (byte)ThisProduct.PmmTCPUDP.MacAddress04;
-    byte mac5 = (byte)ThisProduct.PmmTCPUDP.MacAddress05;
-    byte mac6 = (byte)ThisProduct.PmmTCPUDP.MacAddress06;
-
-    int ip1 = ThisProduct.PmmTCPUDP.IPAddress01;
-    int ip2 = ThisProduct.PmmTCPUDP.IPAddress02;
-    int ip3 = ThisProduct.PmmTCPUDP.IPAddress03;
-    int ip4 = ThisProduct.PmmTCPUDP.IPAddress04;
-
-    byte mac[] = {mac1, mac2, mac3, mac4, mac5, mac6};
-    IPAddress ip(ip1, ip2, ip3, ip4);
-
-    PMMInitializeEthernet(ip, mac);
-}
-
-void PMMInitializeEthernet(IPAddress ip, byte mac[])
-{
-    Ethernet.init(10);
-    Ethernet.begin(mac, ip);
-    server.begin();
-}
 
 /*****************************************************************
  * Common functions for all types of ROM
@@ -158,11 +124,18 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
 
     PmmConvertDecimalToBinary(stoi(values[10]));
 
-    ThisProduct.PmmGeneral.WebServer = binaryInt[11];
-    ThisProduct.PmmGeneral.CaseType = binaryInt[10];
-    ThisProduct.PmmGeneral.FiberOption = binaryInt[9];
-    ThisProduct.PmmGeneral.SingleModeFiber = binaryInt[8];
-    ThisProduct.PmmGeneral.MultiModeFiber = binaryInt[7];
+    ThisProduct.PmmGeneral.ItHasEthernet = binaryInt[7];
+    ThisProduct.PmmGeneral.ItHasSwitch = binaryInt[6];
+    ThisProduct.PmmGeneral.ItHasExtEEPROM = binaryInt[5];
+    ThisProduct.PmmGeneral.ItHasExtFlash = binaryInt[4];
+    ThisProduct.PmmGeneral.ItHasSerial = binaryInt[3];
+    ThisProduct.PmmGeneral.ItHasWebServer = binaryInt[2];
+    ThisProduct.PmmGeneral.ItHasFiber = binaryInt[1];
+    ThisProduct.PmmGeneral.LoRA = binaryInt[0];
+
+    PmmConvertDecimalToBinary(stoi(values[11]));
+
+    ThisProduct.PmmGeneral.Zidbee = binaryInt[7];
     ThisProduct.PmmGeneral.GSM = binaryInt[6];
     ThisProduct.PmmGeneral.GPS = binaryInt[5];
     ThisProduct.PmmGeneral.Antenna = binaryInt[4];
@@ -171,19 +144,30 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
     ThisProduct.PmmGeneral.UDPOption = binaryInt[1];
     ThisProduct.PmmGeneral.GateWay = binaryInt[0];
 
-    ThisProduct.PmmGeneral.ControlerType = stoi(values[11]);
-    ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[12]);
-    ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[13]);
-    ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[14]);
-    ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[15]);
-    ThisProduct.PmmGeneral.NumberOfSerials = stoi(values[16]);
-    ThisProduct.PmmGeneral.NumberOfUDPPorts = stoi(values[17]);
-    ThisProduct.PmmGeneral.MinReadValue = stoi(values[18]);
-    ThisProduct.PmmGeneral.MaxReadValue = stoi(values[19]);
-    ThisProduct.PmmGeneral.OprationVoltage = stoi(values[20]);
-    ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[21]);
-    ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[22]);
-    ThisProduct.PmmGeneral.SettingsRef = stoi(values[23]);
+    ThisProduct.PmmGeneral.ControlerType = stoi(values[12]);
+    ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[13]);
+    ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[11]);
+    ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[15]);
+    ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[16]);
+    ThisProduct.PmmGeneral.NumberOfSerials = stoi(values[17]);
+    ThisProduct.PmmGeneral.NumberOfUDPPorts = stoi(values[18]);
+    ThisProduct.PmmGeneral.MinReadValue = stoi(values[19]);
+    ThisProduct.PmmGeneral.MaxReadValue = stoi(values[20]);
+    ThisProduct.PmmGeneral.OprationVoltage = stoi(values[21]);
+    ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[22]);
+    ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[23]);
+    ThisProduct.PmmGeneral.SettingsRef = stoi(values[24]);
+
+    PmmConvertDecimalToBinary(stoi(values[25]));
+
+    ThisProduct.PmmGeneral.IsModBus = binaryInt[7];
+    ThisProduct.PmmGeneral.IsCanBus = binaryInt[6];
+    ThisProduct.PmmGeneral.IsProfiBus = binaryInt[5];
+    ThisProduct.PmmGeneral.IsProfiNet = binaryInt[4];
+    ThisProduct.PmmGeneral.IsBACnet = binaryInt[3];
+    ThisProduct.PmmGeneral.IsDLMS = binaryInt[2];
+    ThisProduct.PmmGeneral.IsMBus = binaryInt[1];
+    ThisProduct.PmmGeneral.IsOPC = binaryInt[0];
 
     General_flash_store.write(ThisProduct.PmmGeneral);
 }
@@ -363,11 +347,16 @@ void PmmReadGeneralSettingsInternalFlash()
     settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.HardwareVersion));
     settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmGeneral.WebServer));
-    settings = String(settings + String(ThisProduct.PmmGeneral.CaseType));
-    settings = String(settings + String(ThisProduct.PmmGeneral.FiberOption));
-    settings = String(settings + String(ThisProduct.PmmGeneral.SingleModeFiber));
-    settings = String(settings + String(ThisProduct.PmmGeneral.MultiModeFiber));
+    settings = String(settings + String(ThisProduct.PmmGeneral.ItHasEthernet));
+    settings = String(settings + String(ThisProduct.PmmGeneral.ItHasSwitch));
+    settings = String(settings + String(ThisProduct.PmmGeneral.ItHasExtEEPROM));
+    settings = String(settings + String(ThisProduct.PmmGeneral.ItHasExtFlash));
+    settings = String(settings + String(ThisProduct.PmmGeneral.ItHasSerial));
+    settings = String(settings + String(ThisProduct.PmmGeneral.ItHasWebServer));
+    settings = String(settings + String(ThisProduct.PmmGeneral.ItHasFiber));
+    settings = String(settings + String(ThisProduct.PmmGeneral.LoRA));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmGeneral.Zidbee));
     settings = String(settings + String(ThisProduct.PmmGeneral.GSM));
     settings = String(settings + String(ThisProduct.PmmGeneral.GPS));
     settings = String(settings + String(ThisProduct.PmmGeneral.Antenna));
@@ -375,6 +364,7 @@ void PmmReadGeneralSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmGeneral.InternalRTC));
     settings = String(settings + String(ThisProduct.PmmGeneral.UDPOption));
     settings = String(settings + String(ThisProduct.PmmGeneral.GateWay));
+    settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.ControlerType));
     settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.MinOprationTemperature));
@@ -400,6 +390,15 @@ void PmmReadGeneralSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmGeneral.GeneralReadingsFactor));
     settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.SettingsRef));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmGeneral.IsModBus));
+    settings = String(settings + String(ThisProduct.PmmGeneral.IsCanBus));
+    settings = String(settings + String(ThisProduct.PmmGeneral.IsProfiBus));
+    settings = String(settings + String(ThisProduct.PmmGeneral.IsProfiNet));
+    settings = String(settings + String(ThisProduct.PmmGeneral.IsBACnet));
+    settings = String(settings + String(ThisProduct.PmmGeneral.IsDLMS));
+    settings = String(settings + String(ThisProduct.PmmGeneral.IsMBus));
+    settings = String(settings + String(ThisProduct.PmmGeneral.IsOPC));
     settings = String(settings + String(",End"));
 
     SerialUSB.println(settings);
@@ -671,11 +670,18 @@ void PmmWriteGeneralSettingsEEPROM(string Message)
 
     PmmConvertDecimalToBinary(stoi(values[10]));
 
-    ThisProduct.PmmGeneral.WebServer = binaryInt[11];
-    ThisProduct.PmmGeneral.CaseType = binaryInt[10];
-    ThisProduct.PmmGeneral.FiberOption = binaryInt[9];
-    ThisProduct.PmmGeneral.SingleModeFiber = binaryInt[8];
-    ThisProduct.PmmGeneral.MultiModeFiber = binaryInt[7];
+    ThisProduct.PmmGeneral.ItHasEthernet = binaryInt[7];
+    ThisProduct.PmmGeneral.ItHasSwitch = binaryInt[6];
+    ThisProduct.PmmGeneral.ItHasExtEEPROM = binaryInt[5];
+    ThisProduct.PmmGeneral.ItHasExtFlash = binaryInt[4];
+    ThisProduct.PmmGeneral.ItHasSerial = binaryInt[3];
+    ThisProduct.PmmGeneral.ItHasWebServer = binaryInt[2];
+    ThisProduct.PmmGeneral.ItHasFiber = binaryInt[1];
+    ThisProduct.PmmGeneral.LoRA = binaryInt[0];
+
+    PmmConvertDecimalToBinary(stoi(values[11]));
+
+    ThisProduct.PmmGeneral.Zidbee = binaryInt[7];
     ThisProduct.PmmGeneral.GSM = binaryInt[6];
     ThisProduct.PmmGeneral.GPS = binaryInt[5];
     ThisProduct.PmmGeneral.Antenna = binaryInt[4];
@@ -684,23 +690,33 @@ void PmmWriteGeneralSettingsEEPROM(string Message)
     ThisProduct.PmmGeneral.UDPOption = binaryInt[1];
     ThisProduct.PmmGeneral.GateWay = binaryInt[0];
 
-    ThisProduct.PmmGeneral.ControlerType = stoi(values[11]);
-    ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[12]);
-    ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[13]);
-    ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[14]);
-    ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[15]);
-    ThisProduct.PmmGeneral.NumberOfSerials = stoi(values[16]);
-    ThisProduct.PmmGeneral.NumberOfUDPPorts = stoi(values[17]);
-    ThisProduct.PmmGeneral.MinReadValue = stoi(values[18]);
-    ThisProduct.PmmGeneral.MaxReadValue = stoi(values[19]);
-    ThisProduct.PmmGeneral.OprationVoltage = stoi(values[20]);
-    ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[21]);
-    ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[22]);
-    ThisProduct.PmmGeneral.SettingsRef = stoi(values[23]);
+    ThisProduct.PmmGeneral.ControlerType = stoi(values[12]);
+    ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[13]);
+    ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[11]);
+    ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[15]);
+    ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[16]);
+    ThisProduct.PmmGeneral.NumberOfSerials = stoi(values[17]);
+    ThisProduct.PmmGeneral.NumberOfUDPPorts = stoi(values[18]);
+    ThisProduct.PmmGeneral.MinReadValue = stoi(values[19]);
+    ThisProduct.PmmGeneral.MaxReadValue = stoi(values[20]);
+    ThisProduct.PmmGeneral.OprationVoltage = stoi(values[21]);
+    ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[22]);
+    ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[23]);
+    ThisProduct.PmmGeneral.SettingsRef = stoi(values[24]);
 
-    for (int index = 0; index < 24; index++)
+    PmmConvertDecimalToBinary(stoi(values[25]));
+
+    ThisProduct.PmmGeneral.IsModBus = binaryInt[7];
+    ThisProduct.PmmGeneral.IsCanBus = binaryInt[6];
+    ThisProduct.PmmGeneral.IsProfiBus = binaryInt[5];
+    ThisProduct.PmmGeneral.IsProfiNet = binaryInt[4];
+    ThisProduct.PmmGeneral.IsBACnet = binaryInt[3];
+    ThisProduct.PmmGeneral.IsDLMS = binaryInt[2];
+    ThisProduct.PmmGeneral.IsMBus = binaryInt[1];
+    ThisProduct.PmmGeneral.IsOPC = binaryInt[0];
+
+    for (int index = 0; index < 26; index++)
     {
-
         PutIntDataToEEprom(index, stoi(values[index]));
     }
 }
@@ -867,12 +883,30 @@ void PmmReadGeneralSettingsEEPROM()
 {
     String settings = "";
 
-    for (int index = 0; index < 24; index++)
+    for (int index = 0; index < 26; index++)
     {
         if (index == 10)
         {
             PmmConvertDecimalToBinary(GetIntDataFromEEprom(10));
-            for (int i = 11; i >= 0; i--)
+            for (int i = 7; i >= 0; i--)
+            {
+                settings = String(settings + String(binaryInt[i]));
+            }
+            settings = String(settings + ",");
+        }
+        else if (index == 11)
+        {
+            PmmConvertDecimalToBinary(GetIntDataFromEEprom(11));
+            for (int i = 7; i >= 0; i--)
+            {
+                settings = String(settings + String(binaryInt[i]));
+            }
+            settings = String(settings + ",");
+        }
+        else if (index == 25)
+        {
+            PmmConvertDecimalToBinary(GetIntDataFromEEprom(25));
+            for (int i = 7; i >= 0; i--)
             {
                 settings = String(settings + String(binaryInt[i]));
             }
@@ -888,6 +922,64 @@ void PmmReadGeneralSettingsEEPROM()
     settings = String(settings + String("End"));
 
     SerialUSB.println(settings);
+
+    ThisProduct.PmmGeneral.DeviceName = GetIntDataFromEEprom(0);
+    ThisProduct.PmmGeneral.SerialNumber = GetIntDataFromEEprom(1);
+    ThisProduct.PmmGeneral.FirstTimeRun = GetIntDataFromEEprom(2);
+    ThisProduct.PmmGeneral.LifeTime = GetIntDataFromEEprom(3);
+    ThisProduct.PmmGeneral.NumberOfCycles = GetIntDataFromEEprom(4);
+    ThisProduct.PmmGeneral.LastRunningTime = GetIntDataFromEEprom(5);
+    ThisProduct.PmmGeneral.NumberOfRunningTimes = GetIntDataFromEEprom(6);
+    ThisProduct.PmmGeneral.SoftwareVersion = GetIntDataFromEEprom(7);
+    ThisProduct.PmmGeneral.FirmwareVersion = GetIntDataFromEEprom(9);
+    ThisProduct.PmmGeneral.HardwareVersion = GetIntDataFromEEprom(0);
+
+    PmmConvertDecimalToBinary(GetIntDataFromEEprom(10));
+
+    ThisProduct.PmmGeneral.ItHasEthernet = binaryInt[7];
+    ThisProduct.PmmGeneral.ItHasSwitch = binaryInt[6];
+    ThisProduct.PmmGeneral.ItHasExtEEPROM = binaryInt[5];
+    ThisProduct.PmmGeneral.ItHasExtFlash = binaryInt[4];
+    ThisProduct.PmmGeneral.ItHasSerial = binaryInt[3];
+    ThisProduct.PmmGeneral.ItHasWebServer = binaryInt[2];
+    ThisProduct.PmmGeneral.ItHasFiber = binaryInt[1];
+    ThisProduct.PmmGeneral.LoRA = binaryInt[0];
+
+    PmmConvertDecimalToBinary(GetIntDataFromEEprom(11));
+
+    ThisProduct.PmmGeneral.Zidbee = binaryInt[7];
+    ThisProduct.PmmGeneral.GSM = binaryInt[6];
+    ThisProduct.PmmGeneral.GPS = binaryInt[5];
+    ThisProduct.PmmGeneral.Antenna = binaryInt[4];
+    ThisProduct.PmmGeneral.ExternalRTC = binaryInt[3];
+    ThisProduct.PmmGeneral.InternalRTC = binaryInt[2];
+    ThisProduct.PmmGeneral.UDPOption = binaryInt[1];
+    ThisProduct.PmmGeneral.GateWay = binaryInt[0];
+
+    ThisProduct.PmmGeneral.ControlerType = GetIntDataFromEEprom(12);
+    ThisProduct.PmmGeneral.MinOprationTemperature = GetIntDataFromEEprom(13);
+    ThisProduct.PmmGeneral.MaxOprationTemperature = GetIntDataFromEEprom(14);
+    ThisProduct.PmmGeneral.NumberOfInputs = GetIntDataFromEEprom(15);
+    ThisProduct.PmmGeneral.NumberOfOutputs = GetIntDataFromEEprom(16);
+    ThisProduct.PmmGeneral.NumberOfSerials = GetIntDataFromEEprom(17);
+    ThisProduct.PmmGeneral.NumberOfUDPPorts = GetIntDataFromEEprom(18);
+    ThisProduct.PmmGeneral.MinReadValue = GetIntDataFromEEprom(19);
+    ThisProduct.PmmGeneral.MaxReadValue = GetIntDataFromEEprom(20);
+    ThisProduct.PmmGeneral.OprationVoltage = GetIntDataFromEEprom(21);
+    ThisProduct.PmmGeneral.GeneralReadingsOffset = GetIntDataFromEEprom(22);
+    ThisProduct.PmmGeneral.GeneralReadingsFactor = GetIntDataFromEEprom(23);
+    ThisProduct.PmmGeneral.SettingsRef = GetIntDataFromEEprom(24);
+
+    PmmConvertDecimalToBinary(GetIntDataFromEEprom(25));
+
+    ThisProduct.PmmGeneral.IsModBus = binaryInt[7];
+    ThisProduct.PmmGeneral.IsCanBus = binaryInt[6];
+    ThisProduct.PmmGeneral.IsProfiBus = binaryInt[5];
+    ThisProduct.PmmGeneral.IsProfiNet = binaryInt[4];
+    ThisProduct.PmmGeneral.IsBACnet = binaryInt[3];
+    ThisProduct.PmmGeneral.IsDLMS = binaryInt[2];
+    ThisProduct.PmmGeneral.IsMBus = binaryInt[1];
+    ThisProduct.PmmGeneral.IsOPC = binaryInt[0];
 }
 
 void PmmReadRTUSettingsEEPROM()
@@ -903,6 +995,39 @@ void PmmReadRTUSettingsEEPROM()
     settings = String(settings + String("End"));
 
     SerialUSB.println(settings);
+
+    ThisProduct.PmmRTU.PortOneName = GetIntDataFromEEprom(100);
+    ThisProduct.PmmRTU.PortOneBaudRate = GetIntDataFromEEprom(101);
+    ThisProduct.PmmRTU.PortOneStopBit = GetIntDataFromEEprom(102);
+    ThisProduct.PmmRTU.PortOneDataBit = GetIntDataFromEEprom(103);
+    ThisProduct.PmmRTU.PortOneParity = GetIntDataFromEEprom(104);
+    ThisProduct.PmmRTU.PortOneConnectionTimeout = GetIntDataFromEEprom(105);
+    ThisProduct.PmmRTU.PortOneMaxRetryRTU = GetIntDataFromEEprom(106);
+    ThisProduct.PmmRTU.PortOneInterface = GetIntDataFromEEprom(107);
+    ThisProduct.PmmRTU.PortTwoName = GetIntDataFromEEprom(108);
+    ThisProduct.PmmRTU.PortTwoBaudRate = GetIntDataFromEEprom(109);
+    ThisProduct.PmmRTU.PortTwoStopBit = GetIntDataFromEEprom(110);
+    ThisProduct.PmmRTU.PortTwoDataBit = GetIntDataFromEEprom(111);
+    ThisProduct.PmmRTU.PortTwoParity = GetIntDataFromEEprom(112);
+    ThisProduct.PmmRTU.PortTwoConnectionTimeout = GetIntDataFromEEprom(113);
+    ThisProduct.PmmRTU.PortTwoMaxRetryRTU = GetIntDataFromEEprom(114);
+    ThisProduct.PmmRTU.PortTwoInterface = GetIntDataFromEEprom(115);
+    ThisProduct.PmmRTU.PortThreeName = GetIntDataFromEEprom(116);
+    ThisProduct.PmmRTU.PortThreeBaudRate = GetIntDataFromEEprom(117);
+    ThisProduct.PmmRTU.PortThreeStopBit = GetIntDataFromEEprom(118);
+    ThisProduct.PmmRTU.PortThreeDataBit = GetIntDataFromEEprom(119);
+    ThisProduct.PmmRTU.PortThreeParity = GetIntDataFromEEprom(120);
+    ThisProduct.PmmRTU.PortThreeConnectionTimeout = GetIntDataFromEEprom(121);
+    ThisProduct.PmmRTU.PortThreeMaxRetryRTU = GetIntDataFromEEprom(122);
+    ThisProduct.PmmRTU.PortThreeInterface = GetIntDataFromEEprom(123);
+    ThisProduct.PmmRTU.PortFourName = GetIntDataFromEEprom(124);
+    ThisProduct.PmmRTU.PortFourBaudRate = GetIntDataFromEEprom(125);
+    ThisProduct.PmmRTU.PortFourStopBit = GetIntDataFromEEprom(126);
+    ThisProduct.PmmRTU.PortFourDataBit = GetIntDataFromEEprom(127);
+    ThisProduct.PmmRTU.PortFourParity = GetIntDataFromEEprom(128);
+    ThisProduct.PmmRTU.PortFourConnectionTimeout = GetIntDataFromEEprom(129);
+    ThisProduct.PmmRTU.PortFourMaxRetryRTU = GetIntDataFromEEprom(130);
+    ThisProduct.PmmRTU.PortFourInterface = GetIntDataFromEEprom(131);
 }
 
 void PmmReadTCPUDPSettingsEEPROM()
@@ -919,6 +1044,45 @@ void PmmReadTCPUDPSettingsEEPROM()
     settings = String(settings + String("End"));
 
     SerialUSB.println(settings);
+
+    ThisProduct.PmmTCPUDP.MacAddress01 = GetIntDataFromEEprom(200);
+    ThisProduct.PmmTCPUDP.MacAddress02 = GetIntDataFromEEprom(201);
+    ThisProduct.PmmTCPUDP.MacAddress03 = GetIntDataFromEEprom(202);
+    ThisProduct.PmmTCPUDP.MacAddress04 = GetIntDataFromEEprom(203);
+    ThisProduct.PmmTCPUDP.MacAddress05 = GetIntDataFromEEprom(204);
+    ThisProduct.PmmTCPUDP.MacAddress06 = GetIntDataFromEEprom(205);
+
+    ThisProduct.PmmTCPUDP.IPAddress01 = GetIntDataFromEEprom(206);
+    ThisProduct.PmmTCPUDP.IPAddress02 = GetIntDataFromEEprom(207);
+    ThisProduct.PmmTCPUDP.IPAddress03 = GetIntDataFromEEprom(208);
+    ThisProduct.PmmTCPUDP.IPAddress04 = GetIntDataFromEEprom(209);
+
+    ThisProduct.PmmTCPUDP.RemoteIPAddress01 = GetIntDataFromEEprom(210);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress02 = GetIntDataFromEEprom(211);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress03 = GetIntDataFromEEprom(212);
+    ThisProduct.PmmTCPUDP.RemoteIPAddress04 = GetIntDataFromEEprom(213);
+
+    ThisProduct.PmmTCPUDP.NetMask01 = GetIntDataFromEEprom(214);
+    ThisProduct.PmmTCPUDP.NetMask02 = GetIntDataFromEEprom(215);
+    ThisProduct.PmmTCPUDP.NetMask03 = GetIntDataFromEEprom(216);
+    ThisProduct.PmmTCPUDP.NetMask04 = GetIntDataFromEEprom(217);
+
+    ThisProduct.PmmTCPUDP.DNSSOneServer01 = GetIntDataFromEEprom(218);
+    ThisProduct.PmmTCPUDP.DNSSOneServer02 = GetIntDataFromEEprom(219);
+    ThisProduct.PmmTCPUDP.DNSSOneServer03 = GetIntDataFromEEprom(220);
+    ThisProduct.PmmTCPUDP.DNSSOneServer04 = GetIntDataFromEEprom(221);
+
+    ThisProduct.PmmTCPUDP.DNSTwoServer01 = GetIntDataFromEEprom(222);
+    ThisProduct.PmmTCPUDP.DNSTwoServer02 = GetIntDataFromEEprom(223);
+    ThisProduct.PmmTCPUDP.DNSTwoServer03 = GetIntDataFromEEprom(224);
+    ThisProduct.PmmTCPUDP.DNSTwoServer04 = GetIntDataFromEEprom(225);
+
+    ThisProduct.PmmTCPUDP.ConnectionTimeoutTCP = GetIntDataFromEEprom(226);
+    ThisProduct.PmmTCPUDP.MaxRetryTCP = GetIntDataFromEEprom(227);
+    ThisProduct.PmmTCPUDP.UDPPortOne = GetIntDataFromEEprom(228);
+    ThisProduct.PmmTCPUDP.UDPPortTwo = GetIntDataFromEEprom(229);
+    ThisProduct.PmmTCPUDP.UDPPortThree = GetIntDataFromEEprom(230);
+    ThisProduct.PmmTCPUDP.UDPPortFour = GetIntDataFromEEprom(231);
 }
 
 void PmmReadModbusSettingsEEPROM()
@@ -942,6 +1106,43 @@ void PmmReadModbusSettingsEEPROM()
     settings = String(settings + String("End"));
 
     SerialUSB.println(settings);
+
+    PmmConvertDecimalToBinary(GetIntDataFromEEprom(268));
+
+    ThisProduct.PmmModbus.ModBusRTU = binaryInt[12];
+    ThisProduct.PmmModbus.ModBusTCP = binaryInt[11];
+    ThisProduct.PmmModbus.ModBusUDP = binaryInt[10];
+    ThisProduct.PmmModbus.ModBusSlave = binaryInt[9];
+    ThisProduct.PmmModbus.ModBusMaster = binaryInt[8];
+    ThisProduct.PmmModbus.ReadCoilsStatus = binaryInt[7];
+    ThisProduct.PmmModbus.ReadInputStatus = binaryInt[6];
+    ThisProduct.PmmModbus.ReadHoldingRegisters = binaryInt[5];
+    ThisProduct.PmmModbus.ReadInputRegisters = binaryInt[4];
+    ThisProduct.PmmModbus.WriteSingleCoil = binaryInt[3];
+    ThisProduct.PmmModbus.WriteSingleRegister = binaryInt[2];
+    ThisProduct.PmmModbus.WriteMultipleCoils = binaryInt[1];
+    ThisProduct.PmmModbus.WriteMultipleRegisters = binaryInt[0];
+    ThisProduct.PmmModbus.StartingAddressCoilsStatus = GetIntDataFromEEprom(269);
+    ThisProduct.PmmModbus.StartingAddressInputStatus = GetIntDataFromEEprom(270);
+    ThisProduct.PmmModbus.StartingAddressHoldingRegisters = GetIntDataFromEEprom(271);
+    ThisProduct.PmmModbus.StartingAddressInputRegisters = GetIntDataFromEEprom(272);
+    ThisProduct.PmmModbus.StartingAddressWriteSingleCoil = GetIntDataFromEEprom(273);
+    ThisProduct.PmmModbus.StartingAddressWriteSingleRegister = GetIntDataFromEEprom(274);
+    ThisProduct.PmmModbus.StartingAddressWriteMultipleCoils = GetIntDataFromEEprom(275);
+    ThisProduct.PmmModbus.StartingAddressWriteMultipleRegisters = GetIntDataFromEEprom(276);
+    ThisProduct.PmmModbus.QuantityCoilsStatus = GetIntDataFromEEprom(277);
+    ThisProduct.PmmModbus.QuantityInputStatus = GetIntDataFromEEprom(278);
+    ThisProduct.PmmModbus.QuantityHoldingRegisters = GetIntDataFromEEprom(279);
+    ThisProduct.PmmModbus.QuantityInputRegisters = GetIntDataFromEEprom(280);
+    ThisProduct.PmmModbus.QuantityWriteMultipleCoils = GetIntDataFromEEprom(281);
+    ThisProduct.PmmModbus.QuantityWriteMultipleRegisters = GetIntDataFromEEprom(282);
+    ThisProduct.PmmModbus.FunctionCode = GetIntDataFromEEprom(283);
+    ThisProduct.PmmModbus.IODataOrder = GetIntDataFromEEprom(284);
+    ThisProduct.PmmModbus.IODataType = GetIntDataFromEEprom(285);
+    ThisProduct.PmmModbus.PollInterval = GetIntDataFromEEprom(286);
+    ThisProduct.PmmModbus.SlaveID = GetIntDataFromEEprom(287);
+    ThisProduct.PmmModbus.StartingAddress = GetIntDataFromEEprom(288);
+    ThisProduct.PmmModbus.Quantity = GetIntDataFromEEprom(289);
 }
 
 void PmmReadTimersSettingsEEPROM()
@@ -956,6 +1157,17 @@ void PmmReadTimersSettingsEEPROM()
     settings = String(settings + ",END");
 
     SerialUSB.println(settings);
+
+    PmmConvertDecimalToBinary(GetIntDataFromEEprom(500));
+
+    ThisProduct.PmmTimers.CycleTimer = binaryInt[7];
+    ThisProduct.PmmTimers.OneMSTimer = binaryInt[6];
+    ThisProduct.PmmTimers.TenMSTimer = binaryInt[5];
+    ThisProduct.PmmTimers.OneSecTimer = binaryInt[4];
+    ThisProduct.PmmTimers.OneMinTimer = binaryInt[3];
+    ThisProduct.PmmTimers.OneHouTimer = binaryInt[2];
+    ThisProduct.PmmTimers.OneMonTimer = binaryInt[1];
+    ThisProduct.PmmTimers.OneYearTimer = binaryInt[0];
 }
 
 void PmmReadAllSettingsEEPROM()
@@ -984,7 +1196,7 @@ string PMMCommnads(string readData)
     std::string commandtype = readData.substr(0, 10);
 
     //---------------- Internal Flash ----------------------------------------------------------------------------------------
-    // PMMSet,0,0,0620,5000,0,1000,55,200,0,0,1,0,3891,1,2,3,4,5,6,100,200,300,400,500,600,1
+    // PMMSet,0,0,0620,5000,0,1000,55,200,0,0,1,0,644,644,1,2,3,4,5,6,100,200,300,400,500,600,1,644
     // PMMSet,0,1,1,9600,1,8,0,5000,3,485,2,9600,2,7,1,6000,4,322,3,9600,1,8,2,7000,5,485,4,9600,2,7,1,7000,5,322
     // PMMSet,0,2,171,205,173,205,171,205,192,186,1,100,192,168,1,200,255,255,255,255,8,8,8,8,8,8,0,0,5000,3,90,91,92,93
     // PMMSet,0,3,4384,1,1001,2001,3001,1,1001,2001,3001,32,64,128,256,100,100,03,1,1,1000,1,1,100
@@ -997,7 +1209,7 @@ string PMMCommnads(string readData)
     //---------------- End Internal Flash -------------------------------------------------------------------------------------
 
     //---------------- EEPROM -------------------------------------------------------------------------------------------------
-    // PMMSet,2,0,0620,5000,0,1000,55,200,0,0,1,0,3891,1,2,3,4,5,6,100,200,300,400,500,600,1
+    // PMMSet,2,0,0620,5000,0,1000,55,200,0,0,1,0,644,644,1,2,3,4,5,6,100,200,300,400,500,600,1,644
     // PMMSet,2,1,1,9600,1,8,0,5000,3,485,2,9600,2,7,1,6000,4,322,3,9600,1,8,2,7000,5,485,4,9600,2,7,1,7000,5,322
     // PMMSet,2,2,171,205,173,205,171,205,192,186,1,100,192,168,1,200,255,255,255,255,8,8,8,8,8,8,0,0,5000,3,90,91,92,93
     // PMMSet,2,3,4384,1,1001,2001,3001,1,1001,2001,3001,32,64,128,256,100,100,03,1,1,1000,1,1,100
@@ -1196,7 +1408,7 @@ string PMMReturnDataFromAPIHTTPHeader()
 
 void PMMSendDataHTTPClient(String Data)
 {
-    PmmEthernetClient client = server.available();
+
     client.println("HTTP/1.1 200 OK");
     client.println("Content-Type: text/html");
     client.println("Connection: close");

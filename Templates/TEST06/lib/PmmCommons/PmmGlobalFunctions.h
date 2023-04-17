@@ -3,17 +3,12 @@
 #ifndef PMMGLOBALFUNCTIONS_H
 #define PMMGLOBALFUNCTIONS_H
 
-#include "PmmTypes.h"
-
-extern void PMMSetUSBConfigurationSettings(string Settings);
-extern string PMMGetUSBConfigurationSettings();
-
-extern void PMMSetDeviceSettingsEProm();
-extern void PMMGetDeviceSettingsEProm();
+#include <PmmTypes.h>
 
 extern void PmmInitializeProjectSettings();
+void PMMInitializeEthernet(IPAddress ip, byte mac[]);
+extern void PmmSetEthernetSettings();
 
-// extern string PMMIsAlive();
 extern std::array<string, 100> PMMSplitString(string parameter, std::array<string, 100> OutputArray);
 extern void PMMSplitString2(string parameter, string &returnVal, string &returnstring);
 extern string ConvertUint8_tTostring(uint8_t number);
@@ -35,16 +30,41 @@ extern unsigned int EEPROMLength();
 extern void InitializeWire();
 
 
+/*****************************************************************
+ * Ethernet functions
+ * **************************************************************/
+
+void PmmSetEthernetSettings()
+{
+    byte mac1 = (byte)ThisProduct.PmmTCPUDP.MacAddress01;
+    byte mac2 = (byte)ThisProduct.PmmTCPUDP.MacAddress02;
+    byte mac3 = (byte)ThisProduct.PmmTCPUDP.MacAddress03;
+    byte mac4 = (byte)ThisProduct.PmmTCPUDP.MacAddress04;
+    byte mac5 = (byte)ThisProduct.PmmTCPUDP.MacAddress05;
+    byte mac6 = (byte)ThisProduct.PmmTCPUDP.MacAddress06;
+
+    int ip1 = ThisProduct.PmmTCPUDP.IPAddress01;
+    int ip2 = ThisProduct.PmmTCPUDP.IPAddress02;
+    int ip3 = ThisProduct.PmmTCPUDP.IPAddress03;
+    int ip4 = ThisProduct.PmmTCPUDP.IPAddress04;
+
+    byte mac[] = {mac1, mac2, mac3, mac4, mac5, mac6};
+    IPAddress ip(ip1, ip2, ip3, ip4);
+
+    PMMInitializeEthernet(ip, mac);
+}
+
+void PMMInitializeEthernet(IPAddress ip, byte mac[])
+{
+    Ethernet.init(10);
+    Ethernet.begin(mac, ip);
+    server.begin();
+}
 
 void InitializeWire()
 {
     Wire.begin();
 }
-
-
-
-
-
 
 void PmmInitializeProjectSettings()
 {
@@ -210,13 +230,6 @@ void Debugprint(string toPrint)
 // #pragma endregion
 
 // #pragma region HTTP FUNCTIONS
-
-// void InitializeEthernet(byte mac[],IPAddress ip)
-// {
-//     Ethernet.init(10);
-//     Ethernet.begin(mac, ip);
-//     server.begin();
-// }
 
 IPAddress PMMGetLocalIP()
 {

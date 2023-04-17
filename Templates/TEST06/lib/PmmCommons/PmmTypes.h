@@ -59,20 +59,7 @@ typedef struct PMMGeneral
     bit InternalRTC = false;
     bit UDPOption = false;
     bit GateWay = false;
-    
-    /* Support protocol 
-    modbus
-    canbus
-    profibus
-    profinet
-    BACnet
-    DLMS
-    MBus
-    OPC
-     */
-
-
-    
+        
     int MinOprationTemperature = 0; // not important change to bits
     int MaxOprationTemperature = 0; // not important change to bits
     int NumberOfInputs = 0;
@@ -86,6 +73,28 @@ typedef struct PMMGeneral
     int GeneralReadingsFactor = 0;
 
     int SettingsRef = 1; // 1 =>Internal Flash,2=>External Flash,3=>EEPROM
+
+    /* Support protocol 
+    modbus
+    canbus
+    profibus
+    profinet
+    BACnet
+    DLMS
+    MBus
+    OPC
+     */
+
+
+    bit IsModBus = false;
+    bit IsCanBus = false;
+    bit IsProfiBus = false;
+    bit IsProfiNet = false;
+    bit IsBACnet = false;
+    bit IsDLMS = false;
+    bit IsMBus = false;
+    bit IsOPC = false;
+  
 
     int Spare01 = 0;
     int Spare02 = 0;

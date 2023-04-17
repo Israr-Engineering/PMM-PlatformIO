@@ -2,11 +2,14 @@
 #define PMMCOMMANDS_H
 
 #include <PmmTypes.h>
+
 #define BowlingLed 5
 #define StatekLed 4
 // declare the existence of this global variable.
 
 extern Product ThisProduct;
+extern PmmEthernetServer server(80);
+extern PmmEthernetClient client = server.available();
 
 // Common functions
 extern void PmmStringToArray(string input);
@@ -34,7 +37,7 @@ extern string PMMCommnads(string readData);
 extern string PMMReturnDataFromSerialUSB();
 // string PMMReturnDataFromAPIHTTPHeader();
 
-//EEPROM
+// EEPROM
 extern void PmmWriteGeneralSettingsEEPROM(string Message);
 extern void PmmWriteRTUSettingsEEPROM(string Message);
 extern void PmmWriteTCPUDPSettingsEEPROM(string Message);

@@ -20,10 +20,18 @@ void setup()
 
   PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
 
-  PmmSetEthernetSettings();
+  if (ThisProduct.PmmGeneral.ItHasEthernet == true)
+  {
+    PmmSetEthernetSettings();
+  }
 
+  if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true && ThisProduct.PmmGeneral.SettingsRef == 3)
+  {
+    PMMInitializeEEPROM();
+  }
+
+  
   // STEP03: Setup and configure services
-
   PmmModbus.PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 35, 36, 31, 1);
   PmmModbus.PMMModBUSRTUServerconfigure(false, 0, 10, false, 0, 10, true, 0, 10, false, 0, 10);
 
