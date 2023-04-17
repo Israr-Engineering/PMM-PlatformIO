@@ -5,10 +5,9 @@
 
 #include <PmmTypes.h>
 
-
 extern void PmmInitializeProjectSettings();
 void PMMInitializeEthernet();
-//extern void PmmSetEthernetSettings();
+// extern void PmmSetEthernetSettings();
 
 extern std::array<string, 100> PMMSplitString(string parameter, std::array<string, 100> OutputArray);
 extern void PMMSplitString2(string parameter, string &returnVal, string &returnstring);
@@ -30,11 +29,40 @@ extern void PMMInitializeEEPROM();
 extern unsigned int EEPROMLength();
 extern void InitializeWire();
 
+byte mac[] = {98, 43, 60, 28, 40, 14};
+IPAddress ip(192, 168, 1, 100);
+
 /*****************************************************************
  * Ethernet functions
  * **************************************************************/
 
+string PmmReturnConfif(int databit, int parity, int stopbit)
+{
+    string config = "SERIAL_8N1";
+    string Parity = "N";
 
+    switch (parity)
+    {
+    case 1:
+        Parity = "N";
+        break;
+    case 2:
+        Parity = "E";
+        break;
+    case 3:
+        Parity = "O";
+        break;
+    case 4:
+        Parity = "M";
+        break;
+    case 5:
+        Parity = "S";
+        break;
+    }
+
+    config = "SERIAL_" + ConvertIntTostring(databit) + Parity + ConvertIntTostring(stopbit);
+    return config;
+}
 
 void PMMInitializeEthernet()
 {
@@ -52,7 +80,15 @@ void PMMInitializeEthernet()
     int ip3 = ThisProduct.PmmTCPUDP.IPAddress03;
     int ip4 = ThisProduct.PmmTCPUDP.IPAddress04;
 
-    byte mac[] = {mac1, mac2, mac3, mac4, mac5, mac6};
+    //mac[] = {mac1, mac2, mac3, mac4, mac5, mac6};
+
+    mac[0] = mac1;
+    mac[1] = mac2;
+    mac[2] = mac3;
+    mac[3] = mac4;
+    mac[4] = mac5;
+    mac[5] = mac6;
+    
     IPAddress ip(ip1, ip2, ip3, ip4);
 
     // try to start
@@ -79,7 +115,7 @@ void PmmInitializeProjectSettings()
 {
     // STEP01 : Read All settings from ROM into "ThisProduct" struct
     PmmReadAllSettingsInternalFlash();
-    
+
     // STEP02 : Select ROM source for Settings , default is the Internal flash
     int Ref = ThisProduct.PmmGeneral.SettingsRef;
     if (Ref == 1)
@@ -98,36 +134,96 @@ void PmmInitializeProjectSettings()
 
     // STEP03: Initialize needed Modules
     // 1. WatchDog 32s
-        PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
-    
+    PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
+
     // 3. Wire
-        InitializeWire();
+    InitializeWire();
     // 4. EEprom
-    ThisProduct.I2CRunning = false ;
+    ThisProduct.I2CRunning = false;
     if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true)
     {
-       StartEEprom();
-       ThisProduct.I2CRunning = true ;
+        StartEEprom();
+        ThisProduct.I2CRunning = true;
     }
-       
+
     // 5. Ethernet
     if (ThisProduct.PmmGeneral.ItHasEthernet == true)
     {
-       PMMInitializeEthernet();
+        PMMInitializeEthernet();
     }
 
     // 6. Protocols : a. modbus
-        PmmModbus.PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 35, 36, 31, 1);
-        PmmModbus.PMMModBUSRTUServerconfigure(false, 0, 10, false, 0, 10, true, 0, 10, false, 0, 10);
-    
+
+    if (ThisProduct.PmmGeneral.IsModBus)
+    {
+        if (ThisProduct.PmmModbus.ModBusTCP)
+        {
+            if (ThisProduct.PmmModbus.ModBusMaster)
+            {
+                //PmmModbus.PMMmodbusTCPServerSetup();
+            }
+
+            if (ThisProduct.PmmModbus.ModBusSlave)
+            {
+            }
+        }
+
+        if (ThisProduct.PmmModbus.ModBusRTU)
+        {
+            if (ThisProduct.PmmModbus.ModBusMaster)
+            {
+                u_int16_t config = stoi(PmmReturnConfif(
+                    ThisProduct.PmmModbus.DataBitConfig,
+                    ThisProduct.PmmModbus.ParityConfig,
+                    ThisProduct.PmmModbus.StopBitConfig));
+
+                PmmModbus.PMMModBUSRTUClientSetup(
+                    config,
+                    ThisProduct.PmmModbus.BaudRate,
+                    ThisProduct.PmmModbus.TXPin,
+                    ThisProduct.PmmModbus.RXPin,
+                    ThisProduct.PmmModbus.SerialSelectionPin,
+                    ThisProduct.PmmModbus.SerialPort);
+            }
+
+            if (ThisProduct.PmmModbus.ModBusSlave)
+            {
+                u_int16_t config = stoi(PmmReturnConfif(
+                    ThisProduct.PmmModbus.DataBitConfig,
+                    ThisProduct.PmmModbus.ParityConfig,
+                    ThisProduct.PmmModbus.StopBitConfig));
+
+                PmmModbus.PMMModBUSRTUServerSetup(
+                    ThisProduct.PmmModbus.SlaveID,
+                    config,
+                    ThisProduct.PmmModbus.BaudRate,
+                    ThisProduct.PmmModbus.TXPin,
+                    ThisProduct.PmmModbus.RXPin,
+                    ThisProduct.PmmModbus.SerialSelectionPin,
+                    ThisProduct.PmmModbus.SerialPort);
+
+                PmmModbus.PMMModBUSRTUServerconfigure(
+                    ThisProduct.PmmModbus.CoilsStatus,
+                    ThisProduct.PmmModbus.StartingAddressCoilsStatus,
+                    ThisProduct.PmmModbus.QuantityCoilsStatus,
+                    ThisProduct.PmmModbus.InputStatus,
+                    ThisProduct.PmmModbus.StartingAddressInputStatus,
+                    ThisProduct.PmmModbus.QuantityInputStatus,
+                    ThisProduct.PmmModbus.HoldingRegisters,
+                    ThisProduct.PmmModbus.StartingAddressHoldingRegisters,
+                    ThisProduct.PmmModbus.QuantityHoldingRegisters,
+                    ThisProduct.PmmModbus.InputRegisters,
+                    ThisProduct.PmmModbus.StartingAddressInputRegisters,
+                    ThisProduct.PmmModbus.QuantityInputRegisters);
+            }
+        }
+    }
 
     // STEP LAST ONE: Start General services
 
-        Scheduler.startLoop(PMMConfiguration);
-        Scheduler.startLoop(PMMCommunication);
-        Scheduler.startLoop(PMMTimers);
-            
-
+    Scheduler.startLoop(PMMConfiguration);
+    Scheduler.startLoop(PMMCommunication);
+    Scheduler.startLoop(PMMTimers);
 }
 
 string CheckAvailabeHardware()
@@ -260,14 +356,14 @@ string DateTimeToString(uint16_t year, uint8_t month, uint8_t day, uint8_t hour,
 void Debugprintln(string toPrint)
 {
     String PrintData = String(toPrint.c_str());
-    if (true)
+    if (ThisProduct.PmmGeneral.Canprint)
         SerialUSB.println(PrintData);
 }
 
 void Debugprint(string toPrint)
 {
     String PrintData = String(toPrint.c_str());
-    if (true)
+    if (ThisProduct.PmmGeneral.Canprint)
         SerialUSB.print(PrintData);
 }
 

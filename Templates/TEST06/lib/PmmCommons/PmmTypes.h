@@ -42,11 +42,11 @@ typedef struct PMMGeneral
     int HardwareVersion = 1; // 23 => 2.3
     int ControlerType = 0;
 
-    bit ItHasEthernet = false ; // add this
-    bit ItHasSwitch = false ;
-    bit ItHasExtEEPROM = false ;
-    bit ItHasExtFlash = false ;
-    bit ItHasSerial = false ;
+    bit ItHasEthernet = false; // add this
+    bit ItHasSwitch = false;
+    bit ItHasExtEEPROM = false;
+    bit ItHasExtFlash = false;
+    bit ItHasSerial = false;
     bit ItHasWebServer = false;
     bit ItHasFiber = false;
     bit LoRA = false;
@@ -59,9 +59,26 @@ typedef struct PMMGeneral
     bit InternalRTC = false;
     bit UDPOption = false;
     bit GateWay = false;
-        
-    int MinOprationTemperature = 0; // not important change to bits
-    int MaxOprationTemperature = 0; // not important change to bits
+
+    bit IsModBus = false;
+    bit IsCanBus = false;
+    bit IsProfiBus = false;
+    bit IsProfiNet = false;
+    bit IsBACnet = false;
+    bit IsDLMS = false;
+    bit IsMBus = false;
+    bit IsOPC = false;
+
+    bit Canprint = false; // bit for bebug mode
+
+    bit spare01 = false;
+    bit spare02 = false;
+    bit spare03 = false;
+    bit spare04 = false;
+    bit spare05 = false;
+    bit spare06 = false;
+    bit spare07 = false;
+
     int NumberOfInputs = 0;
     int NumberOfOutputs = 0;
     int NumberOfSerials = 0;
@@ -73,28 +90,6 @@ typedef struct PMMGeneral
     int GeneralReadingsFactor = 0;
 
     int SettingsRef = 1; // 1 =>Internal Flash,2=>External Flash,3=>EEPROM
-
-    /* Support protocol 
-    modbus
-    canbus
-    profibus
-    profinet
-    BACnet
-    DLMS
-    MBus
-    OPC
-     */
-
-
-    bit IsModBus = false;
-    bit IsCanBus = false;
-    bit IsProfiBus = false;
-    bit IsProfiNet = false;
-    bit IsBACnet = false;
-    bit IsDLMS = false;
-    bit IsMBus = false;
-    bit IsOPC = false;
-  
 
     int Spare01 = 0;
     int Spare02 = 0;
@@ -186,7 +181,6 @@ typedef struct PMMModBus
     // ModBus Settings
     bit ModBusRTU = false;
     bit ModBusTCP = false;
-    bit ModBusUDP = false;
     bit ModBusSlave = false;
     bit ModBusMaster = false;
     bit ReadCoilsStatus = false;
@@ -197,6 +191,11 @@ typedef struct PMMModBus
     bit WriteSingleRegister = false;
     bit WriteMultipleCoils = false;
     bit WriteMultipleRegisters = false;
+    bit CoilsStatus = false;
+    bit InputStatus = false;
+    bit HoldingRegisters = false;
+    bit InputRegisters = false;
+
     int StartingAddressCoilsStatus = 0;
     int StartingAddressInputStatus = 0;
     int StartingAddressHoldingRegisters = 0;
@@ -219,13 +218,15 @@ typedef struct PMMModBus
     int StartingAddress = 0;
     int Quantity = 0;
 
-    int Spare01 = 0;
-    int Spare02 = 0;
-    int Spare03 = 0;
-    int Spare04 = 0;
-    int Spare05 = 0;
-    int Spare06 = 0;
-    int Spare07 = 0;
+    int DataBitConfig = 8;
+    int ParityConfig = 1;
+    int StopBitConfig = 1;
+    int BaudRate = 9600;
+    int TXPin = 35;
+    int RXPin = 36;
+    int SerialSelectionPin = 1;
+    int SerialPort = 1;
+
     int Spare08 = 0;
     int Spare09 = 0;
     int Spare10 = 0;
@@ -282,10 +283,34 @@ typedef struct PMMTimer
 
 } PMMTimer;
 
-
 typedef struct PMMDeviceCalibration
 {
-    /* 
+    /*
+    this is a spescial settings for the device itself
+    */
+    float Calebrate00 = 0;
+    float Calebrate01 = 0;
+    float Calebrate02 = 0;
+    float Calebrate03 = 0;
+    float Calebrate04 = 0;
+    float Calebrate05 = 0;
+    float Calebrate06 = 0;
+    float Calebrate07 = 0;
+    float Calebrate08 = 0;
+    float Calebrate09 = 0;
+    float Calebrate10 = 0;
+    float Calebrate11 = 0;
+    float Calebrate12 = 0;
+    float Calebrate13 = 0;
+    float Calebrate14 = 0;
+    float Calebrate15 = 0;
+   
+
+} PMMDeviceCalibration;
+
+typedef struct GerneralPurpose
+{
+    /*
     this is a spescial settings for the device itself
     */
     int Spare00 = 0;
@@ -321,18 +346,18 @@ typedef struct PMMDeviceCalibration
     int Spare30 = 0;
     int Spare31 = 0;
 
-} PMMDeviceCalibration;
+} GerneralPurpose;
 
 typedef struct Product
 {
 
-// General Flages 
+    // General Flages
     bool EthernetRunning = false;
-    bool SerialRunning = false ;
-    bool I2CRunning = false ; 
-    bool SPIRunning = false ;
+    bool SerialRunning = false;
+    bool I2CRunning = false;
+    bool SPIRunning = false;
 
-// Settings Stucts
+    // Settings Stucts
     PMMGeneral PmmGeneral;
     PMMRTU PmmRTU;
     PMMTCPUDP PmmTCPUDP;
@@ -340,6 +365,7 @@ typedef struct Product
     PMMTimer PmmTimers;
     PMMDeviceCalibration PmmCalibrationPage01;
     PMMDeviceCalibration PmmCalibrationPage02;
+    GerneralPurpose PmmGerneralPurpose;
 
 } Product;
 

@@ -151,7 +151,7 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
     array<string, 18> arr;
     string Resulte = "Time : " + PMMDatetimeNowStr(date) + " (Lang,Lat) = " + to_string(lang) + " , " + to_string(lat) + "; \n";
 
-#pragma region Equation of Time
+#//pragma region Equation of Time
     double tmpB = 360.0 / 365;
 
     int16_t x = PMMReturnDayOfYear(year(date), month(date), day(date));
@@ -165,42 +165,42 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
     double EOT = 9.87 * sin(2 * B) - 7.53 * cos(B) - 1.5 * sin(B);
     Resulte += "EOT = " + to_string(EOT) + "\n";
     arr[1] = to_string(EOT);
-#pragma endregion
+//#pragma endregion
 
-#pragma region Declination
+//#pragma region Declination
     double Declination = 23.45 * sin(B);
     Resulte += "Declination = " + to_string(Declination) + "\n";
     arr[2] = to_string(Declination);
-#pragma endregion
+//#pragma endregion
 
-#pragma region Local Standard Time Meridian
+//#pragma region Local Standard Time Meridian
     double LSTM = 15 * TimeZone;
     Resulte += "LSTM = " + to_string(LSTM) + "\n";
     arr[3] = to_string(LSTM);
-#pragma endregion
+//#pragma endregion
 
-#pragma region Time Correction Factor(TC)
+//#pragma region Time Correction Factor(TC)
     double TC = 4 * (lang - LSTM) + EOT;
     Resulte += "TC = " + to_string(TC) + " minutes." + "\n";
     arr[4] = to_string(TC);
-#pragma endregion
+//#pragma endregion
 
-#pragma region Local Solar Time(LST)
+//#pragma region Local Solar Time(LST)
 
     // need to be edited
     time_t LST = date + (60 * TC);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Hour Angle(HRA)
+//#pragma region Hour Angle(HRA)
 
     time_t tmpLSTh = LST - 43200;
 
     double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)) / 60)) * (double)15 / 60;
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region HRA = HRA + 180;
+//#pragma region HRA = HRA + 180;
 
     Resulte += "HRA = " + to_string(HRA) + "\n";
     arr[5] = to_string(HRA);
@@ -217,9 +217,9 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
 
     arr[7] = to_string(HRAZRAD);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Elevation
+//#pragma region Elevation
     double latRAD = lat * M_PI / 180;                 // convert to Radians
     double DeclinationRAD = Declination * M_PI / 180; // convert to Radians
 
@@ -230,9 +230,9 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
     Resulte += "Elevation = " + to_string(Elevation) + "\n";
     arr[8] = to_string(Elevation);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Azimuth
+//#pragma region Azimuth
     double Azimuth = acos(
         (sin(DeclinationRAD) * cos(latRAD) - cos(DeclinationRAD) * sin(latRAD) * cos(HRARAD)) / cos(ElevationRAD));
 
@@ -250,9 +250,9 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
     Resulte += "Azimuth = " + to_string(Azimuth) + "\n";
     arr[10] = to_string(Azimuth);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Sunrise and Sunset
+//#pragma region Sunrise and Sunset
 
     double tmp = (1.0 / 15) * acos(tan(DeclinationRAD) * tan(latRAD));
     tmp = tmp * 180 / M_PI;
@@ -275,9 +275,9 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
     Resulte = Resulte + "Sunrise = " + PmmDateTimeToString((year(Sunset)), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset)) + "\n";
     arr[12] = PmmDateTimeToString((year(Sunset) - 1970), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset));
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region TrueAngle and Zenith
+//#pragma region TrueAngle and Zenith
     double Zenith = 90 - Elevation; // Bs
     Resulte = Resulte + "Zenith = " + to_string(Zenith) + "\n";
     arr[13] = to_string(Zenith);
@@ -298,9 +298,9 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
 
     Resulte = Resulte + "TrueAngle = " + to_string(TrueAngle) + "\n";
     arr[15] = to_string(TrueAngle);
-#pragma endregion
+//#pragma endregion
 
-#pragma region TrueAngle(NREL Method)
+//#pragma region TrueAngle(NREL Method)
     // Solar Elevation Bs, Solar Azimuth Ys
     double Bs = Elevation;
     Ys = 360 - Azimuth; // Ys
@@ -334,9 +334,9 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
 
     Resulte = Resulte + "NREL TrueAngle = " + to_string(TrueAngleNerl);
     arr[16] = to_string(TrueAngleNerl);
-#pragma endregion
+//#pragma endregion
 
-#pragma region TrueAngle Backracking
+//#pragma region TrueAngle Backracking
     double BackTrackerAngle = TrueAngle;
     double GCR = (double)TrackerWidth / Post2Post;
     double GCR_RAD = GCR * M_PI / 180;
@@ -357,7 +357,7 @@ array<string, 18> PmmSunCalculations::SunCalculations(time_t date, double lat, d
         }
     }
     arr[17] = to_string(BackTrackerAngle);
-#pragma endregion
+//#pragma endregion
 
     return arr;
 }
@@ -368,7 +368,7 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
     array<string, 18> arr;
     string Resulte = "Time : " + PMMDatetimeNowStr(date) + " (Lang,Lat) = " + to_string(lang) + " , " + to_string(lat) + "; \n";
 
-#pragma region Equation of Time
+//#pragma region Equation of Time
     double tmpB = 360.0 / 365;
 
     int16_t x = PMMReturnDayOfYear(year(date), month(date), day(date));
@@ -382,42 +382,42 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
     double EOT = 9.87 * sin(2 * B) - 7.53 * cos(B) - 1.5 * sin(B);
     Resulte += "EOT = " + to_string(EOT) + "\n";
     arr[1] = to_string(EOT);
-#pragma endregion
+//#pragma endregion
 
-#pragma region Declination
+//#pragma region Declination
     double Declination = 23.45 * sin(B);
     Resulte += "Declination = " + to_string(Declination) + "\n";
     arr[2] = to_string(Declination);
-#pragma endregion
+//#pragma endregion
 
-#pragma region Local Standard Time Meridian
+//#pragma region Local Standard Time Meridian
     double LSTM = 15 * TimeZone;
     Resulte += "LSTM = " + to_string(LSTM) + "\n";
     arr[3] = to_string(LSTM);
-#pragma endregion
+//#pragma endregion
 
-#pragma region Time Correction Factor(TC)
+//#pragma region Time Correction Factor(TC)
     double TC = 4 * (lang - LSTM) + EOT;
     Resulte += "TC = " + to_string(TC) + " minutes." + "\n";
     arr[4] = to_string(TC);
-#pragma endregion
+//#pragma endregion
 
-#pragma region Local Solar Time(LST)
+//#pragma region Local Solar Time(LST)
 
     // need to be edited
     time_t LST = date + (60 * TC);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Hour Angle(HRA)
+//#pragma region Hour Angle(HRA)
 
     time_t tmpLSTh = LST - 43200;
 
     double HRA = (double)((hour(tmpLSTh) * 60) + minute(LST) + ((double)(second(LST)) / 60)) * (double)15 / 60;
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region HRA = HRA + 180;
+//#pragma region HRA = HRA + 180;
 
     Resulte += "HRA = " + to_string(HRA) + "\n";
     arr[5] = to_string(HRA);
@@ -434,9 +434,9 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
 
     arr[7] = to_string(HRAZRAD);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Elevation
+//#pragma region Elevation
     double latRAD = lat * M_PI / 180;                 // convert to Radians
     double DeclinationRAD = Declination * M_PI / 180; // convert to Radians
 
@@ -447,9 +447,9 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
     Resulte += "Elevation = " + to_string(Elevation) + "\n";
     arr[8] = to_string(Elevation);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Azimuth
+//#pragma region Azimuth
     double Azimuth = acos(
         (sin(DeclinationRAD) * cos(latRAD) - cos(DeclinationRAD) * sin(latRAD) * cos(HRARAD)) / cos(ElevationRAD));
 
@@ -467,9 +467,9 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
     Resulte += "Azimuth = " + to_string(Azimuth) + "\n";
     arr[10] = to_string(Azimuth);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region Sunrise and Sunset
+//#pragma region Sunrise and Sunset
 
     double tmp = (1.0 / 15) * acos(tan(DeclinationRAD) * tan(latRAD));
     tmp = tmp * 180 / M_PI;
@@ -504,9 +504,9 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
     Resulte = Resulte + "Sunrise = " + PmmDateTimeToString((year(Sunset)), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset)) + "\n";
     arr[12] = PmmDateTimeToString((year(Sunset) - 1970), month(Sunset), day(Sunset), hour(Sunset), minute(Sunset), second(Sunset));
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region TrueAngle and Zenith
+//#pragma region TrueAngle and Zenith
     double Zenith = 90 - Elevation; // Bs
     Resulte = Resulte + "Zenith = " + to_string(Zenith) + "\n";
     arr[13] = to_string(Zenith);
@@ -527,9 +527,9 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
 
     Resulte = Resulte + "TrueAngle = " + to_string(TrueAngle) + "\n";
     arr[15] = to_string(TrueAngle);
-#pragma endregion
+//#pragma endregion
 
-#pragma region TrueAngle(NREL Method)
+//#pragma region TrueAngle(NREL Method)
     // Solar Elevation Bs, Solar Azimuth Ys
     double Bs = Elevation;
     Ys = 360 - Azimuth; // Ys
@@ -563,9 +563,9 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
 
     Resulte = Resulte + "NREL TrueAngle = " + to_string(TrueAngleNerl);
     arr[16] = to_string(TrueAngleNerl);
-#pragma endregion
+//#pragma endregion
 
-#pragma region TrueAngle Backracking
+//#pragma region TrueAngle Backracking
     double BackTrackerAngle = TrueAngle;
     double GCR = (double)TrackerWidth / Post2Post;
     double GCR_RAD = GCR * M_PI / 180;
@@ -586,7 +586,7 @@ string PmmSunCalculations::SunCalculationsStr(time_t date, double lat, double la
         }
     }
     arr[17] = to_string(BackTrackerAngle);
-#pragma endregion
+//#pragma endregion
 
     return Resulte;
 }
