@@ -8,8 +8,7 @@
 // declare the existence of this global variable.
 
 extern Product ThisProduct;
-extern PmmEthernetServer server(80);
-extern PmmEthernetClient client = server.available();
+
 
 // Common functions
 extern void PmmStringToArray(string input);
@@ -32,6 +31,10 @@ extern void PmmReadAllSettingsInternalFlash();
 
 // Command
 extern void PMMInitializeEthernet(IPAddress ip, byte mac[]);
+
+extern void StartCommandHttpServer();
+extern void StartEEprom();
+
 extern string PMMReadCommands();
 extern string PMMCommnads(string readData);
 extern string PMMReturnDataFromSerialUSB();

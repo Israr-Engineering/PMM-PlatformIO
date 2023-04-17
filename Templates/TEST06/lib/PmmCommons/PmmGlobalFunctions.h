@@ -5,9 +5,10 @@
 
 #include <PmmTypes.h>
 
+
 extern void PmmInitializeProjectSettings();
-void PMMInitializeEthernet(IPAddress ip, byte mac[]);
-extern void PmmSetEthernetSettings();
+void PMMInitializeEthernet();
+//extern void PmmSetEthernetSettings();
 
 extern std::array<string, 100> PMMSplitString(string parameter, std::array<string, 100> OutputArray);
 extern void PMMSplitString2(string parameter, string &returnVal, string &returnstring);
@@ -29,13 +30,16 @@ extern void PMMInitializeEEPROM();
 extern unsigned int EEPROMLength();
 extern void InitializeWire();
 
-
 /*****************************************************************
  * Ethernet functions
  * **************************************************************/
 
-void PmmSetEthernetSettings()
+
+
+void PMMInitializeEthernet()
 {
+
+    // read settings
     byte mac1 = (byte)ThisProduct.PmmTCPUDP.MacAddress01;
     byte mac2 = (byte)ThisProduct.PmmTCPUDP.MacAddress02;
     byte mac3 = (byte)ThisProduct.PmmTCPUDP.MacAddress03;
@@ -51,14 +55,19 @@ void PmmSetEthernetSettings()
     byte mac[] = {mac1, mac2, mac3, mac4, mac5, mac6};
     IPAddress ip(ip1, ip2, ip3, ip4);
 
-    PMMInitializeEthernet(ip, mac);
-}
+    // try to start
+    ThisProduct.EthernetRunning = false;
 
-void PMMInitializeEthernet(IPAddress ip, byte mac[])
-{
-    Ethernet.init(10);
-    Ethernet.begin(mac, ip);
-    server.begin();
+    if (ThisProduct.PmmGeneral.ItHasEthernet)
+    {
+        Ethernet.init(10);
+        Ethernet.begin(mac, ip);
+        ThisProduct.EthernetRunning = true;
+    }
+    else
+    {
+        SerialUSB.println("No Ethernet found ..");
+    }
 }
 
 void InitializeWire()
@@ -68,8 +77,10 @@ void InitializeWire()
 
 void PmmInitializeProjectSettings()
 {
+    // STEP01 : Read All settings from ROM into "ThisProduct" struct
     PmmReadAllSettingsInternalFlash();
-
+    
+    // STEP02 : Select ROM source for Settings , default is the Internal flash
     int Ref = ThisProduct.PmmGeneral.SettingsRef;
     if (Ref == 1)
     {
@@ -84,6 +95,39 @@ void PmmInitializeProjectSettings()
     {
         PmmReadAllSettingsEEPROM();
     } // Read Settings From EEPROM
+
+    // STEP03: Initialize needed Modules
+    // 1. WatchDog 32s
+        PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
+    
+    // 3. Wire
+        InitializeWire();
+    // 4. EEprom
+    ThisProduct.I2CRunning = false ;
+    if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true)
+    {
+       StartEEprom();
+       ThisProduct.I2CRunning = true ;
+    }
+       
+    // 5. Ethernet
+    if (ThisProduct.PmmGeneral.ItHasEthernet == true)
+    {
+       PMMInitializeEthernet();
+    }
+
+    // 6. Protocols : a. modbus
+        PmmModbus.PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 35, 36, 31, 1);
+        PmmModbus.PMMModBUSRTUServerconfigure(false, 0, 10, false, 0, 10, true, 0, 10, false, 0, 10);
+    
+
+    // STEP LAST ONE: Start General services
+
+        Scheduler.startLoop(PMMConfiguration);
+        Scheduler.startLoop(PMMCommunication);
+        Scheduler.startLoop(PMMTimers);
+            
+
 }
 
 string CheckAvailabeHardware()

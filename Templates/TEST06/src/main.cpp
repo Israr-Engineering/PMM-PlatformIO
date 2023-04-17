@@ -16,37 +16,15 @@ void setup()
   // STEP01: Read Flash ROM and update Settings
 
   PmmInitializeProjectSettings();
-  // STEP02: Initialize needed Modules
 
-  PmmWatchDoggy.setup(WDT_SOFTCYCLE32S);
-
-  if (ThisProduct.PmmGeneral.ItHasEthernet == true)
-  {
-    PmmSetEthernetSettings();
-  }
-
-  if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true && ThisProduct.PmmGeneral.SettingsRef == 3)
-  {
-    PMMInitializeEEPROM();
-  }
-
+  // STEP02: Initialize Extra needed Modules
   
-  // STEP03: Setup and configure services
-  PmmModbus.PMMModBUSRTUServerSetup(1, SERIAL_8N1, 9600, 35, 36, 31, 1);
-  PmmModbus.PMMModBUSRTUServerconfigure(false, 0, 10, false, 0, 10, true, 0, 10, false, 0, 10);
-
-  // STEP04: Start General services
-
-  Scheduler.startLoop(PMMConfiguration);
-  Scheduler.startLoop(PMMCommunication);
-  // Scheduler.startLoop(PMMTimers);
+  
 
   // STEP05: Warmup 2 seconds
 
   SerialUSB.println("New Start");
-  // SerialUSB.setTimeout(30000);
-  // string CMDResult = PMMReadFromFlashAllSettings();
-  // SerialUSB.println(CMDResult.c_str());
+  
 }
 
 /* ///////////////////////////////////////////////////

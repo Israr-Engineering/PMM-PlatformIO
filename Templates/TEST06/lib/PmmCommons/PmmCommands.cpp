@@ -42,6 +42,9 @@ void PmmReadTimersSettingsInternalFlash();
 
 // #include "PmmConfigrature.h"
 
+ PmmEthernetServer server(80);
+ PmmEthernetClient client = server.available();
+
 char *strings[32]; // an array of pointers to the pieces of the above array after strtok()
 char *ptr = NULL;
 string values[32];
@@ -94,6 +97,30 @@ void PMMIsAlive()
 {
     SerialUSB.println("PMMAlive");
 }
+
+
+ void StartCommandHttpServer()
+ {
+    if(ThisProduct.EthernetRunning)
+    {
+        server.begin();
+    }else
+    {
+        SerialUSB.println("Http server fail : no ethernet running .");
+    }
+ }
+
+void StartEEprom()
+{
+    if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true && ThisProduct.PmmGeneral.SettingsRef == 3)
+    {
+        //PMMInitializeEEPROM();
+        
+        EEpromSetup();
+        
+    }
+}
+
 
 /*****************************************************************
  * Internal flash section

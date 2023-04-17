@@ -338,7 +338,8 @@ typedef struct Product
     PMMTCPUDP PmmTCPUDP;
     PMMModBus PmmModbus;
     PMMTimer PmmTimers;
-    PMMDeviceCalibration PmmCalibration;
+    PMMDeviceCalibration PmmCalibrationPage01;
+    PMMDeviceCalibration PmmCalibrationPage02;
 
 } Product;
 
