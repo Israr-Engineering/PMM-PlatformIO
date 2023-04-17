@@ -121,9 +121,11 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
     ThisProduct.PmmGeneral.SoftwareVersion = stoi(values[7]);
     ThisProduct.PmmGeneral.FirmwareVersion = stoi(values[8]);
     ThisProduct.PmmGeneral.HardwareVersion = stoi(values[9]);
+    ThisProduct.PmmGeneral.ControlerType = stoi(values[10]);
 
-    PmmConvertDecimalToBinary(stoi(values[10]));
+    PmmConvertDecimalToBinary(stoi(values[11]));
 
+<<<<<<< HEAD
     ThisProduct.PmmGeneral.ItHasEthernet = binaryInt[7];
     ThisProduct.PmmGeneral.ItHasSwitch = binaryInt[6];
     ThisProduct.PmmGeneral.ItHasExtEEPROM = binaryInt[5];
@@ -135,6 +137,16 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
 
     PmmConvertDecimalToBinary(stoi(values[11]));
 
+=======
+    ThisProduct.PmmGeneral.ItHasEthernet = binaryInt[15];
+    ThisProduct.PmmGeneral.ItHasSwitch = binaryInt[14];
+    ThisProduct.PmmGeneral.ItHasExtEEPROM = binaryInt[13];
+    ThisProduct.PmmGeneral.ItHasExtFlash = binaryInt[12];
+    ThisProduct.PmmGeneral.ItHasSerial = binaryInt[11];
+    ThisProduct.PmmGeneral.ItHasWebServer = binaryInt[10];
+    ThisProduct.PmmGeneral.ItHasFiber = binaryInt[9];
+    ThisProduct.PmmGeneral.LoRA = binaryInt[8];
+>>>>>>> 74e261730edb1c88b5eadd4a93520888e2422269
     ThisProduct.PmmGeneral.Zidbee = binaryInt[7];
     ThisProduct.PmmGeneral.GSM = binaryInt[6];
     ThisProduct.PmmGeneral.GPS = binaryInt[5];
@@ -144,6 +156,7 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
     ThisProduct.PmmGeneral.UDPOption = binaryInt[1];
     ThisProduct.PmmGeneral.GateWay = binaryInt[0];
 
+<<<<<<< HEAD
     ThisProduct.PmmGeneral.ControlerType = stoi(values[12]);
     ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[13]);
     ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[11]);
@@ -168,6 +181,21 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
     ThisProduct.PmmGeneral.IsDLMS = binaryInt[2];
     ThisProduct.PmmGeneral.IsMBus = binaryInt[1];
     ThisProduct.PmmGeneral.IsOPC = binaryInt[0];
+=======
+    
+    ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[12]);
+    ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[13]);
+    ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[14]);
+    ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[15]);
+    ThisProduct.PmmGeneral.NumberOfSerials = stoi(values[16]);
+    ThisProduct.PmmGeneral.NumberOfUDPPorts = stoi(values[17]);
+    ThisProduct.PmmGeneral.MinReadValue = stoi(values[18]);
+    ThisProduct.PmmGeneral.MaxReadValue = stoi(values[19]);
+    ThisProduct.PmmGeneral.OprationVoltage = stoi(values[20]);
+    ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[21]);
+    ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[22]);
+    ThisProduct.PmmGeneral.SettingsRef = stoi(values[23]);
+>>>>>>> 74e261730edb1c88b5eadd4a93520888e2422269
 
     General_flash_store.write(ThisProduct.PmmGeneral);
 }
@@ -347,6 +375,11 @@ void PmmReadGeneralSettingsInternalFlash()
     settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.HardwareVersion));
     settings = String(settings + ",");
+<<<<<<< HEAD
+=======
+    settings = String(settings + String(ThisProduct.PmmGeneral.ControlerType));
+    settings = String(settings + ",");
+>>>>>>> 74e261730edb1c88b5eadd4a93520888e2422269
     settings = String(settings + String(ThisProduct.PmmGeneral.ItHasEthernet));
     settings = String(settings + String(ThisProduct.PmmGeneral.ItHasSwitch));
     settings = String(settings + String(ThisProduct.PmmGeneral.ItHasExtEEPROM));
@@ -355,7 +388,10 @@ void PmmReadGeneralSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmGeneral.ItHasWebServer));
     settings = String(settings + String(ThisProduct.PmmGeneral.ItHasFiber));
     settings = String(settings + String(ThisProduct.PmmGeneral.LoRA));
+<<<<<<< HEAD
     settings = String(settings + ",");
+=======
+>>>>>>> 74e261730edb1c88b5eadd4a93520888e2422269
     settings = String(settings + String(ThisProduct.PmmGeneral.Zidbee));
     settings = String(settings + String(ThisProduct.PmmGeneral.GSM));
     settings = String(settings + String(ThisProduct.PmmGeneral.GPS));
@@ -364,9 +400,12 @@ void PmmReadGeneralSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmGeneral.InternalRTC));
     settings = String(settings + String(ThisProduct.PmmGeneral.UDPOption));
     settings = String(settings + String(ThisProduct.PmmGeneral.GateWay));
+<<<<<<< HEAD
     settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.ControlerType));
     settings = String(settings + ",");
+=======
+>>>>>>> 74e261730edb1c88b5eadd4a93520888e2422269
     settings = String(settings + String(ThisProduct.PmmGeneral.MinOprationTemperature));
     settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.MaxOprationTemperature));
@@ -667,9 +706,11 @@ void PmmWriteGeneralSettingsEEPROM(string Message)
     ThisProduct.PmmGeneral.SoftwareVersion = stoi(values[7]);
     ThisProduct.PmmGeneral.FirmwareVersion = stoi(values[8]);
     ThisProduct.PmmGeneral.HardwareVersion = stoi(values[9]);
+    ThisProduct.PmmGeneral.ControlerType = stoi(values[10]);
 
-    PmmConvertDecimalToBinary(stoi(values[10]));
+    PmmConvertDecimalToBinary(stoi(values[11]));
 
+<<<<<<< HEAD
     ThisProduct.PmmGeneral.ItHasEthernet = binaryInt[7];
     ThisProduct.PmmGeneral.ItHasSwitch = binaryInt[6];
     ThisProduct.PmmGeneral.ItHasExtEEPROM = binaryInt[5];
@@ -681,6 +722,16 @@ void PmmWriteGeneralSettingsEEPROM(string Message)
 
     PmmConvertDecimalToBinary(stoi(values[11]));
 
+=======
+    ThisProduct.PmmGeneral.ItHasEthernet = binaryInt[15];
+    ThisProduct.PmmGeneral.ItHasSwitch = binaryInt[14];
+    ThisProduct.PmmGeneral.ItHasExtEEPROM = binaryInt[13];
+    ThisProduct.PmmGeneral.ItHasExtFlash = binaryInt[12];
+    ThisProduct.PmmGeneral.ItHasSerial = binaryInt[11];
+    ThisProduct.PmmGeneral.ItHasWebServer = binaryInt[10];
+    ThisProduct.PmmGeneral.ItHasFiber = binaryInt[9];
+    ThisProduct.PmmGeneral.LoRA = binaryInt[8];
+>>>>>>> 74e261730edb1c88b5eadd4a93520888e2422269
     ThisProduct.PmmGeneral.Zidbee = binaryInt[7];
     ThisProduct.PmmGeneral.GSM = binaryInt[6];
     ThisProduct.PmmGeneral.GPS = binaryInt[5];
@@ -690,6 +741,7 @@ void PmmWriteGeneralSettingsEEPROM(string Message)
     ThisProduct.PmmGeneral.UDPOption = binaryInt[1];
     ThisProduct.PmmGeneral.GateWay = binaryInt[0];
 
+<<<<<<< HEAD
     ThisProduct.PmmGeneral.ControlerType = stoi(values[12]);
     ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[13]);
     ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[11]);
@@ -703,6 +755,21 @@ void PmmWriteGeneralSettingsEEPROM(string Message)
     ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[22]);
     ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[23]);
     ThisProduct.PmmGeneral.SettingsRef = stoi(values[24]);
+=======
+    
+    ThisProduct.PmmGeneral.MinOprationTemperature = stoi(values[12]);
+    ThisProduct.PmmGeneral.MaxOprationTemperature = stoi(values[13]);
+    ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[14]);
+    ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[15]);
+    ThisProduct.PmmGeneral.NumberOfSerials = stoi(values[16]);
+    ThisProduct.PmmGeneral.NumberOfUDPPorts = stoi(values[17]);
+    ThisProduct.PmmGeneral.MinReadValue = stoi(values[18]);
+    ThisProduct.PmmGeneral.MaxReadValue = stoi(values[19]);
+    ThisProduct.PmmGeneral.OprationVoltage = stoi(values[20]);
+    ThisProduct.PmmGeneral.GeneralReadingsOffset = stoi(values[21]);
+    ThisProduct.PmmGeneral.GeneralReadingsFactor = stoi(values[22]);
+    ThisProduct.PmmGeneral.SettingsRef = stoi(values[23]);
+>>>>>>> 74e261730edb1c88b5eadd4a93520888e2422269
 
     PmmConvertDecimalToBinary(stoi(values[25]));
 
