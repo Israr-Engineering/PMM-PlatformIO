@@ -8,6 +8,7 @@
 // declare the existence of this global variable.
 
 extern Product ThisProduct;
+extern PMMIO PmmIO;
 
 
 // Common functions

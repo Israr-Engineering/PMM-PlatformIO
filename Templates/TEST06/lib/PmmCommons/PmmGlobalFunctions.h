@@ -39,72 +39,78 @@ uint8_t *MACAddress;
 
 u_int16_t PmmReturnConfig(int databit, int parity, int stopbit)
 {
-    unsigned long databitLong;
-    unsigned long parityLong;
-    unsigned long stopbitLong;
+    unsigned long databitLong = 0x1ul;
+    unsigned long parityLong = 0;
+    unsigned long stopbitLong = 0x400ul;
 
-    if (databit == 1)
+// PARITY
+    if (parity == 1)
     {
-        databitLong = 0x1ul;
+        parityLong = 0x1ul;
     } // EVEN
-    else if (databit == 2)
+    else if (parity == 2)
     {
-        databitLong = 0x2ul;
+        parityLong = 0x2ul;
     } // ODD
-    else if (databit == 3)
+    else if (parity == 3)
     {
-        databitLong = 0x3ul;
+        parityLong = 0x3ul;
     } // NONE
-    else if (databit == 4)
+    else if (parity == 4)
     {
-        databitLong = 0x4ul;
+        parityLong = 0x4ul;
     } // MARK
-    else if (databit == 5)
+    else if (parity == 5)
     {
-        databitLong = 0x5ul;
+        parityLong = 0x5ul;
     } // SPACE
-    else if (databit == 6)
+    else if (parity == 6)
     {
-        databitLong = 0xFul;
+        parityLong = 0xFul;
     } // MASK
 
-    if (parity == 10)
+// STOP BIT
+    if (stopbit == 10)
     {
-        parityLong = 0x10ul;
+        stopbitLong = 0x10ul;
     }
-    else if (parity == 15)
+    else if (stopbit == 15)
     {
-        parityLong = 0x20ul;
+        stopbitLong = 0x20ul;
     }
-    else if (parity == 20)
+    else if (stopbit == 20)
     {
-        parityLong = 0x30ul;
+        stopbitLong = 0x30ul;
     }
     else
     {
-        parityLong = 0xF0ul;
+        stopbitLong = 0xF0ul;
     }
 
-    if (stopbit == 5)
+
+//DATA BITS
+    if (databit == 5)
     {
-        stopbitLong = 0x100ul;
+        databitLong = 0x100ul;
     }
-    else if (stopbit == 6)
+    else if (databit == 6)
     {
-        stopbitLong = 0x200ul;
+        databitLong = 0x200ul;
     }
-    else if (stopbit == 7)
+    else if (databit == 7)
     {
-        stopbitLong = 0x300ul;
+        databitLong = 0x300ul;
     }
-    else if (stopbit == 8)
+    else if (databit == 8)
     {
-        stopbitLong = 0x400ul;
+        databitLong = 0x400ul;
     }
     else
     {
-        stopbitLong = 0xF00ul;
+        databitLong = 0xF00ul;
     }
+
+
 
     u_int16_t config = (databitLong | parityLong | stopbitLong);
     return config;

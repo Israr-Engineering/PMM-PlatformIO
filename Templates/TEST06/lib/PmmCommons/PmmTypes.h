@@ -369,4 +369,20 @@ typedef struct Product
 
 } Product;
 
+typedef struct PMMIO
+{
+
+bool InputsBit[128];
+bool InputsBitPrev[128];
+bool OutputsBit[128];
+bool OutputsBitPrev[128];
+
+int Inputs[128];
+int InputsPrev[128];
+int Outputs[128];
+int OutputsPrev[128];
+
+}PMMIO;
+
+
 #endif

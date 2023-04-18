@@ -3,9 +3,9 @@
 
 #include <PmmCommands.h>
 #include <PmmGlobalFunctions.h>
-#include "test.cpp"
 
-// int rastest =10 ;
+
+
 
 void setup()
 {
@@ -87,17 +87,13 @@ void PMMCommunication()
   if ((millis() - CommunicationTimer) > 500)
   {
 
-    //   long* RegisrersValues = PMMModBUSRTUServerholdingRegisterRead(StartingAddress,Quantity);
-    //   for (int address = StartingAddress; address < (StartingAddress+Quantity); address++)
-    //   {
-    //     int index = address - StartingAddress;
-    //     //long val = PMMModBUSRTUServerholdingRegisterRead(address);
-    //     long val = RegisrersValues[index];
-    //     SerialUSB.print("Value Of Address ");
-    //     SerialUSB.print(address);
-    //     SerialUSB.print(" : ");
-    //     SerialUSB.println(val);
-    //   }
+    // Manage Extension Boards
+
+
+
+
+
+    
 
     CommunicationTimer = millis();
   }

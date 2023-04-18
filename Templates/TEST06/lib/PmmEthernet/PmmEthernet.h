@@ -253,8 +253,9 @@ private:
 
 class PmmEthernetServer : public Server {
 private:
-	uint16_t _port;
+	
 public:
+    uint16_t _port;
 	PmmEthernetServer(uint16_t port) : _port(port) { }
 	PmmEthernetClient available();
 	PmmEthernetClient accept();

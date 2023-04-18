@@ -9,6 +9,7 @@ PmmPWMClass::~PmmPWMClass() {
 
 void PmmPWMClass::PmmPWMSetup(int PWMOutputArray[], int Resolution)
 {
+    
     int Length= sizeof(PWMOutputArray) / sizeof(PWMOutputArray[0]);
     for(int i=0;i<Length;i++)
     {

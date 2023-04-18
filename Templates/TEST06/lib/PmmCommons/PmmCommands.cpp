@@ -55,6 +55,7 @@ string values[32];
 int binaryInt[16];
 string binary[16];
 Product ThisProduct;
+PMMIO PmmIO;
 
 /*****************************************************************
  * Common functions for all types of ROM
