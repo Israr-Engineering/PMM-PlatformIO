@@ -1,5 +1,9 @@
 
+#ifndef PMMMODBUS_H
+#define PMMMODBUS_H
+
 #include <PmmModbus.h>
+#include <PmmCommands.h>
 
 PmmEthernetServer ethServer(502);
 PmmModbusTCPServer modbusTCPServer;
@@ -183,12 +187,24 @@ void PmmModBus::PMMModBUSRTUClientholdingRegisterWrite(int SlaveID, int address,
 
 // TCP Server
 
-void PmmModBus::PMMmodbusTCPServerSetup(uint8_t *MACAddress, IPAddress IpAddress, int16_t ETHPORT, int16_t SlaveID)
+void PmmModBus::PMMmodbusTCPServerSetup(uint8_t *MACAddress, IPAddress IpAddress, uint16_t ETHPORT, int16_t SlaveID)
 {
-    Ethernet.begin(MACAddress, IpAddress);
 
+    Ethernet.begin(MACAddress, IpAddress);
+    ethServer._port = ETHPORT;
     ethServer.begin();
     modbusTCPServer.begin(SlaveID);
+}
+
+void PmmModBus::PMMmodbusTCPServerSetup(uint16_t ETHPORT, int16_t SlaveID)
+{
+    if (ThisProduct.EthernetRunning)
+    {
+        // PmmEthernetServer ethServer(ETHPORT);
+        ethServer._port = ETHPORT;
+        ethServer.begin();
+        modbusTCPServer.begin(SlaveID);
+    }
 }
 
 void PmmModBus::PMMmodbusTCPServerconfigure(bool Coils, int16_t CoilsStartAddress, int16_t CoilsQauntity,
@@ -291,3 +307,5 @@ void PmmModBus::PMMmodbusTCPServerinputRegisterWrite(int address, uint16_t value
     modbusTCPServer.poll();
     modbusTCPServer.inputRegisterWrite(address, value);
 }
+
+#endif

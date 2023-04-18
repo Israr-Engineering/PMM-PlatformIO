@@ -37,31 +37,76 @@ uint8_t *MACAddress;
  * Ethernet functions
  * **************************************************************/
 
-string PmmReturnConfig(int databit, int parity, int stopbit)
+u_int16_t PmmReturnConfig(int databit, int parity, int stopbit)
 {
-    string config = "SERIAL_8N1";
-    string Parity = "N";
+    unsigned long databitLong;
+    unsigned long parityLong;
+    unsigned long stopbitLong;
 
-    switch (parity)
+    if (databit == 1)
     {
-    case 1:
-        Parity = "N";
-        break;
-    case 2:
-        Parity = "E";
-        break;
-    case 3:
-        Parity = "O";
-        break;
-    case 4:
-        Parity = "M";
-        break;
-    case 5:
-        Parity = "S";
-        break;
+        databitLong = 0x1ul;
+    } // EVEN
+    else if (databit == 2)
+    {
+        databitLong = 0x2ul;
+    } // ODD
+    else if (databit == 3)
+    {
+        databitLong = 0x3ul;
+    } // NONE
+    else if (databit == 4)
+    {
+        databitLong = 0x4ul;
+    } // MARK
+    else if (databit == 5)
+    {
+        databitLong = 0x5ul;
+    } // SPACE
+    else if (databit == 6)
+    {
+        databitLong = 0xFul;
+    } // MASK
+
+    if (parity == 10)
+    {
+        parityLong = 0x10ul;
+    }
+    else if (parity == 15)
+    {
+        parityLong = 0x20ul;
+    }
+    else if (parity == 20)
+    {
+        parityLong = 0x30ul;
+    }
+    else
+    {
+        parityLong = 0xF0ul;
     }
 
-    config = "SERIAL_" + ConvertIntTostring(databit) + Parity + ConvertIntTostring(stopbit);
+    if (stopbit == 5)
+    {
+        stopbitLong = 0x100ul;
+    }
+    else if (stopbit == 6)
+    {
+        stopbitLong = 0x200ul;
+    }
+    else if (stopbit == 7)
+    {
+        stopbitLong = 0x300ul;
+    }
+    else if (stopbit == 8)
+    {
+        stopbitLong = 0x400ul;
+    }
+    else
+    {
+        stopbitLong = 0xF00ul;
+    }
+
+    u_int16_t config = (databitLong | parityLong | stopbitLong);
     return config;
 }
 
@@ -159,31 +204,10 @@ void PmmInitializeProjectSettings()
     {
         if (ThisProduct.PmmModbus.ModBusTCP)
         {
-            // read settings
-            byte mac1 = (byte)ThisProduct.PmmTCPUDP.MacAddress01;
-            byte mac2 = (byte)ThisProduct.PmmTCPUDP.MacAddress02;
-            byte mac3 = (byte)ThisProduct.PmmTCPUDP.MacAddress03;
-            byte mac4 = (byte)ThisProduct.PmmTCPUDP.MacAddress04;
-            byte mac5 = (byte)ThisProduct.PmmTCPUDP.MacAddress05;
-            byte mac6 = (byte)ThisProduct.PmmTCPUDP.MacAddress06;
-
-            MACAddress[0] = mac1;
-            MACAddress[1] = mac2;
-            MACAddress[2] = mac3;
-            MACAddress[3] = mac4;
-            MACAddress[4] = mac5;
-            MACAddress[5] = mac6;
-
-            int ip1 = ThisProduct.PmmTCPUDP.IPAddress01;
-            int ip2 = ThisProduct.PmmTCPUDP.IPAddress02;
-            int ip3 = ThisProduct.PmmTCPUDP.IPAddress03;
-            int ip4 = ThisProduct.PmmTCPUDP.IPAddress04;
-
-            IPAddress ip(ip1, ip2, ip3, ip4);
 
             if (ThisProduct.PmmModbus.ModBusMaster)
             {
-                PmmModbus.PMMmodbusTCPServerSetup(MACAddress,ip, ThisProduct.PmmTCPUDP.UDPPortOne, ThisProduct.PmmModbus.SlaveID);
+                PmmModbus.PMMmodbusTCPServerSetup(ThisProduct.PmmTCPUDP.UDPPortOne, ThisProduct.PmmModbus.SlaveID);
 
                 PmmModbus.PMMmodbusTCPServerconfigure(
                     ThisProduct.PmmModbus.CoilsStatus,
@@ -207,16 +231,63 @@ void PmmInitializeProjectSettings()
 
         if (ThisProduct.PmmModbus.ModBusRTU)
         {
+            u_int16_t configCom1 = PmmReturnConfig(
+                ThisProduct.PmmRTU.PortOneDataBit,
+                ThisProduct.PmmRTU.PortOneParity,
+                ThisProduct.PmmRTU.PortOneStopBit);
+
+            u_int16_t configCom2 = PmmReturnConfig(
+                ThisProduct.PmmRTU.PortTwoDataBit,
+                ThisProduct.PmmRTU.PortTwoParity,
+                ThisProduct.PmmRTU.PortTwoStopBit);
+
+            u_int16_t configCom3 = PmmReturnConfig(
+                ThisProduct.PmmRTU.PortThreeDataBit,
+                ThisProduct.PmmRTU.PortThreeParity,
+                ThisProduct.PmmRTU.PortThreeStopBit);
+
+            u_int16_t configCom4 = PmmReturnConfig(
+                ThisProduct.PmmRTU.PortFourDataBit,
+                ThisProduct.PmmRTU.PortFourParity,
+                ThisProduct.PmmRTU.PortFourStopBit);
+
+            u_int16_t config = SERIAL_8N1;
+            int baudrate = 9600;
+
+            if (ThisProduct.PmmModbus.SerialPort == 1)
+            {
+                config = configCom1;
+                baudrate = ThisProduct.PmmRTU.PortTwoBaudRate;
+            }
+            if (ThisProduct.PmmModbus.SerialPort == 2)
+            {
+                config = configCom2;
+                baudrate = ThisProduct.PmmRTU.PortTwoBaudRate;
+            }
+            if (ThisProduct.PmmModbus.SerialPort == 3)
+            {
+                config = configCom3;
+                baudrate = ThisProduct.PmmRTU.PortThreeBaudRate;
+            }
+            if (ThisProduct.PmmModbus.SerialPort == 4)
+            {
+                config = configCom4;
+                baudrate = ThisProduct.PmmRTU.PortFourBaudRate;
+            }
+
+            PmmModbus.PMMModBUSRTUClientSetup(
+                config,
+                baudrate,
+                ThisProduct.PmmModbus.TXPin,
+                ThisProduct.PmmModbus.RXPin,
+                ThisProduct.PmmModbus.SerialSelectionPin,
+                ThisProduct.PmmModbus.SerialPort);
+
             if (ThisProduct.PmmModbus.ModBusMaster)
             {
-                u_int16_t config = stoi(PmmReturnConfig(
-                    ThisProduct.PmmModbus.DataBitConfig,
-                    ThisProduct.PmmModbus.ParityConfig,
-                    ThisProduct.PmmModbus.StopBitConfig));
-
                 PmmModbus.PMMModBUSRTUClientSetup(
                     config,
-                    ThisProduct.PmmModbus.BaudRate,
+                    baudrate,
                     ThisProduct.PmmModbus.TXPin,
                     ThisProduct.PmmModbus.RXPin,
                     ThisProduct.PmmModbus.SerialSelectionPin,
@@ -225,19 +296,46 @@ void PmmInitializeProjectSettings()
 
             if (ThisProduct.PmmModbus.ModBusSlave)
             {
-                u_int16_t config = stoi(PmmReturnConfig(
-                    ThisProduct.PmmModbus.DataBitConfig,
-                    ThisProduct.PmmModbus.ParityConfig,
-                    ThisProduct.PmmModbus.StopBitConfig));
-
-                PmmModbus.PMMModBUSRTUServerSetup(
-                    ThisProduct.PmmModbus.SlaveID,
-                    config,
-                    ThisProduct.PmmModbus.BaudRate,
-                    ThisProduct.PmmModbus.TXPin,
-                    ThisProduct.PmmModbus.RXPin,
-                    ThisProduct.PmmModbus.SerialSelectionPin,
-                    ThisProduct.PmmModbus.SerialPort);
+                if (ThisProduct.PmmModbus.SerialPort == 1)
+                {
+                    PmmModbus.PMMModBUSRTUServerSetup(
+                        configCom1,
+                        ThisProduct.PmmRTU.PortOneBaudRate,
+                        ThisProduct.PmmModbus.TXPin,
+                        ThisProduct.PmmModbus.RXPin,
+                        ThisProduct.PmmModbus.SerialSelectionPin,
+                        ThisProduct.PmmModbus.SerialPort);
+                }
+                if (ThisProduct.PmmModbus.SerialPort == 2)
+                {
+                    PmmModbus.PMMModBUSRTUServerSetup(
+                        configCom2,
+                        ThisProduct.PmmRTU.PortTwoBaudRate,
+                        ThisProduct.PmmModbus.TXPin,
+                        ThisProduct.PmmModbus.RXPin,
+                        ThisProduct.PmmModbus.SerialSelectionPin,
+                        ThisProduct.PmmModbus.SerialPort);
+                }
+                if (ThisProduct.PmmModbus.SerialPort == 3)
+                {
+                    PmmModbus.PMMModBUSRTUServerSetup(
+                        configCom3,
+                        ThisProduct.PmmRTU.PortThreeBaudRate,
+                        ThisProduct.PmmModbus.TXPin,
+                        ThisProduct.PmmModbus.RXPin,
+                        ThisProduct.PmmModbus.SerialSelectionPin,
+                        ThisProduct.PmmModbus.SerialPort);
+                }
+                if (ThisProduct.PmmModbus.SerialPort == 4)
+                {
+                    PmmModbus.PMMModBUSRTUServerSetup(
+                        configCom4,
+                        ThisProduct.PmmRTU.PortFourBaudRate,
+                        ThisProduct.PmmModbus.TXPin,
+                        ThisProduct.PmmModbus.RXPin,
+                        ThisProduct.PmmModbus.SerialSelectionPin,
+                        ThisProduct.PmmModbus.SerialPort);
+                }
 
                 PmmModbus.PMMModBUSRTUServerconfigure(
                     ThisProduct.PmmModbus.CoilsStatus,
