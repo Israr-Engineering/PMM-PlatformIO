@@ -40,7 +40,8 @@ void PmmReadTimersSettingsInternalFlash();
 
   */
 
-// #include "PmmConfigrature.h"
+void PMMReadCommands();
+void PMMSendDataHTTPClient(String Data);
 
 PmmEthernetServer server(80);
 PmmEthernetClient client = server.available();
@@ -93,9 +94,9 @@ void PmmConvertDecimalToBinary(int Dic)
     }
 }
 
-void PMMIsAlive()
+String PMMIsAlive()
 {
-    SerialUSB.println("PMMAlive");
+    return "PMMAlive";
 }
 
 void StartCommandHttpServer()
@@ -354,7 +355,7 @@ void PmmWriteTimerSettingsInternalFlash(string Message)
     Timers_flash_store.write(ThisProduct.PmmTimers);
 }
 
-void PmmReadGeneralSettingsInternalFlash()
+String PmmReadGeneralSettingsInternalFlash()
 {
 
     ThisProduct.PmmGeneral = General_flash_store.read();
@@ -431,10 +432,12 @@ void PmmReadGeneralSettingsInternalFlash()
 
     settings = String(settings + String(",End"));
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
+
+    return settings;
 }
 
-void PmmReadRTUSettingsInternalFlash()
+String PmmReadRTUSettingsInternalFlash()
 {
     ThisProduct.PmmRTU = RTU_flash_store.read();
     String settings = "";
@@ -504,10 +507,12 @@ void PmmReadRTUSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmRTU.PortFourInterface));
     settings = String(settings + ",End");
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
+
+    return settings;
 }
 
-void PmmReadTCPUDPSettingsInternalFlash()
+String PmmReadTCPUDPSettingsInternalFlash()
 {
 
     ThisProduct.PmmTCPUDP = TCPUDP_flash_store.read();
@@ -578,10 +583,11 @@ void PmmReadTCPUDPSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmTCPUDP.UDPPortFour));
     settings = String(settings + ",End");
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
+    return settings;
 }
 
-void PmmReadModbusSettingsInternalFlash()
+String PmmReadModbusSettingsInternalFlash()
 {
     ThisProduct.PmmModbus = Modbus_flash_store.read();
     String settings = "";
@@ -662,10 +668,12 @@ void PmmReadModbusSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmModbus.SerialPort));
     settings = String(settings + ",End");
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
+
+    return settings;
 }
 
-void PmmReadTimersSettingsInternalFlash()
+String PmmReadTimersSettingsInternalFlash()
 {
     ThisProduct.PmmTimers = Timers_flash_store.read();
     String settings = "";
@@ -680,7 +688,9 @@ void PmmReadTimersSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmTimers.OneYearTimer));
     settings = String(settings + ",End");
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
+
+    return settings;
 }
 
 void PmmReadAllSettingsInternalFlash()
@@ -939,7 +949,7 @@ void PmmWriteTimerSettingsEEPROM(string Message)
     PutIntDataToEEprom(500, stoi(values[0]));
 }
 
-void PmmReadGeneralSettingsEEPROM()
+String PmmReadGeneralSettingsEEPROM()
 {
     String settings = "";
 
@@ -981,7 +991,7 @@ void PmmReadGeneralSettingsEEPROM()
 
     settings = String(settings + String("End"));
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
 
     ThisProduct.PmmGeneral.DeviceName = GetIntDataFromEEprom(0);
     ThisProduct.PmmGeneral.SerialNumber = GetIntDataFromEEprom(1);
@@ -1037,9 +1047,11 @@ void PmmReadGeneralSettingsEEPROM()
     ThisProduct.PmmGeneral.GeneralReadingsOffset = GetIntDataFromEEprom(20);
     ThisProduct.PmmGeneral.GeneralReadingsFactor = GetIntDataFromEEprom(21);
     ThisProduct.PmmGeneral.SettingsRef = GetIntDataFromEEprom(22);
+
+    return settings;
 }
 
-void PmmReadRTUSettingsEEPROM()
+String PmmReadRTUSettingsEEPROM()
 {
     String settings = "";
 
@@ -1051,7 +1063,7 @@ void PmmReadRTUSettingsEEPROM()
 
     settings = String(settings + String("End"));
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
 
     ThisProduct.PmmRTU.PortOneName = GetIntDataFromEEprom(100);
     ThisProduct.PmmRTU.PortOneBaudRate = GetIntDataFromEEprom(101);
@@ -1085,9 +1097,11 @@ void PmmReadRTUSettingsEEPROM()
     ThisProduct.PmmRTU.PortFourConnectionTimeout = GetIntDataFromEEprom(129);
     ThisProduct.PmmRTU.PortFourMaxRetryRTU = GetIntDataFromEEprom(130);
     ThisProduct.PmmRTU.PortFourInterface = GetIntDataFromEEprom(131);
+
+    return settings;
 }
 
-void PmmReadTCPUDPSettingsEEPROM()
+String PmmReadTCPUDPSettingsEEPROM()
 {
 
     String settings = "";
@@ -1100,7 +1114,7 @@ void PmmReadTCPUDPSettingsEEPROM()
 
     settings = String(settings + String("End"));
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
 
     ThisProduct.PmmTCPUDP.MacAddress01 = GetIntDataFromEEprom(200);
     ThisProduct.PmmTCPUDP.MacAddress02 = GetIntDataFromEEprom(201);
@@ -1140,9 +1154,11 @@ void PmmReadTCPUDPSettingsEEPROM()
     ThisProduct.PmmTCPUDP.UDPPortTwo = GetIntDataFromEEprom(229);
     ThisProduct.PmmTCPUDP.UDPPortThree = GetIntDataFromEEprom(230);
     ThisProduct.PmmTCPUDP.UDPPortFour = GetIntDataFromEEprom(231);
+
+    return settings;
 }
 
-void PmmReadModbusSettingsEEPROM()
+String PmmReadModbusSettingsEEPROM()
 {
     String settings = "";
 
@@ -1162,7 +1178,7 @@ void PmmReadModbusSettingsEEPROM()
 
     settings = String(settings + String("End"));
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
 
     PmmConvertDecimalToBinary(GetIntDataFromEEprom(300));
 
@@ -1214,9 +1230,11 @@ void PmmReadModbusSettingsEEPROM()
     ThisProduct.PmmModbus.RXPin = GetIntDataFromEEprom(327);
     ThisProduct.PmmModbus.SerialSelectionPin = GetIntDataFromEEprom(328);
     ThisProduct.PmmModbus.SerialPort = GetIntDataFromEEprom(329);
+
+    return settings;
 }
 
-void PmmReadTimersSettingsEEPROM()
+String PmmReadTimersSettingsEEPROM()
 {
     String settings = "";
 
@@ -1227,7 +1245,7 @@ void PmmReadTimersSettingsEEPROM()
     }
     settings = String(settings + ",END");
 
-    SerialUSB.println(settings);
+    //SerialUSB.println(settings);
 
     PmmConvertDecimalToBinary(GetIntDataFromEEprom(500));
 
@@ -1239,6 +1257,8 @@ void PmmReadTimersSettingsEEPROM()
     ThisProduct.PmmTimers.OneHouTimer = binaryInt[2];
     ThisProduct.PmmTimers.OneMonTimer = binaryInt[1];
     ThisProduct.PmmTimers.OneYearTimer = binaryInt[0];
+
+    return settings;
 }
 
 void PmmReadAllSettingsEEPROM()
@@ -1254,16 +1274,16 @@ void PmmReadAllSettingsEEPROM()
  * Command Reader Functions
  ******************************************************************/
 
-string PMMReturnDataFromSerialUSB()
+String PMMReturnDataFromSerialUSB()
 {
     String Command = "";
     Command = SerialUSB.readStringUntil('\n');
-    return Command.c_str();
+    return Command;
 }
 
-string PMMCommnads(string readData)
+String PMMCommnads(string readData)
 {
-    string result = "";
+    String result = "";
     std::string commandtype = readData.substr(0, 10);
 
     //---------------- Internal Flash ----------------------------------------------------------------------------------------
@@ -1298,6 +1318,7 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteGeneralSettingsInternalFlash(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMSet,0,1")
@@ -1306,6 +1327,7 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteRTUSettingsInternalFlash(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMSet,0,2")
@@ -1314,6 +1336,7 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteTCPUDPSettingsInternalFlash(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMSet,0,3")
@@ -1322,6 +1345,7 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteModbusSettingsInternalFlash(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMSet,0,4")
@@ -1330,31 +1354,32 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteTimerSettingsInternalFlash(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMGet,0,0") // GET General TO STRING
     {
-        PmmReadGeneralSettingsInternalFlash();
+       result =  PmmReadGeneralSettingsInternalFlash();
     }
 
     if (commandtype == "PMMGet,0,1") // GET RTU TO STRING
     {
-        PmmReadRTUSettingsInternalFlash();
+        result = PmmReadRTUSettingsInternalFlash();
     }
 
     if (commandtype == "PMMGet,0,2") // GET TCP TO STRING
     {
-        PmmReadTCPUDPSettingsInternalFlash();
+        result = PmmReadTCPUDPSettingsInternalFlash();
     }
 
     if (commandtype == "PMMGet,0,3") // GET Modbus TO STRING
     {
-        PmmReadModbusSettingsInternalFlash();
+        result = PmmReadModbusSettingsInternalFlash();
     }
 
     if (commandtype == "PMMGet,0,4") // GET Timers TO STRING
     {
-        PmmReadTimersSettingsInternalFlash();
+        result = PmmReadTimersSettingsInternalFlash();
     }
 
     if (commandtype == "PMMSet,2,0")
@@ -1363,6 +1388,7 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteGeneralSettingsEEPROM(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMSet,2,1")
@@ -1371,6 +1397,7 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteRTUSettingsEEPROM(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMSet,2,2")
@@ -1379,6 +1406,7 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteTCPUDPSettingsEEPROM(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMSet,2,3")
@@ -1387,6 +1415,7 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteTimerSettingsEEPROM(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMSet,2,4")
@@ -1395,63 +1424,64 @@ string PMMCommnads(string readData)
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         PmmWriteTimerSettingsEEPROM(readData);
+        result = "Done";
     }
 
     if (commandtype == "PMMGet,2,0") // GET General TO STRING
     {
-        PmmReadGeneralSettingsEEPROM();
+        result = PmmReadGeneralSettingsEEPROM();
     }
 
     if (commandtype == "PMMGet,2,1") // GET RTU TO STRING
     {
-        PmmReadRTUSettingsEEPROM();
+        result = PmmReadRTUSettingsEEPROM();
     }
 
     if (commandtype == "PMMGet,2,2") // GET TCP TO STRING
     {
-        PmmReadTCPUDPSettingsEEPROM();
+        result = PmmReadTCPUDPSettingsEEPROM();
     }
 
     if (commandtype == "PMMGet,2,3") // GET Modbus TO STRING
     {
-        PmmReadModbusSettingsEEPROM();
+       result =  PmmReadModbusSettingsEEPROM();
     }
 
     if (commandtype == "PMMGet,2,4") // GET Timers TO STRING
     {
-        PmmReadTimersSettingsEEPROM();
+        result = PmmReadTimersSettingsEEPROM();
     }
 
     if (readData == "PMMTestConfiguration")
     {
-        PMMIsAlive();
+        result =  PMMIsAlive();
     }
 
     return result;
 }
 
-string PMMReadCommands()
+void PMMReadCommands()
 {
-    string result = "";
+    String result = "";
     if (SerialUSB.available())
     {
-        string cmd = PMMReturnDataFromSerialUSB();
+        string cmd = PMMReturnDataFromSerialUSB().c_str();
 
         if (!cmd.empty())
         {
-            result = PMMCommnads(cmd);
+            result = PMMCommnads(cmd.c_str());
+            SerialUSB.println(result);
         }
     }
 
-    // if (client)
-    // {
-    //     result = PMMCommnads(PMMReturnDataFromAPIHTTPHeader());
-    // }
-
-    return result;
+    if (client)
+    {
+        result = PMMCommnads((PMMReturnDataFromAPIHTTPHeader()).c_str());
+        PMMSendDataHTTPClient(result);
+    }
 }
 
-string PMMReturnDataFromAPIHTTPHeader()
+String PMMReturnDataFromAPIHTTPHeader()
 {
     String APIData = "";
     String readString = " ";
@@ -1474,7 +1504,7 @@ string PMMReturnDataFromAPIHTTPHeader()
         }
     }
 
-    return APIData.c_str();
+    return APIData;
 }
 
 void PMMSendDataHTTPClient(String Data)

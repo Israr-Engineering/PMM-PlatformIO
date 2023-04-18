@@ -31,12 +31,13 @@ extern void InitializeWire();
 
 byte mac[] = {98, 43, 60, 28, 40, 14};
 IPAddress ip(192, 168, 1, 100);
+uint8_t *MACAddress;
 
 /*****************************************************************
  * Ethernet functions
  * **************************************************************/
 
-string PmmReturnConfif(int databit, int parity, int stopbit)
+string PmmReturnConfig(int databit, int parity, int stopbit)
 {
     string config = "SERIAL_8N1";
     string Parity = "N";
@@ -80,7 +81,7 @@ void PMMInitializeEthernet()
     int ip3 = ThisProduct.PmmTCPUDP.IPAddress03;
     int ip4 = ThisProduct.PmmTCPUDP.IPAddress04;
 
-    //mac[] = {mac1, mac2, mac3, mac4, mac5, mac6};
+    // mac[] = {mac1, mac2, mac3, mac4, mac5, mac6};
 
     mac[0] = mac1;
     mac[1] = mac2;
@@ -88,7 +89,7 @@ void PMMInitializeEthernet()
     mac[3] = mac4;
     mac[4] = mac5;
     mac[5] = mac6;
-    
+
     IPAddress ip(ip1, ip2, ip3, ip4);
 
     // try to start
@@ -158,9 +159,45 @@ void PmmInitializeProjectSettings()
     {
         if (ThisProduct.PmmModbus.ModBusTCP)
         {
+            // read settings
+            byte mac1 = (byte)ThisProduct.PmmTCPUDP.MacAddress01;
+            byte mac2 = (byte)ThisProduct.PmmTCPUDP.MacAddress02;
+            byte mac3 = (byte)ThisProduct.PmmTCPUDP.MacAddress03;
+            byte mac4 = (byte)ThisProduct.PmmTCPUDP.MacAddress04;
+            byte mac5 = (byte)ThisProduct.PmmTCPUDP.MacAddress05;
+            byte mac6 = (byte)ThisProduct.PmmTCPUDP.MacAddress06;
+
+            MACAddress[0] = mac1;
+            MACAddress[1] = mac2;
+            MACAddress[2] = mac3;
+            MACAddress[3] = mac4;
+            MACAddress[4] = mac5;
+            MACAddress[5] = mac6;
+
+            int ip1 = ThisProduct.PmmTCPUDP.IPAddress01;
+            int ip2 = ThisProduct.PmmTCPUDP.IPAddress02;
+            int ip3 = ThisProduct.PmmTCPUDP.IPAddress03;
+            int ip4 = ThisProduct.PmmTCPUDP.IPAddress04;
+
+            IPAddress ip(ip1, ip2, ip3, ip4);
+
             if (ThisProduct.PmmModbus.ModBusMaster)
             {
-                //PmmModbus.PMMmodbusTCPServerSetup();
+                PmmModbus.PMMmodbusTCPServerSetup(MACAddress,ip, ThisProduct.PmmTCPUDP.UDPPortOne, ThisProduct.PmmModbus.SlaveID);
+
+                PmmModbus.PMMmodbusTCPServerconfigure(
+                    ThisProduct.PmmModbus.CoilsStatus,
+                    ThisProduct.PmmModbus.StartingAddressCoilsStatus,
+                    ThisProduct.PmmModbus.QuantityCoilsStatus,
+                    ThisProduct.PmmModbus.InputStatus,
+                    ThisProduct.PmmModbus.StartingAddressInputStatus,
+                    ThisProduct.PmmModbus.QuantityInputStatus,
+                    ThisProduct.PmmModbus.HoldingRegisters,
+                    ThisProduct.PmmModbus.StartingAddressHoldingRegisters,
+                    ThisProduct.PmmModbus.QuantityHoldingRegisters,
+                    ThisProduct.PmmModbus.InputRegisters,
+                    ThisProduct.PmmModbus.StartingAddressInputRegisters,
+                    ThisProduct.PmmModbus.QuantityInputRegisters);
             }
 
             if (ThisProduct.PmmModbus.ModBusSlave)
@@ -172,7 +209,7 @@ void PmmInitializeProjectSettings()
         {
             if (ThisProduct.PmmModbus.ModBusMaster)
             {
-                u_int16_t config = stoi(PmmReturnConfif(
+                u_int16_t config = stoi(PmmReturnConfig(
                     ThisProduct.PmmModbus.DataBitConfig,
                     ThisProduct.PmmModbus.ParityConfig,
                     ThisProduct.PmmModbus.StopBitConfig));
@@ -188,7 +225,7 @@ void PmmInitializeProjectSettings()
 
             if (ThisProduct.PmmModbus.ModBusSlave)
             {
-                u_int16_t config = stoi(PmmReturnConfif(
+                u_int16_t config = stoi(PmmReturnConfig(
                     ThisProduct.PmmModbus.DataBitConfig,
                     ThisProduct.PmmModbus.ParityConfig,
                     ThisProduct.PmmModbus.StopBitConfig));
