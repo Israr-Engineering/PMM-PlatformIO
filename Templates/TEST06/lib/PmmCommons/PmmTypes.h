@@ -356,6 +356,10 @@ typedef struct Product
     bool SerialRunning = false;
     bool I2CRunning = false;
     bool SPIRunning = false;
+    bool ModbusRTUServerRunning = false ;
+    bool ModbusTCPServerRunning = false ;
+    bool ModbusRTUClientRunning = false ;
+    bool ModbusTCPClientRunning = false ;
 
     // Settings Stucts
     PMMGeneral PmmGeneral;
@@ -372,15 +376,25 @@ typedef struct Product
 typedef struct PMMIO
 {
 
-bool InputsBit[128];
-bool InputsBitPrev[128];
-bool OutputsBit[128];
-bool OutputsBitPrev[128];
 
-int Inputs[128];
-int InputsPrev[128];
-int Outputs[128];
-int OutputsPrev[128];
+
+// represent descret InputStatus in modbus
+byte InputsByte[120];
+// image for internal use
+byte InputsBytePrev[120];
+// represent coils bits in modbus
+byte OutputsByte[120];
+// image for internal use
+byte OutputsBytePrev[120];
+
+// represent Input registers in modbus
+int Inputs[120];
+// image for internal use
+int InputsPrev[120];
+// represent hodling registers in modbus
+int Outputs[120];
+// image for internal use
+int OutputsPrev[120];
 
 }PMMIO;
 

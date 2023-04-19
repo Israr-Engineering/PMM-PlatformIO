@@ -91,7 +91,13 @@ public:
   void PMMmodbusTCPServerholdingRegisterWrite(int address, uint16_t value);
   void PMMmodbusTCPServerinputRegisterWrite(int address, uint16_t value);
 
+
   // TCP Client
+
+
+  // All servers
+  void ModbusServersUpdate();
+  
 };
 
 extern PmmModBus PmmModbus;

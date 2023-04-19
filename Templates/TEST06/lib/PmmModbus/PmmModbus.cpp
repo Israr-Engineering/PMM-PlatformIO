@@ -4,6 +4,7 @@
 
 #include <PmmModbus.h>
 #include <PmmCommands.h>
+//#include <PmmGlobalFunctions.h>
 
 PmmEthernetServer ethServer(502);
 PmmModbusTCPServer modbusTCPServer;
@@ -306,6 +307,60 @@ void PmmModBus::PMMmodbusTCPServerinputRegisterWrite(int address, uint16_t value
     modbusTCPServer.accept(client);
     modbusTCPServer.poll();
     modbusTCPServer.inputRegisterWrite(address, value);
+}
+
+// should be used for GENERAL IO .Consider Serial01 and Ethernet if any alsways modbus server 
+void PmmModBus::ModbusServersUpdate()
+{
+
+    for (int i = 0; i < 120; i++)
+    {
+
+        // input registers
+        if (PmmIO.Inputs[i] != PmmIO.InputsPrev[i])
+        {
+            PmmIO.InputsPrev[i] = PmmIO.Inputs[i];
+            // Send to modbus server
+            if (ThisProduct.ModbusRTUServerRunning) PmmModbus.PMMModBUSRTUServerinputRegisterWrite(i,PmmIO.Inputs[i]);
+            if (ThisProduct.ModbusTCPServerRunning) PmmModbus.PMMmodbusTCPServerinputRegisterWrite(i,PmmIO.Inputs[i]);
+        }
+
+        // output (holding) registers
+        // write then read register 
+        if (PmmIO.Outputs[i] != PmmIO.OutputsPrev[i])
+        {
+            
+            if (ThisProduct.ModbusRTUServerRunning) PmmModbus.PMMModBUSRTUServerholdingRegisterWrite(i,PmmIO.Outputs[i]);
+            if (ThisProduct.ModbusTCPServerRunning) PmmModbus.PMMModBUSRTUServerholdingRegisterWrite(i,PmmIO.Outputs[i]);
+            
+        }
+        // Read to modbus server
+            if (ThisProduct.ModbusRTUServerRunning) PmmIO.Outputs[i] = PmmModbus.PMMModBUSRTUServerholdingRegisterReadOneValue(i);
+            if (ThisProduct.ModbusTCPServerRunning) PmmIO.Outputs[i] = PmmModbus.PMMmodbusTCPServerholdingRegisterRead(i);
+            PmmIO.OutputsPrev[i] = PmmIO.Outputs[i];
+        
+
+        // inputs coils => Master can only read this
+        if (PmmIO.InputsByte[i] != PmmIO.InputsBytePrev[i])
+        {
+            PmmIO.InputsBytePrev[i] = PmmIO.InputsByte[i];
+            // Send to modbus server
+
+            if (ThisProduct.ModbusRTUServerRunning) PmmModbus.PMMModBUSRTUServerdiscreteInputWrite(i,PmmIO.InputsByte[i]);
+            if (ThisProduct.ModbusTCPServerRunning) PmmModbus.PMMmodbusTCPServerdiscreteInputWrite(i,PmmIO.InputsByte[i]);
+
+        }
+
+        // ouputs coils Master can only write/read this
+        if (ThisProduct.ModbusRTUServerRunning) PmmIO.Outputs[i] = PmmModbus.PMMModBUSRTUServercoilReadOneValue(i);
+            if (ThisProduct.ModbusTCPServerRunning) PmmIO.Outputs[i] = PmmModbus.PMMmodbusTCPServercoilRead(i);
+        if (PmmIO.OutputsByte[i] != PmmIO.OutputsBytePrev[i])
+        {
+                         
+           PmmIO.OutputsBytePrev[i] = PmmIO.OutputsByte[i];
+
+        }
+    }
 }
 
 #endif
