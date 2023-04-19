@@ -96,6 +96,131 @@ typedef struct PMMGeneral
 
 } PMMGeneral;
 
+typedef struct PMMModBus
+{
+    /* data */
+
+    // system memorey
+
+    // ModBus Settings
+    bit ModBusRTU = false;
+    bit ModBusTCP = false;
+    bit ModBusSlave = false;
+    bit ModBusMaster = false;
+    bit ReadCoilsStatus = false;
+    bit ReadInputStatus = false;
+    bit ReadHoldingRegisters = false;
+    bit ReadInputRegisters = false;
+
+    bit WriteSingleCoil = false;
+    bit WriteSingleRegister = false;
+    bit WriteMultipleCoils = false;
+    bit WriteMultipleRegisters = false;
+    bit CoilsStatus = false;
+    bit InputStatus = false;
+    bit HoldingRegisters = false;
+    bit InputRegisters = false;
+
+    int StartingAddressCoilsStatus = 0;
+    int StartingAddressInputStatus = 0;
+    int StartingAddressHoldingRegisters = 0;
+    int StartingAddressInputRegisters = 0;
+    int StartingAddressWriteSingleCoil = 0;
+    int StartingAddressWriteSingleRegister = 0;
+    int StartingAddressWriteMultipleCoils = 0;
+    int StartingAddressWriteMultipleRegisters = 0;
+    int QuantityCoilsStatus = 0;
+    int QuantityInputStatus = 0;
+    int QuantityHoldingRegisters = 0;
+    int QuantityInputRegisters = 0;
+    int QuantityWriteMultipleCoils = 0;
+    int QuantityWriteMultipleRegisters = 0;
+    int FunctionCode = 01;
+    int IODataOrder = 1;
+    int IODataType = 1;
+    int PollInterval = 0;
+    int SlaveID = 1;
+    int StartingAddress = 0;
+    int Quantity = 0;
+
+    int DataBitConfig = 8;
+    int ParityConfig = 1;
+    int StopBitConfig = 1;
+    int BaudRate = 9600;
+    int TXPin = 35;
+    int RXPin = 36;
+    int SerialSelectionPin = 1;
+    int SerialPort = 1;
+
+    int Spare08 = 0;
+    int Spare09 = 0;
+    int Spare10 = 0;
+
+} PMMModBus;
+
+
+typedef struct PMMModBusPort
+{
+    /* data */
+
+    // system memorey
+
+    // ModBus Settings
+    bit ModBusRTU = false;
+    bit ModBusTCP = false;
+    bit ModBusSlave = false;
+    bit ModBusMaster = false;
+    bit ReadCoilsStatus = false;
+    bit ReadInputStatus = false;
+    bit ReadHoldingRegisters = false;
+    bit ReadInputRegisters = false;
+    
+    bit WriteSingleCoil = false;
+    bit WriteSingleRegister = false;
+    bit WriteMultipleCoils = false;
+    bit WriteMultipleRegisters = false;
+    bit CoilsStatus = false;
+    bit InputStatus = false;
+    bit HoldingRegisters = false;
+    bit InputRegisters = false;
+
+    int StartingAddressCoilsStatus = 0; // 02
+    int StartingAddressInputStatus = 0; // 03
+    int StartingAddressHoldingRegisters = 0; //04
+    int StartingAddressInputRegisters = 0; //05
+    int StartingAddressWriteSingleCoil = 0; // 06
+    int StartingAddressWriteSingleRegister = 0; // 07
+    int StartingAddressWriteMultipleCoils = 0; // 08
+    int StartingAddressWriteMultipleRegisters = 0; //09
+    int QuantityCoilsStatus = 0; // 10
+    int QuantityInputStatus = 0; // 11
+    int QuantityHoldingRegisters = 0; // 12
+    int QuantityInputRegisters = 0; // 13
+    int QuantityWriteMultipleCoils = 0; // 14
+    int QuantityWriteMultipleRegisters = 0; // 15
+    int FunctionCode = 01;// 16
+    int IODataOrder = 1; // 17
+    int IODataType = 1; // 18
+    int PollInterval = 0; // 19
+    int SlaveID = 1; // 20
+    int PortFourConnectionTimeout = 5000; // 21
+    int PortFourMaxRetry = 5; // 22
+
+    int Spare23 = 0;
+    int Spare24 = 0;
+    int Spare25 = 0;
+    int Spare26 = 0;
+    int Spare27 = 0;
+    int Spare28 = 0;
+    int Spare29 = 0;
+    int Spare30 = 0;
+    int Spare31 = 0;
+    int Spare32 = 0;
+
+
+} PMMModBusPort;
+
+
 typedef struct PMMRTU
 {
     int PortOneName = 1;
@@ -170,68 +295,12 @@ typedef struct PMMTCPUDP
 
     int Spare01 = 0;
 
+    // Modbus
+    PMMModBusPort PmmModBus;
+
 } PMMTCPUDP;
 
-typedef struct PMMModBus
-{
-    /* data */
 
-    // system memorey
-
-    // ModBus Settings
-    bit ModBusRTU = false;
-    bit ModBusTCP = false;
-    bit ModBusSlave = false;
-    bit ModBusMaster = false;
-    bit ReadCoilsStatus = false;
-    bit ReadInputStatus = false;
-    bit ReadHoldingRegisters = false;
-    bit ReadInputRegisters = false;
-    bit WriteSingleCoil = false;
-    bit WriteSingleRegister = false;
-    bit WriteMultipleCoils = false;
-    bit WriteMultipleRegisters = false;
-    bit CoilsStatus = false;
-    bit InputStatus = false;
-    bit HoldingRegisters = false;
-    bit InputRegisters = false;
-
-    int StartingAddressCoilsStatus = 0;
-    int StartingAddressInputStatus = 0;
-    int StartingAddressHoldingRegisters = 0;
-    int StartingAddressInputRegisters = 0;
-    int StartingAddressWriteSingleCoil = 0;
-    int StartingAddressWriteSingleRegister = 0;
-    int StartingAddressWriteMultipleCoils = 0;
-    int StartingAddressWriteMultipleRegisters = 0;
-    int QuantityCoilsStatus = 0;
-    int QuantityInputStatus = 0;
-    int QuantityHoldingRegisters = 0;
-    int QuantityInputRegisters = 0;
-    int QuantityWriteMultipleCoils = 0;
-    int QuantityWriteMultipleRegisters = 0;
-    int FunctionCode = 01;
-    int IODataOrder = 1;
-    int IODataType = 1;
-    int PollInterval = 0;
-    int SlaveID = 1;
-    int StartingAddress = 0;
-    int Quantity = 0;
-
-    int DataBitConfig = 8;
-    int ParityConfig = 1;
-    int StopBitConfig = 1;
-    int BaudRate = 9600;
-    int TXPin = 35;
-    int RXPin = 36;
-    int SerialSelectionPin = 1;
-    int SerialPort = 1;
-
-    int Spare08 = 0;
-    int Spare09 = 0;
-    int Spare10 = 0;
-
-} PMMModBus;
 
 typedef struct PMMTimer
 {
@@ -348,12 +417,77 @@ typedef struct GerneralPurpose
 
 } GerneralPurpose;
 
+typedef struct PMMSERIAL
+{
+    int PortStopBit = 1; // 0
+    int PortDataBit = 8; // 1
+    int PortParity = 0; //  2 : 0 => Non , 1 => Odd , 2 => Even
+    int SerialConfig = 8; // 3 : 23 u_int16_t config = (databitLong | parityLong | stopbitLong);
+
+    long BaudRate = 9600; // 4
+
+    int TXPin = 35; // 5
+    int RXPin = 36;// 6
+    int SerialSelectionPin = 1; // 7
+    int SerialPort = 1; // 8
+    int PortFourInterface = 485; // 9
+
+    int Spare10 = 0;
+    int Spare11 = 0;
+    int Spare12 = 0;
+    int Spare13 = 0;
+    int Spare14 = 0;
+    int Spare15 = 0;
+    int Spare16 = 0;
+    int Spare17 = 0;
+    int Spare18 = 0;
+    int Spare19 = 0;
+    int Spare20 = 0;
+    int Spare21 = 0;
+    int Spare22 = 0;
+    int Spare23 = 0;
+    int Spare24 = 0;
+    int Spare25 = 0;
+    int Spare26 = 0;
+    int Spare27 = 0;
+    int Spare28 = 0;
+    int Spare29 = 0;
+    int Spare30 = 0;
+
+    //int Spare31 = 0;
+    bit spare3100 = false;
+    bit spare3101 = false;
+    bit spare3102 = false;
+    bit spare3103 = false;
+    bit spare3104 = false;
+    bit spare3105 = false;
+    bit spare3106 = false;
+    bit spare3107 = false;
+
+    bit spare3108 = false;
+    bit spare3109 = false;
+    bit spare3110 = false;
+    bit spare3111 = false;
+    bit spare3112 = false;
+    bit spare3113 = false;
+    bit spare3114 = false;
+    bit spare3115 = false;
+    
+
+    // modbus
+    PMMModBusPort PmmModBus;
+
+
+}PMMSERIAL;
+
+
 typedef struct Product
 {
 
     // General Flages
     bool EthernetRunning = false;
     bool SerialRunning = false;
+    bool WireRunning = false;
     bool I2CRunning = false;
     bool SPIRunning = false;
     bool ModbusRTUServerRunning = false ;

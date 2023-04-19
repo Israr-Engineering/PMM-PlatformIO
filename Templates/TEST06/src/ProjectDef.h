@@ -73,6 +73,15 @@
 PmmModBus PmmModbus;
 #endif
 
+#if defined MultiModbus
+//#include <PmmModbus.h>
+PmmModBus PmmModbusP02;
+PmmModBus PmmModbusP03;
+PmmModBus PmmModbusP04;
+#endif
+
+
+
 #ifdef PMMEEPROM
 #include <PmmExternalEEPROM.h>
 #endif

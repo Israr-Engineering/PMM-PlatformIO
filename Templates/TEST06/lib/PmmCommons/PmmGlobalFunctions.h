@@ -160,7 +160,13 @@ void PMMInitializeEthernet()
 
 void InitializeWire()
 {
-    Wire.begin();
+    if (ThisProduct.WireRunning == false)
+    {
+         Wire.begin();
+
+         ThisProduct.WireRunning = true;
+    }
+   
 }
 
 void PmmInitializeProjectSettings()
@@ -359,6 +365,9 @@ void PmmInitializeProjectSettings()
             }
         }
     }
+
+    // 7.  Time and running hours
+
 
     // STEP LAST ONE: Start General services
 

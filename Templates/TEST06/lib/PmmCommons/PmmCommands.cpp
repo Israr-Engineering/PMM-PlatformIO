@@ -1458,6 +1458,13 @@ String PMMCommnads(string readData)
         result =  PMMIsAlive();
     }
 
+    //NVIC_SystemReset();
+    if (readData == "PMMResetMCU1948")
+    {
+        NVIC_SystemReset();
+        result =  "Reset..";
+    }
+
     return result;
 }
 

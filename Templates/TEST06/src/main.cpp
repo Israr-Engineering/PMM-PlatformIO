@@ -51,9 +51,9 @@ void loop()
     // {
     //   SerialUSB.println(" Write fail");
     // }
-    // SerialUSB.print(x1);
-    // SerialUSB.println(" ..Running...");
-    MainLoopTimer = millis();
+     SerialUSB.print(x1);
+     SerialUSB.println(" ..Running...");
+     MainLoopTimer = millis();
     x1++;
   }
   yield();
