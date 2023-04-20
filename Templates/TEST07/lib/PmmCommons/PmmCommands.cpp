@@ -71,6 +71,7 @@ PMMIO PmmIO;
 PmmInternalRTC PmmRTCInternal;
 
 PmmDS3231 PmmRTCExternal;
+// Extra functions if needed
 PmmRTClib PMMDS3231A;
 
 /*****************************************************************
@@ -1486,10 +1487,7 @@ String PMMCommnads(string readData)
     }
 
     // Set and get clock from PC
-    //  PMMSetInternalRTC,year,month,day,hour,minute,seconds,mSeconds
     //  SETRTC,0,1,23,4,20,0,15,00,00,
-    // PMMSetInternalRTC,4384,1,1001,2001,3001,1,1001,2001,3001,32,64,128,256,100,100,03,1,1,1000,1,1,100,8,1,1,9600,35,36,1,1
-
     if (commandtype == "SETRTC,0,1") // internal RTC
     {
         string substring = "SETRTC,0,1,";
@@ -1499,7 +1497,7 @@ String PMMCommnads(string readData)
         // result = "Done";
     }
 
-    // SETRTC,1,1,23,4,20,0,15,00,00,
+    // SETRTC,1,1,23,4,20,10,19,00,00,
     if (commandtype == "SETRTC,1,1") // External RTC
     {
         string substring = "SETRTC,1,1,";
@@ -1552,9 +1550,7 @@ String GetInternalRTC()
     result = result + ",";
     result = result + String(PmmRTCInternal.getSeconds());
     result = result + ",";
-    // result = String(PmmRTCInternal.getYear());
-    result = result + "000,";
-
+    
     return result;
 }
 
@@ -1579,7 +1575,7 @@ String SetExternalRTC(string Message)
 String GetExternalRTC()
 {
 
-    DateTime now = PMMDS3231A.now();
+    DateTime now = PmmRTCExternal.now();
     String result = "";
 
     result = String(now.year());
@@ -1594,9 +1590,7 @@ String GetExternalRTC()
     result = result + ",";
     result = result + String(now.second());
     result = result + ",";
-    // result = String(PmmRTCInternal.getYear());
-    result = result + "000,";
-
+    
     return result;
 }
 

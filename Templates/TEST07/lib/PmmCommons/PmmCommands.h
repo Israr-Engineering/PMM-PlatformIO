@@ -4,6 +4,8 @@
 #include <PmmTypes.h>
 #include <PmmInternalRTC.h>
 
+#include <PmmDS3231.h>
+
 #define BowlingLed 5
 #define StatekLed 4
 // declare the existence of this global variable.
@@ -11,6 +13,7 @@
 extern Product ThisProduct;
 extern PMMIO PmmIO;
 extern PmmInternalRTC PmmRTCInternal;
+extern PmmDS3231 PmmRTCExternal;
 
 
 
@@ -44,7 +47,14 @@ extern String PMMCommnads(string readData);
 extern String PMMReturnDataFromSerialUSB();
 extern String PMMReturnDataFromAPIHTTPHeader();
 extern void PMMSendDataHTTPClient(String Data);
-extern String GetInternalRTC();
+// RTC
+
+String SetInternalRTC(string Message);
+String GetInternalRTC();
+
+String SetExternalRTC(string Message);
+String GetExternalRTC();
+
 
 // EEPROM
 extern void PmmWriteGeneralSettingsEEPROM(string Message);

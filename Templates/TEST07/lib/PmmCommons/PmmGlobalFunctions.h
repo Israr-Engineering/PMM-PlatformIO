@@ -4,7 +4,7 @@
 #define PMMGLOBALFUNCTIONS_H
 
 #include <PmmTypes.h>
-#include <PmmExternalRTC.h>
+
 
 extern void PmmInitializeProjectSettings();
 void PMMInitializeEthernet();
@@ -375,13 +375,13 @@ void PmmInitializeProjectSettings()
         ThisProduct.InternalRTCRunning = true;
     }
 
-    //8.RTC External (this need to be tested)
+    //8.RTC External 
 
     if(ThisProduct.PmmGeneral.ExternalRTC) // DS3231
     {
 
-       PMMInitializeExternalRTC();
-        ThisProduct.ExternalRTCRunning = true;
+       //PMMInitializeExternalRTC();
+       if(PmmRTCExternal.RTCCheck()) ThisProduct.ExternalRTCRunning = true;
     }
 
 

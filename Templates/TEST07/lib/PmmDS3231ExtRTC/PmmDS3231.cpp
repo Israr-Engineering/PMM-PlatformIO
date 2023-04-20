@@ -184,6 +184,49 @@ DateTime PmmRTClib::now(TwoWire & _Wire) {
 ///// ERIC'S ORIGINAL CODE FOLLOWS /////
 
 ///// PMM Added this 
+
+//Check if External RTC avalible on port Add 0x68
+bool PmmDS3231::RTCCheck()
+{
+    Wire.beginTransmission(0x68);
+    bool RTCFound = Wire.endTransmission() == 0;
+    return RTCFound;
+}
+
+DateTime PmmDS3231::now() {
+  _Wire.beginTransmission(CLOCK_ADDRESS);
+  _Wire.write(0);	// This is the first register address (Seconds)
+  			// We'll read from here on for 7 bytes: secs reg, minutes reg, hours, days, months and years.
+  _Wire.endTransmission();
+  
+  _Wire.requestFrom(CLOCK_ADDRESS, 7);
+  uint16_t ss = bcd2bin(_Wire.read() & 0x7F);
+  uint16_t mm = bcd2bin(_Wire.read());
+  uint16_t hh = bcd2bin(_Wire.read());
+  _Wire.read();
+  uint16_t d = bcd2bin(_Wire.read());
+  uint16_t m = bcd2bin(_Wire.read());
+  uint16_t y = bcd2bin(_Wire.read()) + 2000;
+  
+  return DateTime (y, m, d, hh, mm, ss);
+}
+
+PmmDS3231 InternalPmmDS3231;
+
+int16_t PmmDS3231::PmmDayOfYear()
+{
+    DateTime now = InternalPmmDS3231.now();
+    byte monthIndex = now.month();
+    byte dayNumber = now.day();
+    const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30};
+    int16_t numberOfDays = 0;
+    for (uint8_t i = 0; i < (monthIndex - 1); i++)
+        numberOfDays += daysInMonth[i];
+    numberOfDays += dayNumber;
+    return numberOfDays;
+}
+
+
 int16_t PmmDS3231::PmmDayOfYear(DateTime now)
 {
     //DateTime now = now();

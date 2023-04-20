@@ -69,8 +69,14 @@ class PmmDS3231 {
 
 		TwoWire & _Wire;
 
-		// Time-retrieval functions
+		// added by PMM
+		DateTime now() ;
+		bool RTCCheck() ;
 		int16_t PmmDayOfYear(DateTime now);
+		int16_t PmmDayOfYear();
+
+		// Time-retrieval functions
+		
 		// the get*() functions retrieve current values of the registers.
 		byte getSecond(); 
 		byte getMinute(); 
