@@ -494,6 +494,8 @@ typedef struct Product
     bool ModbusTCPServerRunning = false ;
     bool ModbusRTUClientRunning = false ;
     bool ModbusTCPClientRunning = false ;
+    bool InternalRTCRunning = false ;
+    bool ExternalRTCRunning = false ;
 
     // Settings Stucts
     PMMGeneral PmmGeneral;

@@ -56,6 +56,7 @@ class PmmRTClib {
   public:
 		// Get date and time snapshot
     static DateTime now(TwoWire & _Wire = Wire);
+	
 };
 
 // Eric's original code is everything below this line
@@ -69,7 +70,7 @@ class PmmDS3231 {
 		TwoWire & _Wire;
 
 		// Time-retrieval functions
-    
+		int16_t PmmDayOfYear(DateTime now);
 		// the get*() functions retrieve current values of the registers.
 		byte getSecond(); 
 		byte getMinute(); 

@@ -19,7 +19,7 @@ void setup()
 
   // STEP02: Initialize Extra needed Modules
   
-    PmmRTCInternal.begin();
+   
 
   // STEP05: Warmup 2 seconds
 

@@ -1,3 +1,6 @@
+#ifndef PMMEXTERNALRTC_H
+#define PMMEXTERNALRTC_H
+
 #ifdef PMMExternalRTC
 
 extern bool PMMInitializeExternalRTC();
@@ -11,5 +14,7 @@ extern int16_t PMMReturnCurrentHour();
 extern int16_t PMMReturnCurrentMinute();
 extern bool PMMRTCCheck();
 extern string PMMRTCStringTime();
+
+#endif
 
 #endif

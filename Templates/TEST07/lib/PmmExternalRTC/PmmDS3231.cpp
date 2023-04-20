@@ -180,7 +180,23 @@ DateTime PmmRTClib::now(TwoWire & _Wire) {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
+
 ///// ERIC'S ORIGINAL CODE FOLLOWS /////
+
+///// PMM Added this 
+int16_t PmmDS3231::PmmDayOfYear(DateTime now)
+{
+    //DateTime now = now();
+    byte monthIndex = now.month();
+    byte dayNumber = now.day();
+    const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30};
+    int16_t numberOfDays = 0;
+    for (uint8_t i = 0; i < (monthIndex - 1); i++)
+        numberOfDays += daysInMonth[i];
+    numberOfDays += dayNumber;
+    return numberOfDays;
+}
+
 
 byte PmmDS3231::getSecond() {
 	_Wire.beginTransmission(CLOCK_ADDRESS);

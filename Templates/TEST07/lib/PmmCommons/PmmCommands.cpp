@@ -9,7 +9,12 @@
 #include <PmmFlashStorage.h>
 #include <PmmSPISerialFlash.h>
 #include <PmmExternalEEPROMLib.h>
+
 #include <PmmInternalRTC.h>
+
+// #include <PmmExternalRTC.h>
+
+#include <PmmDS3231.h>
 
 #include "PmmCommands.h"
 
@@ -43,8 +48,12 @@ void PmmReadTimersSettingsInternalFlash();
 
 void PMMReadCommands();
 void PMMSendDataHTTPClient(String Data);
+
 String SetInternalRTC(string Message);
 String GetInternalRTC();
+
+String SetExternalRTC(string Message);
+String GetExternalRTC();
 
 PmmEthernetServer server(80);
 PmmEthernetClient client = server.available();
@@ -60,6 +69,9 @@ string binary[16];
 Product ThisProduct;
 PMMIO PmmIO;
 PmmInternalRTC PmmRTCInternal;
+
+PmmDS3231 PmmRTCExternal;
+PmmRTClib PMMDS3231A;
 
 /*****************************************************************
  * Common functions for all types of ROM
@@ -440,7 +452,7 @@ String PmmReadGeneralSettingsInternalFlash()
 
     settings = String(settings + String(",End"));
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     return settings;
 }
@@ -515,7 +527,7 @@ String PmmReadRTUSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmRTU.PortFourInterface));
     settings = String(settings + ",End");
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     return settings;
 }
@@ -591,7 +603,7 @@ String PmmReadTCPUDPSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmTCPUDP.UDPPortFour));
     settings = String(settings + ",End");
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
     return settings;
 }
 
@@ -676,7 +688,7 @@ String PmmReadModbusSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmModbus.SerialPort));
     settings = String(settings + ",End");
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     return settings;
 }
@@ -696,7 +708,7 @@ String PmmReadTimersSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmTimers.OneYearTimer));
     settings = String(settings + ",End");
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     return settings;
 }
@@ -999,7 +1011,7 @@ String PmmReadGeneralSettingsEEPROM()
 
     settings = String(settings + String("End"));
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     ThisProduct.PmmGeneral.DeviceName = GetIntDataFromEEprom(0);
     ThisProduct.PmmGeneral.SerialNumber = GetIntDataFromEEprom(1);
@@ -1071,7 +1083,7 @@ String PmmReadRTUSettingsEEPROM()
 
     settings = String(settings + String("End"));
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     ThisProduct.PmmRTU.PortOneName = GetIntDataFromEEprom(100);
     ThisProduct.PmmRTU.PortOneBaudRate = GetIntDataFromEEprom(101);
@@ -1122,7 +1134,7 @@ String PmmReadTCPUDPSettingsEEPROM()
 
     settings = String(settings + String("End"));
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     ThisProduct.PmmTCPUDP.MacAddress01 = GetIntDataFromEEprom(200);
     ThisProduct.PmmTCPUDP.MacAddress02 = GetIntDataFromEEprom(201);
@@ -1186,7 +1198,7 @@ String PmmReadModbusSettingsEEPROM()
 
     settings = String(settings + String("End"));
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     PmmConvertDecimalToBinary(GetIntDataFromEEprom(300));
 
@@ -1253,7 +1265,7 @@ String PmmReadTimersSettingsEEPROM()
     }
     settings = String(settings + ",END");
 
-    //SerialUSB.println(settings);
+    // SerialUSB.println(settings);
 
     PmmConvertDecimalToBinary(GetIntDataFromEEprom(500));
 
@@ -1367,7 +1379,7 @@ String PMMCommnads(string readData)
 
     if (commandtype == "PMMGet,0,0") // GET General TO STRING
     {
-       result =  PmmReadGeneralSettingsInternalFlash();
+        result = PmmReadGeneralSettingsInternalFlash();
     }
 
     if (commandtype == "PMMGet,0,1") // GET RTU TO STRING
@@ -1452,7 +1464,7 @@ String PMMCommnads(string readData)
 
     if (commandtype == "PMMGet,2,3") // GET Modbus TO STRING
     {
-       result =  PmmReadModbusSettingsEEPROM();
+        result = PmmReadModbusSettingsEEPROM();
     }
 
     if (commandtype == "PMMGet,2,4") // GET Timers TO STRING
@@ -1462,40 +1474,50 @@ String PMMCommnads(string readData)
 
     if (readData == "PMMTestConfiguration")
     {
-        result =  PMMIsAlive();
+        result = PMMIsAlive();
     }
 
-
-    //Actions
-    //Reset MCU =>NVIC_SystemReset();
+    // Actions
+    // Reset MCU =>NVIC_SystemReset();
     if (readData == "PMMResetMCU1948")
     {
         NVIC_SystemReset();
-        result =  "Reset..";
+        result = "Reset..";
     }
 
-    //Set and get clock from PC
-    // PMMSetInternalRTC,year,month,day,hour,minute,seconds,mSeconds
-    // SETRTC,0,1,23,4,20,0,15,00,00,
-    //PMMSetInternalRTC,4384,1,1001,2001,3001,1,1001,2001,3001,32,64,128,256,100,100,03,1,1,1000,1,1,100,8,1,1,9600,35,36,1,1
+    // Set and get clock from PC
+    //  PMMSetInternalRTC,year,month,day,hour,minute,seconds,mSeconds
+    //  SETRTC,0,1,23,4,20,0,15,00,00,
+    // PMMSetInternalRTC,4384,1,1001,2001,3001,1,1001,2001,3001,32,64,128,256,100,100,03,1,1,1000,1,1,100,8,1,1,9600,35,36,1,1
 
-     if (commandtype == "SETRTC,0,1") // internal RTC
+    if (commandtype == "SETRTC,0,1") // internal RTC
     {
         string substring = "SETRTC,0,1,";
         std::size_t ind = readData.find(substring);
         readData.erase(ind, substring.length());
         result = SetInternalRTC(readData);
-        //result = "Done";
+        // result = "Done";
     }
 
-
+    // SETRTC,1,1,23,4,20,0,15,00,00,
+    if (commandtype == "SETRTC,1,1") // External RTC
+    {
+        string substring = "SETRTC,1,1,";
+        std::size_t ind = readData.find(substring);
+        readData.erase(ind, substring.length());
+        result = SetExternalRTC(readData);
+        // result = "Done";
+    }
 
     if (readData == "PMMGetInternalRTC")
     {
-        
         result = GetInternalRTC();
-         
-    }  
+    }
+
+    if (readData == "PMMGetExternalRTC")
+    {
+        result = GetExternalRTC();
+    }
 
     return result;
 }
@@ -1503,15 +1525,14 @@ String PMMCommnads(string readData)
 String SetInternalRTC(string Message)
 {
     PmmStringToArray(Message);
-    
-    PmmRTCInternal.setDate(lowByte(stoi(values[2])),lowByte(stoi(values[1])),lowByte(stoi(values[0])));
-    PmmRTCInternal.setTime(lowByte(stoi(values[3])),lowByte(stoi(values[4])),lowByte(stoi(values[5])));
+
+    PmmRTCInternal.setDate(lowByte(stoi(values[2])), lowByte(stoi(values[1])), lowByte(stoi(values[0])));
+    PmmRTCInternal.setTime(lowByte(stoi(values[3])), lowByte(stoi(values[4])), lowByte(stoi(values[5])));
 
     // PmmRTCInternal.setDate(20,4,23);
     // PmmRTCInternal.setTime(13,15,0);
 
-     return "Internal RTC Updated";
-
+    return "Internal RTC Updated";
 }
 
 String GetInternalRTC()
@@ -1519,23 +1540,64 @@ String GetInternalRTC()
 
     String result = "";
 
-    result = String(PmmRTCInternal.getYear());  
-    result = result + ","; 
-    result = result + String(PmmRTCInternal.getMonth());  
-    result = result + ",";  
-    result = result + String(PmmRTCInternal.getDay());  
-    result = result + ","; 
-    result = result + String(PmmRTCInternal.getHours());  
-    result = result + ","; 
-    result = result + String(PmmRTCInternal.getMinutes());  
-    result = result + ","; 
-    result = result + String(PmmRTCInternal.getSeconds());  
-    result = result + ","; 
-    //result = String(PmmRTCInternal.getYear());  
-    result = result + "000,"; 
+    result = String(PmmRTCInternal.getYear());
+    result = result + ",";
+    result = result + String(PmmRTCInternal.getMonth());
+    result = result + ",";
+    result = result + String(PmmRTCInternal.getDay());
+    result = result + ",";
+    result = result + String(PmmRTCInternal.getHours());
+    result = result + ",";
+    result = result + String(PmmRTCInternal.getMinutes());
+    result = result + ",";
+    result = result + String(PmmRTCInternal.getSeconds());
+    result = result + ",";
+    // result = String(PmmRTCInternal.getYear());
+    result = result + "000,";
 
     return result;
+}
 
+// External RTC DS3231
+String SetExternalRTC(string Message)
+{
+    PmmStringToArray(Message);
+
+    PmmRTCExternal.setYear(lowByte(stoi(values[0])));
+    PmmRTCExternal.setMonth(lowByte(stoi(values[1])));
+    PmmRTCExternal.setDate(lowByte(stoi(values[2])));
+
+    PmmRTCExternal.setClockMode(false); // 24h mode
+    PmmRTCExternal.setHour(lowByte(stoi(values[3])));
+    PmmRTCExternal.setMinute(lowByte(stoi(values[4])));
+    PmmRTCExternal.setSecond(lowByte(stoi(values[5])));
+
+    return "External RTC Updated";
+}
+
+// External RTC DS3231
+String GetExternalRTC()
+{
+
+    DateTime now = PMMDS3231A.now();
+    String result = "";
+
+    result = String(now.year());
+    result = result + ",";
+    result = result + String(now.month());
+    result = result + ",";
+    result = result + String(now.day());
+    result = result + ",";
+    result = result + String(now.hour());
+    result = result + ",";
+    result = result + String(now.minute());
+    result = result + ",";
+    result = result + String(now.second());
+    result = result + ",";
+    // result = String(PmmRTCInternal.getYear());
+    result = result + "000,";
+
+    return result;
 }
 
 void PMMReadCommands()
