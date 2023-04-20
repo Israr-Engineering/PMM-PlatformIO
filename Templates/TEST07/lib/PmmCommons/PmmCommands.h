@@ -2,6 +2,7 @@
 #define PMMCOMMANDS_H
 
 #include <PmmTypes.h>
+#include <PmmInternalRTC.h>
 
 #define BowlingLed 5
 #define StatekLed 4
@@ -9,6 +10,8 @@
 
 extern Product ThisProduct;
 extern PMMIO PmmIO;
+extern PmmInternalRTC PmmRTCInternal;
+
 
 
 // Common functions
@@ -41,6 +44,7 @@ extern String PMMCommnads(string readData);
 extern String PMMReturnDataFromSerialUSB();
 extern String PMMReturnDataFromAPIHTTPHeader();
 extern void PMMSendDataHTTPClient(String Data);
+extern String GetInternalRTC();
 
 // EEPROM
 extern void PmmWriteGeneralSettingsEEPROM(string Message);

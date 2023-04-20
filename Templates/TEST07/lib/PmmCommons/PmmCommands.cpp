@@ -9,6 +9,7 @@
 #include <PmmFlashStorage.h>
 #include <PmmSPISerialFlash.h>
 #include <PmmExternalEEPROMLib.h>
+#include <PmmInternalRTC.h>
 
 #include "PmmCommands.h"
 
@@ -42,6 +43,8 @@ void PmmReadTimersSettingsInternalFlash();
 
 void PMMReadCommands();
 void PMMSendDataHTTPClient(String Data);
+String SetInternalRTC(string Message);
+String GetInternalRTC();
 
 PmmEthernetServer server(80);
 PmmEthernetClient client = server.available();
@@ -56,6 +59,7 @@ int binaryInt[16];
 string binary[16];
 Product ThisProduct;
 PMMIO PmmIO;
+PmmInternalRTC PmmRTCInternal;
 
 /*****************************************************************
  * Common functions for all types of ROM
@@ -65,6 +69,8 @@ void PmmStringToArray(string input)
 {
     // declaring character array (+1 for null terminator)
     char *char_array = new char[128];
+
+    SerialUSB.println(input.c_str());
 
     // copying the contents of the
     // string to char array
@@ -83,6 +89,7 @@ void PmmStringToArray(string input)
     {
         string s(strings[n]);
         values[n] = s;
+        SerialUSB.println(s.c_str());
     }
 }
 
@@ -1458,15 +1465,92 @@ String PMMCommnads(string readData)
         result =  PMMIsAlive();
     }
 
-    //NVIC_SystemReset();
+
+    //Actions
+    //Reset MCU =>NVIC_SystemReset();
     if (readData == "PMMResetMCU1948")
     {
         NVIC_SystemReset();
         result =  "Reset..";
     }
 
+    //Set and get clock from PC
+    // PMMSetInternalRTC,year,month,day,hour,minute,seconds,mSeconds
+    // PMMSetInternalRTC,23,4,20,3,37,00,00,
+    //PMMSetInternalRTC,4384,1,1001,2001,3001,1,1001,2001,3001,32,64,128,256,100,100,03,1,1,1000,1,1,100,8,1,1,9600,35,36,1,1
+
+    if (readData == "PMMSetInternalRTC")
+    {
+
+        // SerialUSB.println(readData.c_str());
+        
+        // string substring = "PMMSetInternalRTC,";
+
+        // std::size_t ind = readData.find(substring);
+        // readData.erase(ind, substring.length());
+        
+         result = SetInternalRTC(readData);
+         
+    }
+
+    if (readData == "PMMGetInternalRTC")
+    {
+        
+        result = GetInternalRTC();
+         
+    }
+
+    
+
+
+
+
     return result;
 }
+
+String SetInternalRTC(string Message)
+{
+    //PmmStringToArray(Message);
+    SerialUSB.println("Recevied ...");
+    SerialUSB.println(Message.c_str());
+
+    //PmmConvertDecimalToBinary(stoi(values[0]));
+    // PmmRTCInternal.setDate(lowByte(stoi(values[3])),lowByte(stoi(values[2])),lowByte(stoi(values[2])));
+    // PmmRTCInternal.setTime(lowByte(stoi(values[4])),lowByte(stoi(values[5])),lowByte(stoi(values[6])));
+
+    PmmRTCInternal.setDate(20,4,23);
+    PmmRTCInternal.setTime(5,12,0);
+
+     return "Internal RTC Updated";
+
+}
+
+
+String GetInternalRTC()
+{
+
+    String result = "";
+
+    result = String(PmmRTCInternal.getYear());  
+    result = result + ","; 
+    result = result + String(PmmRTCInternal.getMonth());  
+    result = result + ",";  
+    result = result + String(PmmRTCInternal.getDay());  
+    result = result + ","; 
+    result = result + String(PmmRTCInternal.getHours());  
+    result = result + ","; 
+    result = result + String(PmmRTCInternal.getMinutes());  
+    result = result + ","; 
+    result = result + String(PmmRTCInternal.getSeconds());  
+    result = result + ","; 
+    //result = String(PmmRTCInternal.getYear());  
+    result = result + "000,"; 
+
+    return result;
+
+}
+
+
 
 void PMMReadCommands()
 {

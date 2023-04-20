@@ -5,7 +5,7 @@
 #include <PmmGlobalFunctions.h>
 
 
-PmmInternalRTC PmmRTCInternal;
+
 
 void setup()
 {
