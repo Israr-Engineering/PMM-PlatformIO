@@ -52,8 +52,12 @@ void loop()
     //   SerialUSB.println(" Write fail");
     // }
 
-     SerialUSB.print(PmmRTCInternal.getHours());SerialUSB.print(" : ");
-      SerialUSB.print(PmmRTCInternal.getMinutes());SerialUSB.print(" : ");
+    SerialUSB.print(PmmRTCInternal.getYear());SerialUSB.print("-");
+      SerialUSB.print(PmmRTCInternal.getMonth());SerialUSB.print("-");
+       SerialUSB.print(PmmRTCInternal.getDay());SerialUSB.print(" ");
+
+     SerialUSB.print(PmmRTCInternal.getHours());SerialUSB.print(":");
+      SerialUSB.print(PmmRTCInternal.getMinutes());SerialUSB.print(":");
        SerialUSB.print(PmmRTCInternal.getSeconds());
        
      SerialUSB.println(" ..Running...");

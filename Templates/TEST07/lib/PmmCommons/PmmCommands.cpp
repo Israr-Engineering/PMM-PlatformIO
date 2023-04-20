@@ -1476,7 +1476,7 @@ String PMMCommnads(string readData)
 
     //Set and get clock from PC
     // PMMSetInternalRTC,year,month,day,hour,minute,seconds,mSeconds
-    // SETRTC,0,1,23,4,20,13,15,00,00,
+    // SETRTC,0,1,23,4,20,0,15,00,00,
     //PMMSetInternalRTC,4384,1,1001,2001,3001,1,1001,2001,3001,32,64,128,256,100,100,03,1,1,1000,1,1,100,8,1,1,9600,35,36,1,1
 
      if (commandtype == "SETRTC,0,1") // internal RTC
@@ -1504,12 +1504,11 @@ String SetInternalRTC(string Message)
 {
     PmmStringToArray(Message);
     
-    //PmmConvertDecimalToBinary(stoi(values[0]));
-    // PmmRTCInternal.setDate(lowByte(stoi(values[3])),lowByte(stoi(values[2])),lowByte(stoi(values[2])));
-    // PmmRTCInternal.setTime(lowByte(stoi(values[4])),lowByte(stoi(values[5])),lowByte(stoi(values[6])));
+    PmmRTCInternal.setDate(lowByte(stoi(values[2])),lowByte(stoi(values[1])),lowByte(stoi(values[0])));
+    PmmRTCInternal.setTime(lowByte(stoi(values[3])),lowByte(stoi(values[4])),lowByte(stoi(values[5])));
 
-    PmmRTCInternal.setDate(20,4,23);
-    PmmRTCInternal.setTime(13,15,0);
+    // PmmRTCInternal.setDate(20,4,23);
+    // PmmRTCInternal.setTime(13,15,0);
 
      return "Internal RTC Updated";
 
