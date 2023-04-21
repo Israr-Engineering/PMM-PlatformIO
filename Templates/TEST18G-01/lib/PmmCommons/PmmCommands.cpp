@@ -149,26 +149,26 @@ FlashStorage(Product_flash_store, Product);
 FlashStorage(General_flash_store, PMMGeneral);
 
 FlashStorage(TCPUDP_flash_store, PMMTCPUDP);
-FlashStorage(TCPUDP_Protocol_store, PMMModBusPort);
+FlashStorage(TCPUDP_Protocol_store, PMMProtocol);
 
 FlashStorage(Serial_flash_store01, PMMSERIAL);
-FlashStorage(Serial_Protoco_store01, PMMModBusPort);
+FlashStorage(Serial_Protoco_store01, PMMProtocol);
 
 FlashStorage(Serial_flash_store02, PMMSERIAL);
-FlashStorage(Serial_Protoco_store02, PMMModBusPort);
+FlashStorage(Serial_Protoco_store02, PMMProtocol);
 
 FlashStorage(Serial_flash_store03, PMMSERIAL);
-FlashStorage(Serial_Protoco_store03, PMMModBusPort);
+FlashStorage(Serial_Protoco_store03, PMMProtocol);
 
 FlashStorage(Serial_flash_store04, PMMSERIAL);
-FlashStorage(Serial_Protoco_store04, PMMModBusPort);
+FlashStorage(Serial_Protoco_store04, PMMProtocol);
 
 FlashStorage(Timers_flash_store, PMMTimer);
 
 FlashStorage(Claibration_flash_Page01, PMMDeviceCalibration);
 FlashStorage(Claibration_flash_Page02, PMMDeviceCalibration);
 
-FlashStorage(GerneralPurpose_flash_Page02, GerneralPurpose);
+FlashStorage(GerneralPurpose_flash_store, GerneralPurpose);
 
 
 void PmmWriteGeneralSettingsInternalFlash(string Message)
@@ -208,15 +208,15 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
 
     PmmConvertDecimalToBinary(stoi(values[12]));
 
-    ThisProduct.PmmGeneral.IsModBus = binaryInt[8];
-    ThisProduct.PmmGeneral.IsCanBus = binaryInt[7];
-    ThisProduct.PmmGeneral.IsProfiBus = binaryInt[6];
-    ThisProduct.PmmGeneral.IsProfiNet = binaryInt[5];
-    ThisProduct.PmmGeneral.IsBACnet = binaryInt[4];
-    ThisProduct.PmmGeneral.IsDLMS = binaryInt[3];
-    ThisProduct.PmmGeneral.IsMBus = binaryInt[2];
-    ThisProduct.PmmGeneral.IsOPC = binaryInt[1];
-    ThisProduct.PmmGeneral.Canprint = binaryInt[0];
+    // ThisProduct.PmmGeneral.IsModBus = binaryInt[8];
+    // ThisProduct.PmmGeneral.IsCanBus = binaryInt[7];
+    // ThisProduct.PmmGeneral.IsProfiBus = binaryInt[6];
+    // ThisProduct.PmmGeneral.IsProfiNet = binaryInt[5];
+    // ThisProduct.PmmGeneral.IsBACnet = binaryInt[4];
+    // ThisProduct.PmmGeneral.IsDLMS = binaryInt[3];
+    // ThisProduct.PmmGeneral.IsMBus = binaryInt[2];
+    // ThisProduct.PmmGeneral.IsOPC = binaryInt[1];
+    // ThisProduct.PmmGeneral.Canprint = binaryInt[0];
 
     ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[13]);
     ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[14]);
@@ -234,42 +234,42 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
 
 void PmmWriteRTUSettingsInternalFlash(string Message)
 {
-    PmmStringToArray(Message);
+    // PmmStringToArray(Message);
 
-    ThisProduct.PmmRTU.PortOneName = stoi(values[0]);
-    ThisProduct.PmmRTU.PortOneBaudRate = stoi(values[1]);
-    ThisProduct.PmmRTU.PortOneStopBit = stoi(values[2]);
-    ThisProduct.PmmRTU.PortOneDataBit = stoi(values[3]);
-    ThisProduct.PmmRTU.PortOneParity = stoi(values[4]);
-    ThisProduct.PmmRTU.PortOneConnectionTimeout = stoi(values[5]);
-    ThisProduct.PmmRTU.PortOneMaxRetryRTU = stoi(values[6]);
-    ThisProduct.PmmRTU.PortOneInterface = stoi(values[7]);
-    ThisProduct.PmmRTU.PortTwoName = stoi(values[8]);
-    ThisProduct.PmmRTU.PortTwoBaudRate = stoi(values[9]);
-    ThisProduct.PmmRTU.PortTwoStopBit = stoi(values[10]);
-    ThisProduct.PmmRTU.PortTwoDataBit = stoi(values[11]);
-    ThisProduct.PmmRTU.PortTwoParity = stoi(values[12]);
-    ThisProduct.PmmRTU.PortTwoConnectionTimeout = stoi(values[13]);
-    ThisProduct.PmmRTU.PortTwoMaxRetryRTU = stoi(values[14]);
-    ThisProduct.PmmRTU.PortTwoInterface = stoi(values[15]);
-    ThisProduct.PmmRTU.PortThreeName = stoi(values[16]);
-    ThisProduct.PmmRTU.PortThreeBaudRate = stoi(values[17]);
-    ThisProduct.PmmRTU.PortThreeStopBit = stoi(values[18]);
-    ThisProduct.PmmRTU.PortThreeDataBit = stoi(values[19]);
-    ThisProduct.PmmRTU.PortThreeParity = stoi(values[20]);
-    ThisProduct.PmmRTU.PortThreeConnectionTimeout = stoi(values[21]);
-    ThisProduct.PmmRTU.PortThreeMaxRetryRTU = stoi(values[22]);
-    ThisProduct.PmmRTU.PortThreeInterface = stoi(values[23]);
-    ThisProduct.PmmRTU.PortFourName = stoi(values[24]);
-    ThisProduct.PmmRTU.PortFourBaudRate = stoi(values[25]);
-    ThisProduct.PmmRTU.PortFourStopBit = stoi(values[26]);
-    ThisProduct.PmmRTU.PortFourDataBit = stoi(values[27]);
-    ThisProduct.PmmRTU.PortFourParity = stoi(values[28]);
-    ThisProduct.PmmRTU.PortFourConnectionTimeout = stoi(values[26]);
-    ThisProduct.PmmRTU.PortFourMaxRetryRTU = stoi(values[30]);
-    ThisProduct.PmmRTU.PortFourInterface = stoi(values[31]);
+    // ThisProduct.PmmRTU.PortOneName = stoi(values[0]);
+    // ThisProduct.PmmRTU.PortOneBaudRate = stoi(values[1]);
+    // ThisProduct.PmmRTU.PortOneStopBit = stoi(values[2]);
+    // ThisProduct.PmmRTU.PortOneDataBit = stoi(values[3]);
+    // ThisProduct.PmmRTU.PortOneParity = stoi(values[4]);
+    // ThisProduct.PmmRTU.PortOneConnectionTimeout = stoi(values[5]);
+    // ThisProduct.PmmRTU.PortOneMaxRetryRTU = stoi(values[6]);
+    // ThisProduct.PmmRTU.PortOneInterface = stoi(values[7]);
+    // ThisProduct.PmmRTU.PortTwoName = stoi(values[8]);
+    // ThisProduct.PmmRTU.PortTwoBaudRate = stoi(values[9]);
+    // ThisProduct.PmmRTU.PortTwoStopBit = stoi(values[10]);
+    // ThisProduct.PmmRTU.PortTwoDataBit = stoi(values[11]);
+    // ThisProduct.PmmRTU.PortTwoParity = stoi(values[12]);
+    // ThisProduct.PmmRTU.PortTwoConnectionTimeout = stoi(values[13]);
+    // ThisProduct.PmmRTU.PortTwoMaxRetryRTU = stoi(values[14]);
+    // ThisProduct.PmmRTU.PortTwoInterface = stoi(values[15]);
+    // ThisProduct.PmmRTU.PortThreeName = stoi(values[16]);
+    // ThisProduct.PmmRTU.PortThreeBaudRate = stoi(values[17]);
+    // ThisProduct.PmmRTU.PortThreeStopBit = stoi(values[18]);
+    // ThisProduct.PmmRTU.PortThreeDataBit = stoi(values[19]);
+    // ThisProduct.PmmRTU.PortThreeParity = stoi(values[20]);
+    // ThisProduct.PmmRTU.PortThreeConnectionTimeout = stoi(values[21]);
+    // ThisProduct.PmmRTU.PortThreeMaxRetryRTU = stoi(values[22]);
+    // ThisProduct.PmmRTU.PortThreeInterface = stoi(values[23]);
+    // ThisProduct.PmmRTU.PortFourName = stoi(values[24]);
+    // ThisProduct.PmmRTU.PortFourBaudRate = stoi(values[25]);
+    // ThisProduct.PmmRTU.PortFourStopBit = stoi(values[26]);
+    // ThisProduct.PmmRTU.PortFourDataBit = stoi(values[27]);
+    // ThisProduct.PmmRTU.PortFourParity = stoi(values[28]);
+    // ThisProduct.PmmRTU.PortFourConnectionTimeout = stoi(values[26]);
+    // ThisProduct.PmmRTU.PortFourMaxRetryRTU = stoi(values[30]);
+    // ThisProduct.PmmRTU.PortFourInterface = stoi(values[31]);
 
-    RTU_flash_store.write(ThisProduct.PmmRTU);
+    // RTU_flash_store.write(ThisProduct.PmmRTU);
 }
 
 void PmmWriteTCPUDPSettingsInternalFlash(string Message)
@@ -440,16 +440,16 @@ String PmmReadGeneralSettingsInternalFlash()
     settings = String(settings + String(ThisProduct.PmmGeneral.UDPOption));
     settings = String(settings + String(ThisProduct.PmmGeneral.GateWay));
     settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmGeneral.IsModBus));
-    settings = String(settings + String(ThisProduct.PmmGeneral.IsCanBus));
-    settings = String(settings + String(ThisProduct.PmmGeneral.IsProfiBus));
-    settings = String(settings + String(ThisProduct.PmmGeneral.IsProfiNet));
-    settings = String(settings + String(ThisProduct.PmmGeneral.IsBACnet));
-    settings = String(settings + String(ThisProduct.PmmGeneral.IsDLMS));
-    settings = String(settings + String(ThisProduct.PmmGeneral.IsMBus));
-    settings = String(settings + String(ThisProduct.PmmGeneral.IsOPC));
-    settings = String(settings + String(ThisProduct.PmmGeneral.Canprint));
-    settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmGeneral.IsModBus));
+    // settings = String(settings + String(ThisProduct.PmmGeneral.IsCanBus));
+    // settings = String(settings + String(ThisProduct.PmmGeneral.IsProfiBus));
+    // settings = String(settings + String(ThisProduct.PmmGeneral.IsProfiNet));
+    // settings = String(settings + String(ThisProduct.PmmGeneral.IsBACnet));
+    // settings = String(settings + String(ThisProduct.PmmGeneral.IsDLMS));
+    // settings = String(settings + String(ThisProduct.PmmGeneral.IsMBus));
+    // settings = String(settings + String(ThisProduct.PmmGeneral.IsOPC));
+    // settings = String(settings + String(ThisProduct.PmmGeneral.Canprint));
+    // settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.NumberOfInputs));
     settings = String(settings + ",");
     settings = String(settings + String(ThisProduct.PmmGeneral.NumberOfOutputs));
@@ -479,77 +479,79 @@ String PmmReadGeneralSettingsInternalFlash()
 
 String PmmReadRTUSettingsInternalFlash()
 {
-    ThisProduct.PmmRTU = RTU_flash_store.read();
-    String settings = "";
+    // ThisProduct.PmmRTU = RTU_flash_store.read();
+    // String settings = "";
 
-    settings = String(settings + String(ThisProduct.PmmRTU.PortOneName));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortOneBaudRate));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortOneStopBit));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortOneDataBit));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortOneParity));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortOneConnectionTimeout));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortOneMaxRetryRTU));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortOneInterface));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortTwoName));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortTwoBaudRate));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortTwoStopBit));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortTwoDataBit));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortTwoParity));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortTwoConnectionTimeout));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortTwoMaxRetryRTU));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortTwoInterface));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortThreeName));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortThreeBaudRate));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortThreeStopBit));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortThreeDataBit));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortThreeParity));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortThreeConnectionTimeout));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortThreeMaxRetryRTU));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortThreeInterface));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortFourName));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortFourBaudRate));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortFourStopBit));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortFourDataBit));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortFourParity));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortFourConnectionTimeout));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortFourMaxRetryRTU));
-    settings = String(settings + ",");
-    settings = String(settings + String(ThisProduct.PmmRTU.PortFourInterface));
-    settings = String(settings + ",End");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortOneName));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortOneBaudRate));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortOneStopBit));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortOneDataBit));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortOneParity));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortOneConnectionTimeout));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortOneMaxRetryRTU));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortOneInterface));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortTwoName));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortTwoBaudRate));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortTwoStopBit));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortTwoDataBit));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortTwoParity));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortTwoConnectionTimeout));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortTwoMaxRetryRTU));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortTwoInterface));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortThreeName));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortThreeBaudRate));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortThreeStopBit));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortThreeDataBit));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortThreeParity));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortThreeConnectionTimeout));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortThreeMaxRetryRTU));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortThreeInterface));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortFourName));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortFourBaudRate));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortFourStopBit));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortFourDataBit));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortFourParity));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortFourConnectionTimeout));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortFourMaxRetryRTU));
+    // settings = String(settings + ",");
+    // settings = String(settings + String(ThisProduct.PmmRTU.PortFourInterface));
+    // settings = String(settings + ",End");
 
     // SerialUSB.println(settings);
 
-    return settings;
+    //return settings;
+     return "settings";
+
 }
 
 String PmmReadTCPUDPSettingsInternalFlash()
@@ -790,15 +792,15 @@ void PmmWriteGeneralSettingsEEPROM(string Message)
 
     PmmConvertDecimalToBinary(stoi(values[12]));
 
-    ThisProduct.PmmGeneral.IsModBus = binaryInt[8];
-    ThisProduct.PmmGeneral.IsCanBus = binaryInt[7];
-    ThisProduct.PmmGeneral.IsProfiBus = binaryInt[6];
-    ThisProduct.PmmGeneral.IsProfiNet = binaryInt[5];
-    ThisProduct.PmmGeneral.IsBACnet = binaryInt[4];
-    ThisProduct.PmmGeneral.IsDLMS = binaryInt[3];
-    ThisProduct.PmmGeneral.IsMBus = binaryInt[2];
-    ThisProduct.PmmGeneral.IsOPC = binaryInt[1];
-    ThisProduct.PmmGeneral.IsOPC = binaryInt[0];
+    // ThisProduct.PmmGeneral.IsModBus = binaryInt[8];
+    // ThisProduct.PmmGeneral.IsCanBus = binaryInt[7];
+    // ThisProduct.PmmGeneral.IsProfiBus = binaryInt[6];
+    // ThisProduct.PmmGeneral.IsProfiNet = binaryInt[5];
+    // ThisProduct.PmmGeneral.IsBACnet = binaryInt[4];
+    // ThisProduct.PmmGeneral.IsDLMS = binaryInt[3];
+    // ThisProduct.PmmGeneral.IsMBus = binaryInt[2];
+    // ThisProduct.PmmGeneral.IsOPC = binaryInt[1];
+    // ThisProduct.PmmGeneral.IsOPC = binaryInt[0];
 
     ThisProduct.PmmGeneral.NumberOfInputs = stoi(values[13]);
     ThisProduct.PmmGeneral.NumberOfOutputs = stoi(values[14]);
@@ -821,38 +823,38 @@ void PmmWriteRTUSettingsEEPROM(string Message)
 {
     PmmStringToArray(Message);
 
-    ThisProduct.PmmRTU.PortOneName = stoi(values[0]);
-    ThisProduct.PmmRTU.PortOneBaudRate = stoi(values[1]);
-    ThisProduct.PmmRTU.PortOneStopBit = stoi(values[2]);
-    ThisProduct.PmmRTU.PortOneDataBit = stoi(values[3]);
-    ThisProduct.PmmRTU.PortOneParity = stoi(values[4]);
-    ThisProduct.PmmRTU.PortOneConnectionTimeout = stoi(values[5]);
-    ThisProduct.PmmRTU.PortOneMaxRetryRTU = stoi(values[6]);
-    ThisProduct.PmmRTU.PortOneInterface = stoi(values[7]);
-    ThisProduct.PmmRTU.PortTwoName = stoi(values[8]);
-    ThisProduct.PmmRTU.PortTwoBaudRate = stoi(values[9]);
-    ThisProduct.PmmRTU.PortTwoStopBit = stoi(values[10]);
-    ThisProduct.PmmRTU.PortTwoDataBit = stoi(values[11]);
-    ThisProduct.PmmRTU.PortTwoParity = stoi(values[12]);
-    ThisProduct.PmmRTU.PortTwoConnectionTimeout = stoi(values[13]);
-    ThisProduct.PmmRTU.PortTwoMaxRetryRTU = stoi(values[14]);
-    ThisProduct.PmmRTU.PortTwoInterface = stoi(values[15]);
-    ThisProduct.PmmRTU.PortThreeName = stoi(values[16]);
-    ThisProduct.PmmRTU.PortThreeBaudRate = stoi(values[17]);
-    ThisProduct.PmmRTU.PortThreeStopBit = stoi(values[18]);
-    ThisProduct.PmmRTU.PortThreeDataBit = stoi(values[19]);
-    ThisProduct.PmmRTU.PortThreeParity = stoi(values[20]);
-    ThisProduct.PmmRTU.PortThreeConnectionTimeout = stoi(values[21]);
-    ThisProduct.PmmRTU.PortThreeMaxRetryRTU = stoi(values[22]);
-    ThisProduct.PmmRTU.PortThreeInterface = stoi(values[23]);
-    ThisProduct.PmmRTU.PortFourName = stoi(values[24]);
-    ThisProduct.PmmRTU.PortFourBaudRate = stoi(values[25]);
-    ThisProduct.PmmRTU.PortFourStopBit = stoi(values[26]);
-    ThisProduct.PmmRTU.PortFourDataBit = stoi(values[27]);
-    ThisProduct.PmmRTU.PortFourParity = stoi(values[28]);
-    ThisProduct.PmmRTU.PortFourConnectionTimeout = stoi(values[26]);
-    ThisProduct.PmmRTU.PortFourMaxRetryRTU = stoi(values[30]);
-    ThisProduct.PmmRTU.PortFourInterface = stoi(values[31]);
+    // ThisProduct.PmmRTU.PortOneName = stoi(values[0]);
+    // ThisProduct.PmmRTU.PortOneBaudRate = stoi(values[1]);
+    // ThisProduct.PmmRTU.PortOneStopBit = stoi(values[2]);
+    // ThisProduct.PmmRTU.PortOneDataBit = stoi(values[3]);
+    // ThisProduct.PmmRTU.PortOneParity = stoi(values[4]);
+    // ThisProduct.PmmRTU.PortOneConnectionTimeout = stoi(values[5]);
+    // ThisProduct.PmmRTU.PortOneMaxRetryRTU = stoi(values[6]);
+    // ThisProduct.PmmRTU.PortOneInterface = stoi(values[7]);
+    // ThisProduct.PmmRTU.PortTwoName = stoi(values[8]);
+    // ThisProduct.PmmRTU.PortTwoBaudRate = stoi(values[9]);
+    // ThisProduct.PmmRTU.PortTwoStopBit = stoi(values[10]);
+    // ThisProduct.PmmRTU.PortTwoDataBit = stoi(values[11]);
+    // ThisProduct.PmmRTU.PortTwoParity = stoi(values[12]);
+    // ThisProduct.PmmRTU.PortTwoConnectionTimeout = stoi(values[13]);
+    // ThisProduct.PmmRTU.PortTwoMaxRetryRTU = stoi(values[14]);
+    // ThisProduct.PmmRTU.PortTwoInterface = stoi(values[15]);
+    // ThisProduct.PmmRTU.PortThreeName = stoi(values[16]);
+    // ThisProduct.PmmRTU.PortThreeBaudRate = stoi(values[17]);
+    // ThisProduct.PmmRTU.PortThreeStopBit = stoi(values[18]);
+    // ThisProduct.PmmRTU.PortThreeDataBit = stoi(values[19]);
+    // ThisProduct.PmmRTU.PortThreeParity = stoi(values[20]);
+    // ThisProduct.PmmRTU.PortThreeConnectionTimeout = stoi(values[21]);
+    // ThisProduct.PmmRTU.PortThreeMaxRetryRTU = stoi(values[22]);
+    // ThisProduct.PmmRTU.PortThreeInterface = stoi(values[23]);
+    // ThisProduct.PmmRTU.PortFourName = stoi(values[24]);
+    // ThisProduct.PmmRTU.PortFourBaudRate = stoi(values[25]);
+    // ThisProduct.PmmRTU.PortFourStopBit = stoi(values[26]);
+    // ThisProduct.PmmRTU.PortFourDataBit = stoi(values[27]);
+    // ThisProduct.PmmRTU.PortFourParity = stoi(values[28]);
+    // ThisProduct.PmmRTU.PortFourConnectionTimeout = stoi(values[26]);
+    // ThisProduct.PmmRTU.PortFourMaxRetryRTU = stoi(values[30]);
+    // ThisProduct.PmmRTU.PortFourInterface = stoi(values[31]);
 
     for (int index = 0; index < 32; index++)
     {
@@ -1067,15 +1069,15 @@ String PmmReadGeneralSettingsEEPROM()
 
     PmmConvertDecimalToBinary(GetIntDataFromEEprom(12));
 
-    ThisProduct.PmmGeneral.IsModBus = binaryInt[8];
-    ThisProduct.PmmGeneral.IsCanBus = binaryInt[7];
-    ThisProduct.PmmGeneral.IsProfiBus = binaryInt[6];
-    ThisProduct.PmmGeneral.IsProfiNet = binaryInt[5];
-    ThisProduct.PmmGeneral.IsBACnet = binaryInt[4];
-    ThisProduct.PmmGeneral.IsDLMS = binaryInt[3];
-    ThisProduct.PmmGeneral.IsMBus = binaryInt[2];
-    ThisProduct.PmmGeneral.IsOPC = binaryInt[1];
-    ThisProduct.PmmGeneral.Canprint = binaryInt[0];
+    // ThisProduct.PmmGeneral.IsModBus = binaryInt[8];
+    // ThisProduct.PmmGeneral.IsCanBus = binaryInt[7];
+    // ThisProduct.PmmGeneral.IsProfiBus = binaryInt[6];
+    // ThisProduct.PmmGeneral.IsProfiNet = binaryInt[5];
+    // ThisProduct.PmmGeneral.IsBACnet = binaryInt[4];
+    // ThisProduct.PmmGeneral.IsDLMS = binaryInt[3];
+    // ThisProduct.PmmGeneral.IsMBus = binaryInt[2];
+    // ThisProduct.PmmGeneral.IsOPC = binaryInt[1];
+    // ThisProduct.PmmGeneral.Canprint = binaryInt[0];
 
     ThisProduct.PmmGeneral.NumberOfInputs = GetIntDataFromEEprom(13);
     ThisProduct.PmmGeneral.NumberOfOutputs = GetIntDataFromEEprom(14);
@@ -1105,38 +1107,38 @@ String PmmReadRTUSettingsEEPROM()
 
     // SerialUSB.println(settings);
 
-    ThisProduct.PmmRTU.PortOneName = GetIntDataFromEEprom(100);
-    ThisProduct.PmmRTU.PortOneBaudRate = GetIntDataFromEEprom(101);
-    ThisProduct.PmmRTU.PortOneStopBit = GetIntDataFromEEprom(102);
-    ThisProduct.PmmRTU.PortOneDataBit = GetIntDataFromEEprom(103);
-    ThisProduct.PmmRTU.PortOneParity = GetIntDataFromEEprom(104);
-    ThisProduct.PmmRTU.PortOneConnectionTimeout = GetIntDataFromEEprom(105);
-    ThisProduct.PmmRTU.PortOneMaxRetryRTU = GetIntDataFromEEprom(106);
-    ThisProduct.PmmRTU.PortOneInterface = GetIntDataFromEEprom(107);
-    ThisProduct.PmmRTU.PortTwoName = GetIntDataFromEEprom(108);
-    ThisProduct.PmmRTU.PortTwoBaudRate = GetIntDataFromEEprom(109);
-    ThisProduct.PmmRTU.PortTwoStopBit = GetIntDataFromEEprom(110);
-    ThisProduct.PmmRTU.PortTwoDataBit = GetIntDataFromEEprom(111);
-    ThisProduct.PmmRTU.PortTwoParity = GetIntDataFromEEprom(112);
-    ThisProduct.PmmRTU.PortTwoConnectionTimeout = GetIntDataFromEEprom(113);
-    ThisProduct.PmmRTU.PortTwoMaxRetryRTU = GetIntDataFromEEprom(114);
-    ThisProduct.PmmRTU.PortTwoInterface = GetIntDataFromEEprom(115);
-    ThisProduct.PmmRTU.PortThreeName = GetIntDataFromEEprom(116);
-    ThisProduct.PmmRTU.PortThreeBaudRate = GetIntDataFromEEprom(117);
-    ThisProduct.PmmRTU.PortThreeStopBit = GetIntDataFromEEprom(118);
-    ThisProduct.PmmRTU.PortThreeDataBit = GetIntDataFromEEprom(119);
-    ThisProduct.PmmRTU.PortThreeParity = GetIntDataFromEEprom(120);
-    ThisProduct.PmmRTU.PortThreeConnectionTimeout = GetIntDataFromEEprom(121);
-    ThisProduct.PmmRTU.PortThreeMaxRetryRTU = GetIntDataFromEEprom(122);
-    ThisProduct.PmmRTU.PortThreeInterface = GetIntDataFromEEprom(123);
-    ThisProduct.PmmRTU.PortFourName = GetIntDataFromEEprom(124);
-    ThisProduct.PmmRTU.PortFourBaudRate = GetIntDataFromEEprom(125);
-    ThisProduct.PmmRTU.PortFourStopBit = GetIntDataFromEEprom(126);
-    ThisProduct.PmmRTU.PortFourDataBit = GetIntDataFromEEprom(127);
-    ThisProduct.PmmRTU.PortFourParity = GetIntDataFromEEprom(128);
-    ThisProduct.PmmRTU.PortFourConnectionTimeout = GetIntDataFromEEprom(129);
-    ThisProduct.PmmRTU.PortFourMaxRetryRTU = GetIntDataFromEEprom(130);
-    ThisProduct.PmmRTU.PortFourInterface = GetIntDataFromEEprom(131);
+    // ThisProduct.PmmRTU.PortOneName = GetIntDataFromEEprom(100);
+    // ThisProduct.PmmRTU.PortOneBaudRate = GetIntDataFromEEprom(101);
+    // ThisProduct.PmmRTU.PortOneStopBit = GetIntDataFromEEprom(102);
+    // ThisProduct.PmmRTU.PortOneDataBit = GetIntDataFromEEprom(103);
+    // ThisProduct.PmmRTU.PortOneParity = GetIntDataFromEEprom(104);
+    // ThisProduct.PmmRTU.PortOneConnectionTimeout = GetIntDataFromEEprom(105);
+    // ThisProduct.PmmRTU.PortOneMaxRetryRTU = GetIntDataFromEEprom(106);
+    // ThisProduct.PmmRTU.PortOneInterface = GetIntDataFromEEprom(107);
+    // ThisProduct.PmmRTU.PortTwoName = GetIntDataFromEEprom(108);
+    // ThisProduct.PmmRTU.PortTwoBaudRate = GetIntDataFromEEprom(109);
+    // ThisProduct.PmmRTU.PortTwoStopBit = GetIntDataFromEEprom(110);
+    // ThisProduct.PmmRTU.PortTwoDataBit = GetIntDataFromEEprom(111);
+    // ThisProduct.PmmRTU.PortTwoParity = GetIntDataFromEEprom(112);
+    // ThisProduct.PmmRTU.PortTwoConnectionTimeout = GetIntDataFromEEprom(113);
+    // ThisProduct.PmmRTU.PortTwoMaxRetryRTU = GetIntDataFromEEprom(114);
+    // ThisProduct.PmmRTU.PortTwoInterface = GetIntDataFromEEprom(115);
+    // ThisProduct.PmmRTU.PortThreeName = GetIntDataFromEEprom(116);
+    // ThisProduct.PmmRTU.PortThreeBaudRate = GetIntDataFromEEprom(117);
+    // ThisProduct.PmmRTU.PortThreeStopBit = GetIntDataFromEEprom(118);
+    // ThisProduct.PmmRTU.PortThreeDataBit = GetIntDataFromEEprom(119);
+    // ThisProduct.PmmRTU.PortThreeParity = GetIntDataFromEEprom(120);
+    // ThisProduct.PmmRTU.PortThreeConnectionTimeout = GetIntDataFromEEprom(121);
+    // ThisProduct.PmmRTU.PortThreeMaxRetryRTU = GetIntDataFromEEprom(122);
+    // ThisProduct.PmmRTU.PortThreeInterface = GetIntDataFromEEprom(123);
+    // ThisProduct.PmmRTU.PortFourName = GetIntDataFromEEprom(124);
+    // ThisProduct.PmmRTU.PortFourBaudRate = GetIntDataFromEEprom(125);
+    // ThisProduct.PmmRTU.PortFourStopBit = GetIntDataFromEEprom(126);
+    // ThisProduct.PmmRTU.PortFourDataBit = GetIntDataFromEEprom(127);
+    // ThisProduct.PmmRTU.PortFourParity = GetIntDataFromEEprom(128);
+    // ThisProduct.PmmRTU.PortFourConnectionTimeout = GetIntDataFromEEprom(129);
+    // ThisProduct.PmmRTU.PortFourMaxRetryRTU = GetIntDataFromEEprom(130);
+    // ThisProduct.PmmRTU.PortFourInterface = GetIntDataFromEEprom(131);
 
     return settings;
 }
@@ -1314,18 +1316,6 @@ void PmmReadAllSettingsEEPROM()
  * Command Reader Functions
  ******************************************************************/
 
-String PMMReturnDataFromSerialUSB()
-{
-    String Command = "";
-    Command = SerialUSB.readStringUntil('\n');
-    return Command;
-}
-
-String PMMCommnads(string readData)
-{
-    String result = "";
-    std::string commandtype = readData.substr(0, 10);
-
     //---------------- Internal Flash ----------------------------------------------------------------------------------------
     // PMMSet,0,0,0620,5000,0,1000,55,200,0,0,1,0,50115,1,2,3,4,5,6,100,200,300,400,500,600,1,644
     // PMMSet,0,1,1,9600,1,8,0,5000,3,485,2,9600,2,7,1,6000,4,322,3,9600,1,8,2,7000,5,485,4,9600,2,7,1,7000,5,322
@@ -1352,190 +1342,69 @@ String PMMCommnads(string readData)
     // PMMGet,2,4
     //---------------- End EEPROM ----------------------------------------------------------------------------------------------
 
-    if (commandtype == "PMMSet,0,0")
-    {
-        string substring = "PMMSet,0,0,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteGeneralSettingsInternalFlash(readData);
-        result = "Done";
-    }
+String PMMCommnads(string readData)
+{
+    String result = "";
+    std::string commandtype = readData.substr(0, 12);
+    std::string substring = commandtype.append(",");
+    std::size_t ind = readData.find(substring);
+    readData.erase(ind, substring.length());
 
-    if (commandtype == "PMMSet,0,1")
-    {
-        string substring = "PMMSet,0,1,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteRTUSettingsInternalFlash(readData);
-        result = "Done";
-    }
+    if (commandtype == "PMMSet,100,0")PmmWriteGeneralSettingsInternalFlash(readData);
+    
+    if (commandtype == "PMMSet,100,1") PmmWriteRTUSettingsInternalFlash(readData);
+    
+    if (commandtype == "PMMSet,100,2")PmmWriteTCPUDPSettingsInternalFlash(readData);
+    
+    if (commandtype == "PMMSet,100,3") result = "Done"; //PmmWriteModbusSettingsInternalFlash(readData);
+    
+    if (commandtype == "PMMSet,100,4")  PmmWriteTimerSettingsInternalFlash(readData);
+    // GET General TO STRING
+    if (commandtype == "PMMGet,100,0") result = PmmReadGeneralSettingsInternalFlash();
+    // GET RTU TO STRING
+    if (commandtype == "PMMGet,100,1") result = PmmReadRTUSettingsInternalFlash();
+    // GET TCP TO STRING
+    if (commandtype == "PMMGet,100,2") result = PmmReadTCPUDPSettingsInternalFlash();
+    // GET Modbus TO STRING
+    if (commandtype == "PMMGet,100,3") result ="Done";//result = PmmReadModbusSettingsInternalFlash();
+    // GET Timers TO STRING
+    if (commandtype == "PMMGet,100,4") result = PmmReadTimersSettingsInternalFlash();
+    //External EEprom PMMSet,2xx,x
 
-    if (commandtype == "PMMSet,0,2")
-    {
-        string substring = "PMMSet,0,2,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteTCPUDPSettingsInternalFlash(readData);
-        result = "Done";
-    }
-
-    if (commandtype == "PMMSet,0,3")
-    {
-        string substring = "PMMSet,0,3,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        //PmmWriteModbusSettingsInternalFlash(readData);
-        result = "Done";
-    }
-
-    if (commandtype == "PMMSet,0,4")
-    {
-        string substring = "PMMSet,0,4,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteTimerSettingsInternalFlash(readData);
-        result = "Done";
-    }
-
-    if (commandtype == "PMMGet,0,0") // GET General TO STRING
-    {
-        result = PmmReadGeneralSettingsInternalFlash();
-    }
-
-    if (commandtype == "PMMGet,0,1") // GET RTU TO STRING
-    {
-        result = PmmReadRTUSettingsInternalFlash();
-    }
-
-    if (commandtype == "PMMGet,0,2") // GET TCP TO STRING
-    {
-        result = PmmReadTCPUDPSettingsInternalFlash();
-    }
-
-    if (commandtype == "PMMGet,0,3") // GET Modbus TO STRING
-    {
-        //result = PmmReadModbusSettingsInternalFlash();
-    }
-
-    if (commandtype == "PMMGet,0,4") // GET Timers TO STRING
-    {
-        result = PmmReadTimersSettingsInternalFlash();
-    }
-
-    if (commandtype == "PMMSet,2,0")
-    {
-        string substring = "PMMSet,2,0,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteGeneralSettingsEEPROM(readData);
-        result = "Done";
-    }
-
-    if (commandtype == "PMMSet,2,1")
-    {
-        string substring = "PMMSet,2,1,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteRTUSettingsEEPROM(readData);
-        result = "Done";
-    }
-
-    if (commandtype == "PMMSet,2,2")
-    {
-        string substring = "PMMSet,2,2,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteTCPUDPSettingsEEPROM(readData);
-        result = "Done";
-    }
-
-    if (commandtype == "PMMSet,2,3")
-    {
-        string substring = "PMMSet,2,3,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteTimerSettingsEEPROM(readData);
-        result = "Done";
-    }
-
-    if (commandtype == "PMMSet,2,4")
-    {
-        string substring = "PMMSet,2,4,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        PmmWriteTimerSettingsEEPROM(readData);
-        result = "Done";
-    }
-
-    if (commandtype == "PMMGet,2,0") // GET General TO STRING
-    {
-        result = PmmReadGeneralSettingsEEPROM();
-    }
-
-    if (commandtype == "PMMGet,2,1") // GET RTU TO STRING
-    {
-        result = PmmReadRTUSettingsEEPROM();
-    }
-
-    if (commandtype == "PMMGet,2,2") // GET TCP TO STRING
-    {
-        result = PmmReadTCPUDPSettingsEEPROM();
-    }
-
-    if (commandtype == "PMMGet,2,3") // GET Modbus TO STRING
-    {
-        //result = PmmReadModbusSettingsEEPROM();
-    }
-
-    if (commandtype == "PMMGet,2,4") // GET Timers TO STRING
-    {
-        result = PmmReadTimersSettingsEEPROM();
-    }
-
-    if (readData == "PMMTestConfiguration")
-    {
-        result = PMMIsAlive();
-    }
-
-    // Actions
+    if (commandtype == "PMMSet,200,0")  PmmWriteGeneralSettingsEEPROM(readData);
+   
+    if (commandtype == "PMMSet,200,1")PmmWriteRTUSettingsEEPROM(readData);
+   
+    if (commandtype == "PMMSet,200,2") PmmWriteTCPUDPSettingsEEPROM(readData);
+   
+    if (commandtype == "PMMSet,200,3") PmmWriteTimerSettingsEEPROM(readData);
+    
+    if (commandtype == "PMMSet,200,4") PmmWriteTimerSettingsEEPROM(readData);
+    // GET General TO STRING
+    if (commandtype == "PMMGet,200,0") result = PmmReadGeneralSettingsEEPROM();
+    // GET RTU TO STRING
+    if (commandtype == "PMMGet,200,1")  result = PmmReadRTUSettingsEEPROM();
+    // GET TCP TO STRING
+    if (commandtype == "PMMGet,200,2") result = PmmReadTCPUDPSettingsEEPROM();
+    // GET Modbus TO STRING
+    if (commandtype == "PMMGet,200,3") result = "";//result = PmmReadModbusSettingsEEPROM();
+    // GET Timers TO STRING
+    if (commandtype == "PMMGet,200,4") result = PmmReadTimersSettingsEEPROM();
+    // Check if alive
+    if (commandtype == "PMMTst,900,0")  result = PMMIsAlive();    
+    // Actions XXXXXX,9xx,x
     // Reset MCU =>NVIC_SystemReset();
-    if (readData == "PMMResetMCU1948")
-    {
-        NVIC_SystemReset();
-        result = "Reset..";
-    }
-
+    if (commandtype == "PMMRST,948,0") NVIC_SystemReset();
     // Set and get clock from PC
-    //  SETRTC,0,1,23,4,20,0,15,00,00,
-    if (commandtype == "SETRTC,0,1") // internal RTC
-    {
-        string substring = "SETRTC,0,1,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        result = SetInternalRTC(readData);
-        // result = "Done";
-    }
-
-    // SETRTC,1,1,23,4,20,10,19,00,00,
-    if (commandtype == "SETRTC,1,1") // External RTC
-    {
-        string substring = "SETRTC,1,1,";
-        std::size_t ind = readData.find(substring);
-        readData.erase(ind, substring.length());
-        result = SetExternalRTC(readData);
-        // result = "Done";
-    }
-
-    if (readData == "PMMGetInternalRTC")
-    {
-        result = GetInternalRTC();
-    }
-
-    if (readData == "PMMGetExternalRTC")
-    {
-        result = GetExternalRTC();
-    }
-
+    // internal RTC : SETRTC,0,1,23,4,20,0,15,00,00,
+    if (commandtype == "SETRTC,910,1") result = SetInternalRTC(readData);
+    // External RTC : SETRTC,1,1,23,4,20,10,19,00,00,
+    if (commandtype == "SETRTC,920,1")  result = SetExternalRTC(readData); 
+    // Get Internal RTC
+    if (commandtype == "GETRTC,910,1")result = GetInternalRTC();
+    // Get External RTC
+    if (commandtype == "GETRTC,920,1")  result = GetExternalRTC();
+   
     return result;
 }
 
@@ -1546,10 +1415,7 @@ String SetInternalRTC(string Message)
     PmmRTCInternal.setDate(lowByte(stoi(values[2])), lowByte(stoi(values[1])), lowByte(stoi(values[0])));
     PmmRTCInternal.setTime(lowByte(stoi(values[3])), lowByte(stoi(values[4])), lowByte(stoi(values[5])));
 
-    // PmmRTCInternal.setDate(20,4,23);
-    // PmmRTCInternal.setTime(13,15,0);
-
-    return "Internal RTC Updated";
+    return "Done";
 }
 
 String GetInternalRTC()
@@ -1572,7 +1438,6 @@ String GetInternalRTC()
     
     return result;
 }
-
 // External RTC DS3231
 String SetExternalRTC(string Message)
 {
@@ -1587,9 +1452,8 @@ String SetExternalRTC(string Message)
     PmmRTCExternal.setMinute(lowByte(stoi(values[4])));
     PmmRTCExternal.setSecond(lowByte(stoi(values[5])));
 
-    return "External RTC Updated";
+    return "Done";
 }
-
 // External RTC DS3231
 String GetExternalRTC()
 {
@@ -1611,6 +1475,13 @@ String GetExternalRTC()
     result = result + ",";
     
     return result;
+}
+// Rturn Data from USB or HTTP
+String PMMReturnDataFromSerialUSB()
+{
+    String Command = "";
+    Command = SerialUSB.readStringUntil('\n');
+    return Command;
 }
 
 void PMMReadCommands()

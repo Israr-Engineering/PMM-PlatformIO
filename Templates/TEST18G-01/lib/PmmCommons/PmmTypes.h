@@ -30,18 +30,19 @@ typedef struct PMMGeneral
     // system memorey
 
     // Device Information
-    int DeviceName = 0620;
-    long SerialNumber = 5000;
-    long FirstTimeRun = 0;
-    long LifeTime = 0;
-    long NumberOfCycles = 0;
-    long LastRunningTime = 0;
-    long NumberOfRunningTimes = 0;
-    int SoftwareVersion = 1; // 12 => 1.2
-    int FirmwareVersion = 1; // 12 => 1.2
-    int HardwareVersion = 1; // 23 => 2.3
-    int ControlerType = 0;
+    int DeviceName = 0620; //(00)
+    long SerialNumber = 5000; //(01)
+    long FirstTimeRun = 0;//(02)
+    long LifeTime = 0;//(03)
+    long NumberOfCycles = 0;//(04)
+    long LastRunningTime = 0;//(05)
+    long NumberOfRunningTimes = 0;//(06)
+    int SoftwareVersion = 1;//(07) // 12 => 1.2
+    int FirmwareVersion = 1;//(08) // 12 => 1.2
+    int HardwareVersion = 1;//(09) // 23 => 2.3
+    int ControlerType = 0;//(10)
 
+    // int Options01 ; //(11)
     bit ItHasEthernet = false; // add this
     bit ItHasSwitch = false;
     bit ItHasExtEEPROM = false;
@@ -60,6 +61,57 @@ typedef struct PMMGeneral
     bit UDPOption = false;
     bit GateWay = false;
 
+    // int Options02 ; //(12)
+    
+    bit Canprint = false; // bit for bebug mode
+    bit spare121 = false;
+    bit spare122 = false;
+    bit spare123 = false;
+    bit spare124 = false;
+    bit spare125 = false;
+    bit spare126 = false;
+    bit spare127 = false;
+
+    bit spare128 = false;
+    bit spare129 = false;
+    bit spare130 = false;
+    bit spare131 = false;
+    bit spare132 = false;
+    bit spare133 = false;
+    bit spare134 = false;
+    bit spare135 = false;
+
+    int NumberOfInputs = 0;//(13)
+    int NumberOfOutputs = 0;//(14)
+    int NumberOfSerials = 0;//(15)
+    int NumberOfUDPPorts = 0;//(16)
+    int MinReadValue = 0;//(17)
+    int MaxReadValue = 0;//(18)
+    int OprationVoltage = 0;//(19)
+    int GeneralReadingsOffset = 0;//(20)
+    int GeneralReadingsFactor = 0;//(21)
+
+    int SettingsRef = 1;//(22) // 1 =>Internal Flash,2=>External Flash,3=>EEPROM
+
+    int Spare23 = 0;//(23)
+    int Spare24 = 0;//(24)
+    int Spare25 = 0;//(25)
+    int Spare26 = 0;//(26)
+    int Spare27 = 0;//(27)
+    int Spare28 = 0;//(28)
+    int Spare29 = 0;//(29)
+    int Spare30 = 0;//(30)
+    int Spare31 = 0;//(31)
+
+} PMMGeneral;
+
+typedef struct PMMProtocol
+{
+    /* data */
+
+    // system memorey
+
+    // int Spare00 ;
     bit IsModBus = false;
     bit IsCanBus = false;
     bit IsProfiBus = false;
@@ -69,38 +121,14 @@ typedef struct PMMGeneral
     bit IsMBus = false;
     bit IsOPC = false;
 
-    bit Canprint = false; // bit for bebug mode
-
-    bit spare01 = false;
-    bit spare02 = false;
-    bit spare03 = false;
-    bit spare04 = false;
-    bit spare05 = false;
-    bit spare06 = false;
-    bit spare07 = false;
-
-    int NumberOfInputs = 0;
-    int NumberOfOutputs = 0;
-    int NumberOfSerials = 0;
-    int NumberOfUDPPorts = 0;
-    int MinReadValue = 0;
-    int MaxReadValue = 0;
-    int OprationVoltage = 0;
-    int GeneralReadingsOffset = 0;
-    int GeneralReadingsFactor = 0;
-
-    int SettingsRef = 1; // 1 =>Internal Flash,2=>External Flash,3=>EEPROM
-
-    int Spare01 = 0;
-    int Spare02 = 0;
-
-} PMMGeneral;
-
-typedef struct PMMModBusPort
-{
-    /* data */
-
-    // system memorey
+    bit Spare08 = false;
+    bit Spare09 = false;
+    bit Spare10 = false;
+    bit Spare11 = false;
+    bit Spare12 = false;
+    bit Spare13 = false;
+    bit Spare14 = false;
+    bit Spare15 = false;
 
     // ModBus Settings
     bit ModBusRTU = false;
@@ -140,8 +168,8 @@ typedef struct PMMModBusPort
     int IODataType = 1; // 18
     int PollInterval = 0; // 19
     int SlaveID = 1; // 20
-    int PortFourConnectionTimeout = 5000; // 21
-    int PortFourMaxRetry = 5; // 22
+    int ConnectionTimeout = 5000; // 21
+    int MaxRetry = 5; // 22
 
     int Spare23 = 0;
     int Spare24 = 0;
@@ -152,48 +180,8 @@ typedef struct PMMModBusPort
     int Spare29 = 0;
     int Spare30 = 0;
     int Spare31 = 0;
-    int Spare32 = 0;
-
-
-} PMMModBusPort;
-
-
-typedef struct PMMRTU
-{
-    int PortOneName = 1;
-    int PortOneBaudRate = 9600;
-    int PortOneStopBit = 1;
-    int PortOneDataBit = 8;
-    int PortOneParity = 0; // 0 => Non , 1 => Odd , 2 => Even
-    int PortOneConnectionTimeout = 5000;
-    int PortOneMaxRetryRTU = 5;
-    int PortOneInterface = 485;
-    int PortTwoName = 1;
-    int PortTwoBaudRate = 9600;
-    int PortTwoStopBit = 1;
-    int PortTwoDataBit = 8;
-    int PortTwoParity = 0; // 0 => Non , 1 => Odd , 2 => Even
-    int PortTwoConnectionTimeout = 5000;
-    int PortTwoMaxRetryRTU = 5;
-    int PortTwoInterface = 485;
-    int PortThreeName = 1;
-    int PortThreeBaudRate = 9600;
-    int PortThreeStopBit = 1;
-    int PortThreeDataBit = 8;
-    int PortThreeParity = 0; // 0 => Non , 1 => Odd , 2 => Even
-    int PortThreeConnectionTimeout = 5000;
-    int PortThreeMaxRetryRTU = 5;
-    int PortThreeInterface = 485;
-    int PortFourName = 1;
-    int PortFourBaudRate = 9600;
-    int PortFourStopBit = 1;
-    int PortFourDataBit = 8;
-    int PortFourParity = 0; // 0 => Non , 1 => Odd , 2 => Even
-    int PortFourConnectionTimeout = 5000;
-    int PortFourMaxRetryRTU = 5;
-    int PortFourInterface = 485;
-
-} PMMRTU;
+    
+} PMMProtocol;
 
 typedef struct PMMTCPUDP
 {
@@ -232,12 +220,10 @@ typedef struct PMMTCPUDP
 
     int Spare01 = 0;
 
-    // Modbus
-    PMMModBusPort PmmModBus;
+    // Modbus PMMTCPUDP
+    PMMProtocol PmmProtocols;
 
 } PMMTCPUDP;
-
-
 
 typedef struct PMMTimer
 {
@@ -255,9 +241,12 @@ typedef struct PMMTimer
     bit OneMonTimer = false;  // INDEX => 500.750 ,Flip Flop Timer Every One Month
     bit OneYearTimer = false; // INDEX => 500.875 ,Flip Flop Timer Every One Year
 
-    int Spare01 = 0;
-    int Spare02 = 0;
-    int Spare03 = 0;
+    //Main loop timer ,default = 1 second
+    long ScanTimer = 1000; 
+    // Configration loop timer,default = 0.5 sec 
+    long ConfigTimer = 500; 
+    //Communication Update timer ,default = 0.5 sec
+    long CommUpdateTimer = 500;
     int Spare04 = 0;
     int Spare05 = 0;
     int Spare06 = 0;
@@ -412,7 +401,7 @@ typedef struct PMMSERIAL
     
 
     // modbus
-    PMMModBusPort PmmModBus;
+    PMMProtocol PmmProtocols;
 
 
 }PMMSERIAL;
@@ -439,16 +428,12 @@ typedef struct Product
 
     PMMTCPUDP PmmTCPUDP;
     
-    PMMSERIAL PmmSerial01;
-    PMMSERIAL PmmSerial02;
-    PMMSERIAL PmmSerial03;
-    PMMSERIAL PmmSerial04;
-     
+    PMMSERIAL PmmSerial[4];
+        
     PMMTimer PmmTimers;
 
-    PMMDeviceCalibration PmmCalibrationPage01;
-    PMMDeviceCalibration PmmCalibrationPage02;
-    
+    PMMDeviceCalibration PmmCalibrationPage[2];
+     
     GerneralPurpose PmmGerneralPurpose;
 
 } Product;
