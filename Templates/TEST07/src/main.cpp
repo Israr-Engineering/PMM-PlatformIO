@@ -4,7 +4,7 @@
 #include <PmmCommands.h>
 #include <PmmGlobalFunctions.h>
 
-
+#include <PMM0620.h>
 
 
 void setup()
@@ -19,7 +19,8 @@ void setup()
 
   // STEP02: Initialize Extra needed Modules
   
-     
+  // STEP03 : Setup Board
+  ThisProductSetup();   
 
   SerialUSB.println("New Start");
   
@@ -29,8 +30,6 @@ void setup()
 // Loop 01 :  Main loop start here                  //
 /////////////////////////////////////////////////// */
 
-int x1 = 0;
-
 void loop()
 {
 
@@ -38,6 +37,8 @@ void loop()
 
   if ((millis() - MainLoopTimer) > 1000)
   {
+
+    ThisProductUpdate();
 
     // PmmModbusRTUServer.poll();
     // if (PmmModbusRTUServer.holdingRegisterWrite(0, x1) == 1)
@@ -75,7 +76,7 @@ void loop()
 
      SerialUSB.println(" ..Running...");
      MainLoopTimer = millis();
-    x1++;
+    
   }
   yield();
 }

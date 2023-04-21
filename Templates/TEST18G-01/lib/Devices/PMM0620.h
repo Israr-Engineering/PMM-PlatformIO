@@ -1,3 +1,9 @@
+/* 
+   Board : PMM0620 12x Digital Inputs
+Firmware : 1.1
+    Date : 20230420
+  Auther : MZ
+ */
 #ifndef PMM0620_H
 #define PMM0620_H
 
@@ -7,14 +13,10 @@
 
 extern void ThisProductSetup();
 extern void ThisProductUpdate();
-extern void ThisProductExt();
 
 // Call this once at main setup function
 void ThisProductSetup()
 {
-
-    ThisProduct.PmmGeneral.DeviceName = 0620;
-
     // configure all pins  as an input and enable the internal pull-up resistor
     for (uint8_t i = 0; i < 12; i++)
         pinMode(PMM_DI_Pins[i], INPUT_PULLUP);
@@ -24,8 +26,8 @@ void ThisProductSetup()
 void ThisProductUpdate()
 {
 
-    // save the digital inputs values into a variable and print it's status
-
+    // save the digital inputs values into a int16 variable 
+    int tmpInputs = 0;
     String str = "";
 
     for (uint8_t i = 0; i < 12; i++)
@@ -34,16 +36,25 @@ void ThisProductUpdate()
 
         sensorVal = !sensorVal;
 
-        // print out the value of the pushbutton
-        str = "DI" + String(i + 1) + "=" + String(sensorVal) + "   ";
-        SerialUSB.print(str);
+        
+        if(sensorVal) 
+        {
+            tmpInputs |= (1 << i); //x |= (1 << n); forces nth bit of x to be 1.  all other bits left alone.
+        }
+        else 
+        {
+            tmpInputs &= ~(1 << i); //x &= ~(1 << n);  // forces nth bit of x to be 0.
+        }
+        
     }
-    SerialUSB.println("");
+
+    PmmIO.InputsByte[0] = lowByte(tmpInputs) ;
+    PmmIO.InputsByte[1] = highByte(tmpInputs);
+
+    //SerialUSB.println("");
+
 }
 
-// Manage Extensions boards
-void ThisProductExt()
-{
-}
+
 
 #endif
