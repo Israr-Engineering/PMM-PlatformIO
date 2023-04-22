@@ -128,7 +128,7 @@ typedef struct PMMProtocol
     bit Spare12 = false;
     bit Spare13 = false;
     bit Spare14 = false;
-    bit Spare15 = false;
+    bit IsRunning = false; //status only, No write just read
 
     // ModBus Settings
     bit ModBusRTU = false;
@@ -381,7 +381,7 @@ typedef struct PMMSERIAL
     int Spare30 = 0;
 
     //int Spare31 = 0;
-    bit spare3100 = false;
+    bit Enabled = false;
     bit spare3101 = false;
     bit spare3102 = false;
     bit spare3103 = false;
@@ -428,7 +428,7 @@ typedef struct Product
 
     PMMTCPUDP PmmTCPUDP;
     
-    PMMSERIAL PmmSerial[4];
+    PMMSERIAL PmmSerial[3]; // Max 4 Ports
         
     PMMTimer PmmTimers;
 

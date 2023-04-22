@@ -109,7 +109,14 @@ void PMMCommunication()
   {
 
     // Manage Extension Boards
+    AllExtensionBoarsdUpdate();
 
+    //Manage Modbus Server
+    for (int i=0 ;i<120 ; i++)
+    {
+
+      
+    }
 
 
 

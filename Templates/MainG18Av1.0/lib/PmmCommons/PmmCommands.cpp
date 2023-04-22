@@ -230,6 +230,7 @@ void PmmWriteGeneralSettingsInternalFlash(string Message)
     ThisProduct.PmmGeneral.SettingsRef = stoi(values[22]);
 
     General_flash_store.write(ThisProduct.PmmGeneral);
+    
 }
 
 void PmmWriteRTUSettingsInternalFlash(string Message)
@@ -319,9 +320,13 @@ void PmmWriteTCPUDPSettingsInternalFlash(string Message)
     TCPUDP_flash_store.write(ThisProduct.PmmTCPUDP);
 }
 
-// void PmmWriteModbusSettingsInternalFlash(string Message)
-// {
-//     PmmStringToArray(Message);
+/* 
+Message : comma sperated string with max 32 elements
+      i : Serial port number
+*/
+void PmmWriteProtocolInternalFlash(string Message , int i)
+{
+    PmmStringToArray(Message);
 
 //     PmmConvertDecimalToBinary(stoi(values[0]));
 
@@ -374,8 +379,17 @@ void PmmWriteTCPUDPSettingsInternalFlash(string Message)
 //     ThisProduct.PmmModbus.SerialSelectionPin = stoi(values[28]);
 //     ThisProduct.PmmModbus.SerialPort = stoi(values[29]);
 
-//     Modbus_flash_store.write(ThisProduct.PmmModbus);
-// }
+//For Serial
+if (i == 0) Serial_Protoco_store01.write(ThisProduct.PmmSerial[i].PmmProtocols);
+if (i == 1) Serial_Protoco_store02.write(ThisProduct.PmmSerial[i].PmmProtocols);
+if (i == 2) Serial_Protoco_store03.write(ThisProduct.PmmSerial[i].PmmProtocols);
+if (i == 3) Serial_Protoco_store04.write(ThisProduct.PmmSerial[i].PmmProtocols);
+//For Ethernet
+if (i == 9) TCPUDP_Protocol_store.write(ThisProduct.PmmTCPUDP.PmmProtocols); 
+
+
+    
+}
 
 void PmmWriteTimerSettingsInternalFlash(string Message)
 {
@@ -1373,7 +1387,7 @@ String PMMCommnads(string readData)
 
     if (commandtype == "PMMSet,200,0")  PmmWriteGeneralSettingsEEPROM(readData);
    
-    if (commandtype == "PMMSet,200,1")PmmWriteRTUSettingsEEPROM(readData);
+    if (commandtype == "PMMSet,200,1") PmmWriteRTUSettingsEEPROM(readData);
    
     if (commandtype == "PMMSet,200,2") PmmWriteTCPUDPSettingsEEPROM(readData);
    

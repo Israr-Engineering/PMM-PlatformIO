@@ -27,7 +27,7 @@ extern void PmmSetEthernetSettings();
 extern void PmmWriteGeneralSettingsInternalFlash(string Message);
 extern void PmmWriteRTUSettingsInternalFlash(string Message);
 extern void PmmWriteTCPUDPSettingsInternalFlash(string Message);
-//extern void PmmWriteModbusSettingsInternalFlash(string Message);
+extern void PmmWriteProtocolInternalFlash(string Message , int Portnumber);
 extern void PmmWriteTimerSettingsInternalFlash(string Message);
 extern String PmmReadGeneralSettingsInternalFlash();
 extern String PmmReadRTUSettingsInternalFlash();

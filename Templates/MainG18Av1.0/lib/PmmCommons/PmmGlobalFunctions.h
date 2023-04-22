@@ -385,10 +385,11 @@ void PmmInitializeProjectSettings()
        if(PmmRTCExternal.RTCCheck()) ThisProduct.ExternalRTCRunning = true;
     }
 
+    // 7. get time from NTP Server if any 
+        
+    // 8. Time and running hours
 
-     
-
-    // 7.  Time and running hours
+    // 9. Extension Boards if any 
 
 
     // STEP LAST ONE: Start General services

@@ -147,6 +147,7 @@ void PMMTimers();
 
 
 //Global Classes
+#include <PMM06XXExtesions.h>
 
 
 
