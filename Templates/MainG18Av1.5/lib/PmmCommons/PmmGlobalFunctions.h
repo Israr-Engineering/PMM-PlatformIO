@@ -120,43 +120,32 @@ u_int16_t PmmReturnConfig(int databit, int parity, int stopbit)
 void PMMInitializeEthernet()
 {
 
-    // // read settings
-    // byte mac1 = (byte)ThisProduct.PmmTCPUDP.MacAddress01;
-    // byte mac2 = (byte)ThisProduct.PmmTCPUDP.MacAddress02;
-    // byte mac3 = (byte)ThisProduct.PmmTCPUDP.MacAddress03;
-    // byte mac4 = (byte)ThisProduct.PmmTCPUDP.MacAddress04;
-    // byte mac5 = (byte)ThisProduct.PmmTCPUDP.MacAddress05;
-    // byte mac6 = (byte)ThisProduct.PmmTCPUDP.MacAddress06;
+    // read settings
+    byte mac[6] = {};
+    mac[0] = ThisProduct.PmmSerial[0].MACAddress01;
+    mac[1] = ThisProduct.PmmSerial[0].MACAddress02;
+    mac[2] = ThisProduct.PmmSerial[0].MACAddress03;
+    mac[3] = ThisProduct.PmmSerial[0].MACAddress04;
+    mac[4] = 0x48; // Locally administered always fixed
+    mac[5] = 0x7E; // Locally administered always fixed
 
-    // int ip1 = ThisProduct.PmmTCPUDP.IPAddress01;
-    // int ip2 = ThisProduct.PmmTCPUDP.IPAddress02;
-    // int ip3 = ThisProduct.PmmTCPUDP.IPAddress03;
-    // int ip4 = ThisProduct.PmmTCPUDP.IPAddress04;
-
-    // // mac[] = {mac1, mac2, mac3, mac4, mac5, mac6};
-
-    // mac[0] = mac1;
-    // mac[1] = mac2;
-    // mac[2] = mac3;
-    // mac[3] = mac4;
-    // mac[4] = mac5;
-    // mac[5] = mac6;
-
-    // IPAddress ip(ip1, ip2, ip3, ip4);
-
-    // // try to start
-    // ThisProduct.EthernetRunning = false;
-
-    // if (ThisProduct.PmmGeneral.ItHasEthernet)
-    // {
-    //     Ethernet.init(10);
-    //     Ethernet.begin(mac, ip);
-    //     ThisProduct.EthernetRunning = true;
-    // }
-    // else
-    // {
-    //     SerialUSB.println("No Ethernet found ..");
-    // }
+    IPAddress ip(ThisProduct.PmmSerial[0].IpAddress01,
+                 ThisProduct.PmmSerial[0].IpAddress02,
+                 ThisProduct.PmmSerial[0].IpAddress03,
+                 ThisProduct.PmmSerial[0].IpAddress04);
+  
+    // Try to start if any 
+    ThisProduct.EthernetRunning = false;
+    if (ThisProduct.PmmGeneral.ItHasEthernet)
+    {
+        Ethernet.init(10); // for W5100 sspin
+        Ethernet.begin(mac, ip);
+        ThisProduct.EthernetRunning = true;
+    }
+    else
+    {
+        SerialUSB.println("No Ethernet found ..");
+    }
 }
 
 void InitializeWire()
@@ -172,36 +161,19 @@ void InitializeWire()
 
 void PmmInitializeProjectSettings()
 {
-    // STEP01 : Read All settings from ROM into "ThisProduct" struct
-    PmmReadAllSettings(0);
 
-    // STEP02 : Select ROM source for Settings , default is the Internal flash
-    int Ref = ThisProduct.PmmGeneral.SettingsRef;
-    if (Ref == 1)
-    {
-        PmmReadAllSettings(0);
-    } // Read Settings From Internal Flash
-
-    if (Ref == 2)
-    {
-    } // Read Settings From External Flash
-
-    if (Ref == 3)
-    {
-        //PmmReadAllSettingsEEPROM();
-    } // Read Settings From EEPROM
-
-    // STEP03: Initialize needed Modules
-    // 1. WatchDog 32s
-    PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
-
-    // 3. Wire
+    // STEP01 :  Initializ Wire library 
     InitializeWire();
+    // STEP02 : Read All settings from ROM into "ThisProduct" struct
+    PmmReadAllSettings(0);    
+    // 1. WatchDog 8s
+    PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
     // 4. EEprom
     ThisProduct.I2CRunning = false;
     if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true)
     {
         //StartEEprom();
+        
         ThisProduct.I2CRunning = true;
     }
 

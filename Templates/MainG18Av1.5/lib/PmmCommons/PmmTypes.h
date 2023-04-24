@@ -29,12 +29,12 @@ typedef struct PMMGeneral
     // system memorey
     // Device Information
     int DeviceName = 0620; //(00)
-    long SerialNumber = 5000; //(01) (02)
-    long FirstTimeRun = 0;// (03) (04)
-    long LifeTime = 0;//(05) (06)
-    long NumberOfCycles = 0;// (07) (08)
-    long LastRunningTime = 0;//(09) (10)
-    long NumberOfRunningTimes = 0;// (11) (12)
+    u_int32_t SerialNumber = 5000; //(01) (02)
+    u_int32_t FirstTimeRun = 0;// (03) (04)
+    u_int32_t LifeTime = 0;//(05) (06)
+    u_int32_t NumberOfCycles = 0;// (07) (08)
+    u_int32_t LastRunningTime = 0;//(09) (10)
+    u_int32_t NumberOfRunningTimes = 0;// (11) (12)
     int SoftwareVersion = 1;//(13) // 12 => 1.2
     int FirmwareVersion = 1;//(14) // 12 => 1.2
     int HardwareVersion = 1;//(15) // 23 => 2.3
@@ -99,7 +99,7 @@ typedef struct PMMGeneral
     int Spare29 = 0;//(30)
     int Spare30 = 0;//(31)
 
-    int SettingsRef = 1;//(28) // 1 =>Internal Flash,2=>External Flash,3=>EEPROM
+    int SettingsRef = 1;//(28) // 0 =>Internal Flash,1=>EEPROM,2=>External Flash
 
     
 
@@ -194,62 +194,35 @@ typedef struct PMMTimer
 
     // Timers Settings ALL TIMERS BITS ARE READONLY
     // int Spare00 ; //(00)
-    bit Cycle = false;   // INDEX => 500 ,Flip Flop Timer Every Cycle
-    bit FirstScan = false;   // INDEX => 500 ,Flip Flop Timer Every Cycle
-    bit OneMS = false;   // INDEX => 500.125 ,Flip Flop Timer Every One MiliSeconds
-    bit TenMS = false;   // INDEX => 500.125 ,Flip Flop Timer Every One MiliSeconds
-    bit M30ms = false;   // INDEX => 500.250 ,Flip Flop Timer Every Ten MiliSeconds
-    bit OneSec = false;  // INDEX => 500.375 ,Flip Flop Timer Every One Second
-    bit M30Sec = false;  // INDEX => 500.375 ,Flip Flop Timer Every One Second
-    bit OneMin = false;  // INDEX => 500.500 ,Flip Flop Timer Every One Minute
-    bit M30Min = false;  // INDEX => 500.500 ,Flip Flop Timer Every One Minute
-    bit OneHour = false;  // INDEX => 500.625 ,Flip Flop Timer Every One Hour
-    bit OneDay = false;  // INDEX => 500.625 ,Flip Flop Timer Every One Hour
-    bit OneMonnth = false;  // INDEX => 500.750 ,Flip Flop Timer Every One Month
-    bit OneYear = false; // INDEX => 500.875 ,Flip Flop Timer Every One Year
-
-    bit Spare0008 = false;
-    bit Spare0009 = false;
-    bit Spare0010 = false;
-    bit Spare0011 = false;
-    bit Spare0012 = false;
-    bit Spare0013 = false;
-    bit Spare0014 = false;
-    bit Spare0015 = false; 
+    bit Cycle = false;   // Readonly
+    bit FirstScan = false;   // Readonly
+    bit OneMS = false;   // Readonly
+    bit TenMS = false;   // Readonly
+    
+    bit M30ms = false;   // Readonly
+    bit OneSec = false;  // Readonly
+    bit M30Sec = false;  // Readonly
+    bit OneMin = false;  // Readonly
+    
+    bit M30Min = false;  // Readonly
+    bit OneHour = false;  // Readonly
+    bit OneDay = false;  // Readonly
+    bit OneMonnth = false;  // Readonly
+    
+    bit OneYear = false; // Readonly
+    bit Spare0012 = false; // Readonly
+    bit Spare0013 = false; // Readonly
+    bit Spare0014 = false; // Readonly
 
     //Main loop timer ,default = 1 second
-    long ScanTimer = 1000; //(01) (02) 
+    u_int32_t ScanTimer = 1000; //(01) (02) 
     // Configration loop timer,default = 0.5 sec 
-    long ConfigTimer = 500; //(03) (04)
+    u_int32_t ConfigTimer = 500; //(03) (04)
     //Communication Update timer ,default = 0.5 sec
-    long CommUpdateTimer = 500;//(05) (06)
+    u_int32_t CommUpdateTimer = 500;//(05) (06)
     
-    int Spare07 = 0;
-    int Spare08 = 0;
-    int Spare09 = 0;
-    int Spare10 = 0;
-    int Spare11 = 0;
-    int Spare12 = 0;
-    int Spare13 = 0;
-    int Spare14 = 0;
-    int Spare15 = 0;
-    int Spare16 = 0;
-    int Spare17 = 0;
-    int Spare18 = 0;
-    int Spare19 = 0;
-    int Spare20 = 0;
-    int Spare21 = 0;
-    int Spare22 = 0;
-    int Spare23 = 0;
-    int Spare24 = 0;
-    int Spare25 = 0;
-    int Spare26 = 0;
-    int Spare27 = 0;
-    int Spare28 = 0;
-    int Spare29 = 0;
-    int Spare30 = 0;
-    int Spare31 = 0;
-
+    int Spare[24] = {0};
+    
 } PMMTimer;
 
 typedef struct PMMDeviceCalibration
@@ -257,23 +230,8 @@ typedef struct PMMDeviceCalibration
     /*
     this is a special settings for the device itself
     */
-    float Calebrate00 = 0;
-    float Calebrate01 = 0;
-    float Calebrate02 = 0;
-    float Calebrate03 = 0;
-    float Calebrate04 = 0;
-    float Calebrate05 = 0;
-    float Calebrate06 = 0;
-    float Calebrate07 = 0;
-    float Calebrate08 = 0;
-    float Calebrate09 = 0;
-    float Calebrate10 = 0;
-    float Calebrate11 = 0;
-    float Calebrate12 = 0;
-    float Calebrate13 = 0;
-    float Calebrate14 = 0;
-    float Calebrate15 = 0;
-   
+    float Calebrate[15] = {0};
+    
 
 } PMMDeviceCalibration;
 
@@ -282,38 +240,9 @@ typedef struct GerneralPurpose
     /*
     this is a special settings for the device itself
     */
-    int Spare00 = 0;
-    int Spare01 = 0;
-    int Spare02 = 0;
-    int Spare03 = 0;
-    int Spare04 = 0;
-    int Spare05 = 0;
-    int Spare06 = 0;
-    int Spare07 = 0;
-    int Spare08 = 0;
-    int Spare09 = 0;
-    int Spare10 = 0;
-    int Spare11 = 0;
-    int Spare12 = 0;
-    int Spare13 = 0;
-    int Spare14 = 0;
-    int Spare15 = 0;
-    int Spare16 = 0;
-    int Spare17 = 0;
-    int Spare18 = 0;
-    int Spare19 = 0;
-    int Spare20 = 0;
-    int Spare21 = 0;
-    int Spare22 = 0;
-    int Spare23 = 0;
-    int Spare24 = 0;
-    int Spare25 = 0;
-    int Spare26 = 0;
-    int Spare27 = 0;
-    int Spare28 = 0;
-    int Spare29 = 0;
-    int Spare30 = 0;
-    int Spare31 = 0;
+    int Spare[31] = {0};
+
+    
 
 } GerneralPurpose;
 

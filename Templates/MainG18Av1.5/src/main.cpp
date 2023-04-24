@@ -14,7 +14,7 @@ void setup()
   // STEP01: Read Flash ROM and update Settings
   PmmInitializeProjectSettings();
   // STEP02: Initialize Extra needed Modules
-
+  ThisProductSetup();
   // STEP03: Warmup 1 sec
   delay(1000);
   SerialUSB.println("New Starting ...");
@@ -27,8 +27,10 @@ void setup()
 void loop()
 {
   PmmWatchDoggy.clear();
-  if ((millis() - MainLoopTimer) > 1000)
+  if ((millis() - MainLoopTimer) > ThisProduct.PmmTimers.ScanTimer)
   {
+
+
     // SerialUSB.print(PmmRTCInternal.getYear());SerialUSB.print("-");
     // SerialUSB.print(PmmRTCInternal.getMonth());SerialUSB.print("-");
     // SerialUSB.print(PmmRTCInternal.getDay());SerialUSB.print(" ");
@@ -54,7 +56,7 @@ void loop()
 
 void PMMConfiguration()
 {
-  if ((millis() - ConfigurationTimer) > 500)
+  if ((millis() - ConfigurationTimer) > ThisProduct.PmmTimers.ConfigTimer)
   {
     PMMReadCommands();
     ConfigurationTimer = millis();
@@ -69,7 +71,7 @@ void PMMConfiguration()
 
 void PMMCommunication()
 {
-  if ((millis() - CommunicationTimer) > 500)
+  if ((millis() - CommunicationTimer) > ThisProduct.PmmTimers.CommUpdateTimer)
   {
     // Manage Extension Boards
     AllExtensionBoarsdUpdate();

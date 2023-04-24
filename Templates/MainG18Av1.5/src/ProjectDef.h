@@ -1,3 +1,6 @@
+#ifndef PROJECTDEF_H
+#define PROJECTDEF_H
+
 
 // PMMTypes
 #define PMMTypes
@@ -58,7 +61,6 @@
 #include <PmmRS485Lib.h>
 #include <PmmEthernet.h>
 #include <PmmTimeLib.h>
-//#include <PmmTypes.h>
 
 #ifdef PMMExternalRTC
 #include <PmmDS3231.h>
@@ -161,6 +163,7 @@ int StartingAddress = 11;
 int Quantity = 10;
 
 
+#endif
 
 
 

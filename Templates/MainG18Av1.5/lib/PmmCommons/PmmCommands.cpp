@@ -101,29 +101,28 @@ void PmmStringToArray(string input)
     }
 }
 
-int binaryInt[16];
+//int binaryInt[16];
 
-void IntToBits(int Dic)
-{
-    for (int i = 0; Dic > 0; i++)
-    {
-        binaryInt[i] = Dic % 2;
-        Dic = Dic / 2;
-    }
-}
+// void IntToBits(int Dic)
+// {
+//     for (int i = 0; Dic > 0; i++)
+//     {
+//         binaryInt[i] = Dic % 2;
+//         Dic = Dic / 2;
+//     }
+// }
 
-int BitsToInt()
-{
-    int  returnValue = 0 ;
+// int BitsToInt()
+// {
+//     int  returnValue = 0 ;
+//         for ( int i = 0; i < 16; i++ )
+//             {
+//                 returnValue = returnValue << 1 | binaryInt[i];
+//             }
 
-        for ( int i = 0; i < 16; i++ )
-            {
-                returnValue = returnValue << 1 | binaryInt[i];
-            }
+//     return returnValue;
 
-    return returnValue;
-
-}
+// }
 
 String PMMIsAlive()
 {
@@ -217,12 +216,12 @@ void PmmWriteGeneralSettings(string Message, int RomTarget)
     PmmStringToArray(Message);
 
     ThisProduct.PmmGeneral.DeviceName = stoi(values[0]);
-    ThisProduct.PmmGeneral.SerialNumber = stol(values[1]);
-    ThisProduct.PmmGeneral.FirstTimeRun = stoi(values[2]);
-    ThisProduct.PmmGeneral.LifeTime = stol(values[3]);
-    ThisProduct.PmmGeneral.NumberOfCycles = stol(values[4]);
-    ThisProduct.PmmGeneral.LastRunningTime = stol(values[5]);
-    ThisProduct.PmmGeneral.NumberOfRunningTimes = stol(values[6]);
+    ThisProduct.PmmGeneral.SerialNumber = stoul(values[1]);
+    ThisProduct.PmmGeneral.FirstTimeRun = stoul(values[2]);
+    ThisProduct.PmmGeneral.LifeTime = stoul(values[3]);
+    ThisProduct.PmmGeneral.NumberOfCycles = stoul(values[4]);
+    ThisProduct.PmmGeneral.LastRunningTime = stoul(values[5]);
+    ThisProduct.PmmGeneral.NumberOfRunningTimes = stoul(values[6]);
     ThisProduct.PmmGeneral.SoftwareVersion = stoi(values[7]);
     ThisProduct.PmmGeneral.FirmwareVersion = stoi(values[8]);
     ThisProduct.PmmGeneral.HardwareVersion = stoi(values[9]);
@@ -526,9 +525,7 @@ void PmmWriteSerialSettings(string Message, int Portnumber, int RomTarget)
 }
 String PmmReadSerialSettings( int Portnumber, int RomTarget)
 {
-    
     String settings = "";
-
     if (RomTarget == 0)
         {
                 if (Portnumber == 0) ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store00.read();// Ethernet Port
@@ -770,7 +767,6 @@ void PmmWriteProtocol(string Message, int Portnumber, int RomTarget)
 }
 String PmmReadProtocol( int Portnumber, int RomTarget)
 {
-    
     String settings = "";
 
     if (RomTarget == 0)
@@ -787,7 +783,7 @@ String PmmReadProtocol( int Portnumber, int RomTarget)
     }
 
     //Build String
-    int tmpInt = 0;
+    // int tmpInt = 0;
     byte IntLowByte = 0 ;
     byte IntHighByte = 0;
 
@@ -808,10 +804,8 @@ String PmmReadProtocol( int Portnumber, int RomTarget)
     bitWrite(IntHighByte,0,ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare13);
     bitWrite(IntHighByte,0,ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare14);
     bitWrite(IntHighByte,0,ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsRunning);
-    
-    tmpInt = IntHighByte ;
-    tmpInt = (tmpInt << 8) | IntLowByte ;
-    settings = String(settings + String(tmpInt));
+      
+    settings = String(settings + String(BytesToInt(IntLowByte,IntHighByte)));
     settings = String(settings + ",");
     // ModBus Settings
     // int Spare00 ; (01)
@@ -908,16 +902,17 @@ void PmmWriteTimerSettings(string Message, int RomTarget)
 {
     PmmStringToArray(Message);
 
-    // IntToBits(stoi(values[0]));
+    ThisProduct.PmmTimers.ScanTimer = stoul(values[1]) ;
+    ThisProduct.PmmTimers.ConfigTimer = stoul(values[2]) ;
+    ThisProduct.PmmTimers.CommUpdateTimer = stoul(values[3]) ;
 
-    // ThisProduct.PmmTimers.CycleTimer = binaryInt[7];
-    // ThisProduct.PmmTimers.OneMSTimer = binaryInt[6];
-    // ThisProduct.PmmTimers.TenMSTimer = binaryInt[5];
-    // ThisProduct.PmmTimers.OneSecTimer = binaryInt[4];
-    // ThisProduct.PmmTimers.OneMinTimer = binaryInt[3];
-    // ThisProduct.PmmTimers.OneHouTimer = binaryInt[2];
-    // ThisProduct.PmmTimers.OneMonTimer = binaryInt[1];
-    // ThisProduct.PmmTimers.OneYearTimer = binaryInt[0];
+    // process the array 
+    const int arrLength = sizeof(ThisProduct.PmmTimers.Spare) / sizeof(ThisProduct.PmmTimers.Spare[0]);
+
+    for(int i = 4 ;i < arrLength  ; i++)
+    {
+        ThisProduct.PmmTimers.Spare[i] = stoi(values[i]) ;
+    }
 
     Timers_flash_store.write(ThisProduct.PmmTimers);
 }
@@ -926,17 +921,48 @@ String PmmReadTimersSettings(int RomTarget)
     ThisProduct.PmmTimers = Timers_flash_store.read();
     String settings = "";
 
-    // settings = String(settings + String(ThisProduct.PmmTimers.CycleTimer));
-    // settings = String(settings + String(ThisProduct.PmmTimers.OneMSTimer));
-    // settings = String(settings + String(ThisProduct.PmmTimers.TenMSTimer));
-    // settings = String(settings + String(ThisProduct.PmmTimers.OneSecTimer));
-    // settings = String(settings + String(ThisProduct.PmmTimers.OneMinTimer));
-    // settings = String(settings + String(ThisProduct.PmmTimers.OneHouTimer));
-    // settings = String(settings + String(ThisProduct.PmmTimers.OneMonTimer));
-    // settings = String(settings + String(ThisProduct.PmmTimers.OneYearTimer));
-    // settings = String(settings + ",End");
+    // build string 
+    // int tmpInt = 0;
+    byte IntLowByte = 0 ;
+    byte IntHighByte = 0;
 
-    // SerialUSB.println(settings);
+    bitWrite(IntLowByte,0,ThisProduct.PmmTimers.Cycle);
+    bitWrite(IntLowByte,0,ThisProduct.PmmTimers.FirstScan);
+    bitWrite(IntLowByte,0,ThisProduct.PmmTimers.OneMS);
+    bitWrite(IntLowByte,0,ThisProduct.PmmTimers.TenMS);
+
+    bitWrite(IntLowByte,0,ThisProduct.PmmTimers.M30ms);
+    bitWrite(IntLowByte,0,ThisProduct.PmmTimers.OneSec);
+    bitWrite(IntLowByte,0,ThisProduct.PmmTimers.M30Sec);
+    bitWrite(IntLowByte,0,ThisProduct.PmmTimers.OneMin);
+
+    bitWrite(IntHighByte,0,ThisProduct.PmmTimers.M30Min);
+    bitWrite(IntHighByte,0,ThisProduct.PmmTimers.OneHour);
+    bitWrite(IntHighByte,0,ThisProduct.PmmTimers.OneDay);
+    bitWrite(IntHighByte,0,ThisProduct.PmmTimers.OneMonnth);
+
+    bitWrite(IntHighByte,0,ThisProduct.PmmTimers.OneYear);
+    bitWrite(IntHighByte,0,ThisProduct.PmmTimers.Spare0012);
+    bitWrite(IntHighByte,0,ThisProduct.PmmTimers.Spare0013);
+    bitWrite(IntHighByte,0,ThisProduct.PmmTimers.Spare0014);
+
+    settings = String(settings + String(BytesToInt(IntLowByte,IntHighByte)));
+    settings = String(settings + ",");      
+    settings = String(settings + String(ThisProduct.PmmTimers.ScanTimer));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTimers.ConfigTimer));
+    settings = String(settings + ",");
+    settings = String(settings + String(ThisProduct.PmmTimers.CommUpdateTimer));
+    settings = String(settings + ",");
+
+    const int arrLength = sizeof(ThisProduct.PmmTimers.Spare) / sizeof(ThisProduct.PmmTimers.Spare[0]);
+
+    for(int i =0 ;i < arrLength ; i++)
+    {
+        settings = String(settings + String(ThisProduct.PmmTimers.Spare[i]));
+        settings = String(settings + ",");
+    }
+  
 
     return settings;
 }
@@ -945,41 +971,12 @@ void PmmWriteGerneralPurpose(string Message, int RomTarget )
 {
     PmmStringToArray(Message);
 
-    ThisProduct.PmmGerneralPurpose.Spare00 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare01 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare02 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare03 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare04 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare05 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare06 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare07 = stoi(values[0]);
+    const int arrLength = sizeof(ThisProduct.PmmGerneralPurpose.Spare) / sizeof(ThisProduct.PmmGerneralPurpose.Spare[0]);
 
-    ThisProduct.PmmGerneralPurpose.Spare08 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare09 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare10 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare11 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare12 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare13 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare14 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare15 = stoi(values[0]);
-
-    ThisProduct.PmmGerneralPurpose.Spare16 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare17 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare18 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare19 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare20 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare21 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare22 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare23 = stoi(values[0]);
-
-    ThisProduct.PmmGerneralPurpose.Spare24 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare25 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare26 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare27 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare28 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare29 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare30 = stoi(values[0]);
-    ThisProduct.PmmGerneralPurpose.Spare31 = stoi(values[0]);
+    for(int i =0 ;i < arrLength  ; i++)
+    {
+        ThisProduct.PmmGerneralPurpose.Spare[i] = stoi(values[i]) ;
+    }
 
     if (RomTarget == 0)
     {
@@ -1001,7 +998,6 @@ String PmmReadGerneralPurpose(int RomTarget)
     if (RomTarget == 0)
    {
         ThisProduct.PmmGerneralPurpose = GerneralPurpose_flash_store.read();
-       
    }
     else if(RomTarget == 1) // EEprom
     {
@@ -1009,24 +1005,43 @@ String PmmReadGerneralPurpose(int RomTarget)
     }
 
     //Build String
-    int tmpInt = 0 ;
-    byte IntLowByte = 0 ;
-    byte IntHighByte = 0 ;
+   
+    const int arrLength = sizeof(ThisProduct.PmmGerneralPurpose.Spare) / sizeof(ThisProduct.PmmGerneralPurpose.Spare[0]);
 
+    for(int i =0 ;i < arrLength ; i++)
+    {
+        settings = String(settings + String(ThisProduct.PmmGerneralPurpose.Spare[i]));
+        settings = String(settings + ",");
+    }
     
-
-
-    tmpInt = IntHighByte ;
-    tmpInt = (tmpInt << 8) | IntLowByte ;
-    settings = String(settings + String(tmpInt));
-    //settings = String(settings + ",");
-
     return settings ;
 }
 
 void PmmWriteDeviceCalibration(string Message,int PageNumber, int RomTarget )
 {
     PmmStringToArray(Message);
+
+    const int arrLength = sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate) / sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[0]);
+
+    for(int i =0 ;i < arrLength  ; i++)
+    {
+        ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i] = stof(values[i]) ;
+    }
+
+
+     if (RomTarget == 0)
+   {
+        if (PageNumber == 0) Claibration_flash_Page01.write(ThisProduct.PmmCalibrationPage[PageNumber]);
+        if (PageNumber == 1) Claibration_flash_Page02.write(ThisProduct.PmmCalibrationPage[PageNumber]);
+        if (PageNumber == 2) Claibration_flash_Page03.write(ThisProduct.PmmCalibrationPage[PageNumber]);
+        if (PageNumber == 3) Claibration_flash_Page04.write(ThisProduct.PmmCalibrationPage[PageNumber]);
+        
+   }
+    else if(RomTarget == 1) // EEprom
+    {
+
+    }
+    
 
 
 }
@@ -1049,15 +1064,14 @@ String PmmReadDeviceCalibration(int PageNumber,int RomTarget )
     }
 
     //Build String
-    int tmpInt = 0;
-    byte IntLowByte = 0;
-    byte IntHighByte = 0 ;
+    
+    const int arrLength = sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate) / sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[0]);
 
-
-    tmpInt = IntHighByte ;
-    tmpInt = (tmpInt << 8) | IntLowByte ;
-    settings = String(settings + String(tmpInt));
-    //settings = String(settings + ",");
+    for(int i =0 ;i < arrLength ; i++)
+    {
+        settings = String(settings + String(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i]));
+        settings = String(settings + ",");
+    }
 
     return settings ;
 
@@ -1065,11 +1079,35 @@ String PmmReadDeviceCalibration(int PageNumber,int RomTarget )
 
 void PmmReadAllSettings(int RomTarget)
 {
-    // PmmReadGeneralSettings();
-    // PmmReadRTUSettings();
-    // PmmReadTCPUDPSettings();
-    // PmmReadModbusSettings();
-    // PmmReadTimersSettings();
+    //STEP01 : Read general settings from internal flash
+    PmmReadGeneralSettings(0);
+    //STEP02 : Select ROM To read from where 0 =>Internal Flash,1=>EEPROM,2=>External Flash
+    RomTarget = ThisProduct.PmmGeneral.SettingsRef;
+    //STEP03 : Read Ethernet settings and protocols 
+    if (ThisProduct.PmmGeneral.ItHasEthernet) 
+    {
+        PmmReadSerialSettings(0,RomTarget);
+        PmmReadProtocol(0,RomTarget);
+    }
+    //STEP04 : Read Serial ports settings 
+    PmmReadSerialSettings(1,RomTarget);
+    PmmReadProtocol(1,RomTarget);
+    PmmReadSerialSettings(2,RomTarget);
+    PmmReadProtocol(2,RomTarget);
+    PmmReadSerialSettings(3,RomTarget);
+    PmmReadProtocol(3,RomTarget);
+    PmmReadSerialSettings(4,RomTarget);
+    PmmReadProtocol(4,RomTarget);
+    //STEP05 : Read Timers settings 
+    PmmReadTimersSettings(RomTarget);
+    //STEP06 : Read Calibration settings 
+    PmmReadDeviceCalibration(0,RomTarget);
+    PmmReadDeviceCalibration(1,RomTarget);
+    PmmReadDeviceCalibration(2,RomTarget);
+    PmmReadDeviceCalibration(3,RomTarget);
+    //STEP07 : Read generl purpose settings
+    PmmReadGerneralPurpose(RomTarget); 
+   
 }
 
 /*****************************************************************
