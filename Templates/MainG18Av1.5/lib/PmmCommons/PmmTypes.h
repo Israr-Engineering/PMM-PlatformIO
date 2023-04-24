@@ -190,20 +190,23 @@ typedef struct PMMProtocol
 
 typedef struct PMMTimer
 {
-    /* data */
-
     // system memorey
 
     // Timers Settings ALL TIMERS BITS ARE READONLY
     // int Spare00 ; //(00)
-    bit CycleTimer = false;   // INDEX => 500 ,Flip Flop Timer Every Cycle
-    bit OneMSTimer = false;   // INDEX => 500.125 ,Flip Flop Timer Every One MiliSeconds
-    bit TenMSTimer = false;   // INDEX => 500.250 ,Flip Flop Timer Every Ten MiliSeconds
-    bit OneSecTimer = false;  // INDEX => 500.375 ,Flip Flop Timer Every One Second
-    bit OneMinTimer = false;  // INDEX => 500.500 ,Flip Flop Timer Every One Minute
-    bit OneHouTimer = false;  // INDEX => 500.625 ,Flip Flop Timer Every One Hour
-    bit OneMonTimer = false;  // INDEX => 500.750 ,Flip Flop Timer Every One Month
-    bit OneYearTimer = false; // INDEX => 500.875 ,Flip Flop Timer Every One Year
+    bit Cycle = false;   // INDEX => 500 ,Flip Flop Timer Every Cycle
+    bit FirstScan = false;   // INDEX => 500 ,Flip Flop Timer Every Cycle
+    bit OneMS = false;   // INDEX => 500.125 ,Flip Flop Timer Every One MiliSeconds
+    bit TenMS = false;   // INDEX => 500.125 ,Flip Flop Timer Every One MiliSeconds
+    bit M30ms = false;   // INDEX => 500.250 ,Flip Flop Timer Every Ten MiliSeconds
+    bit OneSec = false;  // INDEX => 500.375 ,Flip Flop Timer Every One Second
+    bit M30Sec = false;  // INDEX => 500.375 ,Flip Flop Timer Every One Second
+    bit OneMin = false;  // INDEX => 500.500 ,Flip Flop Timer Every One Minute
+    bit M30Min = false;  // INDEX => 500.500 ,Flip Flop Timer Every One Minute
+    bit OneHour = false;  // INDEX => 500.625 ,Flip Flop Timer Every One Hour
+    bit OneDay = false;  // INDEX => 500.625 ,Flip Flop Timer Every One Hour
+    bit OneMonnth = false;  // INDEX => 500.750 ,Flip Flop Timer Every One Month
+    bit OneYear = false; // INDEX => 500.875 ,Flip Flop Timer Every One Year
 
     bit Spare0008 = false;
     bit Spare0009 = false;
@@ -252,7 +255,7 @@ typedef struct PMMTimer
 typedef struct PMMDeviceCalibration
 {
     /*
-    this is a spescial settings for the device itself
+    this is a special settings for the device itself
     */
     float Calebrate00 = 0;
     float Calebrate01 = 0;
@@ -277,7 +280,7 @@ typedef struct PMMDeviceCalibration
 typedef struct GerneralPurpose
 {
     /*
-    this is a spescial settings for the device itself
+    this is a special settings for the device itself
     */
     int Spare00 = 0;
     int Spare01 = 0;
