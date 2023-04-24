@@ -1,0 +1,47 @@
+// AUTOMATICALLY GENERATED FILE. PLEASE DO NOT MODIFY IT MANUALLY
+//
+// PIO Unified Debugger
+//
+// Documentation: https://docs.platformio.org/page/plus/debugging.html
+// Configuration: https://docs.platformio.org/page/projectconf/section_env_debug.html
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug",
+            "executable": "D:/07. C Programming Empeded/GetHubLocal/PMM-PlatformIO/Templates/TEST04/.pio/build/Pmm0620/firmware.elf",
+            "projectEnvName": "Pmm0620",
+            "toolchainBinDir": "C:/Users/MQ/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/MQ/.platformio/platforms/atmelsam/misc/svd/ATSAMD21G18A.svd",
+            "preLaunchTask": {
+                "type": "PlatformIO",
+                "task": "Pre-Debug"
+            }
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (skip Pre-Debug)",
+            "executable": "D:/07. C Programming Empeded/GetHubLocal/PMM-PlatformIO/Templates/TEST04/.pio/build/Pmm0620/firmware.elf",
+            "projectEnvName": "Pmm0620",
+            "toolchainBinDir": "C:/Users/MQ/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/MQ/.platformio/platforms/atmelsam/misc/svd/ATSAMD21G18A.svd"
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (without uploading)",
+            "executable": "D:/07. C Programming Empeded/GetHubLocal/PMM-PlatformIO/Templates/TEST04/.pio/build/Pmm0620/firmware.elf",
+            "projectEnvName": "Pmm0620",
+            "toolchainBinDir": "C:/Users/MQ/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "svdPath": "C:/Users/MQ/.platformio/platforms/atmelsam/misc/svd/ATSAMD21G18A.svd",
+            "loadMode": "manual"
+        }
+    ]
+}
