@@ -1367,9 +1367,9 @@ String PMMCommnads(string readData)
         case 142:
             result = PmmWriteDeviceCalibration(readData, 0, 0);
             break; // 142,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5
-        case 143:
-            result = PmmReadDeviceCalibration(0,RomSelect);
-            break; // 143,000,000
+        // case 143:
+        //     result = PmmReadDeviceCalibration(0,RomSelect);
+        //     break; // 143,000,000
 
         case 900:
             result = PMMIsAlive();
