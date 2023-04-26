@@ -228,6 +228,7 @@ typedef struct PMMDeviceCalibration
     /*
     this is a special settings for the device itself
     */
+    float Header = 0 ; // Headert to make sure EEprom is working , not for read
     float Calebrate[15] = {0};
 
 } PMMDeviceCalibration;
@@ -237,6 +238,7 @@ typedef struct GerneralPurpose
     /*
     this is a special settings for the device itself
     */
+    int Header = 0 ; // Headert to make sure EEprom is working , not for read
     int Spare[31] = {0};
 
 } GerneralPurpose;

@@ -7,6 +7,16 @@
 //Include your board here
 #include <PMM0620.h>
 
+// PmmModBus ArrModbus[5] = 
+// {
+//   PmmModBus() ,
+//   PmmModBus() ,
+//   PmmModBus() ,
+//   PmmModBus() ,
+//   PmmModBus() 
+
+// };
+
 void setup()
 {
   // STEP00: Start usb serial for debug
@@ -15,6 +25,9 @@ void setup()
   PmmInitializeProjectSettings();
   // STEP02: Initialize Extra needed Modules
   ThisProductSetup();
+
+
+
   // STEP03: Warmup 1 sec
   delay(1000);
   SerialUSB.println("New Starting ...");

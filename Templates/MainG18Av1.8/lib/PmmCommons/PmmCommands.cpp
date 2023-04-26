@@ -307,14 +307,16 @@ String PmmWriteGeneralSettings(string Message, int RomTarget)
     if (RomTarget == 0)
     {
          PmmInternalEEPROM.put(0, ThisProduct.PmmGeneral);
+         result = "Done RomTarget = 0";
     }
     else if (RomTarget == 1) // EEprom
     {
         PmmEEporom.begin();
         PmmEEporom.put(0, ThisProduct.PmmGeneral);
+         result = "Done RomTarget = 1";
     }
 
-    result = "Done";
+    
     return result;
 }
 String PmmReadGeneralSettings(int RomTarget)
@@ -1190,6 +1192,9 @@ String PmmWriteGerneralPurpose(string Message, int RomTarget)
     String result = "";
     PmmStringToArray(Message);
 
+
+    ThisProduct.PmmGerneralPurpose.Header = 159;
+
     const int arrLength = sizeof(ThisProduct.PmmGerneralPurpose.Spare) / sizeof(ThisProduct.PmmGerneralPurpose.Spare[0]);
 
     for (int i = 0; i < arrLength; i++)
@@ -1217,16 +1222,16 @@ String PmmReadGerneralPurpose(int RomTarget)
 
     if (RomTarget == 0)
     {
-        PmmInternalEEPROM.get(1536, ThisProduct.PmmTimers);
+        PmmInternalEEPROM.get(1536, ThisProduct.PmmGerneralPurpose);
     }
     else if (RomTarget == 1) // EEprom
     {
         PmmEEporom.begin();
-        PmmEEporom.get(1536, ThisProduct.PmmTimers);
+        PmmEEporom.get(1536, ThisProduct.PmmGerneralPurpose);
     }
 
     // Build String
-
+    
     const int arrLength = sizeof(ThisProduct.PmmGerneralPurpose.Spare) / sizeof(ThisProduct.PmmGerneralPurpose.Spare[0]);
 
     for (int i = 0; i < arrLength; i++)
@@ -1242,6 +1247,9 @@ String PmmWriteDeviceCalibration(string Message, int PageNumber, int RomTarget)
 {
     String result = "";
     PmmStringToArray(Message);
+   
+
+    ThisProduct.PmmCalibrationPage[PageNumber].Header = 159;
 
     const int arrLength = sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate) / sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[0]);
 
@@ -1523,7 +1531,7 @@ String PMMCommnads(string readData)
         case 143:
             PmmStringToArray(readData);
             result = PmmReadDeviceCalibration(0, RomSelect, stol(values[2]));
-            break; // 143,000,1000000
+            break; // 143,000,000,000,1000000
 
         case 144:
             result = PmmWriteDeviceCalibration(readData, 1, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
@@ -1531,7 +1539,7 @@ String PMMCommnads(string readData)
         case 145:
             PmmStringToArray(readData);
             result = PmmReadDeviceCalibration(1, RomSelect, stol(values[2]));
-            break; // 145,000,1000000
+            break; // 145,000,000,000,1000000
 
         case 146:
             result = PmmWriteDeviceCalibration(readData, 2, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
@@ -1539,7 +1547,7 @@ String PMMCommnads(string readData)
         case 147:
             PmmStringToArray(readData);
             result = PmmReadDeviceCalibration(2, RomSelect, stol(values[2]));
-            break; // 147,000,1000000
+            break; // 147,000,000,000,1000000
 
         case 148:
             result = PmmWriteDeviceCalibration(readData, 3, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
@@ -1547,11 +1555,11 @@ String PMMCommnads(string readData)
         case 149:
             PmmStringToArray(readData);
             result = PmmReadDeviceCalibration(3, RomSelect, stol(values[2]));
-            break; // 149,000,1000000
+            break; // 149,000,000,000,1000000
 
         case 900:
             result = PMMIsAlive();
-            break; // 948,001,000
+            break; // 900,001,000
         case 948:
             NVIC_SystemReset();
             break; // 948,001,000

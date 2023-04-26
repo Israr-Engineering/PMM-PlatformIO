@@ -150,10 +150,11 @@ public:
 
 private:
   // Default settings are for onsemi CAT24C51 512Kbit I2C EEPROM used on SparkFun Qwiic EEPROM Breakout
+  // for PMM the defualte is Microchip 24LC256-I/SN 256Kbit
   struct_memorySettings settings = {
       .i2cPort = &Wire,
       .deviceAddress = 0b1010000, 			// 0x50; format is 0b1010 + (A2 A1 A0) or 0b1010 + (B0 A1 A0) for larger (>512kbit) EEPROMs
-      .memorySize_bytes = (uint32_t)512 * 1024 / 8,	// equals 64 KB
+      .memorySize_bytes = (uint32_t)256 * 1024 / 8,	// equals 32 KB
       .pageSize_bytes = 64,
       .pageWriteTime_ms = 5,
       .pollForWriteComplete = true
