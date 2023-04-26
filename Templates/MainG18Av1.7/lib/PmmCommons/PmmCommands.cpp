@@ -1423,121 +1423,118 @@ String PMMCommnads(string readData)
         // rowData = 001,001,000,
         std::string commandtype = readData.substr(0, 3); // obtain commandtype
         int CommandCode = stoi(commandtype);             // obtain command code
-        int RomSelect = stoi(readData.substr(5, 2));  
-         SerialUSB.println((readData.substr(5, 2)).c_str());   // obtain ROM Select=> 0:Internal flash ,1:Ext EEPROM ,Ext Flash
+        int RomSelect = stoi(readData.substr(5, 2));     // obtain ROM Select=> 0:Internal flash ,1:Ext EEPROM ,Ext Flash
         readData.erase(0, 8);                            // Clean readData
-
-        SerialUSB.println(RomSelect);
 
         switch (CommandCode)
         {
         case 100:
-            result = PmmWriteGeneralSettings(readData, RomSelect); // EEProm address = 0
+            result = PmmWriteGeneralSettings(readData, RomSelect); // EEProm address = ( 0 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                                 // 100,000,0620,20230425,1682370000,1682405659,0,1682405999,1000,10,13,11,1,36373,59392,1,5050,0,0,0,0,10,0,0,0,0,0,0
         case 101:
             result = PmmReadGeneralSettings(RomSelect);
             break; // 101,000,000
 
         case 102:
-            result = PmmWriteTimerSettings(readData, RomSelect); // EEProm address = 128
+            result = PmmWriteTimerSettings(readData, RomSelect); // EEProm address = ( 128 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                               // 102,000,000,1000,1000,1000,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 103:
             result = PmmReadTimersSettings(RomSelect);
             break; // 103,000,000
 
         case 110:
-            result = PmmWriteSerialSettings(readData, 0, RomSelect); // EEProm address = 256 384 512 640 768
+            result = PmmWriteSerialSettings(readData, 0, RomSelect); // EEProm address = ( 256 384 512 640 768 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                                   // Ethernet port  -- 110,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 111:
             result = PmmReadSerialSettings(0, RomSelect);
             break; // 111,000,000
         case 112:
-            result = PmmWriteSerialSettings(readData, 1, RomSelect); // EEProm address = 256 384 512 640 768
+            result = PmmWriteSerialSettings(readData, 1, RomSelect); // EEProm address = ( 256 384 512 640 768 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                                   // 112,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 113:
             result = PmmReadSerialSettings(1, RomSelect);
             break; // 113,000,000
         case 114:
-            result = PmmWriteSerialSettings(readData, 2, RomSelect); // EEProm address = 256 384 512 640 768
+            result = PmmWriteSerialSettings(readData, 2, RomSelect); // EEProm address = ( 256 384 512 640 768 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                                   // 114,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 115:
             result = PmmReadSerialSettings(2, RomSelect);
             break; // 115,000,000
         case 116:
-            result = PmmWriteSerialSettings(readData, 3, RomSelect); // EEProm address = 256 384 512 640 768
+            result = PmmWriteSerialSettings(readData, 3, RomSelect); // EEProm address = ( 256 384 512 640 768 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                                   // 116,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 117:
             result = PmmReadSerialSettings(3, RomSelect);
             break; // 117,000,000
         case 118:
-            PmmWriteSerialSettings(readData, 4, RomSelect); // EEProm address = 256 384 512 640 768
-            break;                                          // 118,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
+            result = PmmWriteSerialSettings(readData, 4, RomSelect); // EEProm address = ( 256 384 512 640 768 ) and Replace 000 In the second part of the comma seperated to 001
+            break;                                                   // 118,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 119:
             result = PmmReadSerialSettings(4, RomSelect);
             break; // 119,000,000
 
         case 130:
-            result = PmmWriteProtocol(readData, 0, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            result = PmmWriteProtocol(readData, 0, RomSelect); // EEProm address = ( 896 1024 1152 1280 1408 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                             // 130,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 131:
             result = PmmReadProtocol(0, RomSelect);
             break; // 131,000,000
         case 132:
-            result = PmmWriteProtocol(readData, 1, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            result = PmmWriteProtocol(readData, 1, RomSelect); // EEProm address = ( 896 1024 1152 1280 1408 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                             // 132,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 133:
             result = PmmReadProtocol(1, RomSelect);
             break; // 133,000,000
         case 134:
-            result = PmmWriteProtocol(readData, 2, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            result = PmmWriteProtocol(readData, 2, RomSelect); // EEProm address = ( 896 1024 1152 1280 1408 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                             // 134,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 135:
             result = PmmReadProtocol(2, RomSelect);
             break; // 135,000,000
         case 136:
-            result = PmmWriteProtocol(readData, 3, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            result = PmmWriteProtocol(readData, 3, RomSelect); // EEProm address = ( 896 1024 1152 1280 1408 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                             // 136,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 137:
             result = PmmReadProtocol(3, RomSelect);
             break; // 137,000,000
 
         case 138:
-            result = PmmWriteProtocol(readData, 4, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            result = PmmWriteProtocol(readData, 4, RomSelect); // EEProm address = ( 896 1024 1152 1280 1408 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                             // 138,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 139:
             result = PmmReadProtocol(4, RomSelect);
             break; // 139,000,000
 
         case 140:
-            result = PmmWriteGerneralPurpose(readData, RomSelect); // EEProm address = 1536
+            result = PmmWriteGerneralPurpose(readData, RomSelect); // EEProm address = ( 1536 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                                 // 140,000,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
         case 141:
             result = PmmReadGerneralPurpose(RomSelect);
             break; // 141,000,000
 
         case 142:
-            result = PmmWriteDeviceCalibration(readData, 0, 0); // EEProm address = 1664 1792 1920 2048
+            result = PmmWriteDeviceCalibration(readData, 0, 0); // EEProm address = ( 1664 1792 1920 2048 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                              // 142,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 143:
             result = PmmReadDeviceCalibration(0, RomSelect, stol(values[3]));
             break; // 143,000,1000000
 
         case 144:
-            result = PmmWriteDeviceCalibration(readData, 1, 0); // EEProm address = 1664 1792 1920 2048
+            result = PmmWriteDeviceCalibration(readData, 1, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
             break;                                              // 144,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 145:
             result = PmmReadDeviceCalibration(1, RomSelect, stol(values[3]));
             break; // 145,000,1000000
 
         case 146:
-            result = PmmWriteDeviceCalibration(readData, 2, 0); // EEProm address = 1664 1792 1920 2048
+            result = PmmWriteDeviceCalibration(readData, 2, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
             break;                                              // 146,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 147:
             result = PmmReadDeviceCalibration(2, RomSelect, stol(values[3]));
             break; // 147,000,1000000
 
         case 148:
-            result = PmmWriteDeviceCalibration(readData, 3, 0); // EEProm address = 1664 1792 1920 2048
+            result = PmmWriteDeviceCalibration(readData, 3, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
             break;                                              // 148,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 149:
             result = PmmReadDeviceCalibration(3, RomSelect, stol(values[3]));
