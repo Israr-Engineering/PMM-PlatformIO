@@ -72,7 +72,7 @@ PmmDS3231 PmmRTCExternal;
 // Extra functions if needed
 PmmRTClib PMMDS3231A;
 
-PmmExternalEEPROM PmmEEporom ;
+PmmExternalEEPROM PmmEEporom;
 
 /*****************************************************************
  * Common functions for all types of ROM
@@ -83,7 +83,7 @@ void PmmStringToArray(string input)
     // declaring character array (+1 for null terminator)
     char *char_array = new char[128];
 
-    SerialUSB.println(input.c_str());
+    // SerialUSB.println(input.c_str());
 
     // copying the contents of the
     // string to char array
@@ -102,9 +102,9 @@ void PmmStringToArray(string input)
     {
         string s(strings[n]);
         values[n] = s;
-        SerialUSB.print(n);
-        SerialUSB.print(" : ");
-        SerialUSB.println(s.c_str());
+        // SerialUSB.print(n);
+        // SerialUSB.print(" : ");
+        //  SerialUSB.println(s.c_str());
     }
 }
 
@@ -203,11 +203,6 @@ void UnsignedLongToUInt8(unsigned long uLongVaue)
     UInt8Array[1] = (uLongVaue >> 8) & 0xFF;  // 0x56
     UInt8Array[2] = (uLongVaue >> 16) & 0xFF; // 0x34
     UInt8Array[3] = (uLongVaue >> 24) & 0xFF; // 0x12
-
-    SerialUSB.println(UInt8Array[0]);
-    SerialUSB.println(UInt8Array[1]);
-    SerialUSB.println(UInt8Array[2]);
-    SerialUSB.println(UInt8Array[3]);
 }
 
 /*****************************************************************
@@ -331,19 +326,15 @@ String PmmWriteGeneralSettings(string Message, int RomTarget)
 
     ThisProduct.PmmGeneral.SettingsRef = stoi(values[25]);
 
-   
-
     if (RomTarget == 0)
     {
-         General_flash_store.write(ThisProduct.PmmGeneral);
+        General_flash_store.write(ThisProduct.PmmGeneral);
     }
     else if (RomTarget == 1) // EEprom
     {
         PmmEEporom.begin();
-        PmmEEporom.put(0,ThisProduct.PmmGeneral);
+        PmmEEporom.put(0, ThisProduct.PmmGeneral);
     }
-
-    
 
     result = "Done";
     return result;
@@ -358,7 +349,7 @@ String PmmReadGeneralSettings(int RomTarget)
     else if (RomTarget == 1) // EEprom
     {
         PmmEEporom.begin();
-        PmmEEporom.get(0,ThisProduct.PmmGeneral);
+        PmmEEporom.get(0, ThisProduct.PmmGeneral);
     }
 
     String settings = "";
@@ -592,29 +583,30 @@ String PmmWriteSerialSettings(string Message, int Portnumber, int RomTarget)
     }
     else if (RomTarget == 1) // EEProm address = 256 384 512 640 768
     {
-        switch (Portnumber) 
+        PmmEEporom.begin();
+        switch (Portnumber)
         {
         case 0:
-            PmmEEporom.put(256 , ThisProduct.PmmSerial[0]); // Ethernet Port
+            PmmEEporom.put(256, ThisProduct.PmmSerial[0]); // Ethernet Port
             result = "Done 0";
             break;
 
         case 1:
-            PmmEEporom.put(384,ThisProduct.PmmSerial[1]); // Ethernet Port
+            PmmEEporom.put(384, ThisProduct.PmmSerial[1]); // Ethernet Port
             result = "Done 1";
             break;
         case 2:
-            PmmEEporom.put(512 ,ThisProduct.PmmSerial[2]); // Ethernet Port
-                result = "Done 2";
-                break;
+            PmmEEporom.put(512, ThisProduct.PmmSerial[2]); // Ethernet Port
+            result = "Done 2";
+            break;
         case 3:
-                PmmEEporom.put(640 ,ThisProduct.PmmSerial[3]); // Ethernet Port
-                result = "Done 3";
-                break;
+            PmmEEporom.put(640, ThisProduct.PmmSerial[3]); // Ethernet Port
+            result = "Done 3";
+            break;
         case 4:
-                PmmEEporom.put(768 ,ThisProduct.PmmSerial[4]); // Ethernet Port
-                result = "Done 4";
-                break;
+            PmmEEporom.put(768, ThisProduct.PmmSerial[4]); // Ethernet Port
+            result = "Done 4";
+            break;
         }
     }
 
@@ -638,27 +630,26 @@ String PmmReadSerialSettings(int Portnumber, int RomTarget)
     }
     else if (RomTarget == 1) // EEProm address = 256 384 512 640 768
     {
-         switch (Portnumber) 
+        PmmEEporom.begin();
+        switch (Portnumber)
         {
         case 0:
-            PmmEEporom.get(256 , ThisProduct.PmmSerial[0]); // Ethernet Port
+            PmmEEporom.get(256, ThisProduct.PmmSerial[0]); // Ethernet Port
             break;
 
         case 1:
-            PmmEEporom.get(384,ThisProduct.PmmSerial[1]); // Ethernet Port
+            PmmEEporom.get(384, ThisProduct.PmmSerial[1]); // Ethernet Port
             break;
         case 2:
-            PmmEEporom.get(512 ,ThisProduct.PmmSerial[2]); // Ethernet Port
+            PmmEEporom.get(512, ThisProduct.PmmSerial[2]); // Ethernet Port
             break;
         case 3:
-            PmmEEporom.get(640 ,ThisProduct.PmmSerial[3]); // Ethernet Port
+            PmmEEporom.get(640, ThisProduct.PmmSerial[3]); // Ethernet Port
             break;
         case 4:
-            PmmEEporom.get(768 ,ThisProduct.PmmSerial[4]); // Ethernet Port
+            PmmEEporom.get(768, ThisProduct.PmmSerial[4]); // Ethernet Port
             break;
         }
-
-
     }
 
     // settings = String(settings + String(ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressCoilsStatus));
@@ -916,6 +907,31 @@ String PmmWriteProtocol(string Message, int Portnumber, int RomTarget)
     }
     else if (RomTarget == 1) // EEprom
     {
+        PmmEEporom.begin();
+        switch (Portnumber)
+        {
+        case 0:
+            PmmEEporom.put(896, ThisProduct.PmmSerial[0].PmmProtocols); // Ethernet Port
+            result = "Done 0";
+            break;
+
+        case 1:
+            PmmEEporom.put(1024, ThisProduct.PmmSerial[1].PmmProtocols); // Ethernet Port
+            result = "Done 1";
+            break;
+        case 2:
+            PmmEEporom.put(1152, ThisProduct.PmmSerial[2].PmmProtocols); // Ethernet Port
+            result = "Done 2";
+            break;
+        case 3:
+            PmmEEporom.put(1280, ThisProduct.PmmSerial[3].PmmProtocols); // Ethernet Port
+            result = "Done 3";
+            break;
+        case 4:
+            PmmEEporom.put(1408, ThisProduct.PmmSerial[4].PmmProtocols); // Ethernet Port
+            result = "Done 4";
+            break;
+        }
     }
 
     return result;
@@ -929,16 +945,35 @@ String PmmReadProtocol(int Portnumber, int RomTarget)
         if (Portnumber == 0)
             ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store01.read(); // Ethernet Port
         if (Portnumber == 1)
-            ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store02.read(); // Serial
+            ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store02.read(); // Serial1
         if (Portnumber == 2)
-            ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store03.read(); // Serial
+            ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store03.read(); // Serial2
         if (Portnumber == 3)
-            ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store04.read(); // Serial
+            ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store04.read(); // Serial3
         if (Portnumber == 4)
-            ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store04.read(); // Serial
+            ThisProduct.PmmSerial[Portnumber].PmmProtocols = Serial_Protoco_store04.read(); // Serial4
     }
     else if (RomTarget == 1) // EEprom
     {
+        PmmEEporom.begin();
+        switch (Portnumber)
+        {
+        case 0:
+            PmmEEporom.get(896, ThisProduct.PmmSerial[0].PmmProtocols); // Ethernet Port
+            break;
+        case 1:
+            PmmEEporom.get(1024, ThisProduct.PmmSerial[1].PmmProtocols); // Serial Port1
+            break;
+        case 2:
+            PmmEEporom.get(1152, ThisProduct.PmmSerial[2].PmmProtocols); // Serial Port3
+            break;
+        case 3:
+            PmmEEporom.get(1280, ThisProduct.PmmSerial[3].PmmProtocols); // Serial Port3
+            break;
+        case 4:
+            PmmEEporom.get(1408, ThisProduct.PmmSerial[4].PmmProtocols); // Serial Port4
+            break;
+        }
     }
 
     // Build String
@@ -1082,17 +1117,15 @@ String PmmWriteTimerSettings(string Message, int RomTarget)
 
     if (RomTarget == 0)
     {
-         Timers_flash_store.write(ThisProduct.PmmTimers);
+        Timers_flash_store.write(ThisProduct.PmmTimers);
     }
     else if (RomTarget == 1)
     {
-    PmmEEporom.begin();
-    PmmEEporom.put(128,ThisProduct.PmmTimers);
+        PmmEEporom.begin();
+        PmmEEporom.put(128, ThisProduct.PmmTimers);
+        result = "Done";
     }
-   
 
-
-    result = "Done";
     return result;
 }
 String PmmReadTimersSettings(int RomTarget)
@@ -1103,10 +1136,10 @@ String PmmReadTimersSettings(int RomTarget)
     }
     else if (RomTarget == 1)
     {
-    PmmEEporom.begin();
-    PmmEEporom.get(128,ThisProduct.PmmTimers);
+        PmmEEporom.begin();
+        PmmEEporom.get(128, ThisProduct.PmmTimers);
     }
-    
+
     String settings = "";
 
     // build string
@@ -1173,6 +1206,9 @@ String PmmWriteGerneralPurpose(string Message, int RomTarget)
     }
     else if (RomTarget == 1) // EEprom
     {
+        PmmEEporom.begin();
+        PmmEEporom.put(1536, ThisProduct.PmmGerneralPurpose);
+        result = "Done";
     }
 
     return result;
@@ -1187,6 +1223,8 @@ String PmmReadGerneralPurpose(int RomTarget)
     }
     else if (RomTarget == 1) // EEprom
     {
+        PmmEEporom.begin();
+        PmmEEporom.get(1536, ThisProduct.PmmTimers);
     }
 
     // Build String
@@ -1239,13 +1277,32 @@ String PmmWriteDeviceCalibration(string Message, int PageNumber, int RomTarget)
     }
     else if (RomTarget == 1) // EEprom
     {
+        PmmEEporom.begin();
+        switch (PageNumber)
+        {
+        case 0:
+            PmmEEporom.put(1664, ThisProduct.PmmCalibrationPage[0]);
+            result = "Done 0";
+            break;
+
+        case 1:
+            PmmEEporom.put(1792, ThisProduct.PmmCalibrationPage[1]);
+            result = "Done 1";
+            break;
+        case 2:
+            PmmEEporom.put(1920, ThisProduct.PmmCalibrationPage[2]);
+            result = "Done 2";
+            break;
+        case 3:
+            PmmEEporom.put(2048, ThisProduct.PmmCalibrationPage[3]);
+            result = "Done 3";
+            break;
+        }
     }
 
     return result;
 }
-
-
-String PmmReadDeviceCalibration(int PageNumber, int RomTarget , long floatfactor)
+String PmmReadDeviceCalibration(int PageNumber, int RomTarget, long floatfactor)
 {
 
     String settings = "";
@@ -1263,34 +1320,51 @@ String PmmReadDeviceCalibration(int PageNumber, int RomTarget , long floatfactor
     }
     else if (RomTarget == 1) // EEprom
     {
+        PmmEEporom.begin();
+        switch (PageNumber)
+        {
+        case 0:
+            PmmEEporom.get(1664, ThisProduct.PmmCalibrationPage[0]);
+            break;
+        case 1:
+            PmmEEporom.get(1792, ThisProduct.PmmCalibrationPage[1]);
+            break;
+        case 2:
+            PmmEEporom.get(1920, ThisProduct.PmmCalibrationPage[2]);
+            break;
+        case 3:
+            PmmEEporom.get(2048, ThisProduct.PmmCalibrationPage[3]);
+            break;
+        }
     }
 
     // Build String
 
     const int arrLength = sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate) / sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[0]);
 
-    SerialUSB.print("Calibration PageNumber : ");SerialUSB.println(PageNumber);
-    SerialUSB.print("Calibration arrLength : ");SerialUSB.println(arrLength);
-   
-    float tmpFloat ;
-    long tmplong ;
+    SerialUSB.print("Calibration PageNumber : ");
+    SerialUSB.println(PageNumber);
+    SerialUSB.print("Calibration arrLength : ");
+    SerialUSB.println(arrLength);
 
-    for (int i = 0; i < arrLength  ; i++)
+    float tmpFloat;
+    long tmplong;
+
+    for (int i = 0; i < arrLength; i++)
     {
-               
-        //settings = String(settings + String(  ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i],3));
-        //settings = settings + ",";
 
-        SerialUSB.println(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i],6);
+        // settings = String(settings + String(  ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i],3));
+        // settings = settings + ",";
 
-         tmpFloat = ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i] ;
-         tmplong = tmpFloat * floatfactor ; 
-                  
-        settings = String(settings + String(  tmplong ));
+        SerialUSB.println(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i], 6);
+
+        tmpFloat = ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i];
+        tmplong = tmpFloat * floatfactor;
+
+        settings = String(settings + String(tmplong));
         settings = settings + ",";
-
     }
-   
+
     return settings;
 }
 
@@ -1340,7 +1414,6 @@ PMM_SPI_FLASH myFlash;
  * Command Reader Functions
  ******************************************************************/
 
-
 String PMMCommnads(string readData)
 {
     String result = "Wrong command";
@@ -1350,125 +1423,124 @@ String PMMCommnads(string readData)
         // rowData = 001,001,000,
         std::string commandtype = readData.substr(0, 3); // obtain commandtype
         int CommandCode = stoi(commandtype);             // obtain command code
-        int RomSelect = stoi(readData.substr(5, 3));     // obtain ROM Select=> 0:Internal flash ,1:Ext EEPROM ,Ext Flash
+        int RomSelect = stoi(readData.substr(5, 2));  
+         SerialUSB.println((readData.substr(5, 2)).c_str());   // obtain ROM Select=> 0:Internal flash ,1:Ext EEPROM ,Ext Flash
         readData.erase(0, 8);                            // Clean readData
+
+        SerialUSB.println(RomSelect);
 
         switch (CommandCode)
         {
         case 100:
             result = PmmWriteGeneralSettings(readData, RomSelect); // EEProm address = 0
-            break; // 100,000,0620,20230425,1682370000,1682405659,0,1682405999,1000,10,13,11,1,36373,59392,1,5050,0,0,0,0,10,0,0,0,0,0,0
+            break;                                                 // 100,000,0620,20230425,1682370000,1682405659,0,1682405999,1000,10,13,11,1,36373,59392,1,5050,0,0,0,0,10,0,0,0,0,0,0
         case 101:
             result = PmmReadGeneralSettings(RomSelect);
             break; // 101,000,000
 
         case 102:
             result = PmmWriteTimerSettings(readData, RomSelect); // EEProm address = 128
-            break; // 102,000,000,1000,1000,1000,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+            break;                                               // 102,000,000,1000,1000,1000,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 103:
             result = PmmReadTimersSettings(RomSelect);
             break; // 103,000,000
 
         case 110:
             result = PmmWriteSerialSettings(readData, 0, RomSelect); // EEProm address = 256 384 512 640 768
-            break; // Ethernet port  -- 110,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
+            break;                                                   // Ethernet port  -- 110,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 111:
             result = PmmReadSerialSettings(0, RomSelect);
             break; // 111,000,000
         case 112:
-            result = PmmWriteSerialSettings(readData, 1, RomSelect);
-            break; // 112,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
+            result = PmmWriteSerialSettings(readData, 1, RomSelect); // EEProm address = 256 384 512 640 768
+            break;                                                   // 112,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 113:
             result = PmmReadSerialSettings(1, RomSelect);
             break; // 113,000,000
         case 114:
-            result = PmmWriteSerialSettings(readData, 2, RomSelect);
-            break; // 114,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
+            result = PmmWriteSerialSettings(readData, 2, RomSelect); // EEProm address = 256 384 512 640 768
+            break;                                                   // 114,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 115:
             result = PmmReadSerialSettings(2, RomSelect);
             break; // 115,000,000
         case 116:
-            result = PmmWriteSerialSettings(readData, 3, RomSelect);
-            break; // 116,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
+            result = PmmWriteSerialSettings(readData, 3, RomSelect); // EEProm address = 256 384 512 640 768
+            break;                                                   // 116,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 117:
             result = PmmReadSerialSettings(3, RomSelect);
             break; // 117,000,000
         case 118:
-            PmmWriteSerialSettings(readData, 4, RomSelect);
-            break; // 118,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
+            PmmWriteSerialSettings(readData, 4, RomSelect); // EEProm address = 256 384 512 640 768
+            break;                                          // 118,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
         case 119:
             result = PmmReadSerialSettings(4, RomSelect);
             break; // 119,000,000
 
         case 130:
-            result = PmmWriteProtocol(readData, 0, RomSelect);
-            break; // 130,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+            result = PmmWriteProtocol(readData, 0, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            break;                                             // 130,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 131:
             result = PmmReadProtocol(0, RomSelect);
             break; // 131,000,000
         case 132:
-            result = PmmWriteProtocol(readData, 1, RomSelect);
-            break; // 132,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+            result = PmmWriteProtocol(readData, 1, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            break;                                             // 132,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 133:
             result = PmmReadProtocol(1, RomSelect);
             break; // 133,000,000
         case 134:
-            result = PmmWriteProtocol(readData, 2, RomSelect);
-            break; // 134,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+            result = PmmWriteProtocol(readData, 2, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            break;                                             // 134,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 135:
             result = PmmReadProtocol(2, RomSelect);
             break; // 135,000,000
         case 136:
-            result = PmmWriteProtocol(readData, 3, RomSelect);
-            break; // 136,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+            result = PmmWriteProtocol(readData, 3, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            break;                                             // 136,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 137:
             result = PmmReadProtocol(3, RomSelect);
             break; // 137,000,000
 
         case 138:
-            result = PmmWriteProtocol(readData, 4, RomSelect);
-            break; // 138,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+            result = PmmWriteProtocol(readData, 4, RomSelect); // EEProm address = 896 1024 1152 1280 1408
+            break;                                             // 138,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         case 139:
             result = PmmReadProtocol(4, RomSelect);
             break; // 139,000,000
 
         case 140:
-            result = PmmWriteGerneralPurpose(readData, RomSelect);
-            break; // 140,000,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
+            result = PmmWriteGerneralPurpose(readData, RomSelect); // EEProm address = 1536
+            break;                                                 // 140,000,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
         case 141:
             result = PmmReadGerneralPurpose(RomSelect);
             break; // 141,000,000
 
         case 142:
-            result = PmmWriteDeviceCalibration(readData, 0, 0);
-            break; // 142,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
+            result = PmmWriteDeviceCalibration(readData, 0, 0); // EEProm address = 1664 1792 1920 2048
+            break;                                              // 142,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 143:
-            PmmStringToArray (readData) ; 
-            result = PmmReadDeviceCalibration(0,RomSelect , stol(values[3]));
+            result = PmmReadDeviceCalibration(0, RomSelect, stol(values[3]));
             break; // 143,000,1000000
 
         case 144:
-            result = PmmWriteDeviceCalibration(readData, 1, 0);
-            break; // 144,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
+            result = PmmWriteDeviceCalibration(readData, 1, 0); // EEProm address = 1664 1792 1920 2048
+            break;                                              // 144,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 145:
-            PmmStringToArray (readData) ; 
-            result = PmmReadDeviceCalibration(1,RomSelect , stol(values[3]));
+            result = PmmReadDeviceCalibration(1, RomSelect, stol(values[3]));
             break; // 145,000,1000000
 
         case 146:
-            result = PmmWriteDeviceCalibration(readData, 2, 0);
-            break; // 146,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
+            result = PmmWriteDeviceCalibration(readData, 2, 0); // EEProm address = 1664 1792 1920 2048
+            break;                                              // 146,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 147:
-            PmmStringToArray (readData) ; 
-            result = PmmReadDeviceCalibration(2,RomSelect , stol(values[3]));
+            result = PmmReadDeviceCalibration(2, RomSelect, stol(values[3]));
             break; // 147,000,1000000
 
         case 148:
-            result = PmmWriteDeviceCalibration(readData, 3, 0);
-            break; // 148,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
+            result = PmmWriteDeviceCalibration(readData, 3, 0); // EEProm address = 1664 1792 1920 2048
+            break;                                              // 148,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 149:
-            PmmStringToArray (readData) ; 
-            result = PmmReadDeviceCalibration(3,RomSelect , stol(values[3]));
+            result = PmmReadDeviceCalibration(3, RomSelect, stol(values[3]));
             break; // 149,000,1000000
 
         case 900:
