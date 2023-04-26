@@ -1517,7 +1517,7 @@ String PMMCommnads(string readData)
             break;                                              // 142,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 143:
             PmmStringToArray(readData);
-            result = PmmReadDeviceCalibration(0, RomSelect, stol(values[3]));
+            result = PmmReadDeviceCalibration(0, RomSelect, stol(values[2]));
             break; // 143,000,1000000
 
         case 144:
@@ -1525,7 +1525,7 @@ String PMMCommnads(string readData)
             break;                                              // 144,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 145:
             PmmStringToArray(readData);
-            result = PmmReadDeviceCalibration(1, RomSelect, stol(values[3]));
+            result = PmmReadDeviceCalibration(1, RomSelect, stol(values[2]));
             break; // 145,000,1000000
 
         case 146:
@@ -1533,7 +1533,7 @@ String PMMCommnads(string readData)
             break;                                              // 146,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 147:
             PmmStringToArray(readData);
-            result = PmmReadDeviceCalibration(2, RomSelect, stol(values[3]));
+            result = PmmReadDeviceCalibration(2, RomSelect, stol(values[2]));
             break; // 147,000,1000000
 
         case 148:
@@ -1541,7 +1541,7 @@ String PMMCommnads(string readData)
             break;                                              // 148,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 149:
             PmmStringToArray(readData);
-            result = PmmReadDeviceCalibration(3, RomSelect, stol(values[3]));
+            result = PmmReadDeviceCalibration(3, RomSelect, stol(values[2]));
             break; // 149,000,1000000
 
         case 900:

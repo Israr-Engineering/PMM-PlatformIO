@@ -5,7 +5,6 @@
 
 #include <PmmTypes.h>
 
-
 extern void PmmInitializeProjectSettings();
 void PMMInitializeEthernet();
 // extern void PmmSetEthernetSettings();
@@ -44,7 +43,7 @@ u_int16_t PmmReturnConfig(int databit, int parity, int stopbit)
     unsigned long parityLong = 0;
     unsigned long stopbitLong = 0x400ul;
 
-// PARITY
+    // PARITY
     if (parity == 1)
     {
         parityLong = 0x1ul;
@@ -70,7 +69,7 @@ u_int16_t PmmReturnConfig(int databit, int parity, int stopbit)
         parityLong = 0xFul;
     } // MASK
 
-// STOP BIT
+    // STOP BIT
     if (stopbit == 10)
     {
         stopbitLong = 0x10ul;
@@ -88,8 +87,7 @@ u_int16_t PmmReturnConfig(int databit, int parity, int stopbit)
         stopbitLong = 0xF0ul;
     }
 
-
-//DATA BITS
+    // DATA BITS
     if (databit == 5)
     {
         databitLong = 0x100ul;
@@ -110,7 +108,6 @@ u_int16_t PmmReturnConfig(int databit, int parity, int stopbit)
     {
         databitLong = 0xF00ul;
     }
-
 
     // 0x400ul | 0x10ul | 0x3ul = ??
     u_int16_t config = (databitLong | parityLong | stopbitLong);
@@ -133,8 +130,8 @@ void PMMInitializeEthernet()
                  ThisProduct.PmmSerial[0].IpAddress02,
                  ThisProduct.PmmSerial[0].IpAddress03,
                  ThisProduct.PmmSerial[0].IpAddress04);
-  
-    // Try to start if any 
+
+    // Try to start if any
     ThisProduct.EthernetRunning = false;
     if (ThisProduct.PmmGeneral.ItHasEthernet)
     {
@@ -152,30 +149,27 @@ void InitializeWire()
 {
     if (ThisProduct.WireRunning == false)
     {
-         Wire.begin();
+        Wire.begin();
 
-         ThisProduct.WireRunning = true;
+        ThisProduct.WireRunning = true;
     }
-   
 }
 
 void PmmInitializeProjectSettings()
 {
 
-    // STEP01 :  Initializ Wire library 
+    // STEP01 :  Initializ Wire library
     InitializeWire();
     // STEP02 : Read All settings from ROM into "ThisProduct" struct
-    PmmReadAllSettings(0);    
+    PmmReadAllSettings(0);
     // 1. WatchDog 8s
     PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
     // 4. EEprom
     ThisProduct.I2CRunning = false;
     if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true)
     {
-        //StartEEprom();
+        // StartEEprom();
 
-        
-        
         ThisProduct.I2CRunning = true;
     }
 
@@ -187,186 +181,132 @@ void PmmInitializeProjectSettings()
 
     // 6. Protocols : a. modbus
 
-    // if (ThisProduct.PmmGeneral.IsModBus)
-    // {
-    //     if (ThisProduct.PmmModbus.ModBusTCP)
-    //     {
+    if (ThisProduct.PmmSerial[0].Enabled)
+    {
+        if (ThisProduct.PmmSerial[0].PmmProtocols.IsModBus)
+        {
+            if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusTCP)
+            {
 
-    //         if (ThisProduct.PmmModbus.ModBusMaster)
-    //         {
-    //             PmmModbus.PMMmodbusTCPServerSetup(ThisProduct.PmmTCPUDP.UDPPortOne, ThisProduct.PmmModbus.SlaveID);
+                if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusMaster)
+                {
+                    PmmModbus.PMMmodbusTCPServerSetup(ThisProduct.PmmSerial[0].Port01, ThisProduct.PmmSerial[0].PmmProtocols.SlaveID);
 
-    //             PmmModbus.PMMmodbusTCPServerconfigure(
-    //                 ThisProduct.PmmModbus.CoilsStatus,
-    //                 ThisProduct.PmmModbus.StartingAddressCoilsStatus,
-    //                 ThisProduct.PmmModbus.QuantityCoilsStatus,
-    //                 ThisProduct.PmmModbus.InputStatus,
-    //                 ThisProduct.PmmModbus.StartingAddressInputStatus,
-    //                 ThisProduct.PmmModbus.QuantityInputStatus,
-    //                 ThisProduct.PmmModbus.HoldingRegisters,
-    //                 ThisProduct.PmmModbus.StartingAddressHoldingRegisters,
-    //                 ThisProduct.PmmModbus.QuantityHoldingRegisters,
-    //                 ThisProduct.PmmModbus.InputRegisters,
-    //                 ThisProduct.PmmModbus.StartingAddressInputRegisters,
-    //                 ThisProduct.PmmModbus.QuantityInputRegisters);
-    //         }
+                    PmmModbus.PMMmodbusTCPServerconfigure(
+                        ThisProduct.PmmSerial[0].PmmProtocols.CoilsStatus,
+                        ThisProduct.PmmSerial[0].PmmProtocols.StartingAddressCoilsStatus,
+                        ThisProduct.PmmSerial[0].PmmProtocols.QuantityCoilsStatus,
+                        ThisProduct.PmmSerial[0].PmmProtocols.InputStatus,
+                        ThisProduct.PmmSerial[0].PmmProtocols.StartingAddressInputStatus,
+                        ThisProduct.PmmSerial[0].PmmProtocols.QuantityInputStatus,
+                        ThisProduct.PmmSerial[0].PmmProtocols.HoldingRegisters,
+                        ThisProduct.PmmSerial[0].PmmProtocols.StartingAddressHoldingRegisters,
+                        ThisProduct.PmmSerial[0].PmmProtocols.QuantityHoldingRegisters,
+                        ThisProduct.PmmSerial[0].PmmProtocols.InputRegisters,
+                        ThisProduct.PmmSerial[0].PmmProtocols.StartingAddressInputRegisters,
+                        ThisProduct.PmmSerial[0].PmmProtocols.QuantityInputRegisters);
 
-    //         if (ThisProduct.PmmModbus.ModBusSlave)
-    //         {
-    //         }
-    //     }
+                    ThisProduct.PmmSerial[0].PmmProtocols.IsRunning = true;
+                }
 
-    //     if (ThisProduct.PmmModbus.ModBusRTU)
-    //     {
-    //         u_int16_t configCom1 = PmmReturnConfig(
-    //             ThisProduct.PmmRTU.PortOneDataBit,
-    //             ThisProduct.PmmRTU.PortOneParity,
-    //             ThisProduct.PmmRTU.PortOneStopBit);
+                if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusSlave)
+                {
+                    ThisProduct.PmmSerial[0].PmmProtocols.IsRunning = true;
+                }
+            }
+        }
+    }
 
-    //         u_int16_t configCom2 = PmmReturnConfig(
-    //             ThisProduct.PmmRTU.PortTwoDataBit,
-    //             ThisProduct.PmmRTU.PortTwoParity,
-    //             ThisProduct.PmmRTU.PortTwoStopBit);
+    for (int serial = 1; serial <= 4; serial++)
+    {
+        if (ThisProduct.PmmSerial[serial].Enabled)
+        {
+            if (ThisProduct.PmmSerial[serial].PmmProtocols.IsModBus)
+            {
+                if (ThisProduct.PmmSerial[serial].PmmProtocols.ModBusRTU)
+                {
+                    u_int16_t configCom = PmmReturnConfig(
+                        ThisProduct.PmmSerial[serial].PortDataBit,
+                        ThisProduct.PmmSerial[serial].PortParity,
+                        ThisProduct.PmmSerial[serial].PortStopBit);
 
-    //         u_int16_t configCom3 = PmmReturnConfig(
-    //             ThisProduct.PmmRTU.PortThreeDataBit,
-    //             ThisProduct.PmmRTU.PortThreeParity,
-    //             ThisProduct.PmmRTU.PortThreeStopBit);
+                    PmmModbus.PMMModBUSRTUClientSetup(
+                        configCom,
+                        ThisProduct.PmmSerial[serial].BaudRate,
+                        ThisProduct.PmmSerial[serial].TXPin,
+                        ThisProduct.PmmSerial[serial].RXPin,
+                        ThisProduct.PmmSerial[serial].SerialSelectionPin,
+                        ThisProduct.PmmSerial[serial].SerialPort);
 
-    //         u_int16_t configCom4 = PmmReturnConfig(
-    //             ThisProduct.PmmRTU.PortFourDataBit,
-    //             ThisProduct.PmmRTU.PortFourParity,
-    //             ThisProduct.PmmRTU.PortFourStopBit);
+                    if (ThisProduct.PmmSerial[serial].PmmProtocols.ModBusMaster)
+                    {
+                        PmmModbus.PMMModBUSRTUClientSetup(
+                            configCom,
+                            ThisProduct.PmmSerial[serial].BaudRate,
+                            ThisProduct.PmmSerial[serial].TXPin,
+                            ThisProduct.PmmSerial[serial].RXPin,
+                            ThisProduct.PmmSerial[serial].SerialSelectionPin,
+                            ThisProduct.PmmSerial[serial].SerialPort);
 
-    //         u_int16_t config = SERIAL_8N1;
-    //         int baudrate = 9600;
+                            ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning = true;
+                    }
 
-    //         if (ThisProduct.PmmModbus.SerialPort == 1)
-    //         {
-    //             config = configCom1;
-    //             baudrate = ThisProduct.PmmRTU.PortTwoBaudRate;
-    //         }
-    //         if (ThisProduct.PmmModbus.SerialPort == 2)
-    //         {
-    //             config = configCom2;
-    //             baudrate = ThisProduct.PmmRTU.PortTwoBaudRate;
-    //         }
-    //         if (ThisProduct.PmmModbus.SerialPort == 3)
-    //         {
-    //             config = configCom3;
-    //             baudrate = ThisProduct.PmmRTU.PortThreeBaudRate;
-    //         }
-    //         if (ThisProduct.PmmModbus.SerialPort == 4)
-    //         {
-    //             config = configCom4;
-    //             baudrate = ThisProduct.PmmRTU.PortFourBaudRate;
-    //         }
+                    if (ThisProduct.PmmSerial[serial].PmmProtocols.ModBusSlave)
+                    {
+                        PmmModbus.PMMModBUSRTUServerSetup(
+                            configCom,
+                            ThisProduct.PmmSerial[serial].BaudRate,
+                            ThisProduct.PmmSerial[serial].TXPin,
+                            ThisProduct.PmmSerial[serial].RXPin,
+                            ThisProduct.PmmSerial[serial].SerialSelectionPin,
+                            ThisProduct.PmmSerial[serial].SerialPort);
 
-    //         PmmModbus.PMMModBUSRTUClientSetup(
-    //             config,
-    //             baudrate,
-    //             ThisProduct.PmmModbus.TXPin,
-    //             ThisProduct.PmmModbus.RXPin,
-    //             ThisProduct.PmmModbus.SerialSelectionPin,
-    //             ThisProduct.PmmModbus.SerialPort);
+                        PmmModbus.PMMModBUSRTUServerconfigure(
+                            ThisProduct.PmmSerial[serial].PmmProtocols.CoilsStatus,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.StartingAddressCoilsStatus,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.QuantityCoilsStatus,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.InputStatus,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.StartingAddressInputStatus,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.QuantityInputStatus,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.HoldingRegisters,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.StartingAddressHoldingRegisters,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.QuantityHoldingRegisters,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.InputRegisters,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.StartingAddressInputRegisters,
+                            ThisProduct.PmmSerial[serial].PmmProtocols.QuantityInputRegisters);
 
-    //         // if (ThisProduct.PmmModbus.ModBusMaster)
-    //         // {
-    //         //     PmmModbus.PMMModBUSRTUClientSetup(
-    //         //         config,
-    //         //         baudrate,
-    //         //         ThisProduct.PmmModbus.TXPin,
-    //         //         ThisProduct.PmmModbus.RXPin,
-    //         //         ThisProduct.PmmModbus.SerialSelectionPin,
-    //         //         ThisProduct.PmmModbus.SerialPort);
-    //         // }
+                            ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning = true;
+                    }
+                }
+            }
+        }
+    }
 
-    //         // if (ThisProduct.PmmModbus.ModBusSlave)
-    //         // {
-    //         //     if (ThisProduct.PmmModbus.SerialPort == 1)
-    //         //     {
-    //         //         PmmModbus.PMMModBUSRTUServerSetup(
-    //         //             configCom1,
-    //         //             ThisProduct.PmmRTU.PortOneBaudRate,
-    //         //             ThisProduct.PmmModbus.TXPin,
-    //         //             ThisProduct.PmmModbus.RXPin,
-    //         //             ThisProduct.PmmModbus.SerialSelectionPin,
-    //         //             ThisProduct.PmmModbus.SerialPort);
-    //         //     }
-    //         //     if (ThisProduct.PmmModbus.SerialPort == 2)
-    //         //     {
-    //         //         PmmModbus.PMMModBUSRTUServerSetup(
-    //         //             configCom2,
-    //         //             ThisProduct.PmmRTU.PortTwoBaudRate,
-    //         //             ThisProduct.PmmModbus.TXPin,
-    //         //             ThisProduct.PmmModbus.RXPin,
-    //         //             ThisProduct.PmmModbus.SerialSelectionPin,
-    //         //             ThisProduct.PmmModbus.SerialPort);
-    //         //     }
-    //         //     if (ThisProduct.PmmModbus.SerialPort == 3)
-    //         //     {
-    //         //         PmmModbus.PMMModBUSRTUServerSetup(
-    //         //             configCom3,
-    //         //             ThisProduct.PmmRTU.PortThreeBaudRate,
-    //         //             ThisProduct.PmmModbus.TXPin,
-    //         //             ThisProduct.PmmModbus.RXPin,
-    //         //             ThisProduct.PmmModbus.SerialSelectionPin,
-    //         //             ThisProduct.PmmModbus.SerialPort);
-    //         //     }
-    //         //     if (ThisProduct.PmmModbus.SerialPort == 4)
-    //         //     {
-    //         //         PmmModbus.PMMModBUSRTUServerSetup(
-    //         //             configCom4,
-    //         //             ThisProduct.PmmRTU.PortFourBaudRate,
-    //         //             ThisProduct.PmmModbus.TXPin,
-    //         //             ThisProduct.PmmModbus.RXPin,
-    //         //             ThisProduct.PmmModbus.SerialSelectionPin,
-    //         //             ThisProduct.PmmModbus.SerialPort);
-    //         //     }
-
-    //         //     PmmModbus.PMMModBUSRTUServerconfigure(
-    //         //         ThisProduct.PmmModbus.CoilsStatus,
-    //         //         ThisProduct.PmmModbus.StartingAddressCoilsStatus,
-    //         //         ThisProduct.PmmModbus.QuantityCoilsStatus,
-    //         //         ThisProduct.PmmModbus.InputStatus,
-    //         //         ThisProduct.PmmModbus.StartingAddressInputStatus,
-    //         //         ThisProduct.PmmModbus.QuantityInputStatus,
-    //         //         ThisProduct.PmmModbus.HoldingRegisters,
-    //         //         ThisProduct.PmmModbus.StartingAddressHoldingRegisters,
-    //         //         ThisProduct.PmmModbus.QuantityHoldingRegisters,
-    //         //         ThisProduct.PmmModbus.InputRegisters,
-    //         //         ThisProduct.PmmModbus.StartingAddressInputRegisters,
-    //         //         ThisProduct.PmmModbus.QuantityInputRegisters);
-    //         // }
-
-    //     }
-    // }
-
-    // 7. RTC internal 
+    // 7. RTC internal
 
     ThisProduct.PmmGeneral.InternalRTC = true;
 
-    if(ThisProduct.PmmGeneral.InternalRTC)
+    if (ThisProduct.PmmGeneral.InternalRTC)
     {
         PmmRTCInternal.begin();
         ThisProduct.InternalRTCRunning = true;
     }
 
-    //8.RTC External 
+    // 8.RTC External
 
-    if(ThisProduct.PmmGeneral.ExternalRTC) // DS3231
+    if (ThisProduct.PmmGeneral.ExternalRTC) // DS3231
     {
 
-       //PMMInitializeExternalRTC();
-       if(PmmRTCExternal.RTCCheck()) ThisProduct.ExternalRTCRunning = true;
+        // PMMInitializeExternalRTC();
+        if (PmmRTCExternal.RTCCheck())
+            ThisProduct.ExternalRTCRunning = true;
     }
 
-    // 7. get time from NTP Server if any 
-        
+    // 7. get time from NTP Server if any
+
     // 8. Time and running hours
 
-    // 9. Extension Boards if any 
-
+    // 9. Extension Boards if any
 
     // STEP LAST ONE: Start General services
 
