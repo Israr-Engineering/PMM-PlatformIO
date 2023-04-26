@@ -71,6 +71,8 @@ void secondTest()
   MyObject customVar; //Variable to store custom object read from EEPROM.
   EEPROM.get(eeAddress, customVar);
 
+  
+
   Serial.println("Read custom object from EEPROM: ");
   printMyObject(customVar);
 }
