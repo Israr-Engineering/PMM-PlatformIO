@@ -1516,6 +1516,7 @@ String PMMCommnads(string readData)
             result = PmmWriteDeviceCalibration(readData, 0, 0); // EEProm address = ( 1664 1792 1920 2048 ) and Replace 000 In the second part of the comma seperated to 001
             break;                                              // 142,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 143:
+            PmmStringToArray(readData);
             result = PmmReadDeviceCalibration(0, RomSelect, stol(values[3]));
             break; // 143,000,1000000
 
@@ -1523,6 +1524,7 @@ String PMMCommnads(string readData)
             result = PmmWriteDeviceCalibration(readData, 1, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
             break;                                              // 144,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 145:
+            PmmStringToArray(readData);
             result = PmmReadDeviceCalibration(1, RomSelect, stol(values[3]));
             break; // 145,000,1000000
 
@@ -1530,6 +1532,7 @@ String PMMCommnads(string readData)
             result = PmmWriteDeviceCalibration(readData, 2, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
             break;                                              // 146,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 147:
+            PmmStringToArray(readData);
             result = PmmReadDeviceCalibration(2, RomSelect, stol(values[3]));
             break; // 147,000,1000000
 
@@ -1537,6 +1540,7 @@ String PMMCommnads(string readData)
             result = PmmWriteDeviceCalibration(readData, 3, 0); // EEProm address = ( 1664 1792 1920 2048 )  and Replace 000 In the second part of the comma seperated to 001
             break;                                              // 148,000,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.5
         case 149:
+            PmmStringToArray(readData);
             result = PmmReadDeviceCalibration(3, RomSelect, stol(values[3]));
             break; // 149,000,1000000
 
