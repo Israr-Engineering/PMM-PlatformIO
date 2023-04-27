@@ -4,7 +4,7 @@
 
 #include <PmmTypes.h>
 #include <PmmEthernet.h>
-//#include <PmmFlashStorage.h>
+// #include <PmmFlashStorage.h>
 #include <FlashStorage_SAMD.h>
 #include <PmmSPISerialFlash.h>
 
@@ -145,6 +145,9 @@ long UInt8ToLong()
 long UInt16ToLong()
 {
     long LongVlaue = 0;
+    // LongVlaue = UInt8Array[0];
+    // LongVlaue = (LongVlaue << 16) | UInt8Array[1];
+
     LongVlaue = UInt16Array[1] << 16 | UInt16Array[0];
 
     return LongVlaue;
@@ -303,17 +306,16 @@ String PmmWriteGeneralSettings(string Message, int RomTarget)
 
     if (RomTarget == 0)
     {
-         PmmInternalEEPROM.put(0, ThisProduct.PmmGeneral);
-         result = "Done RomTarget = 0";
+        PmmInternalEEPROM.put(0, ThisProduct.PmmGeneral);
+        result = "Done RomTarget = 0";
     }
     else if (RomTarget == 1) // EEprom
     {
         PmmEEporom.begin();
         PmmEEporom.put(0, ThisProduct.PmmGeneral);
-         result = "Done RomTarget = 1";
+        result = "Done RomTarget = 1";
     }
 
-    
     return result;
 }
 String PmmReadGeneralSettings(int RomTarget)
@@ -321,9 +323,8 @@ String PmmReadGeneralSettings(int RomTarget)
 
     if (RomTarget == 0)
     {
-        //General_flash_store.read(ThisProduct.PmmGeneral);
-        PmmInternalEEPROM.get(0,ThisProduct.PmmGeneral);
-
+        // General_flash_store.read(ThisProduct.PmmGeneral);
+        PmmInternalEEPROM.get(0, ThisProduct.PmmGeneral);
     }
     else if (RomTarget == 1) // EEprom
     {
@@ -598,33 +599,31 @@ String PmmReadSerialSettings(int Portnumber, int RomTarget)
     {
         switch (Portnumber)
         {
-            case 0:
-            //Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Ethernet Port
-            PmmInternalEEPROM.get(256,ThisProduct.PmmSerial[Portnumber]);
+        case 0:
+            // Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Ethernet Port
+            PmmInternalEEPROM.get(256, ThisProduct.PmmSerial[Portnumber]);
             break;
 
-            case 1:
-            //Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Serial Port
-            PmmInternalEEPROM.get(384,ThisProduct.PmmSerial[Portnumber]);
+        case 1:
+            // Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Serial Port
+            PmmInternalEEPROM.get(384, ThisProduct.PmmSerial[Portnumber]);
             break;
 
-            case 2:
-            //Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Serial Port
-            PmmInternalEEPROM.get(512,ThisProduct.PmmSerial[Portnumber]);
+        case 2:
+            // Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Serial Port
+            PmmInternalEEPROM.get(512, ThisProduct.PmmSerial[Portnumber]);
             break;
 
-            case 3:
-            //Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Serial Port
-            PmmInternalEEPROM.get(640,ThisProduct.PmmSerial[Portnumber]);
+        case 3:
+            // Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Serial Port
+            PmmInternalEEPROM.get(640, ThisProduct.PmmSerial[Portnumber]);
             break;
 
-            case 4:
-            //Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Serial Port
-            PmmInternalEEPROM.get(768,ThisProduct.PmmSerial[Portnumber]);
+        case 4:
+            // Serial_flash_store00.read(ThisProduct.PmmSerial[Portnumber]); // Serial Port
+            PmmInternalEEPROM.get(768, ThisProduct.PmmSerial[Portnumber]);
             break;
-
         }
-        
     }
     else if (RomTarget == 1) // EEProm address = 256 384 512 640 768
     {
@@ -868,7 +867,7 @@ String PmmWriteProtocol(string Message, int Portnumber, int RomTarget)
         switch (Portnumber)
         {
         case 0:
-           PmmInternalEEPROM.put(896, ThisProduct.PmmSerial[0].PmmProtocols); // Ethernet Port
+            PmmInternalEEPROM.put(896, ThisProduct.PmmSerial[0].PmmProtocols); // Ethernet Port
             result = "Done 0";
             break;
 
@@ -889,7 +888,6 @@ String PmmWriteProtocol(string Message, int Portnumber, int RomTarget)
             result = "Done 4";
             break;
         }
-        
     }
     else if (RomTarget == 1) // EEprom
     {
@@ -947,7 +945,6 @@ String PmmReadProtocol(int Portnumber, int RomTarget)
             PmmInternalEEPROM.get(1408, ThisProduct.PmmSerial[4].PmmProtocols); // Serial Port4
             break;
         }
-                
     }
     else if (RomTarget == 1) // EEprom
     {
@@ -1128,7 +1125,7 @@ String PmmReadTimersSettings(int RomTarget)
 {
     if (RomTarget == 0)
     {
-        //ThisProduct.PmmTimers = Timers_flash_store.read();
+        // ThisProduct.PmmTimers = Timers_flash_store.read();
         PmmInternalEEPROM.get(128, ThisProduct.PmmTimers);
     }
     else if (RomTarget == 1)
@@ -1189,7 +1186,6 @@ String PmmWriteGerneralPurpose(string Message, int RomTarget)
     String result = "";
     PmmStringToArray(Message);
 
-
     ThisProduct.PmmGerneralPurpose.Header = 159;
 
     const int arrLength = sizeof(ThisProduct.PmmGerneralPurpose.Spare) / sizeof(ThisProduct.PmmGerneralPurpose.Spare[0]);
@@ -1201,7 +1197,7 @@ String PmmWriteGerneralPurpose(string Message, int RomTarget)
 
     if (RomTarget == 0)
     {
-       PmmInternalEEPROM.put(1536, ThisProduct.PmmGerneralPurpose);
+        PmmInternalEEPROM.put(1536, ThisProduct.PmmGerneralPurpose);
         result = "Done";
     }
     else if (RomTarget == 1) // EEprom
@@ -1228,7 +1224,7 @@ String PmmReadGerneralPurpose(int RomTarget)
     }
 
     // Build String
-    
+
     const int arrLength = sizeof(ThisProduct.PmmGerneralPurpose.Spare) / sizeof(ThisProduct.PmmGerneralPurpose.Spare[0]);
 
     for (int i = 0; i < arrLength; i++)
@@ -1244,7 +1240,6 @@ String PmmWriteDeviceCalibration(string Message, int PageNumber, int RomTarget)
 {
     String result = "";
     PmmStringToArray(Message);
-   
 
     ThisProduct.PmmCalibrationPage[PageNumber].Header = 159;
 
@@ -1257,10 +1252,10 @@ String PmmWriteDeviceCalibration(string Message, int PageNumber, int RomTarget)
 
     if (RomTarget == 0)
     {
-       switch (PageNumber)
+        switch (PageNumber)
         {
         case 0:
-           PmmInternalEEPROM.put(1664, ThisProduct.PmmCalibrationPage[0]);
+            PmmInternalEEPROM.put(1664, ThisProduct.PmmCalibrationPage[0]);
             result = "Done 0";
             break;
 
@@ -1436,11 +1431,13 @@ String PMMCommnads(string readData)
         int RomSelect = stoi(readData.substr(5, 2));     // obtain ROM Select=> 0:Internal flash ,1:Ext EEPROM ,Ext Flash
         readData.erase(0, 8);                            // Clean readData
 
+        SerialUSB.println(CommandCode);
+
         switch (CommandCode)
         {
         case 100:
             result = PmmWriteGeneralSettings(readData, RomSelect); // EEProm address = ( 0 ) and Replace 000 In the second part of the comma seperated to 001
-            break;                                                 // 100,000,0620,20230425,1682370000,1682405659,0,1682405999,1000,10,13,11,1,36373,59392,1,5050,0,0,0,0,10,0,0,0,0,0,0
+            break;                                                 // 100,000,0620,20230425,1682370000,1682405659,0,1682405999,1000,10,13,11,1,65535,59392,1,5050,0,0,0,0,10,0,0,0,0,0,0
         case 101:
             result = PmmReadGeneralSettings(RomSelect);
             break; // 101,000,000
@@ -1663,7 +1660,6 @@ void PMMReadCommands()
     if (SerialUSB.available())
     {
         string cmd = PMMReturnDataFromSerialUSB().c_str();
-
         if (!cmd.empty())
         {
             result = PMMCommnads(cmd.c_str());
@@ -1671,10 +1667,14 @@ void PMMReadCommands()
         }
     }
 
-    if (client)
+    if (ThisProduct.EthernetRunning == true)
     {
-        result = PMMCommnads((PMMReturnDataFromAPIHTTPHeader()).c_str());
-        PMMSendDataHTTPClient(result);
+        string cmd = PMMReturnDataFromAPIHTTPHeader().c_str();
+        if (!cmd.empty())
+        {
+            result = PMMCommnads(cmd);
+            PMMSendDataHTTPClient(result);
+        }
     }
 }
 
@@ -1683,9 +1683,9 @@ String PMMReturnDataFromAPIHTTPHeader()
     String APIData = "";
     String readString = " ";
 
-    while (client.connected())
+    while (ThisProduct.EthernetRunning == true)
     {
-        if (client.available())
+        if (ThisProduct.EthernetRunning == true)
         {
             char c = client.read();
 

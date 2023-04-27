@@ -5,6 +5,16 @@
 
 #include <PmmTypes.h>
 
+PmmModBus ModbusPort[1] =
+    {
+        PmmModBus(),
+        //   PmmModBus() ,
+        //   PmmModBus() ,
+        //   PmmModBus() ,
+        //   PmmModBus()
+
+};
+
 extern void PmmInitializeProjectSettings();
 void PMMInitializeEthernet();
 // extern void PmmSetEthernetSettings();
@@ -118,27 +128,34 @@ void PMMInitializeEthernet()
 {
 
     // read settings
-    byte mac[6] = {};
-    mac[0] = ThisProduct.PmmSerial[0].MACAddress01;
-    mac[1] = ThisProduct.PmmSerial[0].MACAddress02;
-    mac[2] = ThisProduct.PmmSerial[0].MACAddress03;
-    mac[3] = ThisProduct.PmmSerial[0].MACAddress04;
-    mac[4] = 0x48; // Locally administered always fixed
-    mac[5] = 0x7E; // Locally administered always fixed
+    // byte mac[6] = {};
+    // mac[0] = ThisProduct.PmmSerial[0].MACAddress01;
+    // mac[1] = ThisProduct.PmmSerial[0].MACAddress02;
+    // mac[2] = ThisProduct.PmmSerial[0].MACAddress03;
+    // mac[3] = ThisProduct.PmmSerial[0].MACAddress04;
+    // mac[4] = 0x48; // Locally administered always fixed
+    // mac[5] = 0x7E; // Locally administered always fixed
 
-    IPAddress ip(ThisProduct.PmmSerial[0].IpAddress01,
-                 ThisProduct.PmmSerial[0].IpAddress02,
-                 ThisProduct.PmmSerial[0].IpAddress03,
-                 ThisProduct.PmmSerial[0].IpAddress04);
+    // IPAddress ip(ThisProduct.PmmSerial[0].IpAddress01,
+    //              ThisProduct.PmmSerial[0].IpAddress02,
+    //              ThisProduct.PmmSerial[0].IpAddress03,
+    //              ThisProduct.PmmSerial[0].IpAddress04);
+
+    byte mac[] = {0x22, 0x22, 0x22, 0x22, 0x22, 0x22};
+    IPAddress ip(192, 168, 1, 106);
 
     // Try to start if any
     ThisProduct.EthernetRunning = false;
-    if (ThisProduct.PmmGeneral.ItHasEthernet)
+    ThisProduct.PmmGeneral.ItHasEthernet = true;
+
+   
+    if (ThisProduct.PmmGeneral.ItHasEthernet == true && ThisProduct.EthernetRunning ==false)
     {
         Ethernet.init(10); // for W5100 sspin
         Ethernet.begin(mac, ip);
         ThisProduct.EthernetRunning = true;
-        SerialUSB.println("Ethernet found ..");
+
+        SerialUSB.println(" Found Ethernet   ..");
     }
     else
     {
@@ -191,9 +208,9 @@ void PmmInitializeProjectSettings()
 
                 if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusMaster)
                 {
-                    PmmModbus.PMMmodbusTCPServerSetup(ThisProduct.PmmSerial[0].Port01, ThisProduct.PmmSerial[0].PmmProtocols.SlaveID);
+                    ModbusPort[5].PMMmodbusTCPServerSetup(ThisProduct.PmmSerial[0].Port01, ThisProduct.PmmSerial[0].PmmProtocols.SlaveID);
 
-                    PmmModbus.PMMmodbusTCPServerconfigure(
+                    ModbusPort[5].PMMmodbusTCPServerconfigure(
                         ThisProduct.PmmSerial[0].PmmProtocols.CoilsStatus,
                         ThisProduct.PmmSerial[0].PmmProtocols.StartingAddressCoilsStatus,
                         ThisProduct.PmmSerial[0].PmmProtocols.QuantityCoilsStatus,
@@ -231,7 +248,7 @@ void PmmInitializeProjectSettings()
                         ThisProduct.PmmSerial[serial].PortParity,
                         ThisProduct.PmmSerial[serial].PortStopBit);
 
-                    PmmModbus.PMMModBUSRTUClientSetup(
+                    ModbusPort[serial].PMMModBUSRTUClientSetup(
                         configCom,
                         ThisProduct.PmmSerial[serial].BaudRate,
                         ThisProduct.PmmSerial[serial].TXPin,
@@ -241,7 +258,7 @@ void PmmInitializeProjectSettings()
 
                     if (ThisProduct.PmmSerial[serial].PmmProtocols.ModBusMaster)
                     {
-                        PmmModbus.PMMModBUSRTUClientSetup(
+                        ModbusPort[serial].PMMModBUSRTUClientSetup(
                             configCom,
                             ThisProduct.PmmSerial[serial].BaudRate,
                             ThisProduct.PmmSerial[serial].TXPin,
@@ -249,12 +266,12 @@ void PmmInitializeProjectSettings()
                             ThisProduct.PmmSerial[serial].SerialSelectionPin,
                             ThisProduct.PmmSerial[serial].SerialPort);
 
-                            ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning = true;
+                        ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning = true;
                     }
 
                     if (ThisProduct.PmmSerial[serial].PmmProtocols.ModBusSlave)
                     {
-                        PmmModbus.PMMModBUSRTUServerSetup(
+                        ModbusPort[serial].PMMModBUSRTUServerSetup(
                             configCom,
                             ThisProduct.PmmSerial[serial].BaudRate,
                             ThisProduct.PmmSerial[serial].TXPin,
@@ -262,7 +279,7 @@ void PmmInitializeProjectSettings()
                             ThisProduct.PmmSerial[serial].SerialSelectionPin,
                             ThisProduct.PmmSerial[serial].SerialPort);
 
-                        PmmModbus.PMMModBUSRTUServerconfigure(
+                        ModbusPort[serial].PMMModBUSRTUServerconfigure(
                             ThisProduct.PmmSerial[serial].PmmProtocols.CoilsStatus,
                             ThisProduct.PmmSerial[serial].PmmProtocols.StartingAddressCoilsStatus,
                             ThisProduct.PmmSerial[serial].PmmProtocols.QuantityCoilsStatus,
@@ -276,7 +293,7 @@ void PmmInitializeProjectSettings()
                             ThisProduct.PmmSerial[serial].PmmProtocols.StartingAddressInputRegisters,
                             ThisProduct.PmmSerial[serial].PmmProtocols.QuantityInputRegisters);
 
-                            ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning = true;
+                        ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning = true;
                     }
                 }
             }
