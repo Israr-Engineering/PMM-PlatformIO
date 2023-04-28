@@ -29,14 +29,7 @@ extern bool PMMCheckEEPROM();
 extern string CheckAvailabeHardware();
 extern string PMMSplitAddreess(string sentence);
 extern string ConvertIntTostring(int number);
-extern string PMMGetRequest(string url);
-extern string PMMGetJSONRequest(string url);
-extern string PMMPostRequest(string url, string Databody);
-extern string PMMPostJSONRequest(string url, string JSONDATA);
-extern void InitializeEthernet();
 extern IPAddress PMMGetLocalIP();
-extern void PMMInitializeEEPROM();
-extern unsigned int EEPROMLength();
 extern void InitializeWire();
 
 
@@ -183,9 +176,9 @@ void PmmInitializeProjectSettings()
 
                 if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusMaster)
                 {
-                    ModbusPort[5].PMMmodbusTCPServerSetup(ThisProduct.PmmSerial[0].Port01, ThisProduct.PmmSerial[0].PmmProtocols.SlaveID);
+                    ModbusPort[0].PMMmodbusTCPServerSetup(ThisProduct.PmmSerial[0].Port01, ThisProduct.PmmSerial[0].PmmProtocols.SlaveID);
 
-                    ModbusPort[5].PMMmodbusTCPServerconfigure(
+                    ModbusPort[0].PMMmodbusTCPServerconfigure(
                         ThisProduct.PmmSerial[0].PmmProtocols.CoilsStatus,
                         ThisProduct.PmmSerial[0].PmmProtocols.StartingAddressCoilsStatus,
                         ThisProduct.PmmSerial[0].PmmProtocols.QuantityCoilsStatus,

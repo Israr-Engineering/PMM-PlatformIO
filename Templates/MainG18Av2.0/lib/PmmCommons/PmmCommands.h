@@ -18,8 +18,7 @@ extern PmmDS3231 PmmRTCExternal;
 // Common functions
 extern void PmmStringToArray(string input);
 extern String PMMIsAlive();
-extern void PmmConvertDecimalToBinary(int Dic);
-extern void PmmSetEthernetSettings();
+
 
 // ROM functions RomTarget => 0 : internal / 1 : ext eeprom / 2 : ext flash
 extern String PmmWriteGeneralSettings(string Message , int RomTarget = 0);
@@ -43,13 +42,12 @@ extern String PmmReadDeviceCalibration(int PageNumber,int RomTarget = 0 , long f
 extern void PmmReadAllSettings(int RomTarget = 0);
 
 // Command
-extern void PMMInitializeEthernet(IPAddress ip, byte mac[]);
+
 extern void StartCommandHttpServer();
 extern void PMMReadCommands();
 extern String PMMCommnads(string readData);
 extern String PMMReturnDataFromSerialUSB();
-extern String PMMReturnDataFromAPIHTTPHeader();
-extern void PMMSendDataHTTPClient(String Data);
+
 // RTC
 String SetInternalRTC(string Message);
 String GetInternalRTC();

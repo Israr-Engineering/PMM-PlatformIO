@@ -4,8 +4,8 @@
 
 #include <PmmTypes.h>
 #include <PmmEthernet.h>
-// #include <PmmFlashStorage.h>
 #include <FlashStorage_SAMD.h>
+
 #include <PmmSPISerialFlash.h>
 
 #include <PmmExternalEEPROM.h>
@@ -44,7 +44,7 @@ void PmmReadTimersSettings();
   */
 
 void PMMReadCommands();
-void PMMSendDataHTTPClient(String Data);
+
 
 String SetInternalRTC(string Message);
 String GetInternalRTC();
@@ -55,13 +55,9 @@ String GetExternalRTC();
 String PMMReturnAPIFromHTTPHeader();
 
 PmmEthernetServer server(80);
-//PmmEthernetClient client = server.available();
-
 char *strings[32]; // an array of pointers to the pieces of the above array after strtok()
 char *ptr = NULL;
 string values[32];
-
-// rastest = 55 ;
 
 string binary[16];
 byte ByteArray[4];
@@ -85,13 +81,9 @@ void PmmStringToArray(string input)
 {
     // declaring character array (+1 for null terminator)
     char *char_array = new char[128];
-
-    // SerialUSB.println(input.c_str());
-
     // copying the contents of the
     // string to char array
     strcpy(char_array, input.c_str());
-
     byte index = 0;
     ptr = strtok(char_array, ","); // delimiter
     while (ptr != NULL)
@@ -105,9 +97,6 @@ void PmmStringToArray(string input)
     {
         string s(strings[n]);
         values[n] = s;
-        // SerialUSB.print(n);
-        // SerialUSB.print(" : ");
-        //  SerialUSB.println(s.c_str());
     }
 }
 
