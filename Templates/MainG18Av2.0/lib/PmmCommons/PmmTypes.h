@@ -341,6 +341,8 @@ typedef struct Product
     bool InternalRTCRunning = false;
     bool ExternalRTCRunning = false;
     bool FirstTimeStart = true ;
+    
+    bool ExternalEEpromRunning = false;
 
     // Settings Stucts
     PMMGeneral PmmGeneral;

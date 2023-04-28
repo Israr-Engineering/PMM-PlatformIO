@@ -45,7 +45,6 @@ void PmmReadTimersSettings();
 
 void PMMReadCommands();
 
-
 String SetInternalRTC(string Message);
 String GetInternalRTC();
 
@@ -100,42 +99,34 @@ void PmmStringToArray(string input)
     }
 }
 
-String PMMIsAlive()
-{
-    return "PMMAlive";
-}
-
 void StartCommandHttpServer()
 {
-    
-    if ( ThisProduct.EthernetRunning == false)
+
+    if (ThisProduct.EthernetRunning == false)
     {
 
-    // read settings
-    // byte mac[6] = {};
-    // mac[0] = ThisProduct.PmmSerial[0].MACAddress01;
-    // mac[1] = ThisProduct.PmmSerial[0].MACAddress02;
-    // mac[2] = ThisProduct.PmmSerial[0].MACAddress03;
-    // mac[3] = ThisProduct.PmmSerial[0].MACAddress04;
-    // mac[4] = 0x48; // Locally administered always fixed
-    // mac[5] = 0x7E; // Locally administered always fixed
+        // read settings
+        byte mac[6] = {};
+        mac[0] = ThisProduct.PmmSerial[0].MACAddress01;
+        mac[1] = ThisProduct.PmmSerial[0].MACAddress02;
+        mac[2] = ThisProduct.PmmSerial[0].MACAddress03;
+        mac[3] = ThisProduct.PmmSerial[0].MACAddress04;
+        mac[4] = 0x48; // Locally administered always fixed
+        mac[5] = 0x7E; // Locally administered always fixed
 
-    // IPAddress ip(ThisProduct.PmmSerial[0].IpAddress01,
-    //              ThisProduct.PmmSerial[0].IpAddress02,
-    //              ThisProduct.PmmSerial[0].IpAddress03,
-    //              ThisProduct.PmmSerial[0].IpAddress04);
-    
-    
-       
-    byte mac[] = {0x23, 0x22, 0x22, 0x22, 0x22, 0x22};
-    IPAddress ip(192, 168, 1, 107);
-     Ethernet.init(SS); // for W5100 sspin
+        IPAddress ip(ThisProduct.PmmSerial[0].IpAddress01,
+                     ThisProduct.PmmSerial[0].IpAddress02,
+                     ThisProduct.PmmSerial[0].IpAddress03,
+                     ThisProduct.PmmSerial[0].IpAddress04);
+
+        // byte mac[] = {0x23, 0x22, 0x22, 0x22, 0x22, 0x22};
+        // IPAddress ip(192, 168, 1, 107);
+        Ethernet.init(SS); // for W5100 sspin
         Ethernet.begin(mac, ip);
         server.begin(); // port 80
         ThisProduct.EthernetRunning = true;
         SerialUSB.println("-> Ethernet Connected ..");
     }
-    
 }
 
 long BytesToLong()
@@ -204,87 +195,90 @@ String PmmWriteGeneralSettings(string Message, int RomTarget)
 {
     String result = "";
     // 100,000,0620,20230425,1682370000,1682405659,0,1682405999,1000,10,13,11,1,36373,59392,1,5050,0,0,0,0,10,0,0,0,0,0,0
-    PmmStringToArray(Message);
+    if (Message != "*") // for internal call just to save struct to ROM
+    {
+        PmmStringToArray(Message);
 
-    ThisProduct.PmmGeneral.DeviceName = stoi(values[0]);
-    ThisProduct.PmmGeneral.SerialNumber = stoul(values[1]);
-    ThisProduct.PmmGeneral.FirstTimeRun = stoul(values[2]);
-    ThisProduct.PmmGeneral.LifeTime = stoul(values[3]);
-    ThisProduct.PmmGeneral.NumberOfCycles = stoul(values[4]);
-    ThisProduct.PmmGeneral.LastRunningTime = stoul(values[5]);
-    ThisProduct.PmmGeneral.NumberOfRunningTimes = stoul(values[6]);
-    ThisProduct.PmmGeneral.SoftwareVersion = stoi(values[7]);
-    ThisProduct.PmmGeneral.FirmwareVersion = stoi(values[8]);
-    ThisProduct.PmmGeneral.HardwareVersion = stoi(values[9]);
-    ThisProduct.PmmGeneral.ControlerType = stoi(values[10]);
+        ThisProduct.PmmGeneral.DeviceName = stoi(values[0]);
+        ThisProduct.PmmGeneral.SerialNumber = stoul(values[1]);
+        ThisProduct.PmmGeneral.FirstTimeRun = stoul(values[2]);
+        ThisProduct.PmmGeneral.LifeTime = stoul(values[3]);
+        ThisProduct.PmmGeneral.NumberOfCycles = stoul(values[4]);
+        ThisProduct.PmmGeneral.LastRunningTime = stoul(values[5]);
+        ThisProduct.PmmGeneral.NumberOfRunningTimes = stoul(values[6]);
+        ThisProduct.PmmGeneral.SoftwareVersion = stoi(values[7]);
+        ThisProduct.PmmGeneral.FirmwareVersion = stoi(values[8]);
+        ThisProduct.PmmGeneral.HardwareVersion = stoi(values[9]);
+        ThisProduct.PmmGeneral.ControlerType = stoi(values[10]);
 
-    int tmpInt = stoi(values[11]);
-    byte IntLowByte = lowByte(tmpInt);
-    byte IntHighByte = highByte(tmpInt);
+        int tmpInt = stoi(values[11]);
+        byte IntLowByte = lowByte(tmpInt);
+        byte IntHighByte = highByte(tmpInt);
 
-    ThisProduct.PmmGeneral.ItHasEthernet = bitRead(IntLowByte, 0);
-    ThisProduct.PmmGeneral.ItHasSwitch = bitRead(IntLowByte, 1);
-    ThisProduct.PmmGeneral.ItHasExtEEPROM = bitRead(IntLowByte, 2);
-    ThisProduct.PmmGeneral.ItHasExtFlash = bitRead(IntLowByte, 3);
+        ThisProduct.PmmGeneral.ItHasEthernet = bitRead(IntLowByte, 0);
+        ThisProduct.PmmGeneral.ItHasSwitch = bitRead(IntLowByte, 1);
+        ThisProduct.PmmGeneral.ItHasExtEEPROM = bitRead(IntLowByte, 2);
+        ThisProduct.PmmGeneral.ItHasExtFlash = bitRead(IntLowByte, 3);
 
-    ThisProduct.PmmGeneral.ItHasSerial = bitRead(IntLowByte, 4);
-    ThisProduct.PmmGeneral.ItHasWebServer = bitRead(IntLowByte, 5);
-    ThisProduct.PmmGeneral.ItHasFiber = bitRead(IntLowByte, 6);
-    ThisProduct.PmmGeneral.LoRA = bitRead(IntLowByte, 7);
+        ThisProduct.PmmGeneral.ItHasSerial = bitRead(IntLowByte, 4);
+        ThisProduct.PmmGeneral.ItHasWebServer = bitRead(IntLowByte, 5);
+        ThisProduct.PmmGeneral.ItHasFiber = bitRead(IntLowByte, 6);
+        ThisProduct.PmmGeneral.LoRA = bitRead(IntLowByte, 7);
 
-    ThisProduct.PmmGeneral.Zidbee = bitRead(IntHighByte, 0);
-    ThisProduct.PmmGeneral.GSM = bitRead(IntHighByte, 1);
-    ThisProduct.PmmGeneral.GPS = bitRead(IntHighByte, 2);
-    ThisProduct.PmmGeneral.Antenna = bitRead(IntHighByte, 3);
+        ThisProduct.PmmGeneral.Zidbee = bitRead(IntHighByte, 0);
+        ThisProduct.PmmGeneral.GSM = bitRead(IntHighByte, 1);
+        ThisProduct.PmmGeneral.GPS = bitRead(IntHighByte, 2);
+        ThisProduct.PmmGeneral.Antenna = bitRead(IntHighByte, 3);
 
-    ThisProduct.PmmGeneral.ExternalRTC = bitRead(IntHighByte, 4);
-    ThisProduct.PmmGeneral.InternalRTC = bitRead(IntHighByte, 5);
-    ThisProduct.PmmGeneral.UDPOption = bitRead(IntHighByte, 6);
-    ThisProduct.PmmGeneral.GateWay = bitRead(IntHighByte, 7);
+        ThisProduct.PmmGeneral.ExternalRTC = bitRead(IntHighByte, 4);
+        ThisProduct.PmmGeneral.InternalRTC = bitRead(IntHighByte, 5);
+        ThisProduct.PmmGeneral.UDPOption = bitRead(IntHighByte, 6);
+        ThisProduct.PmmGeneral.GateWay = bitRead(IntHighByte, 7);
 
-    // // int Options02 ; //(18)
-    tmpInt = stoi(values[12]);
-    IntLowByte = lowByte(tmpInt);
-    IntHighByte = highByte(tmpInt);
+        // // int Options02 ; //(18)
+        tmpInt = stoi(values[12]);
+        IntLowByte = lowByte(tmpInt);
+        IntHighByte = highByte(tmpInt);
 
-    ThisProduct.PmmGeneral.Canprint = bitRead(IntLowByte, 0);
-    ThisProduct.PmmGeneral.Ext01Pac9535 = bitRead(IntLowByte, 1);
-    ThisProduct.PmmGeneral.Ext02Pac9535 = bitRead(IntLowByte, 2);
-    ThisProduct.PmmGeneral.Ext03Pac9535 = bitRead(IntLowByte, 3);
+        ThisProduct.PmmGeneral.Canprint = bitRead(IntLowByte, 0);
+        ThisProduct.PmmGeneral.Ext01Pac9535 = bitRead(IntLowByte, 1);
+        ThisProduct.PmmGeneral.Ext02Pac9535 = bitRead(IntLowByte, 2);
+        ThisProduct.PmmGeneral.Ext03Pac9535 = bitRead(IntLowByte, 3);
 
-    ThisProduct.PmmGeneral.I2CServer = bitRead(IntLowByte, 4);
-    ThisProduct.PmmGeneral.spare125 = bitRead(IntLowByte, 5);
-    ThisProduct.PmmGeneral.spare126 = bitRead(IntLowByte, 6);
-    ThisProduct.PmmGeneral.spare127 = bitRead(IntLowByte, 7);
+        ThisProduct.PmmGeneral.I2CServer = bitRead(IntLowByte, 4);
+        ThisProduct.PmmGeneral.spare125 = bitRead(IntLowByte, 5);
+        ThisProduct.PmmGeneral.spare126 = bitRead(IntLowByte, 6);
+        ThisProduct.PmmGeneral.spare127 = bitRead(IntLowByte, 7);
 
-    ThisProduct.PmmGeneral.spare128 = bitRead(IntHighByte, 0);
-    ThisProduct.PmmGeneral.spare129 = bitRead(IntHighByte, 1);
-    ThisProduct.PmmGeneral.spare130 = bitRead(IntHighByte, 2);
-    ThisProduct.PmmGeneral.spare131 = bitRead(IntHighByte, 3);
+        ThisProduct.PmmGeneral.spare128 = bitRead(IntHighByte, 0);
+        ThisProduct.PmmGeneral.spare129 = bitRead(IntHighByte, 1);
+        ThisProduct.PmmGeneral.spare130 = bitRead(IntHighByte, 2);
+        ThisProduct.PmmGeneral.spare131 = bitRead(IntHighByte, 3);
 
-    ThisProduct.PmmGeneral.spare132 = bitRead(IntHighByte, 4);
-    ThisProduct.PmmGeneral.spare133 = bitRead(IntHighByte, 5);
-    ThisProduct.PmmGeneral.spare134 = bitRead(IntHighByte, 6);
-    ThisProduct.PmmGeneral.spare135 = bitRead(IntHighByte, 7);
+        ThisProduct.PmmGeneral.spare132 = bitRead(IntHighByte, 4);
+        ThisProduct.PmmGeneral.spare133 = bitRead(IntHighByte, 5);
+        ThisProduct.PmmGeneral.spare134 = bitRead(IntHighByte, 6);
+        ThisProduct.PmmGeneral.spare135 = bitRead(IntHighByte, 7);
 
-    ThisProduct.PmmGeneral.Ext01Name = stoi(values[13]); //(19) 00 => zero = No extesion board
-    ThisProduct.PmmGeneral.Ext01Address01 = lowByte(stoi(values[14]));
-    ThisProduct.PmmGeneral.Ext01Address02 = highByte(stoi(values[14]));
-    ThisProduct.PmmGeneral.Ext02Name = stoi(values[15]); //(19) 00 => zero = No extesion board
-    ThisProduct.PmmGeneral.Ext02Address01 = lowByte(stoi(values[16]));
-    ThisProduct.PmmGeneral.Ext02Address02 = highByte(stoi(values[16]));
-    ThisProduct.PmmGeneral.Ext03Name = stoi(values[17]); //(19) 00 => zero = No extesion board
-    ThisProduct.PmmGeneral.Ext03Address01 = lowByte(stoi(values[18]));
-    ThisProduct.PmmGeneral.Ext03Address02 = highByte(stoi(values[18]));
+        ThisProduct.PmmGeneral.Ext01Name = stoi(values[13]); //(19) 00 => zero = No extesion board
+        ThisProduct.PmmGeneral.Ext01Address01 = lowByte(stoi(values[14]));
+        ThisProduct.PmmGeneral.Ext01Address02 = highByte(stoi(values[14]));
+        ThisProduct.PmmGeneral.Ext02Name = stoi(values[15]); //(19) 00 => zero = No extesion board
+        ThisProduct.PmmGeneral.Ext02Address01 = lowByte(stoi(values[16]));
+        ThisProduct.PmmGeneral.Ext02Address02 = highByte(stoi(values[16]));
+        ThisProduct.PmmGeneral.Ext03Name = stoi(values[17]); //(19) 00 => zero = No extesion board
+        ThisProduct.PmmGeneral.Ext03Address01 = lowByte(stoi(values[18]));
+        ThisProduct.PmmGeneral.Ext03Address02 = highByte(stoi(values[18]));
 
-    ThisProduct.PmmGeneral.I2CServerAddress = stoi(values[19]);
-    ThisProduct.PmmGeneral.Spare26 = stoi(values[20]);
-    ThisProduct.PmmGeneral.Spare27 = stoi(values[21]);
-    ThisProduct.PmmGeneral.Spare28 = stoi(values[22]);
-    ThisProduct.PmmGeneral.Spare29 = stoi(values[23]);
-    ThisProduct.PmmGeneral.Spare30 = stoi(values[24]);
+        ThisProduct.PmmGeneral.I2CServerAddress = stoi(values[19]);
+        ThisProduct.PmmGeneral.Spare26 = stoi(values[20]);
+        ThisProduct.PmmGeneral.Spare27 = stoi(values[21]);
+        ThisProduct.PmmGeneral.Spare28 = stoi(values[22]);
+        ThisProduct.PmmGeneral.Spare29 = stoi(values[23]);
+        ThisProduct.PmmGeneral.Spare30 = stoi(values[24]);
 
-    ThisProduct.PmmGeneral.SettingsRef = stoi(values[25]);
+        ThisProduct.PmmGeneral.SettingsRef = stoi(values[25]);
+    }
 
     if (RomTarget == 0)
     {
@@ -424,98 +418,100 @@ String PmmWriteSerialSettings(string Message, int Portnumber, int RomTarget)
     String result = "";
     // 110,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,4294967295,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
     // 110,000,16779265,524289,9600,35,36,1,1,485,845440125,1677830336,-1,838926784,134744072,33687560,32965110,33096184,0,0,0,32771
-    PmmStringToArray(Message);
+    if (Message != "*") // for internal call just to save struct to ROM
+    {
+        PmmStringToArray(Message);
 
-    LongToBytes(stol(values[0]));                                 // 00000001000000000000100000000001
-    ThisProduct.PmmSerial[Portnumber].PortStopBit = ByteArray[0]; // 00000001
-    ThisProduct.PmmSerial[Portnumber].PortDataBit = ByteArray[1]; // 00001000
-    ThisProduct.PmmSerial[Portnumber].PortParity = ByteArray[2];  // 00000000
-    ThisProduct.PmmSerial[Portnumber].PortName = ByteArray[3];    // 00000001
+        LongToBytes(stol(values[0]));                                 // 00000001000000000000100000000001
+        ThisProduct.PmmSerial[Portnumber].PortStopBit = ByteArray[0]; // 00000001
+        ThisProduct.PmmSerial[Portnumber].PortDataBit = ByteArray[1]; // 00001000
+        ThisProduct.PmmSerial[Portnumber].PortParity = ByteArray[2];  // 00000000
+        ThisProduct.PmmSerial[Portnumber].PortName = ByteArray[3];    // 00000001
 
-    ThisProduct.PmmSerial[Portnumber].SerialConfig = stol(values[1]);
-    ThisProduct.PmmSerial[Portnumber].BaudRate = stol(values[2]);
-    ThisProduct.PmmSerial[Portnumber].TXPin = stoi(values[3]);
-    ThisProduct.PmmSerial[Portnumber].RXPin = stoi(values[4]);
+        ThisProduct.PmmSerial[Portnumber].SerialConfig = stol(values[1]);
+        ThisProduct.PmmSerial[Portnumber].BaudRate = stol(values[2]);
+        ThisProduct.PmmSerial[Portnumber].TXPin = stoi(values[3]);
+        ThisProduct.PmmSerial[Portnumber].RXPin = stoi(values[4]);
 
-    ThisProduct.PmmSerial[Portnumber].SerialSelectionPin = stoi(values[5]);
-    ThisProduct.PmmSerial[Portnumber].SerialPort = stoi(values[6]);
-    ThisProduct.PmmSerial[Portnumber].Interface = stoi(values[7]);
+        ThisProduct.PmmSerial[Portnumber].SerialSelectionPin = stoi(values[5]);
+        ThisProduct.PmmSerial[Portnumber].SerialPort = stoi(values[6]);
+        ThisProduct.PmmSerial[Portnumber].Interface = stoi(values[7]);
 
-    LongToBytes(stol(values[8]));                                  // 00110010011001000110010001111101
-    ThisProduct.PmmSerial[Portnumber].MACAddress01 = ByteArray[0]; // 01111101
-    ThisProduct.PmmSerial[Portnumber].MACAddress02 = ByteArray[1]; // 01001011
-    ThisProduct.PmmSerial[Portnumber].MACAddress03 = ByteArray[2]; // 01100100
-    ThisProduct.PmmSerial[Portnumber].MACAddress04 = ByteArray[3]; // 00110010
-    // ThisProduct.PmmSerial[Portnumber].MACAddress05 = ByteArray[4]; // fixed
-    // ThisProduct.PmmSerial[Portnumber].MACAddress06 = ByteArray[5]; // fixed
+        LongToBytes(stol(values[8]));                                  // 00110010011001000110010001111101
+        ThisProduct.PmmSerial[Portnumber].MACAddress01 = ByteArray[0]; // 01111101
+        ThisProduct.PmmSerial[Portnumber].MACAddress02 = ByteArray[1]; // 01001011
+        ThisProduct.PmmSerial[Portnumber].MACAddress03 = ByteArray[2]; // 01100100
+        ThisProduct.PmmSerial[Portnumber].MACAddress04 = ByteArray[3]; // 00110010
+        // ThisProduct.PmmSerial[Portnumber].MACAddress05 = ByteArray[4]; // fixed
+        // ThisProduct.PmmSerial[Portnumber].MACAddress06 = ByteArray[5]; // fixed
 
-    UnsignedLongToUInt8(stoul(values[9]));                         // 01100100000000011010100011000000
-    ThisProduct.PmmSerial[Portnumber].IpAddress01 = UInt8Array[0]; // 11000000
-    ThisProduct.PmmSerial[Portnumber].IpAddress02 = UInt8Array[1]; // 10101000
-    ThisProduct.PmmSerial[Portnumber].IpAddress03 = UInt8Array[2]; // 00000001
-    ThisProduct.PmmSerial[Portnumber].IpAddress04 = UInt8Array[3]; // 01100100
+        UnsignedLongToUInt8(stoul(values[9]));                         // 01100100000000011010100011000000
+        ThisProduct.PmmSerial[Portnumber].IpAddress01 = UInt8Array[0]; // 11000000
+        ThisProduct.PmmSerial[Portnumber].IpAddress02 = UInt8Array[1]; // 10101000
+        ThisProduct.PmmSerial[Portnumber].IpAddress03 = UInt8Array[2]; // 00000001
+        ThisProduct.PmmSerial[Portnumber].IpAddress04 = UInt8Array[3]; // 01100100
 
-    UnsignedLongToUInt8(stoul(values[10]));                         // 11111111111111111111111111111111
-    ThisProduct.PmmSerial[Portnumber].SubnetMask01 = UInt8Array[0]; // 11111111
-    ThisProduct.PmmSerial[Portnumber].SubnetMask02 = UInt8Array[1]; // 11111111
-    ThisProduct.PmmSerial[Portnumber].SubnetMask03 = UInt8Array[2]; // 11111111
-    ThisProduct.PmmSerial[Portnumber].SubnetMask04 = UInt8Array[3]; // 11111111
+        UnsignedLongToUInt8(stoul(values[10]));                         // 11111111111111111111111111111111
+        ThisProduct.PmmSerial[Portnumber].SubnetMask01 = UInt8Array[0]; // 11111111
+        ThisProduct.PmmSerial[Portnumber].SubnetMask02 = UInt8Array[1]; // 11111111
+        ThisProduct.PmmSerial[Portnumber].SubnetMask03 = UInt8Array[2]; // 11111111
+        ThisProduct.PmmSerial[Portnumber].SubnetMask04 = UInt8Array[3]; // 11111111
 
-    UnsignedLongToUInt8(stoul(values[11]));                      // 00110010000000010000000111000000
-    ThisProduct.PmmSerial[Portnumber].GateWay01 = UInt8Array[0]; // 11000000
-    ThisProduct.PmmSerial[Portnumber].GateWay02 = UInt8Array[1]; // 10101000
-    ThisProduct.PmmSerial[Portnumber].GateWay03 = UInt8Array[2]; // 00000001
-    ThisProduct.PmmSerial[Portnumber].GateWay04 = UInt8Array[3]; // 00110010
+        UnsignedLongToUInt8(stoul(values[11]));                      // 00110010000000010000000111000000
+        ThisProduct.PmmSerial[Portnumber].GateWay01 = UInt8Array[0]; // 11000000
+        ThisProduct.PmmSerial[Portnumber].GateWay02 = UInt8Array[1]; // 10101000
+        ThisProduct.PmmSerial[Portnumber].GateWay03 = UInt8Array[2]; // 00000001
+        ThisProduct.PmmSerial[Portnumber].GateWay04 = UInt8Array[3]; // 00110010
 
-    LongToBytes(stol(values[12]));                           // 00001000000010000000100000001000
-    ThisProduct.PmmSerial[Portnumber].DNS101 = ByteArray[0]; // 00001000
-    ThisProduct.PmmSerial[Portnumber].DNS102 = ByteArray[1]; // 00001000
-    ThisProduct.PmmSerial[Portnumber].DNS103 = ByteArray[2]; // 00001000
-    ThisProduct.PmmSerial[Portnumber].DNS104 = ByteArray[3]; // 00001000
+        LongToBytes(stol(values[12]));                           // 00001000000010000000100000001000
+        ThisProduct.PmmSerial[Portnumber].DNS101 = ByteArray[0]; // 00001000
+        ThisProduct.PmmSerial[Portnumber].DNS102 = ByteArray[1]; // 00001000
+        ThisProduct.PmmSerial[Portnumber].DNS103 = ByteArray[2]; // 00001000
+        ThisProduct.PmmSerial[Portnumber].DNS104 = ByteArray[3]; // 00001000
 
-    LongToBytes(stol(values[13]));                           // 00000010000000100000100000001000
-    ThisProduct.PmmSerial[Portnumber].DNS201 = ByteArray[0]; // 00001000
-    ThisProduct.PmmSerial[Portnumber].DNS202 = ByteArray[1]; // 00001000
-    ThisProduct.PmmSerial[Portnumber].DNS203 = ByteArray[2]; // 00000010
-    ThisProduct.PmmSerial[Portnumber].DNS204 = ByteArray[3]; // 00000010
+        LongToBytes(stol(values[13]));                           // 00000010000000100000100000001000
+        ThisProduct.PmmSerial[Portnumber].DNS201 = ByteArray[0]; // 00001000
+        ThisProduct.PmmSerial[Portnumber].DNS202 = ByteArray[1]; // 00001000
+        ThisProduct.PmmSerial[Portnumber].DNS203 = ByteArray[2]; // 00000010
+        ThisProduct.PmmSerial[Portnumber].DNS204 = ByteArray[3]; // 00000010
 
-    UnsignedLongToUInt16(stoul(values[14]));                   // 00000001111101110000000111110110
-    ThisProduct.PmmSerial[Portnumber].Port01 = UInt16Array[0]; // 0000000111110110
-    ThisProduct.PmmSerial[Portnumber].Port02 = UInt16Array[1]; // 0000000111110111
+        UnsignedLongToUInt16(stoul(values[14]));                   // 00000001111101110000000111110110
+        ThisProduct.PmmSerial[Portnumber].Port01 = UInt16Array[0]; // 0000000111110110
+        ThisProduct.PmmSerial[Portnumber].Port02 = UInt16Array[1]; // 0000000111110111
 
-    UnsignedLongToUInt16(stoul(values[15]));                   // 00000001111110010000000111111000
-    ThisProduct.PmmSerial[Portnumber].Port03 = UInt16Array[0]; // 0000000111111000
-    ThisProduct.PmmSerial[Portnumber].Port04 = UInt16Array[1]; // 0000000111111001
+        UnsignedLongToUInt16(stoul(values[15]));                   // 00000001111110010000000111111000
+        ThisProduct.PmmSerial[Portnumber].Port03 = UInt16Array[0]; // 0000000111111000
+        ThisProduct.PmmSerial[Portnumber].Port04 = UInt16Array[1]; // 0000000111111001
 
-    ThisProduct.PmmSerial[Portnumber].Spare28 = stoi(values[16]);
-    ThisProduct.PmmSerial[Portnumber].Spare29 = stoi(values[17]);
-    ThisProduct.PmmSerial[Portnumber].Spare30 = stoi(values[18]);
+        ThisProduct.PmmSerial[Portnumber].Spare28 = stoi(values[16]);
+        ThisProduct.PmmSerial[Portnumber].Spare29 = stoi(values[17]);
+        ThisProduct.PmmSerial[Portnumber].Spare30 = stoi(values[18]);
 
-    // int Spare31 = 0;
-    int tmpInt = stoi(values[19]);
-    byte IntLowByte = lowByte(tmpInt); // 1000000000000011
-    byte IntHighByte = highByte(tmpInt);
+        // int Spare31 = 0;
+        int tmpInt = stoi(values[19]);
+        byte IntLowByte = lowByte(tmpInt); // 1000000000000011
+        byte IntHighByte = highByte(tmpInt);
 
-    ThisProduct.PmmSerial[Portnumber].Enabled = bitRead(IntLowByte, 0);
-    ThisProduct.PmmSerial[Portnumber].spare3101 = bitRead(IntLowByte, 1);
-    ThisProduct.PmmSerial[Portnumber].spare3102 = bitRead(IntLowByte, 2);
-    ThisProduct.PmmSerial[Portnumber].spare3103 = bitRead(IntLowByte, 3);
+        ThisProduct.PmmSerial[Portnumber].Enabled = bitRead(IntLowByte, 0);
+        ThisProduct.PmmSerial[Portnumber].spare3101 = bitRead(IntLowByte, 1);
+        ThisProduct.PmmSerial[Portnumber].spare3102 = bitRead(IntLowByte, 2);
+        ThisProduct.PmmSerial[Portnumber].spare3103 = bitRead(IntLowByte, 3);
 
-    ThisProduct.PmmSerial[Portnumber].spare3104 = bitRead(IntLowByte, 4);
-    ThisProduct.PmmSerial[Portnumber].spare3105 = bitRead(IntLowByte, 5);
-    ThisProduct.PmmSerial[Portnumber].spare3106 = bitRead(IntLowByte, 6);
-    ThisProduct.PmmSerial[Portnumber].spare3107 = bitRead(IntLowByte, 7);
+        ThisProduct.PmmSerial[Portnumber].spare3104 = bitRead(IntLowByte, 4);
+        ThisProduct.PmmSerial[Portnumber].spare3105 = bitRead(IntLowByte, 5);
+        ThisProduct.PmmSerial[Portnumber].spare3106 = bitRead(IntLowByte, 6);
+        ThisProduct.PmmSerial[Portnumber].spare3107 = bitRead(IntLowByte, 7);
 
-    ThisProduct.PmmSerial[Portnumber].spare3108 = bitRead(IntHighByte, 0);
-    ThisProduct.PmmSerial[Portnumber].spare3109 = bitRead(IntHighByte, 1);
-    ThisProduct.PmmSerial[Portnumber].spare3110 = bitRead(IntHighByte, 2);
-    ThisProduct.PmmSerial[Portnumber].spare3111 = bitRead(IntHighByte, 3);
+        ThisProduct.PmmSerial[Portnumber].spare3108 = bitRead(IntHighByte, 0);
+        ThisProduct.PmmSerial[Portnumber].spare3109 = bitRead(IntHighByte, 1);
+        ThisProduct.PmmSerial[Portnumber].spare3110 = bitRead(IntHighByte, 2);
+        ThisProduct.PmmSerial[Portnumber].spare3111 = bitRead(IntHighByte, 3);
 
-    ThisProduct.PmmSerial[Portnumber].spare3112 = bitRead(IntHighByte, 4);
-    ThisProduct.PmmSerial[Portnumber].spare3113 = bitRead(IntHighByte, 5);
-    ThisProduct.PmmSerial[Portnumber].IsEthernet = bitRead(IntHighByte, 6);
-    ThisProduct.PmmSerial[Portnumber].IsRunning = bitRead(IntHighByte, 7);
-
+        ThisProduct.PmmSerial[Portnumber].spare3112 = bitRead(IntHighByte, 4);
+        ThisProduct.PmmSerial[Portnumber].spare3113 = bitRead(IntHighByte, 5);
+        ThisProduct.PmmSerial[Portnumber].IsEthernet = bitRead(IntHighByte, 6);
+        ThisProduct.PmmSerial[Portnumber].IsRunning = bitRead(IntHighByte, 7);
+    }
     if (RomTarget == 0)
     {
         switch (Portnumber)
@@ -759,90 +755,93 @@ String PmmWriteProtocol(string Message, int Portnumber, int RomTarget)
 {
     String result = "";
     // 130,000,384,162,0,100,200,300,10,20,30,40,03,1,1,1000,1,1000,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-    PmmStringToArray(Message);
-    int tmpInt = stoi(values[0]);        // 0000000110000000
-    byte IntLowByte = lowByte(tmpInt);   // 10000000
-    byte IntHighByte = highByte(tmpInt); // 00000001
+    if (Message != "*") // for internal call just to save struct to ROM
+    {
+        PmmStringToArray(Message);
+        int tmpInt = stoi(values[0]);        // 0000000110000000
+        byte IntLowByte = lowByte(tmpInt);   // 10000000
+        byte IntHighByte = highByte(tmpInt); // 00000001
 
-    ThisProduct.PmmSerial[Portnumber].Enabled = bitRead(IntLowByte, 0);
+        ThisProduct.PmmSerial[Portnumber].Enabled = bitRead(IntLowByte, 0);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsModBus = bitRead(IntLowByte, 0);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsCanBus = bitRead(IntLowByte, 1);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsProfiBus = bitRead(IntLowByte, 2);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsProfiNet = bitRead(IntLowByte, 3);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsBACnet = bitRead(IntLowByte, 4);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsDLMS = bitRead(IntLowByte, 5);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsMBus = bitRead(IntLowByte, 6);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsOPC = bitRead(IntLowByte, 7);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsModBus = bitRead(IntLowByte, 0);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsCanBus = bitRead(IntLowByte, 1);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsProfiBus = bitRead(IntLowByte, 2);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsProfiNet = bitRead(IntLowByte, 3);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsBACnet = bitRead(IntLowByte, 4);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsDLMS = bitRead(IntLowByte, 5);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsMBus = bitRead(IntLowByte, 6);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsOPC = bitRead(IntLowByte, 7);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare08 = bitRead(IntHighByte, 0);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare09 = bitRead(IntHighByte, 1);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare10 = bitRead(IntHighByte, 2);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare11 = bitRead(IntHighByte, 3);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare12 = bitRead(IntHighByte, 4);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare13 = bitRead(IntHighByte, 5);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare14 = bitRead(IntHighByte, 6);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsRunning = bitRead(IntHighByte, 7);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare08 = bitRead(IntHighByte, 0);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare09 = bitRead(IntHighByte, 1);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare10 = bitRead(IntHighByte, 2);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare11 = bitRead(IntHighByte, 3);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare12 = bitRead(IntHighByte, 4);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare13 = bitRead(IntHighByte, 5);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare14 = bitRead(IntHighByte, 6);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IsRunning = bitRead(IntHighByte, 7);
 
-    // ModBus Settings
-    // int Spare00 ; (01)
-    tmpInt = stoi(values[1]);       // 000000010100010
-    IntLowByte = lowByte(tmpInt);   // 10100010
-    IntHighByte = highByte(tmpInt); // 0000000
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ModBusRTU = bitRead(IntLowByte, 0);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ModBusTCP = bitRead(IntLowByte, 1);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ModBusSlave = bitRead(IntLowByte, 2);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ModBusMaster = bitRead(IntLowByte, 3);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ReadCoilsStatus = bitRead(IntLowByte, 4);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ReadInputStatus = bitRead(IntLowByte, 5);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ReadHoldingRegisters = bitRead(IntLowByte, 6);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ReadInputRegisters = bitRead(IntLowByte, 7);
+        // ModBus Settings
+        // int Spare00 ; (01)
+        tmpInt = stoi(values[1]);       // 000000010100010
+        IntLowByte = lowByte(tmpInt);   // 10100010
+        IntHighByte = highByte(tmpInt); // 0000000
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ModBusRTU = bitRead(IntLowByte, 0);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ModBusTCP = bitRead(IntLowByte, 1);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ModBusSlave = bitRead(IntLowByte, 2);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ModBusMaster = bitRead(IntLowByte, 3);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ReadCoilsStatus = bitRead(IntLowByte, 4);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ReadInputStatus = bitRead(IntLowByte, 5);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ReadHoldingRegisters = bitRead(IntLowByte, 6);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ReadInputRegisters = bitRead(IntLowByte, 7);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.WriteSingleCoil = bitRead(IntHighByte, 0);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.WriteSingleRegister = bitRead(IntHighByte, 1);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.WriteMultipleCoils = bitRead(IntHighByte, 2);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.WriteMultipleRegisters = bitRead(IntHighByte, 3);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.CoilsStatus = bitRead(IntHighByte, 4);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.InputStatus = bitRead(IntHighByte, 5);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.HoldingRegisters = bitRead(IntHighByte, 6);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.InputRegisters = bitRead(IntHighByte, 7);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.WriteSingleCoil = bitRead(IntHighByte, 0);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.WriteSingleRegister = bitRead(IntHighByte, 1);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.WriteMultipleCoils = bitRead(IntHighByte, 2);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.WriteMultipleRegisters = bitRead(IntHighByte, 3);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.CoilsStatus = bitRead(IntHighByte, 4);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.InputStatus = bitRead(IntHighByte, 5);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.HoldingRegisters = bitRead(IntHighByte, 6);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.InputRegisters = bitRead(IntHighByte, 7);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressCoilsStatus = stoi(values[2]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressInputStatus = stoi(values[3]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressHoldingRegisters = stoi(values[4]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressInputRegisters = stoi(values[5]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressCoilsStatus = stoi(values[2]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressInputStatus = stoi(values[3]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressHoldingRegisters = stoi(values[4]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.StartingAddressInputRegisters = stoi(values[5]);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.QuantityCoilsStatus = stoi(values[6]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.QuantityInputStatus = stoi(values[7]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.QuantityHoldingRegisters = stoi(values[8]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.QuantityInputRegisters = stoi(values[9]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.QuantityCoilsStatus = stoi(values[6]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.QuantityInputStatus = stoi(values[7]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.QuantityHoldingRegisters = stoi(values[8]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.QuantityInputRegisters = stoi(values[9]);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.FunctionCode = stoi(values[10]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IODataOrder = stoi(values[11]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.IODataType = stoi(values[12]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.PollInterval = stoi(values[13]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.SlaveID = stoi(values[14]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.ConnectionTimeout = stoi(values[15]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.FunctionCode = stoi(values[10]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IODataOrder = stoi(values[11]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.IODataType = stoi(values[12]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.PollInterval = stoi(values[13]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.SlaveID = stoi(values[14]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.ConnectionTimeout = stoi(values[15]);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.MaxRetry = stoi(values[16]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare17 = stoi(values[17]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare18 = stoi(values[18]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare19 = stoi(values[19]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.MaxRetry = stoi(values[16]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare17 = stoi(values[17]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare18 = stoi(values[18]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare19 = stoi(values[19]);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare20 = stoi(values[20]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare21 = stoi(values[21]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare22 = stoi(values[22]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare23 = stoi(values[23]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare20 = stoi(values[20]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare21 = stoi(values[21]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare22 = stoi(values[22]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare23 = stoi(values[23]);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare24 = stoi(values[24]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare25 = stoi(values[25]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare26 = stoi(values[26]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare27 = stoi(values[27]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare24 = stoi(values[24]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare25 = stoi(values[25]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare26 = stoi(values[26]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare27 = stoi(values[27]);
 
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare28 = stoi(values[28]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare29 = stoi(values[29]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare30 = stoi(values[30]);
-    ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare31 = stoi(values[31]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare28 = stoi(values[28]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare29 = stoi(values[29]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare30 = stoi(values[30]);
+        ThisProduct.PmmSerial[Portnumber].PmmProtocols.Spare31 = stoi(values[31]);
+    }
 
     if (RomTarget == 0)
     {
@@ -1076,18 +1075,21 @@ String PmmWriteTimerSettings(string Message, int RomTarget)
 {
     String result = "";
     // 102,000,000,1000,1000,1000,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-    PmmStringToArray(Message);
-
-    ThisProduct.PmmTimers.ScanTimer = stoul(values[1]);
-    ThisProduct.PmmTimers.ConfigTimer = stoul(values[2]);
-    ThisProduct.PmmTimers.CommUpdateTimer = stoul(values[3]);
-
-    // process the array
-    const int arrLength = sizeof(ThisProduct.PmmTimers.Spare) / sizeof(ThisProduct.PmmTimers.Spare[0]);
-
-    for (int i = 4; i < arrLength; i++)
+    if (Message != "*") // for internal call just to save struct to ROM
     {
-        ThisProduct.PmmTimers.Spare[i] = stoi(values[i]);
+        PmmStringToArray(Message);
+
+        ThisProduct.PmmTimers.ScanTimer = stoul(values[1]);
+        ThisProduct.PmmTimers.ConfigTimer = stoul(values[2]);
+        ThisProduct.PmmTimers.CommUpdateTimer = stoul(values[3]);
+
+        // process the array
+        const int arrLength = sizeof(ThisProduct.PmmTimers.Spare) / sizeof(ThisProduct.PmmTimers.Spare[0]);
+
+        for (int i = 4; i < arrLength; i++)
+        {
+            ThisProduct.PmmTimers.Spare[i] = stoi(values[i]);
+        }
     }
 
     if (RomTarget == 0)
@@ -1166,17 +1168,19 @@ String PmmReadTimersSettings(int RomTarget)
 String PmmWriteGerneralPurpose(string Message, int RomTarget)
 {
     String result = "";
-    PmmStringToArray(Message);
-
-    ThisProduct.PmmGerneralPurpose.Header = 159;
-
-    const int arrLength = sizeof(ThisProduct.PmmGerneralPurpose.Spare) / sizeof(ThisProduct.PmmGerneralPurpose.Spare[0]);
-
-    for (int i = 0; i < arrLength; i++)
+    if (Message != "*") // for internal call just to save struct to ROM
     {
-        ThisProduct.PmmGerneralPurpose.Spare[i] = stoi(values[i]);
-    }
+        PmmStringToArray(Message);
 
+        ThisProduct.PmmGerneralPurpose.Header = 159;
+
+        const int arrLength = sizeof(ThisProduct.PmmGerneralPurpose.Spare) / sizeof(ThisProduct.PmmGerneralPurpose.Spare[0]);
+
+        for (int i = 0; i < arrLength; i++)
+        {
+            ThisProduct.PmmGerneralPurpose.Spare[i] = stoi(values[i]);
+        }
+    }
     if (RomTarget == 0)
     {
         PmmInternalEEPROM.put(1536, ThisProduct.PmmGerneralPurpose);
@@ -1221,15 +1225,18 @@ String PmmReadGerneralPurpose(int RomTarget)
 String PmmWriteDeviceCalibration(string Message, int PageNumber, int RomTarget)
 {
     String result = "";
-    PmmStringToArray(Message);
-
-    ThisProduct.PmmCalibrationPage[PageNumber].Header = 159;
-
-    const int arrLength = sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate) / sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[0]);
-
-    for (int i = 0; i < arrLength; i++)
+    if (Message != "*") // for internal call just to save struct to ROM
     {
-        ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i] = stof(values[i]);
+        PmmStringToArray(Message);
+
+        ThisProduct.PmmCalibrationPage[PageNumber].Header = 159;
+
+        const int arrLength = sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate) / sizeof(ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[0]);
+
+        for (int i = 0; i < arrLength; i++)
+        {
+            ThisProduct.PmmCalibrationPage[PageNumber].Calebrate[i] = stof(values[i]);
+        }
     }
 
     if (RomTarget == 0)
@@ -1357,50 +1364,59 @@ String PmmReadDeviceCalibration(int PageNumber, int RomTarget, long floatfactor)
 
 void PmmReadAllSettings(int RomTarget)
 {
-    //STEP01 : Read general settings from internal flash
+    
+
+    // STEP01 : Read general settings from internal flash
     PmmReadGeneralSettings(0);
-    if (ThisProduct.PmmGeneral.NumberOfCycles > 0)
+    
+    // STEP02 : First starting only
+    if(ThisProduct.PmmGeneral.NumberOfCycles  == 4294967295 ) // load defualt settings form struct's to internal flash 0xffff ffff
+    {
+        ThisProduct.PmmGeneral.NumberOfCycles = 1;
+        PmmWriteGeneralSettings("0620,20230425,1682370000,1682405659,1,1682405999,1000,10,13,11,1,65535,59392,1,5050,0,0,0,0,10,0,0,0,0,0,0",0);
+        PmmWriteGeneralSettings("*",0);
+        PmmWriteSerialSettings("*",0,0); // Ethernet (192,168,1,110)
+        PmmWriteSerialSettings("*",1,0); // Main Serial port
+        PmmWriteSerialSettings("*",2,0); // Main Serial port
+        PmmWriteSerialSettings("*",3,0); // Main Serial port
+        PmmWriteSerialSettings("*",4,0); // Main Serial port
+        PmmWriteTimerSettings("*",0); // Timers
+        PmmWriteGerneralPurpose("*",0);
+        PmmWriteDeviceCalibration("*",0);
+        PmmWriteDeviceCalibration("*",1);
+        PmmWriteDeviceCalibration("*",2);
+        PmmWriteDeviceCalibration("*",3);
+    }
+    else // normal start
     {
         ThisProduct.FirstTimeStart = false;
-        ThisProduct.PmmGeneral.NumberOfCycles ++;
+        ThisProduct.PmmGeneral.NumberOfCycles++;
 
-    // // STEP02 : Select ROM To read from where 0 =>Internal Flash,1=>EEPROM,2=>External Flash
-    // RomTarget = ThisProduct.PmmGeneral.SettingsRef;
-    // // STEP03 : Read Ethernet settings and protocols
-    // if (ThisProduct.PmmGeneral.ItHasEthernet)
-    // {
-    //     PmmReadSerialSettings(0, RomTarget);
-    //     PmmReadProtocol(0, RomTarget);
-    // }
-    // // STEP04 : Read Serial ports settings
-    // PmmReadSerialSettings(1, RomTarget);
-    // PmmReadProtocol(1, RomTarget);
-    // PmmReadSerialSettings(2, RomTarget);
-    // PmmReadProtocol(2, RomTarget);
-    // PmmReadSerialSettings(3, RomTarget);
-    // PmmReadProtocol(3, RomTarget);
-    // PmmReadSerialSettings(4, RomTarget);
-    // PmmReadProtocol(4, RomTarget);
-    // // STEP05 : Read Timers settings
-    // PmmReadTimersSettings(RomTarget);
-    // // STEP06 : Read Calibration settings
-    // PmmReadDeviceCalibration(0, RomTarget);
-    // PmmReadDeviceCalibration(1, RomTarget);
-    // PmmReadDeviceCalibration(2, RomTarget);
-    // PmmReadDeviceCalibration(3, RomTarget);
-    // // STEP07 : Read generl purpose settings
-    // PmmReadGerneralPurpose(RomTarget);
+        // STEP02 : Select ROM To read from where 0 =>Internal Flash,1=>EEPROM,2=>External Flash
+        RomTarget = ThisProduct.PmmGeneral.SettingsRef;
+        // STEP03 : Read Ethernet settings and protocols
+        PmmReadSerialSettings(0, RomTarget);
+        PmmReadProtocol(0, RomTarget);
+        // STEP04 : Read Serial ports settings
+        PmmReadSerialSettings(1, RomTarget);
+        PmmReadProtocol(1, RomTarget);
+        PmmReadSerialSettings(2, RomTarget);
+        PmmReadProtocol(2, RomTarget);
+        PmmReadSerialSettings(3, RomTarget);
+        PmmReadProtocol(3, RomTarget);
+        PmmReadSerialSettings(4, RomTarget);
+        PmmReadProtocol(4, RomTarget);
+        // STEP05 : Read Timers settings
+        PmmReadTimersSettings(RomTarget);
+        // STEP06 : Read Calibration settings
+        PmmReadDeviceCalibration(0, RomTarget);
+        PmmReadDeviceCalibration(1, RomTarget);
+        PmmReadDeviceCalibration(2, RomTarget);
+        PmmReadDeviceCalibration(3, RomTarget);
+        // STEP07 : Read generl purpose settings
+        PmmReadGerneralPurpose(RomTarget);
     }
-    else // load defualt settings form struct's to internal flash
-    {
-        ThisProduct.PmmGeneral.NumberOfCycles ++;
-        //PmmWriteGeneralSettings(0);
-        //PmmWriteSerialSettings(0,0); // Ethernet (192,168,1,110)
-        //PmmWriteSerialSettings(1,0); // Main Serial port
-        //PmmWriteTimerSettings(0); // Timers
-
-    }
-
+    
 }
 
 /*****************************************************************
@@ -1429,7 +1445,7 @@ String PMMCommnads(string readData)
         int RomSelect = stoi(readData.substr(5, 2));     // obtain ROM Select=> 0:Internal flash ,1:Ext EEPROM ,Ext Flash
         readData.erase(0, 8);                            // Clean readData
 
-        //SerialUSB.println(CommandCode);
+        // SerialUSB.println(CommandCode);
         switch (CommandCode)
         {
         case 100:
@@ -1549,7 +1565,7 @@ String PMMCommnads(string readData)
             break; // 149,000,000,000,1000000
 
         case 900:
-            //result = PMMIsAlive();
+            // result = PMMIsAlive();
             result = "Alive!!";
             break; // 900,001,000
         case 948:
@@ -1654,7 +1670,6 @@ String PMMReturnDataFromSerialUSB()
 
 void PMMReadCommands()
 {
-    
 
     String result = "";
     if (SerialUSB.available())
@@ -1669,63 +1684,63 @@ void PMMReadCommands()
 
     if (ThisProduct.EthernetRunning == true)
     {
-        String tmpString =PMMReturnAPIFromHTTPHeader(); //http://192.168.1.107/api?message=900,001,000
+        String tmpString = PMMReturnAPIFromHTTPHeader(); // http://192.168.1.107/api?message=900,001,000
 
-        if(tmpString!="") {SerialUSB.print("Recived Http command : ");SerialUSB.println(tmpString);}
-  
-         
-
+        if (tmpString != "")
+        {
+            SerialUSB.print("Recived Http command : ");
+            SerialUSB.println(tmpString);
+        }
     }
 }
 
 String PMMReturnAPIFromHTTPHeader()
 {
-    //SerialUSB.println("Test incoming message ..");
+    // SerialUSB.println("Test incoming message ..");
 
-  String APIData="";
-  String Data="";
-  String readString=" ";
-  PmmEthernetClient client = server.available();
-  if (client)
-  {
-    //SerialUSB.println("Client reciveing");
-    while (client.connected())
+    String APIData = "";
+    String Data = "";
+    String readString = " ";
+    PmmEthernetClient client = server.available();
+    if (client)
     {
-      if (client.available())
-      {
-        char c = client.read();
-      
-
-        if (readString.length() < 1200)
+        // SerialUSB.println("Client reciveing");
+        while (client.connected())
         {
-          readString += c;
+            if (client.available())
+            {
+                char c = client.read();
+
+                if (readString.length() < 1200)
+                {
+                    readString += c;
+                }
+                if (c == '\n')
+                {
+                    APIData = readString.substring(readString.indexOf("api?message=") + 12, readString.indexOf("HTTP/1.1"));
+                    string cmd = APIData.c_str();
+                    Data = PMMCommnads(cmd);
+
+                    client.println("HTTP/1.1 200 OK");
+                    client.println("Content-Type: text/html");
+                    client.println("Connection: close"); // the connection will be closed after completion of the response
+                    // client.println("Refresh: 5");  // refresh the page automatically every 5 sec
+                    client.println();
+                    client.println("<!DOCTYPE HTML>");
+                    client.println("<html>");
+                    client.println("<head>");
+                    client.print(Data);
+                    client.println("</head>");
+                    client.println("<html>");
+
+                    client.stop();
+                    // SerialUSB.println(readString);
+                    // SerialUSB.println(APIData);
+                }
+            }
         }
-        if (c == '\n')
-        {
-        APIData = readString.substring(readString.indexOf("api?message=")+12, readString.indexOf("HTTP/1.1")); 
-        string cmd = APIData.c_str();
-        Data = PMMCommnads(cmd);
-
-        client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: text/html");
-          client.println("Connection: close");  // the connection will be closed after completion of the response
-          //client.println("Refresh: 5");  // refresh the page automatically every 5 sec
-          client.println();
-          client.println("<!DOCTYPE HTML>");
-          client.println("<html>");
-          client.println("<head>");
-          client.print(Data);
-          client.println("</head>");
-          client.println("<html>");
-
-        client.stop();
-        // SerialUSB.println(readString);
-        // SerialUSB.println(APIData);
-          }
-      }
     }
-    
-  }
-  if (Data != "")  Data = "Result : " + Data ;
- return Data;
+    if (Data != "")
+        Data = "Result : " + Data;
+    return Data;
 }

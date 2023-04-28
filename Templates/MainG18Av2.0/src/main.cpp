@@ -13,6 +13,7 @@ void setup()
   SerialUSB.begin(9600);
   // STEP01: Read Flash ROM and update Settings
  
+ //PmmReadAllSettings(0);
 
   PmmInitializeProjectSettings();
 
@@ -45,7 +46,8 @@ void loop()
     // SerialUSB.println(GetInternalRTC());
 
     // SerialUSB.println("External RTC :");
-    // SerialUSB.println(GetExternalRTC());
+    
+    //SerialUSB.println(ThisProduct.PmmGeneral.NumberOfCycles);
 // 
   //SerialUSB.println(" ..Running...");
 

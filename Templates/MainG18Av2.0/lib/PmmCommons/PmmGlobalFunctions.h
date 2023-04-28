@@ -119,7 +119,7 @@ void PMMInitializeEthernet()
   
     // turn off EthernetRunning if you want to start Ethernet and server
     
-    ThisProduct.PmmGeneral.ItHasEthernet = true;
+    ThisProduct.PmmGeneral.ItHasEthernet = true; // for test only
 
     if (ThisProduct.PmmGeneral.ItHasEthernet)ThisProduct.EthernetRunning = false;
 
@@ -149,23 +149,23 @@ void PmmInitializeProjectSettings()
     // 1. WatchDog 8s
     PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
     // 4. EEprom
-    ThisProduct.I2CRunning = false;
+    
     if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true)
     {
         // StartEEprom();
-
-        ThisProduct.I2CRunning = true;
+        if(PMMCheckEEPROM)
+        ThisProduct.ExternalEEpromRunning = true;
     }
 
     // 5. Ethernet
-    ThisProduct.PmmGeneral.ItHasEthernet = true ; 
-
+    ThisProduct.PmmGeneral.ItHasEthernet = true; // for test only
     if (ThisProduct.PmmGeneral.ItHasEthernet == true)
     {
         PMMInitializeEthernet();
     }
 
     // 6. Protocols : a. modbus
+    //ThisProduct.PmmSerial[0].Enabled) = true; // for test only
 
     if (ThisProduct.PmmSerial[0].Enabled)
     {
@@ -197,7 +197,7 @@ void PmmInitializeProjectSettings()
 
                 if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusSlave)
                 {
-                    ThisProduct.PmmSerial[0].PmmProtocols.IsRunning = true;
+                    //ThisProduct.PmmSerial[0].PmmProtocols.IsRunning = true;
                 }
             }
         }
@@ -331,7 +331,8 @@ bool PMMCheckEEPROM()
 {
     Wire.begin();
     Wire.beginTransmission(0x50);
-    bool EEPROMFound = Wire.endTransmission() == 0;
+    bool EEPROMFound = false;
+    EEPROMFound = Wire.endTransmission() == 0;
     return EEPROMFound;
 }
 
