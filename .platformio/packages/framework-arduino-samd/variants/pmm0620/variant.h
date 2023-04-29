@@ -185,13 +185,15 @@ PMM_DI6,PMM_DI7,PMM_DI8,PMM_DI9,PMM_DI10,PMM_DI11};
 // Other pins
 #define PIN_ATN              (38ul)
 static const uint8_t ATN = PIN_ATN;
+#define PIN_ETHRRST          (24UL)
+static const uint8_t ETHERRST = PIN_ETHRRST;
 
 /*
  * Serial interfaces
  */
 // Serial (EDBG)
-#define PIN_SERIAL_RX       (31ul)
-#define PIN_SERIAL_TX       (30ul)
+#define PIN_SERIAL_RX       (36ul)
+#define PIN_SERIAL_TX       (35ul)
 #define PAD_SERIAL_TX       (UART_TX_PAD_2)
 #define PAD_SERIAL_RX       (SERCOM_RX_PAD_3)
 
@@ -207,14 +209,15 @@ static const uint8_t ATN = PIN_ATN;
  */
 #define SPI_INTERFACES_COUNT 1
 
-#define PIN_SPI_MISO         (22u)
-#define PIN_SPI_MOSI         (23u)
-#define PIN_SPI_SCK          (24u)
+#define PIN_SPI_MISO         (28u)
+#define PIN_SPI_MOSI         (29u)
+#define PIN_SPI_SCK          (30u)
 #define PERIPH_SPI           sercom4
 #define PAD_SPI_TX           SPI_PAD_2_SCK_3
 #define PAD_SPI_RX           SERCOM_RX_PAD_0
+#define PIN_WIS_SS           (18)
 
-//static const uint8_t SS	  = PIN_A2 ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
+static const uint8_t SS	  = PIN_WIS_SS ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
 static const uint8_t MOSI = PIN_SPI_MOSI ;
 static const uint8_t MISO = PIN_SPI_MISO ;
 static const uint8_t SCK  = PIN_SPI_SCK ;
@@ -224,8 +227,8 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
  */
 #define WIRE_INTERFACES_COUNT 1
 
-#define PIN_WIRE_SDA         (20u)
-#define PIN_WIRE_SCL         (21u)
+#define PIN_WIRE_SDA         (26u)
+#define PIN_WIRE_SCL         (27u)
 #define PERIPH_WIRE          sercom3
 #define WIRE_IT_HANDLER      SERCOM3_Handler
 

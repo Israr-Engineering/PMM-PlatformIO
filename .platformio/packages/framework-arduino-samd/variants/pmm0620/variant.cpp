@@ -122,12 +122,14 @@ const PinDescription g_APinDescription[] =
         //(36)
         {PORTB, 23, PIO_SERCOM_ALT, PIN_ATTR_NONE, No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE}, // RX: SERCOM5/PAD[3]
 
+
         // 32/33 I2C (SDA/SCL and also EDBG:SDA/SCL)
         //(37)
         {PORTA, 22, PIO_SERCOM, PIN_ATTR_NONE, No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE}, // SDA: SERCOM3/PAD[0]
         //(38)
         {PORTA, 23, PIO_SERCOM, PIN_ATTR_NONE, No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE}, // SCL: SERCOM3/PAD[1]
 
+        
         // 34..37 - EDBG/SPI
         //(39)
         {PORTA, 19, PIO_SERCOM, PIN_ATTR_NONE, No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE}, // MISO: SERCOM1/PAD[3]
