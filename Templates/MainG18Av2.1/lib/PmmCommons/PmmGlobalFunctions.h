@@ -148,6 +148,7 @@ void PmmInitializeProjectSettings()
     
     // 1. WatchDog 8s
     PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
+    
     // 4. EEprom
     
     if (ThisProduct.PmmGeneral.ItHasExtEEPROM == true)
@@ -466,13 +467,5 @@ void Debugprint(string toPrint)
 
 // #pragma endregion
 
-// #pragma region HTTP FUNCTIONS
-
-IPAddress PMMGetLocalIP()
-{
-    return Ethernet.localIP();
-}
-
-// #pragma endregion
 
 #endif

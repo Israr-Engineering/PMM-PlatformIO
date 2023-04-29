@@ -16,6 +16,7 @@ void setup()
   //  STEP02: Initialize Extra needed Modules
   ThisProductSetup();
   // STEP03: Warmup 1 sec
+  //SCB_SCR_SLEEPDEEP_Msk
   delay(1000);
   SerialUSB.println("New Starting ...");
   
@@ -94,3 +95,33 @@ void PMMTimers()
 /* ///////////////////////////////////////////////////
 // WATCHDOG: Reset Controller                       //
 /////////////////////////////////////////////////// */
+
+// #include <stdbool.h>
+
+// #define USER_BUTTON_PIN 13
+
+// static volatile bool s_button_pressed;
+
+// void setup(void) {
+//   pinMode(LED_BUILTIN, OUTPUT);                  // Initialise the LED_BUILTIN output
+//   digitalWrite(LED_BUILTIN, LOW);   // Turn on the LED
+//   pinMode(USER_BUTTON_PIN, INPUT_PULLUP);        // Intialise button input pin and activate internal pull-up resistor
+//   attachInterrupt(USER_BUTTON_PIN, on_button_press, LOW);   // Activate a LOW level interrupt on the button pin
+//   NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;    // Prevent the flash memory from powering down in sleep mode
+//   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;             // Select standby sleep mode
+// }
+
+// void loop() {
+//   digitalWrite(LED_BUILTIN, HIGH);  // Turn off the LED
+//   SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;  // Disable SysTick interrupts
+//   __DSB();                          // Ensure remaining memory accesses are complete
+//   __WFI();                          // Enter sleep mode and Wait For Interrupt (WFI)
+//   SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;   // Enable SysTick interrupts  
+//   delay(500);                       // Keep LED off long enough to see that we passed the __WFI
+//   digitalWrite(LED_BUILTIN, LOW);   // Turn on the LED
+//   delay(2000);                      // Wait a bit
+// }
+
+// void on_button_press(void) {
+//   s_button_pressed = true;
+// }
