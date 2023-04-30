@@ -459,31 +459,43 @@ void PmmPowerManagerSetup()
 {
     // STEP01 : Watch dog setup
     PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
+    //PmmWatchDoggy.attachShutdown(PmmPowerManagerInterrupt);
     // STEP02 : Sleep mode setup
-    pinMode(PMM_DI_LossOfPower, INPUT);                                    // Intialise LossOfPower input pin and activate internal pull-up resistor
-    attachInterrupt(PMM_DI_LossOfPower, PmmPowerManagerInterrupt, RISING); // Activate a Rising level interrupt
-    NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;     // Prevent the flash memory from powering down in sleep mode
-    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;                                     // Select standby sleep mode
+    //pinMode(DIPPROG01, INPUT);                                    // Intialise LossOfPower input pin and activate internal pull-up resistor
+     attachInterrupt(DIPPROG01, PmmPowerManagerInterrupt, HIGH); // Activate a Rising level interrupt
+    // NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;     // Prevent the flash memory from powering down in sleep mode
+    // SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;                                     // Select standby sleep mode
 }
 
 void PmmPowerManagerUpdate()
 {
     PmmWatchDoggy.clear();
 
-    if (digitalRead(PMM_DI_LossOfPower) == 0)
+    if (digitalRead(DIPPROG02) == 1)
     {
-
-        // PmmWatchDoggy.setup(0x00);                  // Disable watch dog
+        //SerialUSB.println("Enter sleep mode");
+        //PmmWatchDoggy.setup(0x00);                  // Disable watch dog
         // SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk; // Disable SysTick interrupts
         // __DSB();                                    // Ensure remaining memory accesses are complete
         // __WFI();                                    // Enter sleep mode and Wait For Interrupt (WFI)
         // SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;  // Enable SysTick interrupts
         // PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);       // Enable watch dog 8sec
+        // SerialUSB.println("Wakeup ..");
     }
 }
 
 void PmmPowerManagerInterrupt(void)
 {
+     //PmmWatchDoggy.clear();
+     NVIC_SystemReset();// Restart
+
+    // if (digitalRead(DIPPROG01) == 0)
+    // {
+    //     SerialUSB.println("back to sleep sleep mode");
+    //     PmmRTCInternal.standbyMode();
+    // }
+
+
 }
 
 #endif

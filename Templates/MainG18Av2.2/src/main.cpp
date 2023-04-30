@@ -5,7 +5,7 @@
 #include <PmmGlobalFunctions.h>
 
 // Include your board here
-#include <PMM0620.h>
+//#include <PMM0620.h>
 
 void setup()
 {
@@ -14,11 +14,11 @@ void setup()
   // STEP01: Read Flash ROM and update Settings
    PmmInitializeProjectSettings();
   //  STEP02: Initialize Extra needed Modules
-  ThisProductSetup();
+  //ThisProductSetup();
 
     pinMode(DIPPROG01,INPUT);
     pinMode(DIPPROG02,INPUT);
-    pinMode(DIPPROG02,DILOSSPOWER);
+    pinMode(DILOSSPOWER,INPUT);
      
   // STEP03: Warmup 1 sec
   //SCB_SCR_SLEEPDEEP_Msk
@@ -41,17 +41,24 @@ void loop()
   if ((millis() - MainLoopTimer) > 1000)
   {
 
-    if (x5 >= 10)
+    if (x5 >= 5)
     {
-      PmmWatchDoggy.setup(0x00);
-      SerialUSB.println("Sleep");
+      
+      
       val =digitalRead(DIPPROG01);
       SerialUSB.println(val);
       val =digitalRead(DIPPROG02);
       SerialUSB.println(val);
       val =digitalRead(DILOSSPOWER);
       SerialUSB.println(val);
-      //PmmRTCInternal.standbyMode();
+      
+      if (digitalRead(DIPPROG02) == 1)
+      {
+        SerialUSB.println("Enter Sleep mode");
+        PmmWatchDoggy.setup(0x00);
+        PmmRTCInternal.standbyMode();
+
+      } 
     }
     
    
