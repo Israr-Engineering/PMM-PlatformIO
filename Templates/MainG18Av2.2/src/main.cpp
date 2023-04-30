@@ -15,6 +15,11 @@ void setup()
    PmmInitializeProjectSettings();
   //  STEP02: Initialize Extra needed Modules
   ThisProductSetup();
+
+    pinMode(DIPPROG01,INPUT);
+    pinMode(DIPPROG02,INPUT);
+    pinMode(DIPPROG02,DILOSSPOWER);
+     
   // STEP03: Warmup 1 sec
   //SCB_SCR_SLEEPDEEP_Msk
   delay(1000);
@@ -26,6 +31,9 @@ void setup()
 // Loop 01 :  Main loop start here                  //
 /////////////////////////////////////////////////// */
 
+int x5 = 0;
+int val;
+ 
 void loop()
 {
   PmmPowerManagerUpdate();
@@ -33,10 +41,21 @@ void loop()
   if ((millis() - MainLoopTimer) > 1000)
   {
 
+    if (x5 >= 10)
+    {
+      PmmWatchDoggy.setup(0x00);
+      SerialUSB.println("Sleep");
+      val =digitalRead(DIPPROG01);
+      SerialUSB.println(val);
+      val =digitalRead(DIPPROG02);
+      SerialUSB.println(val);
+      val =digitalRead(DILOSSPOWER);
+      SerialUSB.println(val);
+      //PmmRTCInternal.standbyMode();
+    }
     
-    //SerialUSB.println(Ethernet.localIP());
    
-
+  x5++;
     MainLoopTimer = millis();
   }
   yield();

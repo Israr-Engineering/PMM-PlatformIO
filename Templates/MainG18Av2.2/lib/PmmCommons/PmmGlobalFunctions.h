@@ -470,15 +470,15 @@ void PmmPowerManagerUpdate()
 {
     PmmWatchDoggy.clear();
 
-    if (!digitalRead(PMM_DI_LossOfPower))
+    if (digitalRead(PMM_DI_LossOfPower) == 0)
     {
 
-        PmmWatchDoggy.setup(0x00);                  // Disable watch dog
-        SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk; // Disable SysTick interrupts
-        __DSB();                                    // Ensure remaining memory accesses are complete
-        __WFI();                                    // Enter sleep mode and Wait For Interrupt (WFI)
-        SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;  // Enable SysTick interrupts
-        PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);       // Enable watch dog 8sec
+        // PmmWatchDoggy.setup(0x00);                  // Disable watch dog
+        // SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk; // Disable SysTick interrupts
+        // __DSB();                                    // Ensure remaining memory accesses are complete
+        // __WFI();                                    // Enter sleep mode and Wait For Interrupt (WFI)
+        // SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;  // Enable SysTick interrupts
+        // PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);       // Enable watch dog 8sec
     }
 }
 
