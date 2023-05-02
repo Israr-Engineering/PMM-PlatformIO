@@ -1373,8 +1373,13 @@ void PmmReadAllSettings(int RomTarget)
     // STEP01 : Read general settings from internal flash
     PmmReadGeneralSettings(0);
     
-    ThisProduct.PmmGeneral.NumberOfCycles  = 4294967295 ; // for test only
-    // STEP02 : First starting only
+    // STEP02 : Defualt Factory Setting => Load First starting only , this will load the struct initial values 
+    if (FACTORYRESET == 1 ) {
+        SerialUSB.println("Factory reset / First start Mode ..");
+        ThisProduct.PmmGeneral.NumberOfCycles  = 4294967295 ; // = 0xffff ffff
+    }
+
+    // STEP03 : First starting only
     if(ThisProduct.PmmGeneral.NumberOfCycles  == 4294967295 ) // load defualt settings form struct's to internal flash 0xffff ffff
     {
         ThisProduct.PmmGeneral.NumberOfCycles = 1;
@@ -1382,17 +1387,25 @@ void PmmReadAllSettings(int RomTarget)
         PmmWriteGeneralSettings("*",0);
         PmmWriteSerialSettings("*",0,0); // Ethernet (192,168,1,110)
         PmmWriteSerialSettings("*",1,0); // Main Serial port
-        PmmWriteSerialSettings("*",2,0); // Main Serial port
-        PmmWriteSerialSettings("*",3,0); // Main Serial port
-        PmmWriteSerialSettings("*",4,0); // Main Serial port
+        PmmWriteSerialSettings("*",2,0); // Serial port 2
+        PmmWriteSerialSettings("*",3,0); // Serial port 3
+        PmmWriteSerialSettings("*",4,0); // Serial port 4
+
+        PmmWriteProtocol("*",0,0);
+        PmmWriteProtocol("*",1,0);
+        PmmWriteProtocol("*",2,0);
+        PmmWriteProtocol("*",3,0);
+        PmmWriteProtocol("*",4,0);
+
         PmmWriteTimerSettings("*",0); // Timers
+
         PmmWriteGerneralPurpose("*",0);
         PmmWriteDeviceCalibration("*",0);
         PmmWriteDeviceCalibration("*",1);
         PmmWriteDeviceCalibration("*",2);
         PmmWriteDeviceCalibration("*",3);
     }
-    else // normal start
+    else // Normal start
     {
         ThisProduct.FirstTimeStart = false;
         ThisProduct.PmmGeneral.NumberOfCycles++;

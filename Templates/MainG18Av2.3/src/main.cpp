@@ -11,6 +11,7 @@ void setup()
 {
   // STEP00: Start usb serial for debug
   SerialUSB.begin(9600);
+  
   // STEP01: Read Flash ROM and update Settings
    PmmInitializeProjectSettings();
   //  STEP02: Initialize Extra needed Modules
@@ -18,10 +19,10 @@ void setup()
 
     pinMode(DIPPROG01,INPUT);
     pinMode(DIPPROG02,INPUT);
-    pinMode(DILOSSPOWER,INPUT);
+    pinMode(DILOSSPOWER,INPUT); 
+    pinMode(FACTORYRESET,INPUT);
      
   // STEP03: Warmup 1 sec
-  //SCB_SCR_SLEEPDEEP_Msk
   delay(1000);
   SerialUSB.println("New Starting ...");
   
@@ -63,7 +64,7 @@ void loop()
       } 
     }
     
-    PmmIO.Inputs[0]++;
+    PmmIO.Inputs[0]++;// Alive flage PmmIO.Inputs[24]
    
   x5++;
     MainLoopTimer = millis();
@@ -98,7 +99,7 @@ void PMMCommunication()
     // Manage Extension Boards
     AllExtensionBoarsdUpdate();
     // Manage Modbus Servers
-    for (int SerialPort =1 ;SerialPort < 5 ; SerialPort++ )
+    for (int SerialPort = 0 ;SerialPort < 5 ; SerialPort++ )
     {
       if (ThisProduct.PmmSerial[SerialPort].Enabled & 
           ThisProduct.PmmSerial[SerialPort].PmmProtocols.IsRunning &
