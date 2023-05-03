@@ -1,3 +1,8 @@
+#ifndef PMMPCA95X5_H
+#define PMMPCA95X5_H
+
+
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -164,3 +169,5 @@ private:
 
 using PCA9535 = PCA95x5::PCA95x5<>;
 using PCA9555 = PCA95x5::PCA95x5<>;
+
+#endif

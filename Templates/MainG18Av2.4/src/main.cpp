@@ -95,7 +95,7 @@ void PMMCommunication()
 {
   if ((millis() - CommunicationTimer) >100)
   {
-    // Manage Extension Boards
+    // Manage product and Extension Boards
     ThisProductUpdate();
     AllExtensionBoarsdUpdate();
     // Manage Modbus Servers
@@ -107,9 +107,7 @@ void PMMCommunication()
     //   ModbusPort[SerialPort].ModbusServersUpdate(SerialPort);
     // }
 
-    ModbusPort[1].ModbusServersUpdate(1);
-
-   
+    ModbusPort[1].ModbusServersUpdate(1);  
     
 
     CommunicationTimer = millis();
