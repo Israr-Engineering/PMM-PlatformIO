@@ -65,7 +65,7 @@ const PinDescription g_APinDescription[] =
         //(19)
         {PORTA, 16, PIO_TIMER, (PIN_ATTR_DIGITAL | PIN_ATTR_PWM | PIN_ATTR_TIMER), No_ADC_Channel, PWM2_CH0, TCC2_CH0, EXTERNAL_INT_0}, // TCC2/WO[0]
         //(20)
-        {PORTA, 19, PIO_TIMER_ALT, (PIN_ATTR_DIGITAL | PIN_ATTR_PWM | PIN_ATTR_TIMER_ALT), No_ADC_Channel, PWM0_CH3, TCC0_CH3, EXTERNAL_INT_3}, // TCC0/WO[3]
+        {PORTA, 19, PIO_TIMER_ALT, (PIN_ATTR_DIGITAL | PIN_ATTR_PWM | PIN_ATTR_TIMER_ALT), No_ADC_Channel, PWM0_CH3, TCC0_CH3, EXTERNAL_INT_NONE}, // TCC0/WO[3]
 
         // 13 (LED)
         //(21)
@@ -74,7 +74,7 @@ const PinDescription g_APinDescription[] =
         // 14..19 - Analog pins
         // --------------------
         //(22)
-        {PORTA, 2, PIO_ANALOG, PIN_ATTR_ANALOG, ADC_Channel0, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_2},          // ADC/AIN[0]
+        {PORTA, 2, PIO_ANALOG, (PIN_ATTR_DIGITAL | PIN_ATTR_ANALOG ), ADC_Channel0, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_2},          // ADC/AIN[0]
         //(23)
         {PORTB, 8, PIO_ANALOG, (PIN_ATTR_PWM | PIN_ATTR_TIMER), ADC_Channel2, PWM4_CH0, TC4_CH0, EXTERNAL_INT_8}, // ADC/AIN[2]
         //(24)
@@ -152,12 +152,12 @@ const PinDescription g_APinDescription[] =
 
         // 42 (AREF)
         //(46)
-        {PORTA, 3, PIO_ANALOG, PIN_ATTR_ANALOG, No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE}, // DAC/VREFP
+        {PORTA, 3, PIO_DIGITAL,(PIN_ATTR_DIGITAL), No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_3}, // DAC/VREFP
 
         // ----------------------
         // 43..45 - Alternate use of A0 (DAC output), 44 SWCLK, 45, SWDIO
         //(47)
-        {PORTA, 2, PIO_ANALOG, PIN_ATTR_ANALOG, DAC_Channel0, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_2},            // DAC/VOUT
+        {PORTA, 2, PIO_DIGITAL, (PIN_ATTR_DIGITAL), DAC_Channel0, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_2},            // DAC/VOUT
         //(48)
         {PORTA, 30, PIO_PWM, PIN_ATTR_DIGITAL | PIO_SERCOM, No_ADC_Channel, NOT_ON_PWM, TCC1_CH0, EXTERNAL_INT_10}, // SWCLK
         //(49)

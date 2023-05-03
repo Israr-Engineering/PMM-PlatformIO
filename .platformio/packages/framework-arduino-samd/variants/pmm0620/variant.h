@@ -106,7 +106,7 @@ extern "C" unsigned int PINCOUNT_fn();
 //02. Dip switches 
 #define PMM_DI_PROG        (23ul) //PB08 : Digital Input for programming mode - near termination dip switch
 #define PMM_DI_PROG01      (46ul) //PA03 : Digital Input - general (front panel dip switch )
-#define PMM_DI_PROG02      (22ul) //PA02 : Digital Input - general (front panel dip switch)
+#define PMM_DI_PROG02      (47ul) //PA02 : Digital Input - general (front panel dip switch)
 //03. Internal signals
 //03a. Ethernet controller
 #define PMM_DO_ETH_RST     (24ul) //PB09 : Digital output : Ethernet controller reset command
@@ -171,6 +171,12 @@ static const uint8_t DI8= PMM_DI8  ;
 static const uint8_t DI9= PMM_DI9  ;
 static const uint8_t DI10=PMM_DI10  ;
 static const uint8_t DI11=PMM_DI11  ;
+
+static const uint8_t DIPPROG01 = PMM_DI_PROG01  ;
+static const uint8_t DIPPROG02 = PMM_DI_PROG02  ;
+static const uint8_t DILOSSPOWER = PMM_DI_LossOfPower  ;
+static const uint8_t FACTORYRESET = PMM_DI_PROG  ;
+
 
 
 // Edit Mohannad
