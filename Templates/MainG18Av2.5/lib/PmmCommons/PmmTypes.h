@@ -81,16 +81,16 @@ typedef struct PMMGeneral
 
     int Ext01Name = 625; //(19) 00 => zero = No extesion board
     // int Ext01Address = 0;//(20)
-    u_int8_t Ext01Address01 = 0x20;
-    u_int8_t Ext01Address02 = 0x27;
+    uint8_t Ext01Address01 = 32;// 0x20
+    uint8_t Ext01Address02 = 51;// 0x21
     int Ext02Name = 0; //(21)
     // int Ext01Address = 0;//(22)
-    u_int8_t Ext02Address01 = 0;
-    u_int8_t Ext02Address02 = 0;
+    uint8_t Ext02Address01 = 0;
+    uint8_t Ext02Address02 = 0;
     int Ext03Name = 0; //(23)
     // int Ext01Address = 0;//(24)
-    u_int8_t Ext03Address01 = 0;
-    u_int8_t Ext03Address02 = 0;
+    uint8_t Ext03Address01 = 0;
+    uint8_t Ext03Address02 = 0;
     int I2CServerAddress = 0; //(25)
 
     int Spare26 = 0; //(26)
@@ -361,9 +361,9 @@ typedef struct PMMIO
     // // image for internal use
     //int InputsBytePrev[120];
     // // represent coils bits in modbus
-     bool OutputsByte[1920];
+    // bit OutputsByte[1920];
     // // image for internal use
-     bool OutputsBytePrev[1920];
+    // bit OutputsBytePrev[1920];
 
     // represent Input registers in modbus
     int Inputs[120];

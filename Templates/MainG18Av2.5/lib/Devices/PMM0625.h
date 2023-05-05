@@ -18,8 +18,8 @@ extern void ThisProductUpdate();
 void ThisProductSetup()
 {
     // configure all pins  as an input and enable the internal pull-up resistor
-    for (uint8_t i = 0; i < 12; i++)
-        pinMode(PMM_DI_Pins[i], INPUT_PULLUP);
+    // for (uint8_t i = 0; i < 12; i++)
+    //     pinMode(PMM_DI_Pins[i], INPUT_PULLUP);
 }
 
 // Manage this in the main loop
@@ -30,26 +30,26 @@ void ThisProductUpdate()
     int tmpInputs = 0;
     String str = "";
 
-    for (uint8_t i = 0; i < 12; i++)
-    {
-        bool sensorVal = digitalRead(PMM_DI_Pins[i]);
+    // for (uint8_t i = 0; i < 12; i++)
+    // {
+    //     bool sensorVal = digitalRead(PMM_DI_Pins[i]);
 
-        sensorVal = !sensorVal;
+    //     sensorVal = !sensorVal;
 
         
-        if(sensorVal) 
-        {
-            tmpInputs |= (1 << i); //x |= (1 << n); forces nth bit of x to be 1.  all other bits left alone.
-        }
-        else 
-        {
-            tmpInputs &= ~(1 << i); //x &= ~(1 << n);  // forces nth bit of x to be 0.
-        }
+    //     if(sensorVal) 
+    //     {
+    //         tmpInputs |= (1 << i); //x |= (1 << n); forces nth bit of x to be 1.  all other bits left alone.
+    //     }
+    //     else 
+    //     {
+    //         tmpInputs &= ~(1 << i); //x &= ~(1 << n);  // forces nth bit of x to be 0.
+    //     }
         
-    }
+    // }
 
-    PmmIO.InputsByte[0] = lowByte(tmpInputs) ;
-    PmmIO.InputsByte[1] = highByte(tmpInputs);
+    // PmmIO.InputsByte[0] = lowByte(tmpInputs) ;
+    // PmmIO.InputsByte[1] = highByte(tmpInputs);
 
     //SerialUSB.println("");
 

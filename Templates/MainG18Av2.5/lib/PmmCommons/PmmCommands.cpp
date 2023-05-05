@@ -122,7 +122,7 @@ void StartCommandHttpServer()
                      ThisProduct.PmmSerial[0].IpAddress03,
                      ThisProduct.PmmSerial[0].IpAddress04);
 
-         //byte mac[] = {0x23, 0x22, 0x22, 0x22, 0x22, 0x22};
+        //  byte mac[] = {0x23, 0x22, 0x22, 0x22, 0x22, 0x22};
         // IPAddress ip(192, 168, 1, 107);
         Ethernet.init(SS); // for W5100 sspin
         Ethernet.begin(mac, ip);

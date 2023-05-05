@@ -5,10 +5,9 @@
 #include <PmmGlobalFunctions.h>
 
 // Include your board here
-#include <PMM0620.h>
+//#include <PMM0620.h>
+#include <PMM0625.h>
 
-PCA9555 ioex;
-PCA9555 ioex1;
 
 
 
@@ -22,14 +21,17 @@ void setup()
   //STEP02: Initialize Extra needed Modules
   ThisProductSetup();
 
-  ThisProduct.PmmGeneral.Ext01Name = 625 ;
+  //for test only 
+  ThisProduct.PmmGeneral.Ext01Name = 0 ;
   ThisProduct.PmmGeneral.Ext01Pac9535 = true;
-  ThisProduct.PmmGeneral.Ext01Address01 = 20;
+  ThisProduct.PmmGeneral.Ext01Address01 = 32; // => 0x20
+  ThisProduct.PmmGeneral.Ext01Address02 = 33; // => 0x21
+  // end for test only 
 
 
   
 
-  AllExtensionBoardsSetup();
+  //AllExtensionBoardsSetup();
   
      
   //STEP04: Warmup 1 sec
