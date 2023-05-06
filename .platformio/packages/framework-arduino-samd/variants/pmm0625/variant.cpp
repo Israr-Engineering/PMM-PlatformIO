@@ -225,7 +225,7 @@ extern "C"
 }
 
 const void *g_apTCInstances[TCC_INST_NUM + TC_INST_NUM] = {TCC0, TCC1, TCC2, TC3, TC4, TC5};
-
+// layth edit here 
 // Multi-serial objects instantiation
 SERCOM sercom0(SERCOM0);
 SERCOM sercom1(SERCOM1);
