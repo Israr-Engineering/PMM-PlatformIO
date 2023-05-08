@@ -91,22 +91,22 @@ extern "C" unsigned int PINCOUNT_fn();
 /*
  * Analog pins
  */
-#define PMM_A0               (57ul) //PB13
-#define PMM_A1               (48ul) //PB00
-#define PMM_A2               (19ul) //PB02
-#define PMM_A3               (49ul) //PB01
-#define PMM_A4               (52ul) //PB05
-#define PMM_A5               (14ul) //PA02
-#define PMM_A6               (51ul) //PB04
-#define PMM_A7               (55ul) //PA03
-#define PMM_A8               (47ul) //PA07
-#define PMM_A9               (48ul) //PA06
-#define PMM_A10              (15ul) //PB08
-#define PMM_A11              (16ul) //PB09
-#define PMM_A12              (18ul) //PA05
-#define PMM_A13              (17ul) //PA04
-#define PMM_A14              (53ul) //PB06
-#define PMM_A15              (54ul) //PB07
+#define PMM_AI0               (57ul) //PB13
+#define PMM_AI1               (48ul) //PB00
+#define PMM_AI2               (19ul) //PB02
+#define PMM_AI3               (49ul) //PB01
+#define PMM_AI4               (52ul) //PB05
+#define PMM_AI5               (14ul) //PA02
+#define PMM_AI6               (51ul) //PB04
+#define PMM_AI7               (55ul) //PA03
+#define PMM_AI8               (47ul) //PA07
+#define PMM_AI9               (48ul) //PA06
+#define PMM_AI10              (15ul) //PB08
+#define PMM_AI11              (16ul) //PB09
+#define PMM_AI12              (18ul) //PA05
+#define PMM_AI13              (17ul) //PA04
+#define PMM_AI14              (53ul) //PB06
+#define PMM_AI15              (54ul) //PB07
 
 #define PMM_DAC0             (14ul) //PA33
 
@@ -129,22 +129,30 @@ extern "C" unsigned int PINCOUNT_fn();
 //#define PMM_DI_LossOfPower        (11u)//PA02 : Digital Input :loos of power 
 
 
-static const uint8_t A0  = PMM_A0;
-static const uint8_t A1  = PMM_A1;
-static const uint8_t A2  = PMM_A2;
-static const uint8_t A3  = PMM_A3;
-static const uint8_t A4  = PMM_A4;
-static const uint8_t A5  = PMM_A5;
-static const uint8_t A6  = PMM_A6;
-static const uint8_t A7  = PMM_A7;
-static const uint8_t A8  = PMM_A8;
-static const uint8_t A9  = PMM_A9;
-static const uint8_t A10 = PMM_A10;
-static const uint8_t A11 = PMM_A11;
-static const uint8_t A12 = PMM_A12;
-static const uint8_t A13 = PMM_A13;
-static const uint8_t A14 = PMM_A14;
-static const uint8_t A15 = PMM_A15;
+static const uint8_t AI0  = PMM_AI0;
+static const uint8_t AI1  = PMM_AI1;
+static const uint8_t AI2  = PMM_AI2;
+static const uint8_t AI3  = PMM_AI3;
+static const uint8_t AI4  = PMM_AI4;
+static const uint8_t AI5  = PMM_AI5;
+static const uint8_t AI6  = PMM_AI6;
+static const uint8_t AI7  = PMM_AI7;
+static const uint8_t AI8  = PMM_AI8;
+static const uint8_t AI9  = PMM_AI9;
+static const uint8_t AI10 = PMM_AI10;
+static const uint8_t AI11 = PMM_AI11;
+static const uint8_t AI12 = PMM_AI12;
+static const uint8_t AI13 = PMM_AI13;
+static const uint8_t AI14 = PMM_AI14;
+static const uint8_t AI15 = PMM_AI15;
+
+
+
+// Edit Mohannad
+static const uint8_t PMM_AI_Pins[16] = {PMM_AI0,PMM_AI1,PMM_AI2,PMM_AI3,PMM_AI4,PMM_AI5,PMM_AI6,PMM_AI7,
+PMM_AI8,PMM_AI9,PMM_AI10,PMM_AI11,PMM_AI12,PMM_AI13,PMM_AI14,PMM_AI15};
+
+
 
 static const uint8_t DAC0 = PMM_DAC0;
 #define ADC_RESOLUTION		12

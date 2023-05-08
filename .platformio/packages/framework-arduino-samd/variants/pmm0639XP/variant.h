@@ -115,13 +115,13 @@ extern "C" unsigned int PINCOUNT_fn();
  /*
  * Analog pins
  */
-#define PMM_A0           (16ul)  //PB09 
-#define PMM_A1           (17ul) //PA04 
-#define PMM_A2           (15ul)  //PB08 
-#define PMM_A3           (18ul) //PA05
+#define PMM_AI0           (16ul)  //PB09 
+#define PMM_AI1           (17ul) //PA04 
+#define PMM_AI2           (15ul)  //PB08 
+#define PMM_AI3           (18ul) //PA05
 
-#define PMM_PWM0         (3ul) //PA07
-#define PMM_PWM1         (9ul) //PA06 
+#define PMM_AO0         (3ul) //PA07
+#define PMM_AO1         (9ul) //PA06 
 
 #define PMM_RUN          (30ul) //PB22
 #define PMM_FAULT        (7ul) //PA21
@@ -164,13 +164,20 @@ static const uint8_t DO4  = PMM_DO4;
 static const uint8_t DO5  = PMM_DO5;
 
 
-static const uint8_t A0   = PMM_A0;
-static const uint8_t A1   = PMM_A1;
-static const uint8_t A2   = PMM_A2;
-static const uint8_t A3   = PMM_A3;
+static const uint8_t AI0   = PMM_AI0;
+static const uint8_t AI1   = PMM_AI1;
+static const uint8_t AI2   = PMM_AI2;
+static const uint8_t AI3   = PMM_AI3;
 
-static const uint8_t PWM0 = PMM_PWM0;
-static const uint8_t PWM1 = PMM_PWM1;
+static const uint8_t AO0 = PMM_AO0;
+static const uint8_t AO1 = PMM_AO1;
+
+
+// Edit Mohannad
+static const uint8_t PMM_AO_Pins[2] = {PMM_AO0,PMM_AO1};
+static const uint8_t PMM_AI_Pins[4]  = {PMM_AI0,PMM_AI1,PMM_AI2,PMM_AI3};
+static const uint8_t PMM_DO_Pins[6]  = {PMM_DO0,PMM_DO1,PMM_DO2,PMM_DO3,PMM_DO4,PMM_DO5};
+static const uint8_t PMM_DI_Pins[12] = {PMM_DI0,PMM_DI1,PMM_DI2,PMM_DI3,PMM_DI4,PMM_DI5,PMM_DI6,PMM_DI7,PMM_DI8,PMM_DI9,PMM_DI10,PMM_DI11};
 
 
 //static const uint8_t DAC0 = PMM_DAC0;

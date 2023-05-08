@@ -194,8 +194,8 @@ PMM_DI6,PMM_DI7,PMM_DI8,PMM_DI9,PMM_DI10,PMM_DI11,PMM_DI12,PMM_DI13,PMM_DI14,PMM
  * Serial interfaces
  */
 // Serial (EDBG)
-#define PIN_SERIAL_RX       (31ul)
-#define PIN_SERIAL_TX       (30ul)
+#define PIN_SERIAL_RX       (47ul)
+#define PIN_SERIAL_TX       (48ul)
 #define PAD_SERIAL_TX       (UART_TX_PAD_2)
 #define PAD_SERIAL_RX       (SERCOM_RX_PAD_3)
 
@@ -227,8 +227,8 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
  */
 #define WIRE_INTERFACES_COUNT 1
 
-#define PIN_WIRE_SDA         (20u)
-#define PIN_WIRE_SCL         (21u)
+#define PIN_WIRE_SDA         (26u)
+#define PIN_WIRE_SCL         (35u)
 #define PERIPH_WIRE          sercom3
 #define WIRE_IT_HANDLER      SERCOM3_Handler
 
