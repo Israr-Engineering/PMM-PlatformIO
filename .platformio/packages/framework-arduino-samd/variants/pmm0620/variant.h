@@ -172,10 +172,7 @@ static const uint8_t DI9= PMM_DI9  ;
 static const uint8_t DI10=PMM_DI10  ;
 static const uint8_t DI11=PMM_DI11  ;
 
-static const uint8_t DIPPROG01 = PMM_DI_PROG01  ;
-static const uint8_t DIPPROG02 = PMM_DI_PROG02  ;
-static const uint8_t DILOSSPOWER = PMM_DI_LossOfPower  ;
-static const uint8_t FACTORYRESET = PMM_DI_PROG  ;
+
 
 
 
@@ -193,6 +190,10 @@ PMM_DI6,PMM_DI7,PMM_DI8,PMM_DI9,PMM_DI10,PMM_DI11};
 static const uint8_t ATN = PIN_ATN;
 #define PIN_ETHRRST          (24UL)
 static const uint8_t ETHERRST = PIN_ETHRRST;
+static const uint8_t DIPPROG01 = PMM_DI_PROG01  ;
+static const uint8_t DIPPROG02 = PMM_DI_PROG02  ;
+static const uint8_t DILOSSPOWER = PMM_DI_LossOfPower  ;
+static const uint8_t FACTORYRESET = PMM_DI_PROG  ;
 
 /*
  * Serial interfaces
