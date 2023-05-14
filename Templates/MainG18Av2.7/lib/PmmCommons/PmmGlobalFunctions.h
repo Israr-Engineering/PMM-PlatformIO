@@ -466,8 +466,8 @@ void PmmPowerManagerSetup()
     PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);
     //PmmWatchDoggy.attachShutdown(PmmPowerManagerInterrupt);
     // STEP02 : Sleep mode setup
-    //pinMode(DIPPROG01, INPUT);                                    // Intialise LossOfPower input pin and activate internal pull-up resistor
-      // Activate a Rising level interrupt
+    pinMode(DIPPROG01, INPUT);                                    // Intialise LossOfPower input pin and activate internal pull-up resistor
+      //Activate a Rising level interrupt
     //  NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;     // Prevent the flash memory from powering down in sleep mode
     //  SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;                                     // Select standby sleep mode
 }
@@ -476,19 +476,22 @@ void PmmPowerManagerUpdate()
 {
     PmmWatchDoggy.clear();
 
-    // if (digitalRead(DIPPROG01) == 0)
-    // {
-    //      attachInterrupt(DIPPROG01, PmmPowerManagerInterrupt, CHANGE);
-    //     SerialUSB.println("Enter sleep mode");
-    //     PmmWatchDoggy.setup(0x00);                  // Disable watch dog
-    //     SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk; // Disable SysTick interrupts
-    //     __DSB();                                    // Ensure remaining memory accesses are complete
-    //     __WFI();                                    // Enter sleep mode and Wait For Interrupt (WFI)
-    //     SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;  // Enable SysTick interrupts
-    //     PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);       // Enable watch dog 8sec
-    //     //NVIC_SystemReset();// Restart
-    //     SerialUSB.println("Wakeup ..");
-    // }
+    if (digitalRead(DIPPROG01) == 0)
+    {
+        // attachInterrupt(DILOSSPOWER, PmmPowerManagerInterrupt, FALLING);
+        SerialUSB.println("Enter sleep mode");
+        delay(1000);
+
+        PmmWatchDoggy.setup(0x00);                  // Disable watch dog
+        // SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk; // Disable SysTick interrupts
+        // __DSB();                                    // Ensure remaining memory accesses are complete
+        // __WFI();                                    // Enter sleep mode and Wait For Interrupt (WFI)
+        // SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;  // Enable SysTick interrupts
+        // PmmWatchDoggy.setup(WDT_SOFTCYCLE8S);       // Enable watch dog 8sec
+        // //NVIC_SystemReset();// Restart
+        // SerialUSB.println("Wakeup ..");
+        PmmRTCInternal.standbyMode();
+    }
 }
 
 void PmmPowerManagerInterrupt(void)

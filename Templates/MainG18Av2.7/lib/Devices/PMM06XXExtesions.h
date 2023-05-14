@@ -199,11 +199,6 @@ void ExtensionBoardUpdate(int SlotNumber, int BoardName, int BoardAddress01, boo
 void AllExtensionBoarsdUpdate()
 {
 
-    // IOext[0].write(0xffff);
-    //   IOext[0].write(val);
-    //  IOext[1].write(val + 1000);
-    //  val++;
-
     if (ThisProduct.PmmGeneral.Ext01Name != 0)
         ExtensionBoardUpdate(1, ThisProduct.PmmGeneral.Ext01Name,
                              ThisProduct.PmmGeneral.Ext01Address01,

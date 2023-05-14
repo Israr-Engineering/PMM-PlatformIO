@@ -81,7 +81,7 @@ void ThisProductUpdate()
     // outputs
 
     int tmpOutput = PmmIO.Outputs[0] ;
-    SerialUSB.println(tmpOutput);
+    //SerialUSB.println(tmpOutput);
 
     for (uint8_t i = 0; i < 4; i++)
     {

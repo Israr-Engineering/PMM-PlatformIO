@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <ProjectDef.h>
 // Include your board here
+#include <PMM0628.h>
 //#include <PMM0625.h>
-#include <PMM0625.h>
 #include <PmmCommands.h>
 #include <PmmGlobalFunctions.h>
 
@@ -19,14 +19,16 @@ void setup()
   ThisProductSetup();
 
   //for test only 
-  ThisProduct.PmmGeneral.Ext01Name = 625 ;
+  //ThisProduct.PmmGeneral.Ext01Name = 625 ;
+  ThisProduct.PmmGeneral.Ext02Name = 000 ;
   ThisProduct.PmmGeneral.Ext01Pac9535 = true;
   ThisProduct.PmmGeneral.Ext01Address01 = 32; // => 0x20
   ThisProduct.PmmGeneral.Ext01Address02 = 33; // => 0x21
 
-  ThisProduct.PmmGeneral.Ext02Name = 632 ;
+  //ThisProduct.PmmGeneral.Ext02Name = 632 ;
+  ThisProduct.PmmGeneral.Ext02Name = 000 ;
   ThisProduct.PmmGeneral.Ext02Pac9535 = false;
-  ThisProduct.PmmGeneral.Ext02Address01 = 8; // => 0x20
+  ThisProduct.PmmGeneral.Ext02Address01 = 0x8; // => 0x20
   ThisProduct.PmmGeneral.Ext02Address02 = 33; // => 0x21
   // end for test only 
   AllExtensionBoardsSetup();
@@ -82,7 +84,7 @@ void loop()
     
     PmmIO.Inputs[29]++;// Alive flage PmmIO.Inputs[24]
     // PmmIO.Inputs[1]++;// Alive flage PmmIO.Inputs[24]
-    //SerialUSB.println( PmmIO.Outputs[0]);
+    SerialUSB.println( digitalRead( DILOSSPOWER));
     
    
   x5++;
