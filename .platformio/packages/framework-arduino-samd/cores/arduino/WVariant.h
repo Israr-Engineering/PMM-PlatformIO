@@ -41,9 +41,19 @@ typedef enum _EAnalogChannel
   ADC_Channel8=8,
   ADC_Channel9=9,
 #endif // __SAMD21J18A__
+#if defined __SAMD21J15B__
+  ADC_Channel8=8,
+  ADC_Channel9=9,
+#endif // __SAMD21J18A__
   ADC_Channel10=10,
   ADC_Channel11=11,
 #if defined __SAMD21J18A__
+  ADC_Channel12=12,
+  ADC_Channel13=13,
+  ADC_Channel14=14,
+  ADC_Channel15=15,
+#endif // __SAMD21J18A__
+#if defined __SAMD21J15B__
   ADC_Channel12=12,
   ADC_Channel13=13,
   ADC_Channel14=14,

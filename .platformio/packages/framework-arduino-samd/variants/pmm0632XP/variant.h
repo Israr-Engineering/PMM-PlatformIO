@@ -156,11 +156,23 @@ static const uint8_t AI15 = PMM_AI15;
 static const uint8_t PMM_AI_Pins[16] = {PMM_AI0,PMM_AI1,PMM_AI2,PMM_AI3,PMM_AI4,PMM_AI5,PMM_AI6,PMM_AI7,
 PMM_AI8,PMM_AI9,PMM_AI10,PMM_AI11,PMM_AI12,PMM_AI13,PMM_AI14,PMM_AI15};
 
-
+//Mandatory : this should be added for compiling the board 
+static const uint8_t A0  = PMM_AI0;
+static const uint8_t A1  = PMM_AI1;
+static const uint8_t A2  = PMM_AI2;
+static const uint8_t A3  = PMM_AI3;
+static const uint8_t A4  = PMM_AI4;
+static const uint8_t A5  = PMM_AI5;
+static const uint8_t A6  = PMM_AI6;
+static const uint8_t A7  = PMM_AI7;
+static const uint8_t A8  = PMM_AI8;
+static const uint8_t A9  = PMM_AI9;
 
 #define PIN_DAC0             (47ul)
 static const uint8_t DAC0 = PIN_DAC0;
 #define ADC_RESOLUTION		12
+//End Mandatory:
+
 
 //static const uint8_t DAC0 = PMM_DAC0;
 //#define ADC_RESOLUTION		12
@@ -196,7 +208,7 @@ static const uint8_t ATN = PIN_ATN;
 #define PAD_SPI_TX           SPI_PAD_2_SCK_3
 #define PAD_SPI_RX           SERCOM_RX_PAD_0
 
-static const uint8_t SS	  = PMM_A2 ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
+//static const uint8_t SS	  = PMM_A2 ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
 static const uint8_t MOSI = PIN_SPI_MOSI ;
 static const uint8_t MISO = PIN_SPI_MISO ;
 static const uint8_t SCK  = PIN_SPI_SCK ;
