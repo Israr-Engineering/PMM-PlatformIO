@@ -80,10 +80,12 @@ public:
 
 
     void PMMmodbusTCPServerSetup(uint8_t *MACAddress, IPAddress IpAddress, int16_t ETHPORT, int16_t SlaveID);
+    void PMMmodbusTCPServerSetup( int16_t ETHPORT, int16_t SlaveID);
+
     void PMMmodbusTCPServerconfigure(bool Coils, int16_t CoilsStartAddress, int16_t CoilsQauntity,
                                             bool InputRegisters, int16_t InputRegistersStartAddress, int16_t InputRegistersQauntity,
                                             bool HoldingRegisters, int16_t HoldingRegistersStartAddress, int16_t HoldingRegistersQauntity,
-                                            bool DiscreteInputs, int16_t DiscreteInputsStartAddress, int16_t DiscreteInputsQauntity);
+                                            bool DiscreteInputs, int16_t DiscreteInputsStartAddress, int16_t DiscreteInputsQauntity);   
 
     int PMMmodbusTCPServercoilRead(int address);
     int PMMmodbusTCPServerdiscreteInputRead(int address);

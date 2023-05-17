@@ -201,6 +201,15 @@ void PmmModBus:: PMMmodbusTCPServerSetup(uint8_t *MACAddress, IPAddress IpAddres
     modbusTCPServer.begin(SlaveID); 
 }
 
+void PmmModBus:: PMMmodbusTCPServerSetup( int16_t ETHPORT, int16_t SlaveID)
+{
+    ethServer._port = ETHPORT;
+    ethServer.begin();
+     
+
+    modbusTCPServer.begin(SlaveID); 
+}
+
 void PmmModBus:: PMMmodbusTCPServerconfigure(bool Coils, int16_t CoilsStartAddress, int16_t CoilsQauntity,
                                  bool InputRegisters, int16_t InputRegistersStartAddress, int16_t InputRegistersQauntity,
                                  bool HoldingRegisters, int16_t HoldingRegistersStartAddress, int16_t HoldingRegistersQauntity,
@@ -311,11 +320,7 @@ void PmmModBus:: PMMmodbusTCPServerinputRegisterWrite(int address, uint16_t valu
 // should be used for GENERAL IO .Consider Serial01 and Ethernet if any alsways modbus server 
 void PmmModBus::ModbusServersUpdate(int serial)
 {
-
-    //  PMMModBUSRTUServerdiscreteInputWrite(0,PmmIO.InputsByte[0]);
-    //  PMMModBUSRTUServerdiscreteInputWrite(8,PmmIO.InputsByte[1]);
-    //  PMMModBUSRTUServerdiscreteInputWrite(16,PmmIO.InputsByte[2]);
-
+    
     for (int i = 0; i < 128; i++)
     {
         // input registers
@@ -323,24 +328,43 @@ void PmmModBus::ModbusServersUpdate(int serial)
         {
             PmmIO.InputsPrev[i] = PmmIO.Inputs[i];
             // Send to modbus server
-            if (ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning ) PMMModBUSRTUServerinputRegisterWrite(i,PmmIO.Inputs[i]);
-            if (ThisProduct.ModbusTCPServerRunning) PMMmodbusTCPServerinputRegisterWrite(i,PmmIO.Inputs[i]);
+            if (serial == 0 )
+            {
+                if (ThisProduct.PmmSerial[0].PmmProtocols.IsRunning ) PMMmodbusTCPServerinputRegisterWrite(i,PmmIO.Inputs[i]);
+            } else 
+            {
+                 if (ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning ) PMMModBUSRTUServerinputRegisterWrite(i,PmmIO.Inputs[i]);
+            }
+            
+           
         }
 
         // output (holding) registers
         // write then read register 
         if (PmmIO.Outputs[i] != PmmIO.OutputsPrev[i])
         {
+            if (serial == 0 )
+            {
+              if (ThisProduct.PmmSerial[0].PmmProtocols.IsRunning) PMMmodbusTCPServerholdingRegisterWrite(i,PmmIO.Outputs[i]);
+            } else 
+            {
+                if (ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning) PMMModBUSRTUServerholdingRegisterWrite(i,PmmIO.Outputs[i]);
+            }
             
-            if (ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning) PMMModBUSRTUServerholdingRegisterWrite(i,PmmIO.Outputs[i]);
-            if (ThisProduct.ModbusTCPServerRunning) PMMModBUSRTUServerholdingRegisterWrite(i,PmmIO.Outputs[i]);
+            
             
         }
 
 
         // Read to modbus server
-            if (ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning) PmmIO.Outputs[i] = PMMModBUSRTUServerholdingRegisterReadOneValue(i);
-            if (ThisProduct.ModbusTCPServerRunning) PmmIO.Outputs[i] = PMMmodbusTCPServerholdingRegisterRead(i);
+        if (serial == 0 )
+            {
+              if (ThisProduct.PmmSerial[0].PmmProtocols.IsRunning) PmmIO.Outputs[i] = PMMmodbusTCPServerholdingRegisterRead(i);
+            } else 
+            {
+               if (ThisProduct.PmmSerial[serial].PmmProtocols.IsRunning) PmmIO.Outputs[i] = PMMModBUSRTUServerholdingRegisterReadOneValue(i);
+            }
+            
             PmmIO.OutputsPrev[i] = PmmIO.Outputs[i];
         
 

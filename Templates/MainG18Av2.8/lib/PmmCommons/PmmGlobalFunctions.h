@@ -161,6 +161,7 @@ void PmmInitializeProjectSettings()
     // 5. Ethernet
     ThisProduct.PmmGeneral.ItHasEthernet = true; // for test only
     ThisProduct.EthernetRunning = false;         // for test only
+
     if (ThisProduct.PmmGeneral.ItHasEthernet == true)
     {
         // RESET Ethernet controller
@@ -173,8 +174,12 @@ void PmmInitializeProjectSettings()
     }
 
     // 6. Protocols : a. modbus
-    // ThisProduct.PmmSerial[0].Enabled = true; // for test only
+   
     ThisProduct.PmmSerial[1].Enabled = true; // for test only
+    ThisProduct.PmmSerial[0].Enabled = true; // for test only
+    ThisProduct.PmmSerial[0].PmmProtocols.IsModBus = true ; // for test only
+    ThisProduct.PmmSerial[0].PmmProtocols.ModBusTCP = true ; // for test only
+    ThisProduct.PmmSerial[0].PmmProtocols.ModBusSlave = true ; // for test only
 
     if (ThisProduct.PmmSerial[0].Enabled)
     {
@@ -183,11 +188,20 @@ void PmmInitializeProjectSettings()
             if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusTCP)
             {
 
-                if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusMaster)
+                if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusMaster) // Cient
                 {
                     //ModbusPort[0].PMMmodbusTCPServerSetup(ThisProduct.PmmSerial[0].Port01, ThisProduct.PmmSerial[0].PmmProtocols.SlaveID);
                        // ModbusPort[0].PMMmodbusTCPServerSetup()
 
+
+                    
+                }
+
+                if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusSlave) // Server
+                {
+                    ModbusPort[0].PMMmodbusTCPServerSetup(
+                            ThisProduct.PmmSerial[0].Port01 ,
+                            ThisProduct.PmmSerial[0].PmmProtocols.SlaveID); 
 
                     ModbusPort[0].PMMmodbusTCPServerconfigure(
                         ThisProduct.PmmSerial[0].PmmProtocols.CoilsStatus,
@@ -205,11 +219,7 @@ void PmmInitializeProjectSettings()
 
                     ThisProduct.PmmSerial[0].PmmProtocols.IsRunning = true;
                 }
-
-                if (ThisProduct.PmmSerial[0].PmmProtocols.ModBusSlave)
-                {
-                    // ThisProduct.PmmSerial[0].PmmProtocols.IsRunning = true;
-                }
+                
             }
         }
     }

@@ -37,7 +37,9 @@ PmmModbusTCPServer::~PmmModbusTCPServer()
 
 int PmmModbusTCPServer::begin(int id)
 {
-  modbus_t* mb = modbus_new_tcp(NULL, IPAddress(0, 0, 0, 0), 0);
+
+ 
+  modbus_t* mb = modbus_new_tcp(NULL, IPAddress(192,168,1,110), 502);
 
   if (!PmmModbusServer::begin(mb, id)) {
     return 0;

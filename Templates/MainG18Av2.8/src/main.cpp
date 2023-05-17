@@ -31,6 +31,8 @@ void setup()
   ThisProduct.PmmGeneral.Ext02Pac9535 = false;
   ThisProduct.PmmGeneral.Ext02Address01 = 0x8; // => 0x20
   ThisProduct.PmmGeneral.Ext02Address02 = 33; // => 0x21
+
+  
   // end for test only 
   AllExtensionBoardsSetup();
     
@@ -83,7 +85,8 @@ void loop()
     
     PmmIO.Inputs[29]++;// Alive flage PmmIO.Inputs[24]
     // PmmIO.Inputs[1]++;// Alive flage PmmIO.Inputs[24]
-    //SerialUSB.println( digitalRead( DILOSSPOWER));
+    // SerialUSB.print("Tracc ThisProduct.PmmSerial[0].PmmProtocols.IsRunning = "); 
+    // SerialUSB.println( ThisProduct.PmmSerial[0].PmmProtocols.IsRunning);
     
    
   x5++;
@@ -121,16 +124,13 @@ void PMMCommunication()
     AllExtensionBoarsdUpdate();
 
     // Manage Modbus Servers
-    // for (int SerialPort = 0 ;SerialPort < 5 ; SerialPort++ )
-    // {
-    //   if (ThisProduct.PmmSerial[SerialPort].Enabled & 
-    //       ThisProduct.PmmSerial[SerialPort].PmmProtocols.IsRunning &
-    //       ThisProduct.PmmSerial[SerialPort].PmmProtocols.ModBusSlave)
-    //   ModbusPort[SerialPort].ModbusServersUpdate(SerialPort);
-    // }
-
-    ModbusPort[1].ModbusServersUpdate(1);  
-    
+    for (int SerialPort = 0 ;SerialPort < 5 ; SerialPort++ )
+    {
+      if (ThisProduct.PmmSerial[SerialPort].Enabled & 
+          ThisProduct.PmmSerial[SerialPort].PmmProtocols.IsRunning &
+          ThisProduct.PmmSerial[SerialPort].PmmProtocols.ModBusSlave)
+      ModbusPort[SerialPort].ModbusServersUpdate(SerialPort);
+    }
 
     CommunicationTimer = millis();
   }
