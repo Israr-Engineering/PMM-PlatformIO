@@ -27,9 +27,9 @@ void setup()
   ThisProduct.PmmGeneral.Ext01Address02 = 33; // => 0x21
 
   ThisProduct.PmmGeneral.Ext02Name = 632 ;
-  ThisProduct.PmmGeneral.Ext02Name = 000 ;
+  //ThisProduct.PmmGeneral.Ext02Name = 000 ;
   ThisProduct.PmmGeneral.Ext02Pac9535 = false;
-  ThisProduct.PmmGeneral.Ext02Address01 = 0x8; // => 0x20
+  ThisProduct.PmmGeneral.Ext02Address01 = 0x4; // => 0x20
   ThisProduct.PmmGeneral.Ext02Address02 = 33; // => 0x21
 
   
@@ -88,6 +88,7 @@ void loop()
     // SerialUSB.print("Tracc ThisProduct.PmmSerial[0].PmmProtocols.IsRunning = "); 
     // SerialUSB.println( ThisProduct.PmmSerial[0].PmmProtocols.IsRunning);
      SerialUSB.println( PmmIO.Outputs[32]);  
+     
 
   x5++;
     MainLoopTimer = millis();
