@@ -80,7 +80,7 @@ const PinDescription g_APinDescription[] =
         //(24)
         {PORTB, 9, PIO_ANALOG, (PIN_ATTR_PWM | PIN_ATTR_TIMER), ADC_Channel3, PWM4_CH1, TC4_CH1, EXTERNAL_INT_9}, // ADC/AIN[3]
         //(25)
-        {PORTA, 4, PIO_ANALOG, 0, ADC_Channel4, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_4},                        // ADC/AIN[4]
+        {PORTA, 4, PIO_ANALOG, (PIN_ATTR_DIGITAL | PIN_ATTR_PWM ), ADC_Channel4, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_4},                        // ADC/AIN[4]
 
 
         // 20..21 I2C pins (SDA/SCL and also EDBG:SDA/SCL)
@@ -138,7 +138,7 @@ const PinDescription g_APinDescription[] =
         //(41)
         {PORTA, 18, PIO_SERCOM, PIN_ATTR_NONE, No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE}, // SS: SERCOM1/PAD[2]
         //(42)
-        {PORTA, 17, PIO_SERCOM, PIN_ATTR_NONE, No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE}, // SCK: SERCOM1/PAD[1]
+        {PORTA, 17, PIO_SERCOM, (PIN_ATTR_DIGITAL), No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE}, // SCK: SERCOM1/PAD[1]
                                                                                                              // { PORTA, 11, PIO_SERCOM, (PIN_ATTR_DIGITAL), No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_11 }, // RX: SERCOM0/PAD[3]
                                                                                                              // { PORTA, 10, PIO_SERCOM, (PIN_ATTR_DIGITAL), No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_10 }, // TX: SERCOM0/PAD[2]
                                                                                                              // 38..41 - EDBG/Digital

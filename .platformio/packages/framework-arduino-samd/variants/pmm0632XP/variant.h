@@ -91,91 +91,50 @@ extern "C" unsigned int PINCOUNT_fn();
 /*
  * Analog pins
  */
-#define PMM_AI0               (52ul) //PB05
-#define PMM_AI1               (43ul) //PA02
-#define PMM_AI2               (51ul) //PB04
-#define PMM_AI3               (50ul) //PB03
-#define PMM_AI4               (52ul) //PB09
-#define PMM_AI5               (53ul) //PB06
-#define PMM_AI6               (15ul) //PB08
-#define PMM_AI7               (55ul) //PB07
-#define PMM_AI8               (54ul) //PA07
-#define PMM_AI9               (17ul) //PA04
-#define PMM_AI10              (40ul) //PA06
-#define PMM_AI11              (18ul) //PA05
-#define PMM_AI12              (19ul) //PB02
-#define PMM_AI13              (50ul) //PB03
-#define PMM_AI14              (49ul) //PB01
-#define PMM_AI15              (48ul) //PB00
+#define PIN_A0               (14ul)
+#define PIN_A1               (47ul)
+#define PIN_A2               (14ul)
+#define PIN_A3               (48ul)
+#define PIN_A4               (49ul)
+#define PIN_A5               (16ul)
 
-#define PMM_RUN           (39ul) //PA21
-#define PMM_FAULT         (62ul) //PB30
-#define PMM_S0            (30ul) //PB22
-#define PMM_S1            (33ul) //PA23
-#define PMM_S2            (26ul) //PA27
-#define PMM_S3            (27ul) //PA28
-
-//#define PMM_DAC0             (14ul) //PA33
-//02. Dip switches 
-#define PMM_DI_PROG        (2ul) //PA14 : Digital Input for programming mode - near termination dip switch
-#define PMM_DI_PROG01      (38u) //PA13 : Digital Input - general (front panel dip switch )
-#define PMM_DI_PROG02      (22u) //PA12 : Digital Input - general (front panel dip switch)
-//03. Internal signals
-//03a. Ethernet controller
-//#define PMM_DO_ETH_RST     (16u) //PB09 : Digital output : Ethernet controller reset command
-//#define PMM_D1_ETH_INT     (17u) //PA04 : Digital Input : Ethernet controller interrupt 
-//#define PMM_DO_SCSn        (10u) //PA18 : Digital output : Ethernet controller chip select command  
-//03b. Flash memory
-#define PMM_DO_FLASH_EN     (58ul) //PB14 : Digital output : Flash Enable command
-#define PMM_DO_FLASH_CS     (57ul)//PB13 : Digital output : Flash chip select command 
-//03c. Serial RS485
-#define PMM_DO_RDENA        (59ul)//PB15 : Digital output : RS485 Direction control  
-//03d. options 
-#define PMM_DI_INT          (60ul)//PB16 : Digital Input : General interrupt from RTC or Extension boards  
-//#define PMM_DI_LossOfPower        (11u)//PA02 : Digital Input :loos of power 
+#define PIN_A6               (50ul)
+#define PIN_A7               (15ul)
+#define PIN_A8               (51ul)
+#define PIN_A9               (52ul)
+#define PIN_A10              (17ul)
+#define PIN_A11              (53ul)
+#define PIN_A12              (18ul)
+#define PIN_A13              (19ul)
+#define PIN_A14              (54ul)
+#define PIN_A15              (55ul)
+#define PIN_A16              (56ul)
 
 
-static const uint8_t AI0  = PMM_AI0;
-static const uint8_t AI1  = PMM_AI1;
-static const uint8_t AI2  = PMM_AI2;
-static const uint8_t AI3  = PMM_AI3;
-static const uint8_t AI4  = PMM_AI4;
-static const uint8_t AI5  = PMM_AI5;
-static const uint8_t AI6  = PMM_AI6;
-static const uint8_t AI7  = PMM_AI7;
-static const uint8_t AI8  = PMM_AI8;
-static const uint8_t AI9  = PMM_AI9;
-static const uint8_t AI10 = PMM_AI10;
-static const uint8_t AI11 = PMM_AI11;
-static const uint8_t AI12 = PMM_AI12;
-static const uint8_t AI13 = PMM_AI13;
-static const uint8_t AI14 = PMM_AI14;
-static const uint8_t AI15 = PMM_AI15;
+#define PIN_DAC0             (14ul)
 
-// Edit Mohannad
-static const uint8_t PMM_AI_Pins[16] = {PMM_AI0,PMM_AI1,PMM_AI2,PMM_AI3,PMM_AI4,PMM_AI5,PMM_AI6,PMM_AI7,
-PMM_AI8,PMM_AI9,PMM_AI10,PMM_AI11,PMM_AI12,PMM_AI13,PMM_AI14,PMM_AI15};
+static const uint8_t A0  = PIN_A0;
+static const uint8_t A1  = PIN_A1;
+static const uint8_t A2  = PIN_A2;
+static const uint8_t A3  = PIN_A3;
+static const uint8_t A4  = PIN_A4;
+static const uint8_t A5  = PIN_A5;
+static const uint8_t A6  = PIN_A6;
+static const uint8_t A7  = PIN_A7;
+static const uint8_t A8  = PIN_A8;
+static const uint8_t A9  = PIN_A9;
+static const uint8_t A10  = PIN_A10;
+static const uint8_t A11  = PIN_A11;
+static const uint8_t A12  = PIN_A12;
+static const uint8_t A13  = PIN_A13;
+static const uint8_t A14  = PIN_A14;
+static const uint8_t A15 = PIN_A15;
+static const uint8_t A16 = PIN_A16;
 
-//Mandatory : this should be added for compiling the board 
-static const uint8_t A0  = PMM_AI0;
-static const uint8_t A1  = PMM_AI1;
-static const uint8_t A2  = PMM_AI2;
-static const uint8_t A3  = PMM_AI3;
-static const uint8_t A4  = PMM_AI4;
-static const uint8_t A5  = PMM_AI5;
-static const uint8_t A6  = PMM_AI6;
-static const uint8_t A7  = PMM_AI7;
-static const uint8_t A8  = PMM_AI8;
-static const uint8_t A9  = PMM_AI9;
 
-#define PIN_DAC0             (47ul)
+
 static const uint8_t DAC0 = PIN_DAC0;
 #define ADC_RESOLUTION		12
-//End Mandatory:
-
-
-//static const uint8_t DAC0 = PMM_DAC0;
-//#define ADC_RESOLUTION		12
 
 // Other pins
 #define PIN_ATN              (38ul)
@@ -208,7 +167,7 @@ static const uint8_t ATN = PIN_ATN;
 #define PAD_SPI_TX           SPI_PAD_2_SCK_3
 #define PAD_SPI_RX           SERCOM_RX_PAD_0
 
-//static const uint8_t SS	  = PMM_A2 ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
+static const uint8_t SS	  = PIN_A2 ;	// SERCOM4 last PAD is present on A2 but HW SS isn't used. Set here only for reference.
 static const uint8_t MOSI = PIN_SPI_MOSI ;
 static const uint8_t MISO = PIN_SPI_MISO ;
 static const uint8_t SCK  = PIN_SPI_SCK ;
