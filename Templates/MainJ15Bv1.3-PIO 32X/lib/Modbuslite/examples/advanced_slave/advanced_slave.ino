@@ -46,7 +46,7 @@ void loop() {
                                      //Devuelve 1 al 4 si hubo error de comunicación
                                      //Devuelve mas de 4 si se procesó correctamente el pedido
 
-  if (state > 4) { //Si es mayor a 4 = el pedido fué correcto
+  if (state > 4) { //If it is greater than 4 = the request was correct
     tempus = millis() + 50; //Tiempo actual + 50ms
     digitalWrite(13, HIGH);//Prende el led
   }
@@ -122,8 +122,9 @@ void io_poll() {
   au16data[4] = analogRead( 0 ); //El valor analógico leido en el pin A0 se guarda en au16data[4]. (siendo 0=0v y 1023=5v)
   au16data[5] = analogRead( 1 );
 
-  // Diagnóstico de la comunicación (para debug)
-  au16data[6] = slave.getInCnt();  //Devuelve cuantos mensajes se recibieron
-  au16data[7] = slave.getOutCnt(); //Devuelve cuantos mensajes se transmitieron
-  au16data[8] = slave.getErrCnt(); //Devuelve cuantos errores hubieron
+  // Communication diagnostics (for debugging)
+  au16data[6] = slave.getInCnt();  // Returns how many messages were received
+  au16data[7] = slave.getOutCnt(); //Returns how many messages were transmitted
+  au16data[8] = slave.getErrCnt(); // Returns how many errors there were
+
 }

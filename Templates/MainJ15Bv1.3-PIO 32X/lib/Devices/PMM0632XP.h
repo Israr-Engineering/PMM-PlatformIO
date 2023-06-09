@@ -1,3 +1,13 @@
+/* 
+   Board : 1. PMM0632xp 24x AnalogInputs  (12bit) 
+   Name On Bus : 1632
+   Firmware : 1.1
+   Date : 20230420
+  Auther : MZ
+  Variant : pmm0632xp
+  Note : this board needs special care for memory size issue
+ */
+
 #ifndef PMM0632XP_H
 #define PMM0632XP_H
 
