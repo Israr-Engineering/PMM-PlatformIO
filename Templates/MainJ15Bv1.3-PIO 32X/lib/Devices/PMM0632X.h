@@ -36,7 +36,7 @@ bool Fault_Flag = false;
 #define TXEN 57
 
 // data array for modbus network sharing
-uint16_t au16data[17] = {
+uint16_t au16data[18] = {
     3, 1415, 9265, 4, 2, 7182, 28182, 8, 0, 0, 0, 0, 0, 0, 1, 5};
 
 /**
@@ -54,7 +54,7 @@ void ThisDeviceSetup()
   // try define the uart here
 
   // Serial.begin( 9600 ); // baud-rate at 9600
-  Serial1.begin(9600, SERIAL_8N1); // 19200 baud, 8-bits, even, 1-bit stop
+  Serial1.begin(115200, SERIAL_8N1); // 19200 baud, 8-bits, even, 1-bit stop
   slave.start();
 
   if (!ReadyToUse)
@@ -96,16 +96,16 @@ void ThisDeviceUpDate()
   if (ReadyToUse)
   {
     // modbus
-    slave.poll(au16data, 16);
+    slave.poll(au16data, 17);
 
     for (int x = 0; x < 17; x++)
     {
       // PMM_AI_Pins[]
       if (x == 0)
       {
-        sensorValue = 1948; // when we lost our home land :(
+        //sensorValue = 1948; // when we lost our home land :(
       }
-      else if (x < 16 && x > 0)
+      else if (x < 18 )// && x > 0)
       {
         sensorValue = analogRead(PMM_AI_Pins[x]);
       }
