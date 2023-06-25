@@ -14,13 +14,13 @@ Analog Out: 9, 10, 11               (%QW0 - %QW2)
 **********************************************************/
 
 //Define the number of inputs and outputs for this board (mapping for the Arduino Uno)
-#define NUM_DISCRETE_INPUT          5
-#define NUM_ANALOG_INPUT            6
-#define NUM_DISCRETE_OUTPUT         4
-#define NUM_ANALOG_OUTPUT           3
+#define NUM_DISCRETE_INPUT          17
+#define NUM_ANALOG_INPUT            0
+#define NUM_DISCRETE_OUTPUT         0
+#define NUM_ANALOG_OUTPUT           0
 
 //Create the I/O pin masks
-uint8_t pinMask_DIN[] = {2, 3, 4, 5, 6};
+uint8_t pinMask_DIN[] = {2,3,4,5,6,7,8,9,10,11,12,13,24,43,44,19,23,7};
 uint8_t pinMask_AIN[] = {A0, A1, A2, A3, A4, A5};
 uint8_t pinMask_DOUT[] = {7, 8, 12, 13};
 uint8_t pinMask_AOUT[] = {9, 10, 11};

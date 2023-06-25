@@ -18,7 +18,7 @@ Copyright (C) 2022 OpenPLC - Thiago Alves
 #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__) || defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega16U4__)
     #define MAX_MB_FRAME 32
 #else
-    #define MAX_MB_FRAME 64
+    #define MAX_MB_FRAME 256
 #endif
 #define MAX_SRV_CLIENTS 3 //how many clients should be able to connect to TCP server at the same time
 #define MBAP_SIZE       6

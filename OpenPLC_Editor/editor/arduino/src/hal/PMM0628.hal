@@ -1,0 +1,5 @@
+# HAL configuration
+# Format :
+# Board type, FQBN
+PMM0628R (ESI 8x Inputs 4x Relay Outputs), PMM-06XX-IO-GENERAL:samd:pmm0628
+

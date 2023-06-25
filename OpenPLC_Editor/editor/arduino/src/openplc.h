@@ -37,10 +37,10 @@ typedef double   IEC_LREAL;
 
 #else
 
-#define MAX_DIGITAL_INPUT          56
-#define MAX_DIGITAL_OUTPUT         56
-#define MAX_ANALOG_INPUT           32
-#define MAX_ANALOG_OUTPUT          32
+#define MAX_DIGITAL_INPUT          512
+#define MAX_DIGITAL_OUTPUT         512
+#define MAX_ANALOG_INPUT           128
+#define MAX_ANALOG_OUTPUT          128
 
 #endif
 

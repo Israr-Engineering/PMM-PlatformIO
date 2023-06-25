@@ -4,14 +4,6 @@ extern "C" {
 }
 #include "Arduino.h"
 
-//OpenPLC HAL for Arduino Uno and Arduino Nano (old) form factor (Uno, Leonardo, Nano, Micro and Zero)
-
-/******************PINOUT CONFIGURATION*******************
-Digital In: 2, 3, 4, 5, 6           (%IX0.0 - %IX0.4)
-Digital Out: 7, 8, 12, 13           (%QX0.0 - %QX0.3)
-Analog In: A0, A1, A2, A3, A4, A5   (%IW0 - %IW5)
-Analog Out: 9, 10, 11               (%QW0 - %QW2)
-**********************************************************/
 
 //Define the number of inputs and outputs for this board (mapping for the Arduino Uno)
 #define NUM_DISCRETE_INPUT          8
@@ -21,9 +13,9 @@ Analog Out: 9, 10, 11               (%QW0 - %QW2)
 
 //Create the I/O pin masks
 uint8_t pinMask_DIN[] = {2,3,4,5,6,7,8,9}; // (%IX0.0 - %IX0.7)
-uint8_t pinMask_AIN[] = {A0, A1, A2, A3, A4, A5};
+uint8_t pinMask_AIN[] = {A0, A1, A2, A3, A4, A5}; // (%IW0 - %IW5)
 uint8_t pinMask_DOUT[] = {10,11,12,13}; // (%QX0.0 - %QX0.3)
-uint8_t pinMask_AOUT[] = {9, 10, 11};
+uint8_t pinMask_AOUT[] = {9, 10, 11}; // (%QW0 - %QW2)
 
 void hardwareInit()
 {

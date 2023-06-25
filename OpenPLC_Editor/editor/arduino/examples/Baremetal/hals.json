@@ -31,14 +31,10 @@
         "platform": "arduino:samd:mkrzero",
         "source": "mkr.cpp"
     },
-    "PMM TEST": {
-        "platform": "arduino:samd:mkrzero",
-        "source": "mkr.cpp"
-    },
     "Arduino Zero (native USB port)": {
         "platform": "arduino:samd:arduino_zero_native",
         "source": "uno_leonardo_nano_micro_zero.cpp"
-    },
+    },    
     "Arduino Mega": {
         "platform": "arduino:avr:mega",
         "source": "mega_due.cpp"
@@ -90,6 +86,7 @@
         "platform": "arduino:samd:arduino_zero_edbg",
         "source": "uno_leonardo_nano_micro_zero.cpp"
     },
+    
     "P1AM-100": {
         "platform": "arduino:samd:mkrzero",
         "source": "p1am.cpp"
@@ -133,5 +130,13 @@
     "FX3U-14M / LE3U-14M": {
         "platform": "STMicroelectronics:stm32:GenF1:pnum=GENERIC_F103VCTX,upload_method=serialMethod",
         "source": "fx3u-14.cpp"
+    },
+    "PMM0620 (ESI 12x Digital Inputs)": {
+        "platform": "PMM-06XX-IO-GENERAL:samd:PMM0620",
+        "source": "PMM0620.cpp"
+    },        
+    "PMM0628R (ESI 8x Inputs 4x Relay Outputs)": {
+        "platform": "PMM-06XX-IO-GENERAL:samd:PMM0628R",
+        "source": "PMM0628.cpp"
     }
 }
