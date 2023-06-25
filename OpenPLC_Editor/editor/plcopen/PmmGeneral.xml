@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
+	<fileHeader companyName="OpenPLC" productName="P1AM Function Blocks Library" productVersion="1.0" creationDateTime="2021-11-11T02:33:11"/>
+	<contentHeader name="P1AM Function Blocks" author="Thiago Alves" modificationDateTime="2021-11-11T02:33:11">
+		<coordinateInfo>
+			<fbd>
+				<scaling x="0" y="0"/>
+			</fbd>
+			<ld>
+				<scaling x="0" y="0"/>
+			</ld>
+			<sfc>
+				<scaling x="0" y="0"/>
+			</sfc>
+		</coordinateInfo>
+	</contentHeader>
+	<types>
+		<dataTypes/>
+		<pous>
+			
+			<pou name="Test" pouType="functionBlock">
+				<interface>
+					<inputVars>
+					
+
+						<variable name="I0">
+							<type>
+								<INT/>
+							</type>
+							<documentation>
+								<xhtml:p><![CDATA[Insert an integer here]]></xhtml:p>
+							</documentation>
+						</variable>
+						<variable name="ACTIVE">
+							<type>
+								<BOOL/>
+							</type>
+							<documentation>
+								<xhtml:p><![CDATA[0 – block does nothing, 1 – block sums 10 to integer in I0]]></xhtml:p>
+							</documentation>
+						</variable>
+					</inputVars>
+					<outputVars>
+					
+						<variable name="OUT">
+							<type>
+								<INT/>
+							</type>
+							<documentation>
+								<xhtml:p><![CDATA[This is the output: I0 + 10]]></xhtml:p>
+							</documentation>
+						</variable>
+					</outputVars>
+				</interface>
+				<body>
+					<ST>
+						<xhtml:p>
+							
+						</xhtml:p>
+					</ST>
+				</body>
+				<documentation>
+					<xhtml:p><![CDATA[This block outputs the sum of input I0 and 10.]]></xhtml:p>
+				</documentation>
+			</pou>
+
+		</pous>
+	</types>
+	<instances>
+		<configurations/>
+	</instances>
+</project>

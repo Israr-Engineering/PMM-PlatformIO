@@ -44,13 +44,15 @@ LOCATIONDATATYPES = {"X": ["BOOL"],
                      "L": ["LINT", "ULINT", "LREAL", "LWORD"]}
 
 # -------------------------------------------------------------------------------
-#                        Function Block Types definitions
+#                        Function Block Types definitions PMM General.xml
 # -------------------------------------------------------------------------------
 
 StdTC6Libs = [(_("Standard function blocks"),   join(sd, "Standard_Function_Blocks.xml")),
               (_("Additional function blocks"), join(sd, "Additional_Function_Blocks.xml")),
               (_("Arduino"), join(sd, "Arduino_Function_Blocks.xml")),
               (_("Communication"), join(sd, "Communication_Blocks.xml")),
+              (_("PMM General"), join(sd, "PmmGeneral.xml")),
+              (_("PMM Special Functions"), join(sd, "PmmSpecialFunctions.xml")),
               (_("P1AM Modules"), join(sd, "P1AM.xml"))]
 
 StdFuncsCSV = join(sd, "iec_std.csv")
