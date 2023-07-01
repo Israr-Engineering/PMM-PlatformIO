@@ -1,5 +1,0 @@
-# HAL configuration
-# Format :
-# Board type, FQBN
-PMM0620 (ESI 12x Digital Inputs), PMM-06XX-IO-GENERAL:samd:PMM0620
-

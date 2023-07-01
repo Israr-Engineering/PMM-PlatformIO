@@ -1,1 +1,0 @@
-{"baud": "9600", "subnet": "255.255.255.0", "com_port": "COM5", "mb_serial": true, "last_update": 1687509697.704, "ip": "", "pwd": "", "slaveid": "1", "mac": "0xDE, 0xAD, 0xBE, 0xEF, 0xDE, 0xAD", "gateway": "", "dns": "", "tcp_iface": "Ethernet", "ssid": "", "mb_tcp": false, "txpin": "31", "board_type": "PMM0628R (ESI 8x Inputs 4x Relay Outputs)", "serial_iface": "Serial"}
