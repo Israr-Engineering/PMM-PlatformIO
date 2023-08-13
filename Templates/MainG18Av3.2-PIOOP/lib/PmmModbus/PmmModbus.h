@@ -102,6 +102,6 @@ public:
 
 };
 
-extern PmmModBus PmmModbus;
+//extern PmmModBus PmmModbus;
 
 #endif

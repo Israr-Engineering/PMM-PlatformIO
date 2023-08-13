@@ -71,7 +71,7 @@
 
 #if defined(PMMModbusRTUServer) || defined(PMMModbusRTUClient) || defined(PMMModbusTCPServer)
 #include <PmmModbus.h>
-PmmModBus PmmModbus;
+//PmmModBus PmmModbus;
 #endif
 
 #if defined MultiModbus

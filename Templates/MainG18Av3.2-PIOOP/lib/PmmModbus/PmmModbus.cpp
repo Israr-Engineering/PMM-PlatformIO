@@ -5,6 +5,11 @@
 PmmEthernetServer ethServer(502);
 PmmModbusTCPServer modbusTCPServer;
 
+// PmmEthernetClient ethClient;
+// PmmModbusTCPClient modbusTCPClient(ethClient);
+
+
+
 PmmModBus::PmmModBus()
 {
 }

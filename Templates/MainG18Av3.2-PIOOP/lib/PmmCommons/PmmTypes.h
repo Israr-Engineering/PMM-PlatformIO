@@ -405,10 +405,10 @@ typedef float    IEC_REAL;
 typedef double   IEC_LREAL;
 
 
-#define MAX_DIGITAL_INPUT          512
-#define MAX_DIGITAL_OUTPUT         512
-#define MAX_ANALOG_INPUT           512
-#define MAX_ANALOG_OUTPUT          512
+#define MAX_DIGITAL_INPUT          32
+#define MAX_DIGITAL_OUTPUT         32
+#define MAX_ANALOG_INPUT           6
+#define MAX_ANALOG_OUTPUT          6
 
 
 //OpenPLC Buffers

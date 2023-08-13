@@ -27,6 +27,7 @@ PmmModBus ModbusPort[1] =
 void PmmReadAllSettings(int RomTarget);
 
 PmmEthernetServer server(80);
+
 char* strings[32]; // an array of pointers to the pieces of the above array after strtok()
 char* ptr = NULL;
 string values[32];
@@ -502,8 +503,8 @@ void PmmPowerManagerUpdate()
 {
     PmmWatchDoggy.clear();
 
-    if (digitalRead(DILOSSPOWER) == 0)
-    {
+    //if (digitalRead(DILOSSPOWER) == 0)
+    //{
         // attachInterrupt(DILOSSPOWER, PmmPowerManagerInterrupt, FALLING);
         // SerialUSB.println("Enter sleep mode");
         // delay(1000);
@@ -517,7 +518,7 @@ void PmmPowerManagerUpdate()
         // //NVIC_SystemReset();// Restart
         // SerialUSB.println("Wakeup ..");
         // PmmRTCInternal.standbyMode();
-    }
+    //}
 }
 
 void PmmPowerManagerInterrupt(void)

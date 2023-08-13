@@ -10,15 +10,16 @@
 //#include <PMM0626X.h> // Tested need some review 
 #include <PMM1003.h>
 
-#include <PmmGlobalFunctions.h>
+//#include <PmmGlobalFunctions.h>
+
+
 
 void setup()
 {
   
   //STEP02: Initialize Product IOs
   hardwareInit();
-
-  
+    
   //STEP04: Warmup 1 sec
   delay(1000);
   SerialUSB.println("New Starting ...");
@@ -40,14 +41,25 @@ void loop()
 {
   //PmmPowerManagerUpdate();
 
-  if ((millis() - MainLoopTimer) > 1000)
+  if ((millis() - MainLoopTimer) > 500)
   {
    
    ///////////////////////////////////////////////////////////////
   //SerialUSB.println (tempRead);
   //PMM1003ID
   SerialUSB.println (Pmm1003ID);
+  //SerialUSB.println(Ethernet.localIP());
   //updateInputBuffers();
+
+  ModbusTCPServer.PMMmodbusTCPServerholdingRegisterWrite(0,999);
+  ModbusTCPServer.PMMmodbusTCPServerholdingRegisterWrite(1,999);
+  ModbusTCPServer.PMMmodbusTCPServerholdingRegisterWrite(2,999);
+  ModbusTCPServer.PMMmodbusTCPServerholdingRegisterWrite(3,999);
+  ModbusTCPServer.PMMmodbusTCPServerholdingRegisterWrite(4,999);
+  ModbusTCPServer.PMMmodbusTCPServerholdingRegisterWrite(5,999);
+  ModbusTCPServer.PMMmodbusTCPServerholdingRegisterWrite(6,999);
+
+  ModbusTCPServer.PMMmodbusTCPServerinputRegisterRead(0);
     
      
 
@@ -64,8 +76,8 @@ void PMMConfiguration()
 {
   if ((millis() - ConfigurationTimer) > 500)
   {
-     StartCommandHttpServer(); // this Should be here always
-     PmmReadCommands();
+    //  StartCommandHttpServer(); // this Should be here always
+    //  PmmReadCommands();
     ConfigurationTimer = millis();
   }
   // We must call 'yield' at a regular basis to pass control to other tasks.
@@ -83,6 +95,7 @@ void PMMCommunication()
     
     // Manage product and Extension Boards
     updateInputBuffers();
+    syncModbusBuffers();
     updateOutputBuffers();
 
     //ThisExtensionBoarsUpdate();
