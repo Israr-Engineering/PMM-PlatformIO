@@ -413,10 +413,10 @@ typedef double   IEC_LREAL;
 
 //OpenPLC Buffers
 
- IEC_BOOL *bool_input[MAX_DIGITAL_INPUT/8][8] = {0};
- IEC_BOOL *bool_output[MAX_DIGITAL_OUTPUT/8][8] = {0};
- IEC_UINT *int_input[MAX_ANALOG_INPUT] = {0};
- IEC_UINT *int_output[MAX_ANALOG_OUTPUT] = {0};
+ IEC_BOOL bool_input[MAX_DIGITAL_INPUT/8][8] = {0};
+ IEC_BOOL bool_output[MAX_DIGITAL_OUTPUT/8][8] = {0};
+ IEC_UINT int_input[MAX_ANALOG_INPUT] = {0};
+ IEC_UINT int_output[MAX_ANALOG_OUTPUT] = {0};
 
 // extern IEC_BOOL buffer_bool_input[MAX_DIGITAL_INPUT/8][8];
 // extern IEC_BOOL buffer_bool_output[MAX_DIGITAL_OUTPUT/8][8];

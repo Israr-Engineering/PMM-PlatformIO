@@ -343,7 +343,7 @@ void syncModbusBuffers()
         //{
             //ModbusTCPServer.PMMModBUSRTUServerholdingRegisterWrite(0,999);
             //write_discrete(i, COILS, (bool)*bool_output[i/8][i%8]);
-            ModbusTCPServer.PmmModBusTCPServerCoilWrite(i,(bool)*bool_output[i/8][i%8]);
+            ModbusTCPServer.PmmModBusTCPServerCoilWrite(i,bool_output[i/8][i%8]);
         //}
     }
     for (int i = 0; i < MAX_ANALOG_OUTPUT; i++)
@@ -351,7 +351,7 @@ void syncModbusBuffers()
         //if (int_output[i] != NULL)
         //{
             //modbus.holding[i] = *int_output[i];
-            ModbusTCPServer.PmmModBusTCPServerHoldingWrite(i,*int_output[i]);
+            ModbusTCPServer.PmmModBusTCPServerHoldingWrite(i,int_output[i]);
         //}
     }
     for (int i = 0; i < MAX_DIGITAL_INPUT; i++)
@@ -359,7 +359,7 @@ void syncModbusBuffers()
         //if (bool_input[i/8][i%8] != NULL)
         //{
             //write_discrete(i, INPUTSTATUS, (bool)*bool_input[i/8][i%8]);
-            ModbusTCPServer.PmmModBusTCPServerDiscreteWrite(i,(bool)*bool_input[i/8][i%8]);
+            ModbusTCPServer.PmmModBusTCPServerDiscreteWrite(i,bool_input[i/8][i%8]);
         //}
     }
     for (int i = 0; i < MAX_ANALOG_INPUT; i++)
@@ -367,7 +367,7 @@ void syncModbusBuffers()
         //if (int_input[i] != NULL)
         //{
             //modbus.input_regs[i] = *int_input[i];
-            ModbusTCPServer.PmmModBusTCPServerInputWrite(i,*int_input[i]);
+            ModbusTCPServer.PmmModBusTCPServerInputWrite(i,int_input[i]);
             
         //}
     }
@@ -381,7 +381,7 @@ void syncModbusBuffers()
         //if (bool_output[i/8][i%8] != NULL)
         //{
            // *bool_output[i/8][i%8] = get_discrete(i, COILS);
-           *bool_output[i/8][i%8] =  ModbusTCPServer.PmmModBusTCPServerCoilRead(i);
+           bool_output[i/8][i%8] =  ModbusTCPServer.PmmModBusTCPServerCoilRead(i);
 
         //}
     }
@@ -390,7 +390,7 @@ void syncModbusBuffers()
         //if (int_output[i] != NULL)
         //{
             //*int_output[i] = modbus.holding[i];
-            *int_output[i] = ModbusTCPServer.PmmModBusTCPServerHoldingRead(i);
+            int_output[i] = ModbusTCPServer.PmmModBusTCPServerHoldingRead(i);
         //}
     }
 }
