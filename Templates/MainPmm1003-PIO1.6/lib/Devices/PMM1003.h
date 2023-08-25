@@ -52,7 +52,7 @@ u_int16_t  PinTx = 35;
 u_int16_t  PinRx = 36;
 u_int16_t  PinTxEna = 31;
 u_long  PinWizS = 9;
-u_long SettingSerial01 = 1023 ; // SERIAL_8N1
+u_long SettingSerial01 = 1043 ; // SERIAL_8N1
 
 // Status LEDs
 bool LED_Ready = false;
@@ -150,6 +150,10 @@ void hardwareInit()
     // STEP04 : Setup Ethernet Controller
     ResetEtherNetController();
     uint8_t tmpID = 0;
+     tmpID = Pmm1003ID;
+        if (MasterIOMode)
+            tmpID++;
+            
     if (FactoryDefualtMode)
     {
         tmpID = Pmm1003ID;
@@ -224,6 +228,16 @@ void hardwareInit()
     LED_Alarm = true;
     int_output[2] = 0;
     int_input[2] = 0;
+
+    // STEP7: Initialize WatchDog timer
+  if (MasterIOMode & FactoryDefualtMode & ModbusTCPMode)
+    PmmWatchDoggy.setup(WDT_HARDCYCLE2S);
+  else if (MasterIOMode & FactoryDefualtMode & !ModbusTCPMode)
+    PmmWatchDoggy.setup(WDT_HARDCYCLE2S);
+  else if (MasterIOMode & !FactoryDefualtMode)
+    PmmWatchDoggy.setup(WDT_HARDCYCLE4S);
+  else
+    PmmWatchDoggy.setup(WDT_HARDCYCLE8S);
 
     
 }

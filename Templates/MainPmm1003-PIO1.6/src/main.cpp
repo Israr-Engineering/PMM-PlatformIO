@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ProjectDef.h>
 #include <PmmTypes.h>
+#include <PmmScheduler.h>
 
 // Include your board here
 #include <PMM1003.h>
@@ -14,15 +15,8 @@ void setup()
 
   // STEP01: Initialize Product IOs
   hardwareInit();
-  // STEP0: Initialize WatchDog timer
-  if (MasterIOMode & FactoryDefualtMode & ModbusTCPMode)
-    PmmWatchDoggy.setup(WDT_HARDCYCLE2S);
-  else if (MasterIOMode & FactoryDefualtMode & !ModbusTCPMode)
-    PmmWatchDoggy.setup(WDT_HARDCYCLE2S);
-  else if (MasterIOMode & !FactoryDefualtMode)
-    PmmWatchDoggy.setup(WDT_HARDCYCLE4S);
-  else
-    PmmWatchDoggy.setup(WDT_HARDCYCLE8S);
+  // STEP02: Do something general here !!!
+  
   // STEP03: Warmup some period
   delay(50);
   // STEP04: tell serial i am starting
@@ -87,6 +81,10 @@ void loop()
       SerialUSB.print(digitalRead(ETHERNETAVALIBLE));
       SerialUSB.print("/ Debug Mod  : ");
       SerialUSB.println(DIDEBUGMODE_Status);
+      SerialUSB.print("/ Serial Settings  : ");
+      SerialUSB.println(SettingSerial01);
+      SerialUSB.print("/ BaudRate : ");
+      SerialUSB.println(BaudRate01);
     }
 
     MainLoopTimer = millis();
@@ -104,7 +102,10 @@ void PMMConfiguration()
   if ((millis() - ConfigurationTimer) > 500)
   {
 #ifdef PMMMCUWITHCONFIG
-    //StartCommandHttpServer(); // this Should be here always
+
+#ifdef PMMHTTPSERVER
+    StartCommandHttpServer(); // this Should be here always
+#endif
     PmmReadCommands();
 #endif
     ConfigurationTimer = millis();

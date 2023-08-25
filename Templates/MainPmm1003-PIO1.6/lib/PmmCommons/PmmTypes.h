@@ -253,7 +253,7 @@ typedef struct PMMSERIAL
 
     long SerialConfig = 1043; //(4)(5)  : 23 u_int16_t config = (databitLong | parityLong | stopbitLong);Arduino Stanard
 
-    long BaudRate = 9600; // (6)(7)
+    long BaudRate = 19200; // (6)(7)
 
     int TXPin = 35;             // (8)
     int RXPin = 36;             // (9)
@@ -261,12 +261,12 @@ typedef struct PMMSERIAL
     int SerialPort = 1;         // (11)
     int Interface = 485;        // (12) (232,422,485,)
 
-    byte MACAddress01 = 192; // (13)
-    byte MACAddress02 = 192; // (14)
-    byte MACAddress03 = 192; // (15)
-    byte MACAddress04 = 192; // (16)
-    // byte MACAddress05 = 192 ; // fixed
-    // byte MACAddress06 = 192 ; // fixed
+    byte MACAddress01 = 0x22; // (13) 0x7E,0x48,0x22,0x22,0x22,(ID)
+    byte MACAddress02 = 0x22; // (14)
+    byte MACAddress03 = 0x22; // (15)
+    byte MACAddress04 = 0x22; // (16)
+    // byte MACAddress05 = 0x48 ; // fixed
+    // byte MACAddress06 = 0x7E ; // fixed
 
     uint8_t IpAddress01 = 192; // (17)
     uint8_t IpAddress02 = 168; // (18)
@@ -276,11 +276,11 @@ typedef struct PMMSERIAL
     uint8_t SubnetMask01 = 255; // (21)
     uint8_t SubnetMask02 = 255; // (22)
     uint8_t SubnetMask03 = 255; // (23)
-    uint8_t SubnetMask04 = 255; // (24)
+    uint8_t SubnetMask04 = 0; // (24)
 
     uint8_t GateWay01 = 192; // (15)
     uint8_t GateWay02 = 168; // (26)
-    uint8_t GateWay03 = 0;   // (27)
+    uint8_t GateWay03 = 1;   // (27)
     uint8_t GateWay04 = 1;   // (28)
 
     byte DNS101 = 8; // (29)
