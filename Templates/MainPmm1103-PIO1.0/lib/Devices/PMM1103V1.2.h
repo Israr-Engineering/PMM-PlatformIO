@@ -5,6 +5,8 @@
 #include "Arduino.h"
 #include <PmmTypes.h>
 #include <FlashStorage_SAMD.h>
+#include <time.h>
+#include <PmmInternalRTC.h>
 
 #ifdef PMMGlobalFunctions
 #include <PmmGlobalFunctions.h>
@@ -16,7 +18,7 @@ static const uint8_t DIMANAUTO = 19ul;    // PA06
 static const uint8_t DIMANEAST = 19ul;    // PA19
 static const uint8_t DIMANWEST = 18ul;    // PA18
 static const uint8_t DILSFEEDBACK = 19ul; // PA15
-static const uint8_t DIPODINT = 19ul;     // PA28
+static const uint8_t DIPOSINT = 19ul;     // PA28
 static const uint8_t DIPROG = 19ul;       // PA03
 // Common Analoge INPUT Pins If any (Pin Mask)
 static const uint8_t AIPOTENTIOMETER = 19ul; // (P2) PB02
@@ -130,6 +132,8 @@ float PmmMPUReadRawAngle() // This Function Get MPU Angle Without Calibration **
     return x;
 }
 
+
+
 void hardwareInit()
 {
     // STEP01 : Prepare IOs
@@ -138,8 +142,8 @@ void hardwareInit()
     pinMode(DIMANEAST, INPUT);
     pinMode(DIMANWEST, INPUT);
     pinMode(DILSFEEDBACK, INPUT);
-    pinMode(DIPODINT, INPUT);
-    pinMode(DIPROG, INPUT);
+    pinMode(DIPOSINT, INPUT);
+    pinMode(DIPROG, INPUT_PULLUP);
 
     pinMode(DORELAWEST, OUTPUT);
     pinMode(DORELAEAST, OUTPUT);
@@ -238,5 +242,129 @@ void syncModbusBuffers()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // This product main functions                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+float PMMCalculateTC()
+{
+//Calculate B
+int16_t dayNumber = PMMReturnDayOfYear();
+    float B = (360.0 / 365.0) * (dayNumber - 81);
+    B = B * PI / 180.0;
+
+//Calculate EOT
+float EOT = 9.87 * sin(2 * B) - 7.53 * cos(B) - 1.5 * sin(B);
+
+//Calculate LTSM
+float LTSM = 15.0 * GetTimeZoneFromEEprom();
+
+//Calculate TC
+float TC = 4 * (GetLatitudeFromEEprom() - LTSM) + EOT;
+return(TC);
+}
+
+float GetSunAngle()
+{
+uint16_t TimeZone=GetTimeZoneFromEEprom();
+float   Longitude=GetLongitudeFromEEprom();
+float Latitude=GetLatitudeFromEEprom();
+//Calculate B
+int16_t dayNumber = PMMReturnDayOfYear();
+    float B = (360.0 / 365.0) * (dayNumber - 81);
+    B = B * PI / 180.0;
+
+//Calculate EOT
+float EOT = 9.87 * sin(2 * B) - 7.53 * cos(B) - 1.5 * sin(B);
+
+//Calculate LTSM
+float LTSM = 15.0 * TimeZone;
+
+//Calculate TC
+float TC = 4 * (Longitude - LTSM) + EOT;
+
+//Calculate LST
+int currentTimeInMinute =  Pmmm1103.RTCMinutes ; // PMMReturnInMinute();
+float LST = currentTimeInMinute + TC;
+
+//Calculate HRA
+float HRA = 15 * (LST) / 60 + 180;
+if (HRA > 180)
+HRA = HRA - 360;
+float HRARAD=DEG_TO_RAD*HRA;
+// SerialUSB.println();
+// SerialUSB.print("HRA :");
+// SerialUSB.println(HRA);
+int Angleinvers=1;
+if (HRA<0)
+    {
+Angleinvers=-1;
+    }
+//Calculate Elevation
+float DeclinationRAD = (23.45 * sin(B))*DEG_TO_RAD;
+double latRAD = Latitude * PI / 180; // convert to Radians
+double Elevation = asin((sin(DeclinationRAD) * sin(latRAD)) + (cos(latRAD) * cos(DeclinationRAD) * cos(HRARAD)));
+double ElevationRAD = Elevation;
+Elevation = Elevation * (180 / PI);
+
+//Calculate Azimuth
+float AzimuthRAD = acos((sin(DeclinationRAD) * cos(latRAD) - cos(DeclinationRAD) * sin(latRAD) * cos(HRARAD)) / cos(ElevationRAD));
+float Azimuth=AzimuthRAD*RAD_TO_DEG;
+//Calculate Zenith
+float ZenithRAD = DEG_TO_RAD*(90 - Elevation);
+
+//Calculate true angle
+ float Ys = 180-Azimuth; // Ys
+    float Yt = 360;
+    Ys = DEG_TO_RAD*Ys;
+    Yt = DEG_TO_RAD*Yt;
+    float a = cos(Yt) * sin(ZenithRAD) * sin(Ys) - sin(Yt) * sin(ZenithRAD) * cos(Ys);
+    float b = cos(ZenithRAD);
+  
+    float TrueAngle = Angleinvers* atan(a / b);
+    TrueAngle =TrueAngle * RAD_TO_DEG;
+    // float Max_Limit=GetMaxLimitFromEEprom();
+    // float Min_Limit=GetMinLimitFromEEprom();
+    // // if(TrueAngle>Max_Limit)
+    // // {TrueAngle=Max_Limit;}
+    // // if(TrueAngle<Min_Limit)
+    // // {TrueAngle=Min_Limit;}
+    return TrueAngle ;
+}
+
+uint32_t SunSet()
+{
+    int16_t dayNumber = PMMReturnDayOfYear();
+    float B = (360.0 / 365.0) * (dayNumber - 81);
+    B = B * PI / 180.0;
+    float DeclinationRAD = (23.45 * sin(B))*DEG_TO_RAD;
+    float latRAD=GetLatitudeFromEEprom()*DEG_TO_RAD;
+    DateTime RTCDateTiem = PMMRTCNOW();
+    DateTime TimeAt12Am = DateTime(RTCDateTiem.year(), RTCDateTiem.month(), RTCDateTiem.day() + 1, 0, 0, 0);
+    float tmp;
+    tmp = ((double)1 / 15 * acos(tan(DeclinationRAD) * tan(latRAD)));
+    tmp = tmp * 180 / PI;
+    float TC =PMMCalculateTC();
+    int sunset = TimeAt12Am.unixtime() - tmp * 60 * 60 - TC * 60;
+    return sunset;
+}
+
+uint32_t SunRise()
+{
+    int16_t dayNumber = PMMReturnDayOfYear();
+    float B = (360.0 / 365.0) * (dayNumber - 81);
+    B = B * PI / 180.0;
+    float DeclinationRAD = (23.45 * sin(B))*DEG_TO_RAD;
+    float latRAD=GetLatitudeFromEEprom()*DEG_TO_RAD;
+    DateTime RTCDateTiem = PMMRTCNOW();
+    DateTime TimeAt12Am = DateTime(RTCDateTiem.year(), RTCDateTiem.month(), RTCDateTiem.day(), 0, 0, 0);
+    float tmp;
+    tmp = ((double)1 / 15 * acos(tan(DeclinationRAD) * tan(latRAD)));
+    tmp = tmp * 180 / PI;
+    float TC = PMMCalculateTC();
+    // int sunset = TimeAt12Am.unixtime() - tmp * 60 * 60 - TC * 60;  // + PMM1103TimeZone * 60 * 60;
+    int sunrise = TimeAt12Am.unixtime() + tmp * 60 * 60 - TC * 60; //+ PMM1103TimeZone * 60 * 60;
+    return sunrise;
+}
+
+*/
 
 #endif

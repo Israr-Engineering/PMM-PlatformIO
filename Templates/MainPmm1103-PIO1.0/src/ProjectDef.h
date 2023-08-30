@@ -9,7 +9,7 @@
 //#define PMMhasExternalRTC          // Enable External RTC
 #define PMMInternalRTC            // Enable Internal RTC
 #define PMMModbus                 // Enable WatchDog Modbus
-#define PMMSunCalculations         // Enable Sun Angle Calculation
+//#define PMMSunCalculations         // Enable Sun Angle Calculation
 //#define PMMExtEEPROM
 //#define PMMFlashMemory
 //#define PMMUDP                    // Enable MPU I2c Reading
