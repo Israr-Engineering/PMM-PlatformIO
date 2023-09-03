@@ -42,6 +42,8 @@ public:
     float B = 0;
     float EOT = 0;
     float Declination = 0;
+    float DeclinationRAD =0 ;
+    float latRAD = 0 ;
     float LSTM = 0;
     time_t LST = 0;
     float TC = 0;

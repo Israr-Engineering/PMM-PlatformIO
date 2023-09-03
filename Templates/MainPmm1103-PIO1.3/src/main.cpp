@@ -73,15 +73,16 @@ void loop()
     /*// Print system variables for monitring */
     if(Pmmm1103.PROGRAMMINGMODE) ShowDebugSummary();
 
-    // SerialUSB.println(Pmmm1103.MINAngle);
-    // SerialUSB.println(Pmmm1103.MAXAngle);
-    // SerialUSB.println(Pmmm1103.MINCalAngle);
-    // SerialUSB.println(Pmmm1103.MAXCalAngle);  //int_output[10]
-    // SerialUSB.println((int16_t)int_output[10]);
+     SerialUSB.println(Pmmm1103.RTCMinutes);
+    SerialUSB.println(( int)Pmmm1103.UpdatePosTimer);
+    SerialUSB.println(Pmmm1103.RTCMinutes % Pmmm1103.UpdatePosTimer);
+
+    SerialUSB.println(Pmmm1103.MPUCalAngle + Pmmm1103.TolernceAngle);
+    SerialUSB.println(Pmmm1103.MPUCalAngle - Pmmm1103.TolernceAngle);  //int_output[10]
+    SerialUSB.println(Pmmm1103.CalcTargetAngle);
     // SerialUSB.println(int_output[8]);
     
-
-
+  
     MainLoopTimer = millis();
   }
   CycleTime = micros();

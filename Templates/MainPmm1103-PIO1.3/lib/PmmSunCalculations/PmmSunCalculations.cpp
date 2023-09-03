@@ -270,12 +270,12 @@ void PmmSunCalculations::UpdateCalculations(time_t date, float lat, float lang, 
         Angleinvers = -1;
     }
     //7. Calculate Elevation
-    float DeclinationRAD = (23.45 * sin(B)) * DEG_TO_RAD;
+    DeclinationRAD = (23.45 * sin(B)) * DEG_TO_RAD;
     Declination = DeclinationRAD * RAD_TO_DEG;
-    double latRAD = Latitude * PI / 180; // convert to Radians
+    latRAD = Latitude * DEG_TO_RAD; // convert to Radians
     Elevation = asin((sin(DeclinationRAD) * sin(latRAD)) + (cos(latRAD) * cos(DeclinationRAD) * cos(HRARAD)));
     double ElevationRAD = Elevation;
-    Elevation = Elevation * (180 / PI);
+    Elevation = Elevation * RAD_TO_DEG;
     //8. Calculate Azimuth
     AzimuthRAD = acos((sin(DeclinationRAD) * cos(latRAD) - cos(DeclinationRAD) * sin(latRAD) * cos(HRARAD)) / cos(ElevationRAD));
     Azimuth = AzimuthRAD * RAD_TO_DEG;
@@ -291,6 +291,19 @@ void PmmSunCalculations::UpdateCalculations(time_t date, float lat, float lang, 
     float b = cos(ZenithRAD);
     TrueAngle = Angleinvers * atan(a / b);
     TrueAngle = TrueAngle * RAD_TO_DEG;
+
+    // Sunrise and Sunset
+    double tmp = (1.0 / 15) * acos(tan(DeclinationRAD) * tan(latRAD));
+    tmp = tmp * RAD_TO_DEG;
+    time_t dateSetRise = PMMSetDatetime((year(date) - 1970), month(date), day(date));
+    // DateTime dateSetRise(date.getYear(), date.getMonth(), date.getDay(), 12, 0, 0);
+     Sunset = dateSetRise + (43200);
+     Sunrise = dateSetRise + (43200);
+    Sunset = Sunset - (3600 * tmp);
+    Sunrise = Sunrise + (3600 * tmp);
+    Sunset = Sunset - (60 * TC);
+    Sunrise = Sunrise - (60 * TC);
+
     //11. TrueAngle(NREL Method)
     //  Solar Elevation Bs, Solar Azimuth Ys
     float Bs = Elevation;

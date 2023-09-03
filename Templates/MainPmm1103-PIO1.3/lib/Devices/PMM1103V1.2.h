@@ -39,7 +39,7 @@ typedef struct InRom
     u_int16_t DeviceType = 0; // 0 => Slave , 1 => Master , ...
     u_int16_t DeviceMode = 0;
     u_int16_t Command = 0;
-    u_int16_t UpdatePosTimer = 5; // Postion update timer in minutes
+    u_int16_t UpdatePosTimer = 2; // Postion update timer in minutes
     // Location and datetime (31.53284475631496, 36.027797725634365)
     int Latitude = 3153;  // ×100| = 31.53
     int Longitude = 3602; // ×100| = 36.02
@@ -64,7 +64,7 @@ typedef struct InRom
 typedef struct PMM1103
 {
     InRom InROM;
-    u_int32_t UpdatePosTimer = 300000; // Postion update timer in ms
+    u_int16_t UpdatePosTimer = 5; // Postion update timer in ms
     // Location and datetime (31.53284475631496, 36.027797725634365)
     float Latitude = 31.53;  // ×100| = 31.53
     float Longitude = 36.02; // ×100| = 36.02
@@ -131,6 +131,7 @@ typedef struct PMM1103
     bool EMERGENCYTimerINEnable = false;
 
     uint32_t LOCALREMOTETimer = 0;
+    long RunAutoTimer = 0;
 
 } PMM1103;
 // Global Classes and structs
@@ -179,12 +180,6 @@ void hardwareInit()
     pinMode(DOLED, OUTPUT);
 
     // STEP02 : Get device address and load variables and check factory Defaults
-    // Pmmm1103.PROGRAMMINGMODE = !digitalRead(DIPROG);
-    // if (Pmmm1103.PROGRAMMINGMODE)
-    // {
-    //     Pmmm1103.IsNotFirstStart = true;
-    //     PmmInternalEEPROM.put(0, Pmmm1103.InROM);
-    // }
     PmmInternalEEPROM.get(0, Pmmm1103.InROM);
     if ((Pmmm1103.InROM.ModBusID > 31) | (Pmmm1103.InROM.ModBusID < 0)) // Mostly first start
     {
@@ -303,7 +298,12 @@ void updateOutputBuffers()
         }
 
         // if(Pmmm1103.CALIBRATIONMODE == false)
-        RunAutoMode();
+        // update every one second
+        if ((millis() - Pmmm1103.RunAutoTimer) > 1000)
+        {
+            RunAutoMode();
+            Pmmm1103.RunAutoTimer = millis();
+        }
     }
 
     // STEP02 : check max-min limit tolerances
@@ -405,27 +405,42 @@ void syncModbusBuffers()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // This product Extra functions start here                                                                     //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int AutoMoveCode = 400;
+bool AutoMoveEnable = false;
+bool AutoMoveNewCycle = false;
 
 void RunAutoMode()
 {
     // STEP00 : Check Auto modes
 
-    Pmmm1103.AUTOLOCALMODE = (Pmmm1103.LOCALREMOTETimer > 60) ? true : false;
+    Pmmm1103.AUTOLOCALMODE = (Pmmm1103.LOCALREMOTETimer > 10 /*60*/) ? true : false;
     Pmmm1103.AUTOREMOTEMODE = !Pmmm1103.AUTOLOCALMODE;
 
-    if (Pmmm1103.RTCMinutes % Pmmm1103.UpdatePosTimer == 0)
+    if (Pmmm1103.AUTOREMOTEMODE)
     {
+        AutoMoveCode = int_output[29];
+        AutoMoveEnable = (AutoMoveCode == 500) ? true : false; // enable code from Master device
+    }
+
+    if ((Pmmm1103.RTCMinutes % Pmmm1103.UpdatePosTimer) == 0)
+    {
+        if (AutoMoveNewCycle == true)
+        {
+            AutoMoveEnable = true;
+            AutoMoveNewCycle = false;
+        }
+
         if (!Pmmm1103.PARKINGMODE || !Pmmm1103.EMERGENCYMODE)
         {
             if (Pmmm1103.AUTOLOCALMODE)
             {
-                Pmmm1103.RemoteTargetAngle = PmmSunCalc.TrueAngle;
-            }
-            else if (Pmmm1103.AUTOREMOTEMODE)
-            {
+                Pmmm1103.RemoteTargetAngle = Pmmm1103.CalcTrueAngle; // PmmSunCalc.TrueAngle;
+                ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(24, int(Pmmm1103.RemoteTargetAngle * 100));
             }
         }
     }
+    else
+        AutoMoveNewCycle = true;
 
     // STEP01 : Park position
     if (((Pmmm1103.RTCHours > hour(PmmSunCalc.Sunset) && (Pmmm1103.RTCMinutes > minute(PmmSunCalc.Sunset))) ||
@@ -433,6 +448,7 @@ void RunAutoMode()
     {
         Pmmm1103.RemoteTargetAngle = Pmmm1103.ParkAngle;
         Pmmm1103.PARKINGMODE = true;
+        ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(24, int(Pmmm1103.RemoteTargetAngle * 100));
     }
     else
     {
@@ -462,6 +478,7 @@ void RunAutoMode()
     if (Pmmm1103.EMERGENCYMODE == true)
     {
         Pmmm1103.RemoteTargetAngle = 0;
+        ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(24, int(Pmmm1103.RemoteTargetAngle * 100));
         if (Pmmm1103.EMERGENCYTimer == 0)
         {
             Pmmm1103.EMERGENCYMODE = false;
@@ -470,42 +487,51 @@ void RunAutoMode()
     }
 
     // STEP03 : Check limits
-    if (Pmmm1103.RemoteTargetAngle > Pmmm1103.MAXAngle)
-    {
-        Pmmm1103.RemoteTargetAngle = Pmmm1103.MAXAngle;
-    }
-    if (Pmmm1103.RemoteTargetAngle < Pmmm1103.MINAngle)
-    {
+    // if (Pmmm1103.RemoteTargetAngle > Pmmm1103.MAXAngle)
+    // {
+    //     Pmmm1103.RemoteTargetAngle = Pmmm1103.MAXAngle;
+    // }
+    // if (Pmmm1103.RemoteTargetAngle < Pmmm1103.MINAngle)
+    // {
 
-        Pmmm1103.RemoteTargetAngle = Pmmm1103.MINAngle;
-    }
+    //     Pmmm1103.RemoteTargetAngle = Pmmm1103.MINAngle;
+    // }
 
     // STEP04 : Update registers
     Pmmm1103.CalcTargetAngle = Pmmm1103.RemoteTargetAngle;
-    ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(24, int(Pmmm1103.RemoteTargetAngle * 100));
 
     //  STEP05 : Order to move
-    if (Pmmm1103.CalcTargetAngle > Pmmm1103.MPUCalAngle) // move to west +++
+    if (AutoMoveEnable)
     {
-        Pmmm1103.MoveEast = false;
-        Pmmm1103.MoveWest = true;
+        if (Pmmm1103.CalcTargetAngle > Pmmm1103.MPUCalAngle) // move to west +++
+        {
+            Pmmm1103.MoveEast = true;
+            Pmmm1103.MoveWest = false;
+            ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(29, 100);
+        }
+        else if (Pmmm1103.CalcTargetAngle < Pmmm1103.MPUCalAngle) // move to east ---
+        {
+            Pmmm1103.MoveEast = false;
+            Pmmm1103.MoveWest = true;
+            ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(29, 200);
+        }
+
+        else
+        {
+            Pmmm1103.MoveEast = false;
+            Pmmm1103.MoveWest = false;
+            ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(29, 300);
+        }
     }
-    else if (Pmmm1103.CalcTargetAngle < Pmmm1103.MPUCalAngle) // move to east ---
-    {
-        Pmmm1103.MoveEast = true;
-        Pmmm1103.MoveWest = false;
-    }
+
     // Accepting Tolerances))
-    else if (Pmmm1103.CalcTargetAngle <= Pmmm1103.MPUCalAngle + Pmmm1103.TolernceAngle &&
-             Pmmm1103.CalcTargetAngle >= Pmmm1103.MPUCalAngle - Pmmm1103.TolernceAngle)
+    if (Pmmm1103.CalcTargetAngle <= (Pmmm1103.MPUCalAngle + Pmmm1103.TolernceAngle) &&
+        Pmmm1103.CalcTargetAngle >= (Pmmm1103.MPUCalAngle - Pmmm1103.TolernceAngle))
     {
         Pmmm1103.MoveEast = false;
         Pmmm1103.MoveWest = false;
-    }
-    else
-    {
-        Pmmm1103.MoveEast = false;
-        Pmmm1103.MoveWest = false;
+        AutoMoveEnable = false;
+        ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(29, 400);
     }
 }
 
@@ -513,7 +539,7 @@ void MappingRegisters()
 {
     // STEP00: Copy ROM to runtime values
 
-    Pmmm1103.UpdatePosTimer = Pmmm1103.InROM.UpdatePosTimer * 60000; // Postion update timer in ms
+    Pmmm1103.UpdatePosTimer = Pmmm1103.InROM.UpdatePosTimer; // Postion update timer in ms
     // Location and datetime (31.53284475631496, 36.027797725634365)
     Pmmm1103.Latitude = float(Pmmm1103.InROM.Latitude) / 100;   // ×100| = 31.53
     Pmmm1103.Longitude = float(Pmmm1103.InROM.Longitude) / 100; // ×100| = 36.02
@@ -631,7 +657,7 @@ void MappingRegisters()
 
         int_output[3] = 0;
         ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(3, 0);
-        NVIC_SystemReset();
+        // NVIC_SystemReset();
     }
 
     // STEP04.2 : Copy ROM TO Holding registers
@@ -668,8 +694,6 @@ void MappingRegisters()
         int_output[3] = 0;
         ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(3, 0);
     }
-
-
 }
 
 void ShowDebugSummary()
@@ -745,6 +769,15 @@ void ShowDebugSummary()
     tmpstr = String(year(PmmSunCalc.Sunset)) + "-" + String(month(PmmSunCalc.Sunset)) + "-" + String(day(PmmSunCalc.Sunset)) + " ";
     tmpstr = tmpstr + String(hour(PmmSunCalc.Sunset)) + ":" + String(minute(PmmSunCalc.Sunset)) + ":" + String(second(PmmSunCalc.Sunset));
     SerialUSB.print(tmpstr);
+
+    // DeclinationRAD =0 ;
+    SerialUSB.print(" /DeclinationRAD = ");
+    SerialUSB.print(PmmSunCalc.DeclinationRAD);
+
+    SerialUSB.print(" /latRAD = ");
+    SerialUSB.print(PmmSunCalc.latRAD);
+
+    SerialUSB.println("");
 }
 
 #endif
