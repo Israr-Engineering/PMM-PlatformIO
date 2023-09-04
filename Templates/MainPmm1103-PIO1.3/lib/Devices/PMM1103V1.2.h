@@ -44,7 +44,7 @@ typedef struct InRom
     int Latitude = 3153;  // ×100| = 31.53
     int Longitude = 3602; // ×100| = 36.02
     int TimeZone = 3;
-    int TolernceAngle = 300; // x100
+    int TolernceAngle = 100; // x100
     int MAXAngle = 6000;     // x100
     int MAXCalAngle = 2200;  // x100
     int MINAngle = -6000;    // x100
@@ -69,7 +69,7 @@ typedef struct PMM1103
     float Latitude = 31.53;  // ×100| = 31.53
     float Longitude = 36.02; // ×100| = 36.02
     int TimeZone = 3;
-    float TolernceAngle = 3;   // x100
+    float TolernceAngle = 1;   // x100
     float MAXAngle = 55;       // x100
     float MAXCalAngle = 60;    // x100
     float MINAngle = -55;      // x100
@@ -299,11 +299,11 @@ void updateOutputBuffers()
 
         // if(Pmmm1103.CALIBRATIONMODE == false)
         // update every one second
-        if ((millis() - Pmmm1103.RunAutoTimer) > 1000)
-        {
+        // if ((millis() - Pmmm1103.RunAutoTimer) > 1000)
+        // {
             RunAutoMode();
             Pmmm1103.RunAutoTimer = millis();
-        }
+        //}
     }
 
     // STEP02 : check max-min limit tolerances
@@ -443,8 +443,8 @@ void RunAutoMode()
         AutoMoveNewCycle = true;
 
     // STEP01 : Park position
-    if (((Pmmm1103.RTCHours > hour(PmmSunCalc.Sunset) && (Pmmm1103.RTCMinutes > minute(PmmSunCalc.Sunset))) ||
-         ((Pmmm1103.RTCHours < hour(PmmSunCalc.Sunrise) && (Pmmm1103.RTCMinutes < minute(PmmSunCalc.Sunrise))))))
+    if ((Pmmm1103.RTCHours >= hour(PmmSunCalc.Sunset) ) ||
+         ((Pmmm1103.RTCHours <= hour(PmmSunCalc.Sunrise) )))
     {
         Pmmm1103.RemoteTargetAngle = Pmmm1103.ParkAngle;
         Pmmm1103.PARKINGMODE = true;
@@ -487,18 +487,28 @@ void RunAutoMode()
     }
 
     // STEP03 : Check limits
-    // if (Pmmm1103.RemoteTargetAngle > Pmmm1103.MAXAngle)
-    // {
-    //     Pmmm1103.RemoteTargetAngle = Pmmm1103.MAXAngle;
-    // }
-    // if (Pmmm1103.RemoteTargetAngle < Pmmm1103.MINAngle)
-    // {
+    if (Pmmm1103.RemoteTargetAngle > Pmmm1103.MAXAngle)
+    {
+        Pmmm1103.RemoteTargetAngle = Pmmm1103.MAXAngle;
+    }
+    if (Pmmm1103.RemoteTargetAngle < Pmmm1103.MINAngle)
+    {
 
-    //     Pmmm1103.RemoteTargetAngle = Pmmm1103.MINAngle;
-    // }
+        Pmmm1103.RemoteTargetAngle = Pmmm1103.MINAngle;
+    }
 
     // STEP04 : Update registers
     Pmmm1103.CalcTargetAngle = Pmmm1103.RemoteTargetAngle;
+
+    // Accepting Tolerances))
+    if (Pmmm1103.CalcTargetAngle <= (Pmmm1103.MPUCalAngle + Pmmm1103.TolernceAngle) &&
+        Pmmm1103.CalcTargetAngle >= (Pmmm1103.MPUCalAngle - Pmmm1103.TolernceAngle))
+    {
+        Pmmm1103.MoveEast = false;
+        Pmmm1103.MoveWest = false;
+        AutoMoveEnable = false;
+        ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(29, 400);
+    }
 
     //  STEP05 : Order to move
     if (AutoMoveEnable)
@@ -518,21 +528,14 @@ void RunAutoMode()
 
         else
         {
+            AutoMoveEnable = false;
             Pmmm1103.MoveEast = false;
             Pmmm1103.MoveWest = false;
             ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(29, 300);
         }
     }
 
-    // Accepting Tolerances))
-    if (Pmmm1103.CalcTargetAngle <= (Pmmm1103.MPUCalAngle + Pmmm1103.TolernceAngle) &&
-        Pmmm1103.CalcTargetAngle >= (Pmmm1103.MPUCalAngle - Pmmm1103.TolernceAngle))
-    {
-        Pmmm1103.MoveEast = false;
-        Pmmm1103.MoveWest = false;
-        AutoMoveEnable = false;
-        ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(29, 400);
-    }
+    
 }
 
 void MappingRegisters()
