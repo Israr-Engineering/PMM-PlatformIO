@@ -52,7 +52,7 @@ typedef struct InRom
     int ParkAngle = 50;      // x100
     int ClibrationAngle = 0; // x100
     // WindSpeed Control
-    int WindSpeedLimit = 0;        // x100
+    int WindSpeedLimit = 12000;    // x100
     int WindSpeedTimeoutIN = 15;   // secondes
     int WindSpeedTimeoutOUT = 100; // secondes
     // Extras for backtracking
@@ -77,7 +77,7 @@ typedef struct PMM1103
     float ParkAngle = 50;      // x100
     float ClibrationAngle = 0; // x100
     // WindSpeed settings
-    float WindSpeedLimit = 0;      // x100
+    float WindSpeedLimit = 12000;  // x100
     int WindSpeedTimeoutIN = 15;   // secondes
     int WindSpeedTimeoutOUT = 100; // secondes
     // RTC and dateTime
@@ -98,7 +98,7 @@ typedef struct PMM1103
     float BackTrackAngle = 0;
     float RemoteTargetAngle = 0; // x100
     // WindSpeed Real time
-    int WindSpeed = 0;
+    float WindSpeed = 0;
     // Modes
     bool MANUALMODE = false;
     bool AUTOREMOTEMODE = false;
@@ -132,6 +132,16 @@ typedef struct PMM1103
 
     uint32_t LOCALREMOTETimer = 0;
     long RunAutoTimer = 0;
+
+    // ALARMS
+    bool AlarmDateTime = false;
+    bool AlarmMovement = false;
+    bool AlarmActualPosition = false;
+    bool AlarmCommunication = false;
+    bool AlarmDataValidation = false;
+    bool Alarmspare05 = false;
+    bool Alarmspare06 = false;
+    bool AlarmGeneral = false;
 
 } PMM1103;
 // Global Classes and structs
@@ -191,7 +201,7 @@ void hardwareInit()
     // STEP03 : Initialize mdbus RTU Server and client
     // Server
     ModbusRTU01Server.PmmModBusRTUServerSetup(Pmmm1103.InROM.ModBusID, SERIAL_8N1, 9600, 35, 36, 31, 1); //  35,36,31
-    ModbusRTU01Server.PmmModBusRTUServerconfigure(true, 0, 24, true, 0, 32, true, 0, 32, true, 0, 24);
+    ModbusRTU01Server.PmmModBusRTUServerconfigure(true, 0, 24, true, 0, 40, true, 0, 40, true, 0, 40);
     if (Pmmm1103.InROM.DeviceType == 1) // if master device config serial02 as client to read time from GPS if any
     {
         ModbusRTU02Client.PmmModBusRTUClientSetup(SERIAL_8N1, 9600, 0, 1, 4, 2); //   PA10,PA11.PA07
@@ -209,11 +219,17 @@ void hardwareInit()
     // STEP06 : Ready to Do SunClac based on time
 
     // STEP7: Initialize WatchDog timer
-    if (!Pmmm1103.PROGRAMMINGMODE)
-    {
-        PmmWatchDoggy.setup(WDT_HARDCYCLE8S);
-    }
+    // if (!Pmmm1103.PROGRAMMINGMODE)
+    // {
+    //     PmmWatchDoggy.setup(WDT_HARDCYCLE8S);
+    // }
 }
+
+int const numReadings = 10;
+float readings[numReadings]; // the readings from the analog input
+int readIndex = 0;           // the index of the current reading
+float total = 0;             // the running total
+int average = 0;             // the average
 
 void updateInputBuffers()
 {
@@ -252,11 +268,35 @@ void updateInputBuffers()
     Pmmm1103.CalcTrueAngleNerl = PmmSunCalc.TrueAngleNerl;
     Pmmm1103.BackTrackAngle = PmmSunCalc.BackTrackerAngle;
 
-    // STEP03 : MPU Angle
-    Pmmm1103.MPURawAngle = PmmSunCalc.PmmMPUReadRawAngle();
-    Pmmm1103.MPUCalAngle = PmmSunCalc.PmmMPUReadCalAngle(Pmmm1103.MINAngle, Pmmm1103.MAXAngle, Pmmm1103.MINCalAngle, Pmmm1103.MAXCalAngle);
-    // Pmmm1103.MPUCalAngle = PmmSunCalc.PmmMPUReadCalAngle(-60.00, 60.00, 157.00, 22.3);
+    // STEP03 : MPU Angle with filter
 
+    Pmmm1103.MPURawAngle = PmmSunCalc.PmmMPUReadRawAngle();
+
+
+    // START FILTER : subtract the last reading:
+    // total = total - readings[readIndex];
+    // // read from the sensor:
+    // readings[readIndex] = Pmmm1103.MPURawAngle;
+    // // add the reading to the total:
+    // total = total + readings[readIndex];
+    // // advance to the next position in the array:
+    // readIndex = readIndex + 1;
+    // // if we're at the end of the array...
+    // if (readIndex >= numReadings)
+    // {
+    //     // ...wrap around to the beginning:
+    //     readIndex = 0;
+    // }
+    // // calculate the average:
+    // average = total / numReadings;
+    // float x = average;
+    // x = map(x * 10, Pmmm1103.MINCalAngle * 10, Pmmm1103.MAXCalAngle * 10, Pmmm1103.MINAngle * 10, Pmmm1103.MAXAngle * 10);
+    // Pmmm1103.MPUCalAngle = x / 10;
+
+    //End filter
+
+     Pmmm1103.MPUCalAngle = PmmSunCalc.PmmMPUReadCalAngle(Pmmm1103.MINAngle, Pmmm1103.MAXAngle, Pmmm1103.MINCalAngle, Pmmm1103.MAXCalAngle);
+    
     // STEP04  : other updates
 }
 
@@ -301,9 +341,9 @@ void updateOutputBuffers()
         // update every one second
         // if ((millis() - Pmmm1103.RunAutoTimer) > 1000)
         // {
-            RunAutoMode();
-            Pmmm1103.RunAutoTimer = millis();
-        //}
+        RunAutoMode();
+        // Pmmm1103.RunAutoTimer = millis();
+        // }
     }
 
     // STEP02 : check max-min limit tolerances
@@ -358,7 +398,9 @@ void GenerateAlarm()
     // STEP02 : Actual Position Alarm
     // STEP03 : Communication Alarm
     // STEM04 : Data Validation Alarm (if any dont save to ROM)
-    // STEP05 : General Alarm
+    // STEM05 :
+    // STEM06 :
+    // STEP07 : General Alarm
 }
 
 void syncModbusBuffers()
@@ -367,8 +409,8 @@ void syncModbusBuffers()
     // STEP00 : HandShaking setup
     if (!int_output[30] == 0)
     {
-        int_output[30] = 0;
-        ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(30, 0);
+        // int_output[30] = 0;
+        // ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(30, 0);
     }
 
     // STEP01 : Looping buffer
@@ -413,13 +455,13 @@ void RunAutoMode()
 {
     // STEP00 : Check Auto modes
 
-    Pmmm1103.AUTOLOCALMODE = (Pmmm1103.LOCALREMOTETimer > 10 /*60*/) ? true : false;
+    Pmmm1103.AUTOLOCALMODE = (Pmmm1103.LOCALREMOTETimer > 60 /*60*/) ? true : false;
     Pmmm1103.AUTOREMOTEMODE = !Pmmm1103.AUTOLOCALMODE;
 
     if (Pmmm1103.AUTOREMOTEMODE)
     {
         AutoMoveCode = int_output[29];
-        AutoMoveEnable = (AutoMoveCode == 500) ? true : false; // enable code from Master device
+        AutoMoveEnable = !(AutoMoveCode == 400) ? true : false; // enable code from Master device
     }
 
     if ((Pmmm1103.RTCMinutes % Pmmm1103.UpdatePosTimer) == 0)
@@ -443,8 +485,8 @@ void RunAutoMode()
         AutoMoveNewCycle = true;
 
     // STEP01 : Park position
-    if ((Pmmm1103.RTCHours >= hour(PmmSunCalc.Sunset) ) ||
-         ((Pmmm1103.RTCHours <= hour(PmmSunCalc.Sunrise) )))
+    if ((Pmmm1103.RTCHours >= hour(PmmSunCalc.Sunset)) ||
+        ((Pmmm1103.RTCHours <= hour(PmmSunCalc.Sunrise))))
     {
         Pmmm1103.RemoteTargetAngle = Pmmm1103.ParkAngle;
         Pmmm1103.PARKINGMODE = true;
@@ -456,14 +498,16 @@ void RunAutoMode()
     }
 
     // STEP02 : Wind speed Emergency
-    if (Pmmm1103.WindSpeed > Pmmm1103.WindSpeedLimit)
+
+    if (Pmmm1103.WindSpeed >= Pmmm1103.WindSpeedLimit)
     {
+
         if (!Pmmm1103.EMERGENCYTimerINEnable)
         {
             Pmmm1103.EMERGENCYTimerINEnable = true;
             Pmmm1103.EMERGENCYTimerIN = Pmmm1103.WindSpeedTimeoutIN;
         }
-        if (Pmmm1103.EMERGENCYMODE == false && Pmmm1103.WindSpeedTimeoutIN == 0)
+        if (Pmmm1103.EMERGENCYMODE == false && Pmmm1103.EMERGENCYTimerIN == 0)
         {
             Pmmm1103.EMERGENCYTimer = Pmmm1103.WindSpeedTimeoutOUT;
             Pmmm1103.EMERGENCYTimerINEnable = false;
@@ -487,18 +531,10 @@ void RunAutoMode()
     }
 
     // STEP03 : Check limits
-    if (Pmmm1103.RemoteTargetAngle > Pmmm1103.MAXAngle)
-    {
-        Pmmm1103.RemoteTargetAngle = Pmmm1103.MAXAngle;
-    }
-    if (Pmmm1103.RemoteTargetAngle < Pmmm1103.MINAngle)
-    {
 
-        Pmmm1103.RemoteTargetAngle = Pmmm1103.MINAngle;
-    }
+    Pmmm1103.CalcTargetAngle = (Pmmm1103.RemoteTargetAngle > Pmmm1103.MAXAngle) ? Pmmm1103.MAXAngle : Pmmm1103.RemoteTargetAngle;
 
-    // STEP04 : Update registers
-    Pmmm1103.CalcTargetAngle = Pmmm1103.RemoteTargetAngle;
+    Pmmm1103.CalcTargetAngle = (Pmmm1103.RemoteTargetAngle < Pmmm1103.MINAngle) ? Pmmm1103.MINAngle : Pmmm1103.RemoteTargetAngle;
 
     // Accepting Tolerances))
     if (Pmmm1103.CalcTargetAngle <= (Pmmm1103.MPUCalAngle + Pmmm1103.TolernceAngle) &&
@@ -513,6 +549,7 @@ void RunAutoMode()
     //  STEP05 : Order to move
     if (AutoMoveEnable)
     {
+
         if (Pmmm1103.CalcTargetAngle > Pmmm1103.MPUCalAngle) // move to west +++
         {
             Pmmm1103.MoveEast = true;
@@ -534,8 +571,6 @@ void RunAutoMode()
             ModbusRTU01Server.PmmModBusRTUServerHoldingWrite(29, 300);
         }
     }
-
-    
 }
 
 void MappingRegisters()
@@ -625,8 +660,8 @@ void MappingRegisters()
     bool_input[2][7] = digitalRead(DIPROG);
 
     // STEP03: From Modbus => Holding Reg => int_output
-    Pmmm1103.RemoteTargetAngle = float(int_output[24]) / 100;
-    Pmmm1103.WindSpeed = float(int_output[17]) / 100;
+    Pmmm1103.RemoteTargetAngle = float((int16_t)int_output[24]) / 100;
+    Pmmm1103.WindSpeed = float((int16_t)int_output[17]) / 100;
 
     // STEP04 : Commands
     // STEP04.1 : Generate Save to ROM Command

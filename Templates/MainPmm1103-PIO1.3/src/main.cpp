@@ -66,21 +66,26 @@ void loop()
     ModbusRTU01Server.PmmModBusRTUServerInputRead(0); // Do nothing but needed to keep system alive
     ///////////////////////////////////////////////////////////////
     // Timers
-    if (Pmmm1103.EMERGENCYTimer > 0 ) Pmmm1103.EMERGENCYTimer = Pmmm1103.EMERGENCYTimer -1; 
+    if (Pmmm1103.EMERGENCYTimer > 0 )
+    {
+      if (Pmmm1103.WindSpeed < Pmmm1103.WindSpeedLimit)  Pmmm1103.EMERGENCYTimer = Pmmm1103.EMERGENCYTimer -1;
+    }
+     
     if (Pmmm1103.EMERGENCYTimerIN > 0 ) Pmmm1103.EMERGENCYTimerIN = Pmmm1103.EMERGENCYTimerIN -1;
     Pmmm1103.LOCALREMOTETimer = Pmmm1103.LOCALREMOTETimer +1; 
 
     /*// Print system variables for monitring */
     if(Pmmm1103.PROGRAMMINGMODE) ShowDebugSummary();
 
-     SerialUSB.println(Pmmm1103.RTCMinutes);
-    SerialUSB.println(( int)Pmmm1103.UpdatePosTimer);
-    SerialUSB.println(Pmmm1103.RTCMinutes % Pmmm1103.UpdatePosTimer);
+    //  SerialUSB.println(Pmmm1103.RTCMinutes);
+    // SerialUSB.println(( int)Pmmm1103.UpdatePosTimer);
+    // SerialUSB.println(Pmmm1103.RTCMinutes % Pmmm1103.UpdatePosTimer);
 
-    SerialUSB.println(Pmmm1103.MPUCalAngle + Pmmm1103.TolernceAngle);
-    SerialUSB.println(Pmmm1103.MPUCalAngle - Pmmm1103.TolernceAngle);  //int_output[10]
-    SerialUSB.println(Pmmm1103.CalcTargetAngle);
-    // SerialUSB.println(int_output[8]);
+    // SerialUSB.println(Pmmm1103.MPUCalAngle + Pmmm1103.TolernceAngle);
+    // SerialUSB.println(Pmmm1103.MPUCalAngle - Pmmm1103.TolernceAngle);  //int_output[10]
+    // SerialUSB.println(Pmmm1103.CalcTargetAngle);
+    SerialUSB.println(Pmmm1103.WindSpeed);
+    SerialUSB.println(Pmmm1103.WindSpeedLimit);
     
   
     MainLoopTimer = millis();
