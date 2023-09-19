@@ -196,17 +196,28 @@ static const uint8_t ATN = PIN_ATN;
  * Serial interfaces
  */
 // Serial (EDBG)
-#define PIN_SERIAL_RX       (36ul)
-#define PIN_SERIAL_TX       (35ul)
+#define PIN_SERIAL_RX       (35ul)
+#define PIN_SERIAL_TX       (36ul)
 #define PAD_SERIAL_TX       (UART_TX_PAD_2)
 #define PAD_SERIAL_RX       (SERCOM_RX_PAD_3)
 
-// Serial1 (not defined for PMM0620)
-
-#define PIN_SERIAL1_RX       (0ul)
-#define PIN_SERIAL1_TX       (1ul)
+// Serial1 )
+#define PIN_SERIAL1_RX       (1ul)
+#define PIN_SERIAL1_TX       (0ul)
 #define PAD_SERIAL1_TX       (UART_TX_PAD_2)
 #define PAD_SERIAL1_RX       (SERCOM_RX_PAD_3)
+
+// Serial2 )
+#define PIN_SERIAL2_RX       (8ul)
+#define PIN_SERIAL2_TX       (9ul)
+#define PAD_SERIAL2_TX       (UART_TX_PAD_2) 
+#define PAD_SERIAL2_RX       (SERCOM_RX_PAD_0)
+
+// Serial3 )
+#define PIN_SERIAL3_RX       (18ul)
+#define PIN_SERIAL3_TX       (19ul)
+#define PAD_SERIAL3_TX       (UART_TX_PAD_0)  
+#define PAD_SERIAL3_RX       (SERCOM_RX_PAD_1)
 
 /*
  * SPI Interfaces
@@ -282,6 +293,8 @@ extern Uart Serial;
 extern Uart Serial1;
 extern Uart Serial2;
 extern Uart Serial3;
+
+//extern Uart PmmSerial[3];
 
 #endif
 
