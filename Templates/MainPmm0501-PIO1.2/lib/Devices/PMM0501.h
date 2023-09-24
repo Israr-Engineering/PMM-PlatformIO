@@ -477,9 +477,9 @@ void ViewSettingsPage(PmmEthernetClient client)
     client.println("<button class='button3' onclick='ResetMCU();' style='margin-top: 10%;'>Reset MCU</button><br><br></ul> <br><br><ul style='margin-left: -10%;' id=''> <input style='width: 140px;left: 15%;' type='Password' class='input' id='Password_txt' name='Password' value='1976'><br>");
     client.println("<button class='button3' onclick='Login();' style='margin-top: 10%;' id='Login_btn'>Login</button> <button class='button3' onclick='Logout();' style='margin-top: 10%;display: none;' id='Logout_btn'>Logout</button><br><br></ul> <div class='footer'> <p>&#169;2014-</p><span id='thisYear'> </span><br>");
     client.println("<p>PMM LLC. All rights reserved.</p><br><a style='text-decoration: none;color: #fff;' href='https://pmm-usa.us/'>www.pmm-usa.us</a> </div></div><div id='content'> ");
-    client.println("<div class='content-div' id='home' style='display: inline;position: absolute;width: 86%;'> <h2>Home</h2> ");
+    client.println("<div class='content-div' id='home' style='display: inline;position: absolute;width: 86%;'> <h2>Product Information</h2> ");
     //Hardware info --------------------------------------------------------
-    client.println("<div class='Group_Item'> <div class='Group_Item_lbl'> <label>Product Name</label> </div><div class='Group_Item_lbl'> <label>PMM 0501</label> </div></div>");
+    client.println("<div class='Group_Item'> <div class='Group_Item_lbl'> <label>Product Name</label> </div><div class='Group_Item_lbl'> <label>PMM0501 Ethernet-Serial Converter</label> </div></div>");
     client.println("<div class='Group_Item'> <div class='Group_Item_lbl'> <label>Serial Number</label> </div><div class='Group_Item_lbl'> <label>20230923</label> </div></div>");
     client.println("<div class='Group_Item'> <div class='Group_Item_lbl'> <label>Hardware Version</label> </div><div class='Group_Item_lbl'> <label>V 1.0</label> </div></div>");
     client.println("<div class='Group_Item'> <div class='Group_Item_lbl'> <label>Software Version</label> </div><div class='Group_Item_lbl'> <label>V 1.0</label> </div></div>");
