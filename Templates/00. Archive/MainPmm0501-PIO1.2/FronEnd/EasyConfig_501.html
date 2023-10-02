@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>PMM-Easy Config</title>
+    <style>
+        .footer {
+            position: fixed;
+            bottom: 5px;
+            color: var(--contentTextColor);
+            text-align: center;
+            font-size: 13px;
+            padding: 2px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+        .footer p {
+            display: contents
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        #navbar {
+            background-color: #339898;
+            color: #fff;
+            padding: 10px;
+            height: 44px;
+            width: 100%;
+        }
+        #leftbar {
+            background-color: #339898;
+            color: #fff;
+            width: 190px;
+            padding: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            margin-top: 64px;
+        }
+        #content {
+            margin-left: 210px;
+            padding: 20px;
+        }
+        .content-div {
+            background-color: #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            height: 400px;
+            display: none;
+        }
+        span {
+            color: #fff;
+        }
+        ul {
+            list-style: none;
+        }
+        li {
+            padding: 12px;
+            width: 92%;
+        }
+        #div1,
+        #div2,
+        #div3 {
+            display: none;
+        }
+        .button {
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+        }
+        .button2 {
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            width: 80px;
+            height: 40px;
+        }
+        textarea {
+            width: 89%;
+            height: 40px;
+            padding: 8px 8px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+            resize: none;
+        }
+        .ddl {
+            width: 192px;
+            height: 28px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+        }
+        .input {
+            width: 192px;
+            height: 28px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+        }
+        .input.udpport {
+            width: 45px;
+            position: static;
+        }
+        .button3 {
+            width: 140px;
+            height: 28px;
+            position: absolute;
+        }
+        .container {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            font-size: 16px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkmark {
+            position: absolute;
+            top: -6px;
+            left: 307px;
+            height: 25px;
+            width: 25px;
+            background-color: #339898;
+            border: solid #339898;
+        }
+        .container:hover input~.checkmark {
+            background-color: #339898;
+        }
+        .container input:checked~.checkmark {
+            background-color: #339898;
+        }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .container input:checked~.checkmark:after {
+            display: block;
+        }
+        .container .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-trasform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        .Divs.active {
+            background-color: #fff;
+            color: #339898;
+        }
+        #LeftBarContent {
+            display: none;
+        }
+        .Group_Item {
+            display: block;
+            margin-bottom: 16px;
+        }
+        .Group_Item_lbl {
+            width: 300px;
+            display: inline-block;
+        }
+        .Group_Item_input {
+            width: 300px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar">
+        <h1 style="position: absolute;top: -6px;left: 26px;">PMM</h1>
+        <h4 style="position: absolute;top: 7px;left: 112px;">Easy Config</h4>
+    </div>
+    <div id="leftbar">
+        <ul style="margin-left: -10%;" id="LeftBarContent">
+            <li class="Divs" onclick="GoToDiv('div1');" id="div1_btn">
+                <span id="div1_span" style="font-size: 14px;"> Ethernet</span>
+            </li>
+            <li class="Divs" onclick="GoToDiv('div2');" id="div2_btn">
+                <span id="div2_span" style="font-size: 14px;"> Serials</span>
+            </li>
+            <li class="Divs" onclick="GoToDiv('div3');" id="div3_btn">
+                <span id="div3_span" style="font-size: 14px;"> Operation Mode</span>
+            </li>
+            <button class="button3" onclick="ReadFromController();" style="margin-top: 10%;">Upload</button><br><br>
+            <button class="button3" onclick="WriteToController();" style="margin-top: 10%;">Download</button><br><br>
+            <button class="button3" onclick="ResetMCU();" style="margin-top: 10%;">Reset MCU</button><br><br>
+        </ul>
+        <br><br>
+        <ul style="margin-left: -10%;" id="">
+            <input style="width: 140px;left: 15%;" type="Password" class="input" id="Password_txt" name="Password"
+                value="1976"><br>
+            <button class="button3" onclick="Login();" style="margin-top: 10%;" id="Login_btn">Login</button>
+            <button class="button3" onclick="Logout();" style="margin-top: 10%;display: none;"
+                id="Logout_btn">Logout</button><br><br>
+        </ul>
+
+        <div class="footer">
+            <p>&#169;2014-</p><span id="thisYear"> </span><br>
+            <p>PMM LLC. All rights reserved.</p><br>
+            <a style="text-decoration: none;color: #fff;" href="https://pmm-usa.us/">www.pmm-usa.us</a>
+        </div>
+    </div>
+    <div id="content">
+        <div class="content-div" id="div1" style="display: inline;position: absolute;width: 86%;">
+            <h2>Ethernet</h2>
+
+            <div class="Group_Item">
+                <label class="container">Enabled
+                    <input type="checkbox" id="Enabled_Ethernet">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="IPAddress">IP Address</label>
+                </div>
+                <div class="Group_Item_input">
+                    <input type="text" class="input" id="IPAddress" name="IPAddress" onchange="GetIPAddress();"
+                        value="192.168.1.100">
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="NetMask">Net Mask</label>
+                </div>
+                <div class="Group_Item_input">
+                    <input type="text" class="input" id="NetMask" name="NetMask" value="255.255.255.0">
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="PreferredDNS">Preferred DNS</label>
+                </div>
+
+                <input type="text" class="input" id="PreferredDNS" name="PreferredDNS" value="8.8.8.8">
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="AlternateDNS">Alternate DNS</label>
+                </div>
+                <div class="Group_Item_input">
+                    <input type="text" class="input" id="AlternateDNS" name="AlternateDNS" value="8.8.4.4">
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="Gateway">Gateway</label>
+                </div>
+                <div class="Group_Item_input">
+                    <input type="text" class="input" id="Gateway" name="Gateway" value="192.168.1.1">
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="MacAddress">Mac Address</label>
+                </div>
+                <div class="Group_Item_input">
+                    <label for="MacAddress" style="left: 24%;top: 40%;">48:7E</label>
+                    <input type="text" class="input" id="MacAddress" name="MacAddress" value="72:64:64:32" style="width: 122px;
+                        margin-left: 22px;">
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="UDPPort" style="margin-right: 142px;">UDP Port</label>
+                </div>
+                <div class="Group_Item_input">
+                    <input type="number" class="input udpport" id="UDPPort" name="UDPPort" style="" value="502">
+                    <input type="number" class="input udpport" id="UDPPort2" name="UDPPort2" style="" value="503">
+                    <input type="number" class="input udpport" id="UDPPort3" name="UDPPort3" style="" value="504">
+                    <input type="number" class="input udpport" id="UDPPort4" name="UDPPort4" style="" value="505">
+                </div>
+            </div>
+        </div>
+        <div class="content-div" id="div2" style="display: inline;position: absolute;width: 86%;">
+            <h2>Serials</h2>
+
+            <div class="Group_Item">
+                <label class="container">Enabled
+                    <input type="checkbox" id="Enabled_Serial">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="Group_Item">
+                <div class="Group_Item_lbl"><label for="SerialPort">Serial Port</label></div>
+                <div class="Group_Item_input">
+                    <select id="SerialPort" class="ddl">
+                        <option value="Serial00">Serial 00</option>
+                        <option value="Serial01">Serial 01</option>
+                        <option value="Serial02">Serial 02</option>
+                        <option value="Serial03">Serial 03</option>
+                    </select>
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="BaudRate">Baud Rate</label>
+                </div>
+                <div class="Group_Item_input">
+                    <select id="BaudRate" class="ddl">
+                        <option value="300">300</option>
+                        <option value="600">600</option>
+                        <option value="1200">1200</option>
+                        <option value="2400">2400</option>
+                        <option value="4800">4800</option>
+                        <option value="9600">9600</option>
+                        <option value="14400">14400</option>
+                        <option value="19200">19200</option>
+                        <option value="38400">38400</option>
+                        <option value="56000">56000</option>
+                        <option value="57600">57600</option>
+                        <option value="115200">115200</option>
+                    </select>
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="DataBit">Data Bit</label>
+                </div>
+                <div class="Group_Item_input">
+                    <select id="DataBit" class="ddl">
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="StopBit">Stop Bit</label>
+                </div>
+                <div class="Group_Item_input">
+                    <select id="StopBit" class="ddl">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="Parity">Parity</label>
+                </div>
+                <div class="Group_Item_input">
+                    <select id="Parity" class="ddl">
+                        <option value="None">None</option>
+                        <option value="Odd">Odd</option>
+                        <option value="Even">Even</option>
+                    </select>
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="Interface">Interface</label>
+                </div>
+                <div class="Group_Item_input">
+                    <select id="Interface" class="ddl">
+                        <option value="485">RS485</option>
+                        <option value="422">RS422</option>
+                        <option value="232">RS232</option>
+                    </select>
+                </div>
+            </div>
+            <div class="Group_Item">
+                <div class="Group_Item_lbl">
+                    <label for="PortID">Port ID</label>
+                </div>
+                <div class="Group_Item_input">
+                    <input type="number" class="input" id="PortID" name="PortID" style="width:100px;" value="1">
+                    <label style="margin-left: 40px;">(1-30)</label>
+                </div>
+            </div>
+        </div>
+        <div class="content-div" id="div3" style="display: inline;position: absolute;width: 86%;">
+            <h2>Operation Mode</h2>
+            <div class="Group_Item">
+                  <input type="radio" id="SerialServer" name="Operation_Mode" value="SerialServer" checked>
+                  <label for="SerialServer">Serial Server</label><br>
+                <p style="margin-left: 3%;">multi ethernet client can communicate with serial port on this device</p>
+            </div>
+            <div class="Group_Item">
+                  <input type="radio" id="PeerToPeer" name="Operation_Mode" value="PeerToPeer">
+                  <label for="PeerToPeer">Peer To Peer</label><br>
+                <label for="RemoteIP" style="top: 6px;position: relative;margin-left: 42px;">Remote IP</label>
+                <label style="top: 6px;position: relative;margin-left: 7%;" id="IpAddress_txt">192.168.1.</label>
+                <input type="number" min="1" class="input" id="RemoteIP" name="RemoteIP"
+                    style="width:50px;margin-left: 0px;" value="200">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var d = new Date();
+        var y = d.getFullYear();
+        document.getElementById("thisYear").textContent = y;
+        let CommandStr = "";
+        let SerialConfig = 1043;
+        CheckLogin();
+        function CheckLogin() {
+            if (localStorage.getItem("Login") == "true") {
+                document.getElementById("Password_txt").style.display = "none";
+                document.getElementById("Login_btn").style.display = "none";
+                document.getElementById("Logout_btn").style.display = "block";
+
+                document.getElementById("LeftBarContent").style.display = "block";
+                GoToDiv("div1");
+                ReadFromController();
+            } else if (localStorage.getItem("Login") == "false") {
+                document.getElementById("Password_txt").style.display = "block";
+                document.getElementById("Login_btn").style.display = "block";
+                document.getElementById("Logout_btn").style.display = "none";
+                document.getElementById("div1").style.display = "none";
+                document.getElementById("div2").style.display = "none";
+                document.getElementById("div3").style.display = "none";
+                document.getElementById("LeftBarContent").style.display = "none";
+            }
+        }
+        function Login() {
+            var pass = document.getElementById("Password_txt").value;
+            var pinCode = "";
+            const xhr = new XMLHttpRequest();
+            const url = "http://" + document.getElementById("IPAddress").value + "/api?message=961,000,000";
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const responseText = xhr.responseText;
+                    pinCode = responseText;
+                }
+            };
+            xhr.send();
+
+            if (pass == "1976" || pass == pinCode) {
+                document.getElementById("Password_txt").style.display = "none";
+                document.getElementById("Login_btn").style.display = "none";
+                document.getElementById("Logout_btn").style.display = "block";
+
+                document.getElementById("LeftBarContent").style.display = "block";
+                GoToDiv("div1");
+                ReadFromController();
+                localStorage.setItem("Login", "true");
+            }
+            else {
+                document.getElementById("Password_txt").style.display = "block";
+                document.getElementById("Login_btn").style.display = "block";
+                document.getElementById("Logout_btn").style.display = "none";
+
+                document.getElementById("LeftBarContent").style.display = "none";
+                localStorage.setItem("Login", "false");
+            }
+        }
+        function Logout() {
+            document.getElementById("Password_txt").style.display = "block";
+            document.getElementById("Login_btn").style.display = "block";
+            document.getElementById("Logout_btn").style.display = "none";
+            document.getElementById("LeftBarContent").style.display = "none";
+            document.getElementById("div1").style.display = "none";
+            document.getElementById("div2").style.display = "none";
+            document.getElementById("div3").style.display = "none";
+            localStorage.setItem("Login", "false");
+        }
+        function GetIPAddress() {
+            var ipAddress = document.getElementById("IPAddress").value;
+            var ipAddressArr = ipAddress.split(".");
+            var LastIP = ipAddressArr[0] + "." + ipAddressArr[1] + "." + ipAddressArr[2] + ".";
+            document.getElementById("IpAddress_txt").textContent = LastIP;
+        }
+        function GoToDiv(div) {
+            if (div == "div1") {
+                document.getElementById("div1").style.display = "block";
+                document.getElementById("div2").style.display = "none";
+                document.getElementById("div3").style.display = "none";
+                document.getElementById("div1_btn").classList.add("active");
+                document.getElementById("div2_btn").classList.remove("active");
+                document.getElementById("div3_btn").classList.remove("active");
+                document.getElementById("div1_span").style.color = "#339898";
+                document.getElementById("div2_span").style.color = "#ffffff";
+                document.getElementById("div3_span").style.color = "#ffffff";
+            }
+            else if (div == "div2") {
+                document.getElementById("div1").style.display = "none";
+                document.getElementById("div2").style.display = "block";
+                document.getElementById("div3").style.display = "none";
+                document.getElementById("div1_btn").classList.remove("active");
+                document.getElementById("div2_btn").classList.add("active");
+                document.getElementById("div3_btn").classList.remove("active");
+                document.getElementById("div1_span").style.color = "#ffffff";
+                document.getElementById("div2_span").style.color = "#339898";
+                document.getElementById("div3_span").style.color = "#ffffff";
+            }
+            else if (div == "div3") {
+                document.getElementById("div1").style.display = "none";
+                document.getElementById("div2").style.display = "none";
+                document.getElementById("div3").style.display = "block";
+                document.getElementById("div1_btn").classList.remove("active");
+                document.getElementById("div2_btn").classList.remove("active");
+                document.getElementById("div3_btn").classList.add("active");
+                document.getElementById("div1_span").style.color = "#ffffff";
+                document.getElementById("div2_span").style.color = "#ffffff";
+                document.getElementById("div3_span").style.color = "#339898";
+            }
+        }
+        function convertIPToDecimal(b1, b2, b3, b4) {
+            var binaryString =
+                b4.toString(2).padStart(8, '0') +
+                b3.toString(2).padStart(8, '0') +
+                b2.toString(2).padStart(8, '0') +
+                b1.toString(2).padStart(8, '0');
+            return parseInt(binaryString, 2).toString();
+        }
+        function convertMacToDecimal(byte1, byte2, byte3, byte4) {
+            var macBytes = [byte1, byte2, byte3, byte4];
+
+            var binaryString = "";
+            for (var i = 3; i >= 0; i--) {
+                binaryString += macBytes[i].toString(2).padStart(8, '0');
+            }
+
+            return parseInt(binaryString, 2).toString();
+        }
+        function numberToByte(number) {
+            if (number >= 0 && number <= 255) {
+                return number & 0xFF;
+            } else {
+                return null;
+            }
+        }
+        function convertBoolToString(val) {
+            var result = "0";
+            if (val !== null && val !== undefined) {
+                val = val.toString().toLowerCase();
+                if (val === "false" || val === "0") {
+                    result = "0";
+                } else if (val === "true" || val === "1") {
+                    result = "1";
+                }
+            }
+            return result;
+        }
+        function WriteToController() {
+            var sparity = document.getElementById("Parity").value
+            let parity = 1;
+            if (sparity === "None") parity = 3;
+            if (sparity === "Odd") parity = 2;
+            var Val1 = convertIPToDecimal(
+                parseInt(document.getElementById("StopBit").value),
+                parseInt(document.getElementById("DataBit").value),
+                parseInt(parity),
+                1
+            );
+            var Val2 = convertMacToDecimal(
+                numberToByte(document.getElementById("MacAddress").value.split(":")[0]),
+                numberToByte(document.getElementById("MacAddress").value.split(":")[1]),
+                numberToByte(document.getElementById("MacAddress").value.split(":")[2]),
+                numberToByte(document.getElementById("MacAddress").value.split(":")[3])
+            );
+            var Val3 = convertIPToDecimal(
+                parseInt((document.getElementById("IPAddress").value).split(".")[0]),
+                parseInt((document.getElementById("IPAddress").value).split(".")[1]),
+                parseInt((document.getElementById("IPAddress").value).split(".")[2]),
+                parseInt((document.getElementById("IPAddress").value).split(".")[3])
+            );
+            var Val4 = convertIPToDecimal(
+                parseInt((document.getElementById("NetMask").value).split(".")[0]),
+                parseInt((document.getElementById("NetMask").value).split(".")[1]),
+                parseInt((document.getElementById("NetMask").value).split(".")[2]),
+                parseInt((document.getElementById("NetMask").value).split(".")[3])
+            );
+            var Val5 = convertIPToDecimal(
+                parseInt((document.getElementById("Gateway").value).split(".")[0]),
+                parseInt((document.getElementById("Gateway").value).split(".")[1]),
+                parseInt((document.getElementById("Gateway").value).split(".")[2]),
+                parseInt((document.getElementById("Gateway").value).split(".")[3])
+            );
+            var Val6 = convertIPToDecimal(
+                parseInt((document.getElementById("PreferredDNS").value).split(".")[0]),
+                parseInt((document.getElementById("PreferredDNS").value).split(".")[1]),
+                parseInt((document.getElementById("PreferredDNS").value).split(".")[2]),
+                parseInt((document.getElementById("PreferredDNS").value).split(".")[3])
+            );
+            var Val7 = convertIPToDecimal(
+                parseInt((document.getElementById("AlternateDNS").value).split(".")[0]),
+                parseInt((document.getElementById("AlternateDNS").value).split(".")[1]),
+                parseInt((document.getElementById("AlternateDNS").value).split(".")[2]),
+                parseInt((document.getElementById("AlternateDNS").value).split(".")[3])
+            );
+            SerialConfig = calcSerialConfig(
+                parseInt(document.getElementById("StopBit").value),
+                document.getElementById("Parity").value,
+                parseInt(document.getElementById("StopBit").value)
+            );
+
+            var PeerToPeer = "0";
+            var SerialServer = "0";
+            var Operation_Mode = document.querySelector("input[name='Operation_Mode']:checked").value;
+            if (Operation_Mode == "PeerToPeer") { PeerToPeer = "1"; }
+            if (Operation_Mode == "SerialServer") { SerialServer = "1"; }
+            var EnabledSerial = "0";
+            var EnabledEthernet = "0";
+            var Enabled_Ethernet = document.getElementById("Enabled_Ethernet").checked;
+            var Enabled_Serial = document.getElementById("Enabled_Serial").checked;
+            if (Enabled_Ethernet) { EnabledEthernet = "1"; }
+            if (Enabled_Serial) { EnabledSerial = "1"; }
+            var Bits = convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString("0");
+            Bits += convertBoolToString(PeerToPeer);
+            Bits += convertBoolToString(SerialServer);
+            Bits += convertBoolToString(EnabledSerial);
+            Bits += convertBoolToString(EnabledEthernet);
+
+            var val = "111";
+            var serialport = document.getElementById("SerialPort").value;
+            switch (serialport) {
+                case "Serial00":
+                    val = "110";
+                    break;
+                case "Serial01":
+                    val = "112";
+                    break;
+                case "Serial02":
+                    val = "114";
+                    break;
+                case "Serial03":
+                    val = "116";
+                    break;
+            }
+
+            var CmdWriteEthernet_Serial_00 = val + ",000,";
+            CmdWriteEthernet_Serial_00 += Val1 + ",";
+            CmdWriteEthernet_Serial_00 += SerialConfig + ",";
+            CmdWriteEthernet_Serial_00 += document.getElementById("BaudRate").value + ",";
+            CmdWriteEthernet_Serial_00 += "35,";
+            CmdWriteEthernet_Serial_00 += "36,";
+            CmdWriteEthernet_Serial_00 += "1,";
+            CmdWriteEthernet_Serial_00 += "1,";
+            CmdWriteEthernet_Serial_00 += document.getElementById("Interface").value + ",";
+            CmdWriteEthernet_Serial_00 += Val2 + ",";
+            CmdWriteEthernet_Serial_00 += Val3 + ",";
+            CmdWriteEthernet_Serial_00 += Val4 + ",";
+            CmdWriteEthernet_Serial_00 += Val5 + ",";
+            CmdWriteEthernet_Serial_00 += Val6 + ",";
+            CmdWriteEthernet_Serial_00 += Val7 + ",";
+            CmdWriteEthernet_Serial_00 += document.getElementById("UDPPort").value + ",";
+            CmdWriteEthernet_Serial_00 += document.getElementById("UDPPort2").value + ",";
+            CmdWriteEthernet_Serial_00 += document.getElementById("UDPPort3").value + ",";
+            CmdWriteEthernet_Serial_00 += document.getElementById("UDPPort4").value + ",";
+            CmdWriteEthernet_Serial_00 += document.getElementById("PortID").value + ",";
+            CmdWriteEthernet_Serial_00 += "0,";
+            CmdWriteEthernet_Serial_00 += document.getElementById("RemoteIP").value + ",";
+            CmdWriteEthernet_Serial_00 += parseInt(Bits, 2);
+            CommandStr = CmdWriteEthernet_Serial_00;
+            SendRequest(CommandStr);
+        }
+        function ReadFromController() {
+            var val = "111";
+            var serialport = document.getElementById("SerialPort").value;
+            switch (serialport) {
+                case "Serial00":
+                    val = "111";
+                    break;
+                case "Serial01":
+                    val = "113";
+                    break;
+                case "Serial02":
+                    val = "115";
+                    break;
+                case "Serial03":
+                    val = "117";
+                    break;
+            }
+
+            CommandStr = val + ",000,000";
+            const xhr = new XMLHttpRequest();
+            const url = "http://" + document.getElementById("IPAddress").value + "/api?message=" + CommandStr;
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const responseText = xhr.responseText;
+                    SetDataToFild(responseText);
+                }
+            };
+            xhr.send();
+        }
+        function ResetMCU() {
+            CommandStr = "948,001,000";
+            SendRequest(CommandStr);
+        }
+        function SendRequest(CommandStr) {
+            const xhr = new XMLHttpRequest();
+            const url = "http://" + document.getElementById("IPAddress").value + "/api?message=" + CommandStr;
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const responseText = xhr.responseText;
+                    console.log(responseText);
+                }
+            };
+            xhr.send();
+        }
+        function calcSerialConfig(sdatabit, sparity, sstopbit) {
+            let databitLong = 0x1;
+            let parityLong = 0;
+            let stopbitLong = 0x400;
+
+            let parity = 1;
+            if (sparity === "None") parity = 3;
+            if (sparity === "Odd") parity = 2;
+
+            let databit = parseInt(sdatabit);
+            let stopbit = parseInt(sstopbit);
+            stopbit = stopbit * 10;
+
+            if (parity === 1) {
+                parityLong = 0x1;
+            } else if (parity === 2) {
+                parityLong = 0x2;
+            } else if (parity === 3) {
+                parityLong = 0x3;
+            } else if (parity === 4) {
+                parityLong = 0x4;
+            } else if (parity === 5) {
+                parityLong = 0x5;
+            } else if (parity === 6) {
+                parityLong = 0xF;
+            }
+
+            if (stopbit === 10) {
+                stopbitLong = 0x10;
+            } else if (stopbit === 15) {
+                stopbitLong = 0x20;
+            } else if (stopbit === 20) {
+                stopbitLong = 0x30;
+            } else {
+                stopbitLong = 0xF0;
+            }
+
+            if (databit === 5) {
+                databitLong = 0x100;
+            } else if (databit === 6) {
+                databitLong = 0x200;
+            } else if (databit === 7) {
+                databitLong = 0x300;
+            } else if (databit === 8) {
+                databitLong = 0x400;
+            } else {
+                databitLong = 0xF00;
+            }
+
+            let config = databitLong | parityLong | stopbitLong;
+            return config;
+        }
+        function SetSerialConfig() {
+            SerialConfig = calcSerialConfig(
+                parseInt(document.getElementById("DataBit").value),
+                document.getElementById("Parity").value,
+                parseInt(document.getElementById("StopBit").value)
+            );
+        }
+        const selectElement1 = document.getElementById('DataBit');
+        selectElement1.addEventListener('change', function () {
+            SetSerialConfig();
+        });
+        const selectElement2 = document.getElementById('Parity');
+        selectElement2.addEventListener('change', function () {
+            SetSerialConfig();
+        });
+        const selectElement3 = document.getElementById('StopBit');
+        selectElement3.addEventListener('change', function () {
+            SetSerialConfig();
+        });
+        function ConvertDecimalToIP(decimalValue) {
+            let decimalNumber = parseInt(decimalValue);
+            let binaryString = decimalNumber.toString(2).padStart(32, '0');
+
+            let ip = new Array(4);
+            ip[3] = parseInt(binaryString.substring(24, 32), 2);
+            ip[2] = parseInt(binaryString.substring(16, 24), 2);
+            ip[1] = parseInt(binaryString.substring(8, 16), 2);
+            ip[0] = parseInt(binaryString.substring(0, 8), 2);
+
+            return ip;
+        }
+        function ConvertDecimalToMac(decimalValue) {
+            let decimalNumber = BigInt(decimalValue);
+            let binaryString = decimalNumber.toString(2).padStart(32, '0');
+
+            let macBytes = new Uint8Array(4);
+            for (let i = 0; i < 4; i++) {
+                macBytes[i] = parseInt(binaryString.substring(i * 8, (i + 1) * 8), 2);
+            }
+
+            return [macBytes[3], macBytes[2], macBytes[1], macBytes[0]];
+        }
+        function ConvertDecimalToBool(value) {
+            let binary = value.toString(2).padStart(16, '0');
+            return binary;
+        }
+        function ConvertStringToBool(value) {
+            return value === "1";
+        }
+        function SetDataToFild(CommResponse) {
+            var values = CommResponse.split(",");
+
+            let Temp = ConvertDecimalToIP(values[0]);
+            document.getElementById("StopBit").value = Temp[3];
+            document.getElementById("DataBit").value = Temp[2];
+
+
+            let parity = "Even";
+            if (Temp[1] === 3) parity = "None";
+            if (Temp[1] === 2) parity = "Odd";
+            document.getElementById("Parity").value = parity;
+
+            SerialConfig = parseInt(values[1]);
+
+            document.getElementById("BaudRate").value = parseInt(values[2]);
+            document.getElementById("Interface").value = parseInt(values[7]);
+
+            let macBytes = ConvertDecimalToMac(values[8]);
+            document.getElementById("MacAddress").value = macBytes[0] + ":" + macBytes[1] + ":" + macBytes[2] + ":" + macBytes[3];
+
+            let ipAddress = ConvertDecimalToIP(values[9]);
+            document.getElementById("IPAddress").value = ipAddress[3] + "." + ipAddress[2] + "." + ipAddress[1] + "." + ipAddress[0];
+
+            let subnetMask = ConvertDecimalToIP(values[10]);
+            document.getElementById("NetMask").value = subnetMask[3] + "." + subnetMask[2] + "." + subnetMask[1] + "." + subnetMask[0];
+
+            let gateway = ConvertDecimalToIP(values[11]);
+            document.getElementById("Gateway").value = gateway[3] + "." + gateway[2] + "." + gateway[1] + "." + gateway[0];
+
+            let dns1 = ConvertDecimalToIP(values[12]);
+            document.getElementById("PreferredDNS").value = dns1[3] + "." + dns1[2] + "." + dns1[1] + "." + dns1[0];
+
+            let dns2 = ConvertDecimalToIP(values[13]);
+            document.getElementById("AlternateDNS").value = dns2[3] + "." + dns2[2] + "." + dns2[1] + "." + dns2[0];
+
+            document.getElementById("UDPPort").value = parseInt(values[14]);
+            document.getElementById("UDPPort2").value = parseInt(values[15]);
+            document.getElementById("UDPPort3").value = parseInt(values[16]);
+            document.getElementById("UDPPort4").value = parseInt(values[17]);
+
+            document.getElementById("PortID").value = parseInt(values[18]);
+            document.getElementById("RemoteIP").value = parseInt(values[20]);
+
+            let bitsString = ConvertDecimalToBool(parseInt(values[21]));
+
+            let Enabled_Ethernet = document.getElementById("Enabled_Ethernet");
+            if (ConvertStringToBool(bitsString.substring(0, 1)) == "1") { Enabled_Ethernet.checked = true; } else { Enabled_Ethernet.checked = false; }
+            let Enabled_Serial = document.getElementById("Enabled_Ethernet");
+            if (ConvertStringToBool(bitsString.substring(1, 2)) == "1") { Enabled_Serial.checked = true; } else { Enabled_Serial.checked = false; }
+
+            var Operation_Mode = "SerialServer";
+            if (ConvertStringToBool(bitsString.substring(2, 3)) == "1") { Operation_Mode = "SerialServer"; }
+            if (ConvertStringToBool(bitsString.substring(3, 4)) == "1") { Operation_Mode = "PeerToPeer"; }
+
+            let radioButtons = document.querySelectorAll(`input[type="radio"][name="${Operation_Mode}"]`);
+
+            radioButtons.forEach(function (radioButton) {
+                radioButton.checked = true;
+            });
+        }
+    
+    </script>
+</body>
+
+</html>
