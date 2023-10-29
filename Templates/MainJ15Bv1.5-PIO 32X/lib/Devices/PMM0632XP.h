@@ -33,22 +33,23 @@ ulong BuadRate = 19200;
 uint8_t DIPROG = 37;
 int slaveID = 1;
 
-//Templates
+// Templates
 uint16_t *ptr01[25];
-
 
 void ThisDeviceSetup()
 {
-  for (int i = 0 ;i < 25;i++) ptr01[i] = ms_init(EMA);
+  for (int i = 0; i < 25; i++)
+    ptr01[i] = ms_init(EMA);
 
-  
+  // I2c Address
+  MyI2CAddress = GetMyI2CAddress(38, 22, 57);
+  MyI2CAddress = MyI2CAddress + 40;
+  // ADC Resolution
+  analogReadResolution(12);
 
   if (!ReadyToUse)
   {
-    MyI2CAddress = GetMyI2CAddress(38, 22, 57);
-    MyI2CAddress = MyI2CAddress + 40  ;
-    // ADC Resolution
-    analogReadResolution(12);
+
     // AI Pins
     PMM_AI_Pins[0] = A1;
     PMM_AI_Pins[1] = A1;
@@ -171,7 +172,7 @@ void ThisDeviceUpDate()
         digitalWrite(AnaSwitch02, HIGH);
         sensorValue = analogRead(PMM_AI_Pins[15]); // AIMZ2
       }
-      
+
       // write to SerialUSB
       // SerialUSB.print(" =>AI[");
       // SerialUSB.print(x);
@@ -182,14 +183,11 @@ void ThisDeviceUpDate()
       sensorValue = ema_filter(sensorValue, ptr01[x]);
 
       // write to i2c
-      PmmIO.Outputs[(x - 1 ) * 2] = lowByte(sensorValue);
+      PmmIO.Outputs[(x - 1) * 2] = lowByte(sensorValue);
       PmmIO.Outputs[((x - 1) * 2) + 1] = highByte(sensorValue);
     }
 
-    PmmIO.Outputs[62] = 32 ;
-  
-
-  
+    PmmIO.Outputs[62] = 32;
   }
 }
 
