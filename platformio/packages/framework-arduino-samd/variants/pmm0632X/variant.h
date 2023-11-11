@@ -58,7 +58,7 @@ extern "C" unsigned int PINCOUNT_fn();
 #endif
 #define PINS_COUNT           (PINCOUNT_fn())
 #define NUM_DIGITAL_PINS     (20u)
-#define NUM_ANALOG_INPUTS    (6u)
+#define NUM_ANALOG_INPUTS    (16u)
 #define NUM_ANALOG_OUTPUTS   (1u)
 #define analogInputToDigitalPin(p)  ((p < 6u) ? (p) + 14u : -1)
 
