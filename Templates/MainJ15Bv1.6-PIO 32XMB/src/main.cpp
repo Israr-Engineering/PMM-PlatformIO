@@ -61,12 +61,15 @@ void loop()
     // blink Run
     if (Fault_Flag)
     {
-      digitalWrite(Fault_LED, HIGH);
+      digitalWrite(Fault_LED, HIGH); //
+      
+
     }
     else
     {
       BlinkFlag = !BlinkFlag;
       digitalWrite(RUN_LED, BlinkFlag);
+            
       digitalWrite(Fault_LED, LOW);
     }
      BlinkingTimer = millis();
@@ -85,7 +88,16 @@ void loop()
     SerialUSB.print(BuadRate); // print the integer MyI2CAddress
     SerialUSB.println(" => Serial settings : SERIAL_8N1 ");
     SerialUSB.print("Cycle (ms): "); // print the integer MyI2CAddress
-    SerialUSB.println(millis() - CycleTimer); 
+    SerialUSB.println(millis() - CycleTimer);  // digitalRead(DIPROG)
+    SerialUSB.print(" /Inputs DIPROG "); 
+    SerialUSB.print(digitalRead(DIPROG)); 
+    SerialUSB.print(" /Inputs A0 "); 
+    SerialUSB.print(digitalRead(38)); 
+    SerialUSB.print(" /Inputs A1 "); 
+    SerialUSB.print(digitalRead(22)); 
+    SerialUSB.print(" /Inputs A2 "); 
+    SerialUSB.println(digitalRead(57));  // digitalRead(DIPROG)
+
     
 
     MainLoopTimer = millis();

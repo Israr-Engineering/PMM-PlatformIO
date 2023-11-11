@@ -22,7 +22,7 @@ bool ReadyToUse = false;
 uint8_t MyI2CAddress = 8;
 int sensorValue = 0;
 int RUN_LED = 39;
-int Fault_LED = 46;
+int Fault_LED = 5;
 bool BlinkFlag = false;
 bool Fault_Flag = false;
 
@@ -59,7 +59,8 @@ void ThisDeviceSetup()
   // ThisSettingsROM = SettingsROM_Store.read();
   // try define the uart here
   // Serial.begin( 9600 ); // baud-rate at 9600
-
+  
+  DIPROG = 37;
   pinMode(DIPROG, INPUT);
   MyI2CAddress = GetMyI2CAddress(38, 22, 57); // (57, 22, 38)
   // MyI2CAddress = !( MyI2CAddress);
@@ -72,6 +73,8 @@ void ThisDeviceSetup()
 
   Serial1.begin(BuadRate, SERIAL_8N1); // 19200 baud, 8-bits, even, 1-bit stop
   slave.start();
+
+  
 
   if (!ReadyToUse)
   {
@@ -100,6 +103,7 @@ void ThisDeviceSetup()
     pinMode(RUN_LED, OUTPUT);
     Fault_LED = 5;
     pinMode(Fault_LED, OUTPUT);
+    digitalWrite(Fault_LED, HIGH); //
     ReadyToUse = true;
 
     // Reset Modbus
@@ -108,18 +112,22 @@ void ThisDeviceSetup()
       PmmIO.Outputs[i] = 0;
       au16data[i] = 0;
     }
+    
   }
 }
 
 void ThisDeviceUpDate()
 {
 
+  MyI2CAddress = GetMyI2CAddress(38, 22, 57);
   if (ReadyToUse)
   {
     // Check filter counter
     FilterCounter++;
     // modbus
     slave.poll(au16data, 63);
+
+    Fault_Flag =  ( slave.getLastError() != 0 ) ? 0 : 1 ;
     // Loop the AI
     for (int x = 1; x < 17; x++)
     {
