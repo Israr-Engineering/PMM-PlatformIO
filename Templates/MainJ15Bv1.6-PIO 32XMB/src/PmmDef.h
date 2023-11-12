@@ -54,10 +54,11 @@ uint8_t GetMyI2CAddress(uint8_t Pin00 ,uint8_t Pin01 , uint8_t Pin02)
   pinMode(Pin01,INPUT);
   pinMode(Pin02,INPUT);
   
-  tmp = digitalRead(Pin00);
-  tmp = (tmp << 1) | digitalRead(Pin01);
-  tmp = (tmp << 1) | digitalRead(Pin02);
+  tmp = !digitalRead(Pin00);
+  tmp = (tmp << 1) | !digitalRead(Pin01);
+  tmp = (tmp << 1) | !digitalRead(Pin02);
 
+  //tmp = (byte) ~tmp ;
   return tmp ;
 }
 

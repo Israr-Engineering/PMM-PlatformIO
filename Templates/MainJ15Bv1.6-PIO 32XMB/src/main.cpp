@@ -96,8 +96,9 @@ void loop()
     SerialUSB.print(" /Inputs A1 "); 
     SerialUSB.print(digitalRead(22)); 
     SerialUSB.print(" /Inputs A2 "); 
-    SerialUSB.println(digitalRead(57));  // digitalRead(DIPROG)
-
+    SerialUSB.println(digitalRead(57));  // digitalRead(DIPROG) MyI2CAddress = GetMyI2CAddress(38, 22, 57);
+    // SerialUSB.print(" /Address "); 
+    // SerialUSB.println(GetMyI2CAddress(38, 22, 57));  
     
 
     MainLoopTimer = millis();

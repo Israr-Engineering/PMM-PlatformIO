@@ -13,7 +13,8 @@
 
 #include <ModbusRtu.h>
 #include <PmmDef.h>
-// #include <microsmooth.h>
+
+//#pragma region Defiitons
 
 // int PMM_AI_Pins[17] = {A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16};
 uint16_t PMM_AI_Pins[17] = {};
@@ -50,23 +51,21 @@ uint16_t au16data[64] = {
  */
 Modbus slave(1, Serial1, TXEN); // this is slave @1 and RS-485
 
+//#pragma endregion
+
 void ThisDeviceSetup()
 {
 
-  // for (int i = 0 ;i < 18;i++) ptr01[i] = ms_init(EMA); // FILTERS SETUP
-  // SettingsROM ThisSettingsROM;
-  // Read the content of "my_flash_store" into the "owner" variable
-  // ThisSettingsROM = SettingsROM_Store.read();
-  // try define the uart here
-  // Serial.begin( 9600 ); // baud-rate at 9600
+  // Board addressing : 
+  // Modbus : (1-16) based on Hex value of dip switches + 1 starting from Zero
+  // I2C : (41 -48) based on Hex value of dip switches + 40 starting from 40
   
   DIPROG = 37;
   pinMode(DIPROG, INPUT);
-  MyI2CAddress = GetMyI2CAddress(38, 22, 57); // (57, 22, 38)
-  // MyI2CAddress = !( MyI2CAddress);
+  MyI2CAddress = GetMyI2CAddress(38, 22, 57) + 1; // inverted value
   slaveID = MyI2CAddress;
   if (digitalRead(DIPROG))
-    slaveID = MyI2CAddress + 8;
+    slaveID = MyI2CAddress + 8; // modbus address bit(3)
   // slaveID = 1 ;
   slave.setID(slaveID); // MODBUS SLAVE ID
   MyI2CAddress = MyI2CAddress + 40;
@@ -118,8 +117,13 @@ void ThisDeviceSetup()
 
 void ThisDeviceUpDate()
 {
-
+  // Read system address every cycle ,to apply new settings you need to restart 
   MyI2CAddress = GetMyI2CAddress(38, 22, 57);
+  slaveID = MyI2CAddress;
+  if (digitalRead(DIPROG))
+    slaveID = MyI2CAddress + 8;
+  MyI2CAddress = MyI2CAddress + 40;
+    
   if (ReadyToUse)
   {
     // Check filter counter
